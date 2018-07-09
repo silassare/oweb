@@ -1,0 +1,12 @@
+(function () {
+	"use strict";
+
+	window.OPageHome = Vue.component("o-page-home", {
+		data    : function () {
+			return {
+			    pageName: "OPageHome"
+			};
+		},
+		template: templateLoad("page.home.html")
+	});
+})();

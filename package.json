@@ -1,0 +1,41 @@
+{
+  "name": "oweb",
+  "version": "1.0.0",
+  "description": "O'Web is a framework for web applications that use APIs built with the OZone framework.",
+  "main": "dist/index.js",
+  "typings": "types/index.d.ts",
+  "keywords": [
+    "oweb",
+    "O'Web",
+    "OZone",
+    "framework"
+  ],
+  "bin": {
+    "oweb": "bin/index.js"
+  },
+  "files": [
+    "src",
+    "assets",
+    "dist/*.js",
+    "bin/*.js",
+    "build/*.js",
+    "types/*.d.ts"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "otpl-js": "file:../../silo/otpl"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.3.4",
+    "typescript": "^2.6.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silassare/oweb.git"
+  },
+  "author": "Emile Silas Sare (emile.silas@gmail.com)",
+  "license": "ISC"
+}
