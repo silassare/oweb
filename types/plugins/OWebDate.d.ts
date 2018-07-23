@@ -1,4 +1,4 @@
-export declare type tTimeDesc = {
+export declare type tDateDesc = {
     D: string;
     l: number;
     L: string;
@@ -21,9 +21,11 @@ export declare type tTimeDesc = {
     a: string;
     A: string;
 };
-export default class OWebTime {
-    private readonly time;
-    constructor(time: string);
+export default class OWebDate {
+    private readonly date;
+    constructor(date: string);
     format(langKey: string, langCode: string): string;
-    describe(langCode: string): tTimeDesc;
+    describe(langCode?: string): tDateDesc;
+    static fromInputValue(date_str: string): OWebDate | false;
+    static timestamp(): number;
 }

@@ -1,3 +1,5 @@
+import {tLangDefinition} from "../../OWebLang";
+
 export default {
 	"OZ_ERROR_REQUEST_FAIL"               : "Error: The request failed.",
 	"OZ_ERROR_NETWORK"                    : "Error: internet connection problems.",
@@ -51,4 +53,4 @@ export default {
 	"OZ_FILE_ALIAS_UNKNOWN"               : "Unknown alias file.",
 	"OZ_FILE_ALIAS_PARSE_ERROR"           : "Alias ​​file, analysis error.",
 	"OZ_FILE_ALIAS_NOT_FOUND"             : "The alias file or the targeted file can not be found ..."
-};
+} as tLangDefinition;

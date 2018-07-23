@@ -1,34 +1,37 @@
 "use strict";
 import PathResolver from "./utils/PathResolver";
-let is_web = typeof window === "object" && typeof window.location === "object";
 let isServerUrl = function (url_key) {
-    return /^(OZ_)?SERVER_/.test(url_key);
+    return /^OZ_SERVER_/.test(url_key);
 };
 let isLocalUrl = function (url_key) {
-    return /^(OZ_)?LOCAL_/.test(url_key);
+    return /^OW_LOCAL_/.test(url_key);
 };
 export default class OWebUrl {
     constructor(context, url_list) {
         this._url_list = url_list;
-        this._url_local_base = context.configs.get("OZ_APP_LOCAL_BASE_URL");
-        this._url_server_base = context.configs.get("OZ_APP_API_BASE_URL");
+        this._url_local_base = context.configs.get("OW_APP_LOCAL_BASE_URL");
+        this._url_server_base = context.configs.get("OZ_API_BASE_URL");
+        console.log("[OWebUrl] ready!");
     }
     get(url_key) {
-        return this._addBaseUrl(url_key);
-    }
-    localResolve(url) {
-        return PathResolver.resolve(this._url_local_base, url);
-    }
-    serverResolve(url) {
-        return PathResolver.resolve(this._url_server_base, url);
-    }
-    _addBaseUrl(url_key) {
         let url = this._url_list[url_key];
         if (!url) {
-            throw new Error(`OWebUrl: url key "${url_key}" is not defined.`);
+            throw new Error(`[OWebUrl] url key "${url_key}" is not defined.`);
         }
-        return isServerUrl(url_key) ? this.localResolve(url) : !is_web && isLocalUrl(url_key) ? this.serverResolve(url) : url;
+        if (isServerUrl(url_key))
+            return this.resolveServer(url);
+        if (isLocalUrl(url_key))
+            return this.resolveLocal(url);
+        return url;
+    }
+    resolveLocal(url) {
+        console.log("l", url);
+        return PathResolver.resolve(this._url_local_base, url);
+    }
+    resolveServer(url) {
+        console.log("s", url);
+        return PathResolver.resolve(this._url_server_base, url);
     }
 }
 ;
-//# sourceMappingURL=OWebUrl.js.map
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT1dlYlVybC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3NyYy9PV2ViVXJsLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLFlBQVksQ0FBQztBQUdiLE9BQU8sWUFBWSxNQUFNLHNCQUFzQixDQUFDO0FBRWhELElBQUksV0FBVyxHQUFHLFVBQVUsT0FBZTtJQUMxQyxPQUFPLGFBQWEsQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLENBQUM7QUFDcEMsQ0FBQyxDQUFDO0FBRUYsSUFBSSxVQUFVLEdBQUcsVUFBVSxPQUFlO0lBQ3pDLE9BQU8sWUFBWSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsQ0FBQztBQUNuQyxDQUFDLENBQUM7QUFJRixNQUFNLENBQUMsT0FBTztJQUtiLFlBQVksT0FBZ0IsRUFBRSxRQUFrQjtRQUMvQyxJQUFJLENBQUMsU0FBUyxHQUFVLFFBQVEsQ0FBQztRQUNqQyxJQUFJLENBQUMsZUFBZSxHQUFJLE9BQU8sQ0FBQyxPQUFPLENBQUMsR0FBRyxDQUFDLHVCQUF1QixDQUFDLENBQUM7UUFDckUsSUFBSSxDQUFDLGdCQUFnQixHQUFHLE9BQU8sQ0FBQyxPQUFPLENBQUMsR0FBRyxDQUFDLGlCQUFpQixDQUFDLENBQUM7UUFFL0QsT0FBTyxDQUFDLEdBQUcsQ0FBQyxrQkFBa0IsQ0FBQyxDQUFDO0lBQ2pDLENBQUM7SUFFRCxHQUFHLENBQUMsT0FBZTtRQUNsQixJQUFJLEdBQUcsR0FBVyxJQUFJLENBQUMsU0FBUyxDQUFDLE9BQU8sQ0FBQyxDQUFDO1FBRTFDLElBQUksQ0FBQyxHQUFHLEVBQUU7WUFDVCxNQUFNLElBQUksS0FBSyxDQUFDLHNCQUFzQixPQUFPLG1CQUFtQixDQUFDLENBQUM7U0FDbEU7UUFFRCxJQUFJLFdBQVcsQ0FBQyxPQUFPLENBQUM7WUFBRSxPQUFPLElBQUksQ0FBQyxhQUFhLENBQUMsR0FBRyxDQUFDLENBQUM7UUFDekQsSUFBSSxVQUFVLENBQUMsT0FBTyxDQUFDO1lBQUUsT0FBTyxJQUFJLENBQUMsWUFBWSxDQUFDLEdBQUcsQ0FBQyxDQUFDO1FBRXZELE9BQU8sR0FBRyxDQUFDO0lBQ1osQ0FBQztJQUVELFlBQVksQ0FBQyxHQUFXO1FBQ3ZCLE9BQU8sQ0FBQyxHQUFHLENBQUMsR0FBRyxFQUFFLEdBQUcsQ0FBQyxDQUFDO1FBQ3RCLE9BQU8sWUFBWSxDQUFDLE9BQU8sQ0FBQyxJQUFJLENBQUMsZUFBZSxFQUFFLEdBQUcsQ0FBQyxDQUFDO0lBQ3hELENBQUM7SUFFRCxhQUFhLENBQUMsR0FBVztRQUN4QixPQUFPLENBQUMsR0FBRyxDQUFDLEdBQUcsRUFBRSxHQUFHLENBQUMsQ0FBQztRQUN0QixPQUFPLFlBQVksQ0FBQyxPQUFPLENBQUMsSUFBSSxDQUFDLGdCQUFnQixFQUFFLEdBQUcsQ0FBQyxDQUFDO0lBQ3pELENBQUM7Q0FDRDtBQUFBLENBQUMifQ==

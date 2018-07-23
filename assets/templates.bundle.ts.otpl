@@ -1,0 +1,23 @@
+/**
+ * Auto-generated file, please don't edit
+ *
+ * O'Web <%$.oweb_version%>
+ *
+ * <%$.bundle_date%>
+ */
+
+"use strict";
+
+const w: any = {}, f = (a: string, b: string) => {
+	w[a] = b;
+	return f
+};
+f<%loop( $.files : $path : $content ){%>("<%$path%>", "<%$content%>")
+
+<%}%>;
+export let templateLoad = function (path: string): string {
+	if (path in w) {
+		return w[path];
+	}
+	throw new Error(`Template file "${path}" is not found.`);
+};

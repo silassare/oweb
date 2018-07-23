@@ -26,6 +26,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "o-tel-input": "file:../otelinput",
     "otpl-js": "file:../../silo/otpl"
   },
   "devDependencies": {

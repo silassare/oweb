@@ -21,8 +21,8 @@ export default class OWebFormValidator {
     getFieldDescription(name: string): string;
     getErrors(): Array<OWebCustomError>;
     validate(): boolean;
-    assert(assertion: any, message: string, data?: {}): void;
-    catchable(e: any): boolean;
+    assert(assertion: any, message: string, data?: {}): this;
+    private catchable;
     static addFieldValidator(name: string, validator: tFormValidator): void;
     static addFieldValidators(map: {
         [key: string]: tFormValidator;

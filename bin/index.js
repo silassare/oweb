@@ -7,11 +7,11 @@
 
 let bundler = require("./bundler");
 
-let argExists = function (name) {
+let argExists = function(name) {
 	return ~process.argv.indexOf(name);
 };
 
-let getArg = function (name) {
+let getArg = function(name) {
 	let argv = process.argv;
 	let pos  = argv.indexOf(name);
 
@@ -22,7 +22,7 @@ let getArg = function (name) {
 	return undefined;
 };
 
-let printUsage = function (err_message) {
+let printUsage = function(err_message) {
 	console.log(
 		`
 O'Web is a framework for web applications that use APIs built with the OZone framework.
@@ -41,11 +41,12 @@ if (argExists("-h") || argExists("--help")) {
 }
 
 let OWebCli = {
-	getArgs: function () {
+	getArgs: function() {
 		return {
 			"source_dir": getArg("--source"),
 			"dest_dir"  : getArg("--dest-dir") || process.cwd(),
-			"web_root"  : getArg("--web-root")
+			"web_root"  : getArg("--web-root"),
+			"is_ts"     : argExists("--ts")
 		};
 	}
 };

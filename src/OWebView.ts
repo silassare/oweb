@@ -19,6 +19,7 @@ export default class OWebView extends OWebEvent {
 
 	constructor() {
 		super();
+		console.log("[OWebView] ready!");
 	}
 
 	isFrozen(): boolean {
@@ -57,7 +58,7 @@ export default class OWebView extends OWebEvent {
 				"data": dialog.data || {}
 			};
 
-			console.error("Please use new dialog mode -> ", d, "instead of ->", dialog);
+			// console.error("[OWebView] please use new dialog mode -> ", d, "instead of ->", dialog);
 		}
 
 		this.trigger(OWebView.EVT_VIEW_DIALOG, [d]);

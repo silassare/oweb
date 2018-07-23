@@ -1,3 +1,5 @@
+import {tLangDefinition} from "../../OWebLang";
+
 export default {
 	// ---------START NEW
 	"OZ_ERROR_REQUEST_FAIL"     : "Erreur: la requête a échoué.",
@@ -60,4 +62,4 @@ export default {
 	"OZ_FILE_ALIAS_PARSE_ERROR": "Fichier alias, erreur d'analyse.",
 	"OZ_FILE_ALIAS_NOT_FOUND"  : "Le fichier alias ou le fichier ciblé est introuvable..."
 
-};
+} as tLangDefinition;

@@ -14,7 +14,7 @@ export default class OWebFormValidator {
 
 	constructor(private readonly app_context: OWebApp, private readonly form: HTMLFormElement, private readonly required: Array<string> = [], private readonly excluded: Array<string> = [], private readonly checkAll: boolean = false) {
 		if (!form || form.nodeName !== "FORM") {
-			throw new Error("OWebFormValidator: a valid form element is required.");
+			throw new Error("[OWebFormValidator] a valid form element is required.");
 		}
 
 		let m         = this;
@@ -28,10 +28,7 @@ export default class OWebFormValidator {
 
 			if (name) {
 				if (!formValidators[validator_name]) {
-					throw new Error("OWebFormValidator: validator '" +
-						validator_name +
-						"' is explicitly set for field '" + name +
-						"' but is not defined.");
+					throw new Error(`[OWebFormValidator] validator "${validator_name}" is explicitly set for field "${ name }" but is not defined.`);
 				}
 
 				m.validatorsMap[name] = validator_name;
@@ -132,7 +129,7 @@ export default class OWebFormValidator {
 					if (Utils.isFunction(fn)) {
 						fn(value, name, context);
 					} else {
-						console.warn("OWebFormValidator: validator '%s' is not defined, field '%s' is then considered as safe.", validator_name, name);
+						console.warn("[OWebFormValidator] validator '%s' is not defined, field '%s' is then considered as safe.", validator_name, name);
 					}
 				}
 			} catch (e) {
@@ -145,13 +142,14 @@ export default class OWebFormValidator {
 		return this.errorList.length === 0;
 	}
 
-	assert(assertion: any, message: string, data?: {}): void {
+	assert(assertion: any, message: string, data?: {}): this {
 		if (!assertion) {
 			throw new OWebCustomError(message, data);
 		}
+		return this;
 	}
 
-	catchable(e: any): boolean {
+	private catchable(e: any): boolean {
 		if (e instanceof OWebCustomError) {
 			if (this.checkAll) {
 				this.errorList.push(e);
@@ -172,22 +170,22 @@ export default class OWebFormValidator {
 	static addFieldValidator(name: string, validator: tFormValidator): void {
 
 		if (!Utils.isString(name)) {
-			throw new TypeError("OWebFormValidator: field name should be a valid string");
+			throw new TypeError("[OWebFormValidator] field name should be a valid string.");
 		}
 
 		if (!Utils.isFunction(validator)) {
-			throw new TypeError("OWebFormValidator: field validator should be a valid function");
+			throw new TypeError("[OWebFormValidator] field validator should be a valid function.");
 		}
 
 		if (name in validator) {
-			console.warn("OWebFormValidator: field '%s' validator will be overwritten", name);
+			console.warn(`[OWebFormValidator] field "${name}" validator will be overwritten.`);
 		}
 
 		formValidators[name] = validator;
 	}
 
 	static addFieldValidators(map: { [key: string]: tFormValidator }): void {
-		Utils.iterate(map, (key, fn) => {
+		Utils.forEach(map, (key: string, fn: tFormValidator) => {
 			OWebFormValidator.addFieldValidator(key, fn);
 		});
 	}

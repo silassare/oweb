@@ -3,11 +3,81 @@
 import OWebApp from "./OWebApp";
 import Utils from "./utils/Utils";
 import OWebKeyStorage from "./OWebKeyStorage";
-import OWebCom from "./OWebCom";
+import OWebCom, {tComResponse} from "./OWebCom";
 
-export type tSvcSuccessCb = () => void;
-export type tSvcFailCb = () => void;
-export type tSvcReqOptions = {
+export interface iServiceAddData<T> {
+	item: T,
+	relations?: {
+		[key: string]: any
+	}
+}
+
+export interface iServiceGetData<T> {
+	item: T,
+	relations?: {
+		[key: string]: any
+	}
+}
+
+export interface iServiceGetAllData<T> {
+	items: T[],
+	max?: number,
+	page?: number,
+	total?: number,
+	relations?: {
+		[key: string]: any
+	}
+}
+
+export interface iServiceUpdateData<T> {
+	item: T,
+	relations?: {
+		[key: string]: any
+	}
+}
+
+export interface iServiceUpdateAllData {
+	affected: number
+}
+
+export interface iServiceDeleteData<T> {
+	item: T,
+	relations?: {
+		[key: string]: any
+	}
+}
+
+export interface iServiceDeleteAllData<T> {
+	affected: number
+}
+
+export interface iServiceGetRelationItemsData<T, R> {
+	target: T,
+	items: R[],
+	max?: number,
+	page?: number,
+	total?: number
+
+}
+
+export interface iServiceGetRelationItemData<T, R> {
+	target: T,
+	item?: R
+}
+
+export type tServiceAddSuccess<T> = (response: iServiceAddData<T>) => void;
+export type tServiceUpdateSuccess<T> = (response: iServiceUpdateData<T>) => void;
+export type tServiceUpdateAllSuccess<T> = (response: iServiceUpdateAllData) => void;
+export type tServiceDeleteSuccess<T> = (response: iServiceDeleteData<T>) => void;
+export type tServiceDeleteAllSuccess<T> = (response: iServiceDeleteAllData<T>) => void;
+export type tServiceGetSuccess<T> = (response: iServiceGetData<T>, fromCache: boolean) => void;
+export type tServiceGetAllSuccess<T> = (response: iServiceGetAllData<T>, fromCache: boolean) => void;
+export type tServiceGetRelationSuccess<T, R> = (response: iServiceGetRelationItemData<T, R>, fromCache: boolean) => void;
+export type tServiceGetRelationItemsSuccess<T, R> = (response: iServiceGetRelationItemsData<T, R>, fromCache: boolean) => void;
+
+export type tServiceFail = (response: tComResponse) => void;
+
+export type tServiceRequestOptions = {
 	max?: number,
 	page?: number,
 	filters?: any
@@ -22,14 +92,14 @@ let toKey = function (query_params: any) {
 	return key.length ? key : "no-params";
 };
 
-export default class OWebService {
+export default class OWebService<T> {
 	private readonly _key_store: OWebKeyStorage;
 	private readonly _base_data: { api_url: any; service_name: string };
 
 	constructor(private readonly app_context: OWebApp, service_name: string, private readonly item_id_name: string) {
 
-		let s_url       = app_context.configs.get("OZ_APP_API_BASE_URL")
-									 .replace(/\/$/g, "");
+		let s_url       = app_context.configs.get("OZ_API_BASE_URL")
+			.replace(/\/$/g, "");
 		this._base_data = {api_url: s_url, service_name: service_name};
 		this._key_store = new OWebKeyStorage(app_context, "services:" + service_name);
 
@@ -53,63 +123,41 @@ export default class OWebService {
 		return this._key_store;
 	}
 
-	addItem(formData: any, success: tSvcSuccessCb, fail: tSvcFailCb, freeze: boolean = false): OWebCom {
-		let m   = this,
-			url = this.getServiceURI();
+	add(formData: any, success: tServiceAddSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
+		let url = this.getServiceURI();
 
-		return this.app_context.request("POST", url, formData, (response: any) => {
-			let data   = response["data"];
-			let entity = data["item"];
-
-			m.getCacheManager()
-			 .setItem(entity[m.item_id_name], entity);
-
-			Utils.callback(success, [data]);
-		}, (response: any) => {
-			Utils.callback(fail, [response]);
-		}, freeze);
+		return this.app_context.request("POST", url, formData, (response: tComResponse) => {
+			success(response["data"]);
+		}, fail, freeze);
 	}
 
-	deleteItem(id: string, success: tSvcSuccessCb, fail: tSvcFailCb, freeze: boolean = false): OWebCom {
+	delete(id: string, success: tServiceDeleteSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
 		let m   = this,
 			url = this.getItemURI(id);
 
-		return this.app_context.request("DELETE", url, null, (response: any) => {
-			let entity = response["data"];
-
+		return this.app_context.request("DELETE", url, null, (response: tComResponse) => {
 			m.getCacheManager().removeItem(id);
-
-			Utils.callback(success, [entity]);
-		}, (response: any) => {
-			Utils.callback(fail, [response]);
-		}, freeze);
-
+			success(response["data"]);
+		}, fail, freeze);
 	}
 
-	updateItem(id: string, formData: any, success: tSvcSuccessCb, fail: tSvcFailCb, freeze: boolean = false): OWebCom {
-		let m   = this,
-			url = this.getItemURI(id);
+	update(id: string, formData: any, success: tServiceUpdateSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
+		let url = this.getItemURI(id);
 
-		return this.app_context.request("PATCH", url, formData, (response: any) => {
-			let entity = response["data"];
-
-			m.getCacheManager().setItem(entity[m.item_id_name], entity);
-
-			Utils.callback(success, [entity]);
-		}, (response: any) => {
-			Utils.callback(fail, [response]);
-		}, freeze);
+		return this.app_context.request("PATCH", url, formData, (response: tComResponse) => {
+			success(response["data"]);
+		}, fail, freeze);
 	}
 
-	updateAllItems(options: tSvcReqOptions, success: tSvcSuccessCb, fail: tSvcFailCb, freeze: boolean = false): OWebCom {
-		let url                          = this.getServiceURI(),
-			filters                      = options.filters,
-			request_data: tSvcReqOptions = {};
+	deleteAll(options: tServiceRequestOptions, success: tServiceDeleteAllSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
+		let url                                  = this.getServiceURI(),
+			filters                              = options.filters,
+			request_data: tServiceRequestOptions = {};
 
-		if (typeof options["max"] === "number") {
+		if (typeof options["max"] === "number") {// will be ignored by O'Zone
 			request_data["max"] = options["max"];
 		}
-		if (typeof options["page"] === "number") {
+		if (typeof options["page"] === "number") {// will be ignored by O'Zone
 			request_data["page"] = options["page"];
 		}
 
@@ -117,17 +165,35 @@ export default class OWebService {
 			request_data["filters"] = filters;
 		}
 
-		return this.app_context.request("PATCH", url, request_data,
-			(response: any) => {
-				let data = response["data"];
-
-				Utils.callback(success, [data]);
-			}, (response: any) => {
-				Utils.callback(fail, [response]);
-			}, freeze);
+		return this.app_context.request("DELETE", url, request_data, (response: tComResponse) => {
+			success(response["data"]);
+		}, fail, freeze);
 	}
 
-	getItem(id: string, success: tSvcSuccessCb, fail: tSvcFailCb, freeze: boolean = false, load_cache_first: boolean = false): OWebCom {
+	updateAll(options: tServiceRequestOptions, formData: any, success: tServiceUpdateAllSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
+		let url                                                  = this.getServiceURI(),
+			filters                                              = options.filters,
+			request_data: tServiceRequestOptions & { data: any } = {
+				data: formData
+			};
+
+		if (typeof options["max"] === "number") {// will be ignored by O'Zone
+			request_data["max"] = options["max"];
+		}
+		if (typeof options["page"] === "number") {// will be ignored by O'Zone
+			request_data["page"] = options["page"];
+		}
+
+		if (Utils.isPlainObject(filters)) {
+			request_data["filters"] = filters;
+		}
+
+		return this.app_context.request("PATCH", url, request_data, (response: tComResponse) => {
+			success(response["data"]);
+		}, fail, freeze);
+	}
+
+	get(id: string, success: tServiceGetSuccess<T>, fail: tServiceFail, freeze: boolean = false, load_cache_first: boolean = false): OWebCom {
 		let m        = this,
 			url      = this.getItemURI(id),
 			cache_id = id;
@@ -135,35 +201,33 @@ export default class OWebService {
 		if (load_cache_first) {
 			let tmp_data = m.getCacheManager().getItem(cache_id);
 
-			if (tmp_data && tmp_data.item) {
-				Utils.callback(success, [tmp_data, false]);
+			if (tmp_data) {
+				success(tmp_data, true);
 				freeze = false;
 			}
 		}
 
-		return this.app_context.request("GET", url, null, (response: any) => {
-			let entity = response["data"];
+		return this.app_context.request("GET", url, null, (response: tComResponse) => {
+			let data = response["data"];
+			m.getCacheManager().setItem(id, data);
+			success(data, false);
+		}, (response: tComResponse) => {
+			let data = m.getCacheManager().getItem(cache_id);
 
-			m.getCacheManager().setItem(cache_id, entity);
-
-			Utils.callback(success, [entity, true, response]);
-		}, (response: any) => {
-			let entity = m.getCacheManager().getItem(cache_id);
-
-			if (entity) {
-				Utils.callback(success, [entity, false, response]);
+			if (data) {
+				success(data, true);
 			} else {
-				Utils.callback(fail, [response]);
+				fail(response);
 			}
 		}, freeze);
 
 	}
 
-	getAllItems(options: tSvcReqOptions, success: tSvcSuccessCb, fail: tSvcFailCb, freeze: boolean = false, force_cache: boolean = false, load_cache_first: boolean = false): OWebCom {
-		let m                            = this,
-			url                          = this.getServiceURI(),
-			filters                      = options["filters"],
-			request_data: tSvcReqOptions = {};
+	getAll(options: tServiceRequestOptions, success: tServiceGetAllSuccess<T>, fail: tServiceFail, freeze: boolean = false, force_cache: boolean = false, load_cache_first: boolean = false): OWebCom {
+		let m                                    = this,
+			url                                  = this.getServiceURI(),
+			filters                              = options["filters"],
+			request_data: tServiceRequestOptions = {};
 
 		if (typeof options["max"] === "number") {
 			request_data["max"] = options["max"];
@@ -183,35 +247,63 @@ export default class OWebService {
 
 			if (tmp_data && tmp_data.items &&
 				Object.keys(tmp_data.items).length) {
-				Utils.callback(success, [tmp_data, false]);
+				success(tmp_data, true);
 				freeze = false;
 			}
 		}
 
-		return this.app_context.request("GET", url, request_data, (response: any) => {
+		return this.app_context.request("GET", url, request_data, (response: tComResponse) => {
 			let data = response["data"];
-
-			force_cache &&
-			m.getCacheManager().setItem(cache_id, data);
-
-			Utils.callback(success, [data, true, response]);
-		}, (response: any) => {
+			force_cache && m.getCacheManager().setItem(cache_id, data);
+			success(data, false);
+		}, (response: tComResponse) => {
 			let data;
 			if (force_cache &&
 				(data = m.getCacheManager().getItem(cache_id))) {
-				Utils.callback(success, [data, false, response]);
+				success(data, true);
 			} else {
-				Utils.callback(fail, [response]);
+				fail(response);
 			}
 		}, freeze);
 
 	}
 
-	getRelationItems(id: string, relation: string, options: tSvcReqOptions, success: tSvcSuccessCb, fail: tSvcFailCb, freeze: boolean = false, force_cache: boolean = false, load_cache_first: boolean = false): OWebCom {
-		let m                            = this,
-			url                          = this.getItemRelationURI(id, relation),
-			filters                      = options["filters"],
-			request_data: tSvcReqOptions = {};
+	getRelation<R>(id: string, relation: string, success: tServiceGetRelationSuccess<T, R>, fail: tServiceFail, freeze: boolean = false, force_cache: boolean = false, load_cache_first: boolean = false): OWebCom {
+		let m   = this,
+			url = this.getItemRelationURI(id, relation);
+
+		let cache_id = toKey({id, relation});
+
+		if (force_cache && load_cache_first) {
+			let tmp_data = this.getCacheManager().getItem(cache_id);
+
+			if (tmp_data && tmp_data.item &&
+				Object.keys(tmp_data.item).length) {
+				success(tmp_data, true);
+				freeze = false;
+			}
+		}
+
+		return this.app_context.request("GET", url, {}, function (response: tComResponse) {
+			let data = response["data"];
+			force_cache && m.getCacheManager().setItem(cache_id, data);
+			success(data, false);
+		}, function (response: tComResponse) {
+			let data;
+			if (force_cache &&
+				(data = m.getCacheManager().getItem(cache_id))) {
+				success(data, true);
+			} else {
+				fail(response);
+			}
+		}, freeze);
+	}
+
+	getRelationItems<R>(id: string, relation: string, options: tServiceRequestOptions, success: tServiceGetRelationItemsSuccess<T, R>, fail: tServiceFail, freeze: boolean = false, force_cache: boolean = false, load_cache_first: boolean = false): OWebCom {
+		let m                                    = this,
+			url                                  = this.getItemRelationURI(id, relation),
+			filters                              = options["filters"],
+			request_data: tServiceRequestOptions = {};
 
 		if (typeof options["max"] === "number") {
 			request_data["max"] = options["max"];
@@ -231,27 +323,24 @@ export default class OWebService {
 
 			if (tmp_data && tmp_data.items &&
 				Object.keys(tmp_data.items).length) {
-				Utils.callback(success, [tmp_data, false]);
+				success(tmp_data, true);
 				freeze = false;
 			}
 		}
 
-		return this.app_context.request("GET", url, request_data, function (response: any) {
+		return this.app_context.request("GET", url, request_data, function (response: tComResponse) {
 			let data = response["data"];
-			if (force_cache) {
-				m.getCacheManager().setItem(cache_id, data);
-			}
+			force_cache && m.getCacheManager().setItem(cache_id, data);
 
-			Utils.callback(success, [data, true, response]);
-		}, function (response: any) {
+			success(data, false);
+		}, function (response: tComResponse) {
 			let data;
 			if (force_cache &&
 				(data = m.getCacheManager().getItem(cache_id))) {
-				Utils.callback(success, [data, false, response]);
+				success(data, true);
 			} else {
-				Utils.callback(fail, [response]);
+				fail(response);
 			}
 		}, freeze);
-
 	}
 }

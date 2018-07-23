@@ -1,5 +1,13 @@
 import OWebEvent from "./OWebEvent";
 import OWebApp from "./OWebApp";
+export declare type tComResponse = {
+    error: number;
+    msg: string;
+    data?: any;
+    utime: number;
+    stime?: number;
+    neterror?: boolean;
+};
 export declare type tComOptions = {
     url: string;
     method: string;
@@ -25,8 +33,10 @@ export default class OWebCom extends OWebEvent {
     private readonly _original_data;
     private _modified_data;
     private _busy;
+    private _request?;
     constructor(app_context: OWebApp, options: tComOptions);
-    _init(): void;
-    send(): false | undefined;
-    handleResponse(response: any): void;
+    private _init;
+    private _handleResponse;
+    send(): void;
+    abort(): void;
 }

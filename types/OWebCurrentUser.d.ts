@@ -9,11 +9,10 @@ export default class OWebCurrentUser extends OWebEvent {
     static readonly EVT_USER_INFO_UPDATE: string;
     private _key_store;
     constructor(app_context: OWebApp);
-    logout(): void;
-    getCurrentUserData(field?: string): any | tUserData;
+    getCurrentUserData(field?: keyof tUserData): any | tUserData;
     setCurrentUserData(data: tUserData, overwrite?: boolean): this;
     setSessionExpire(expire: number): this;
     getSessionExpire(): number;
     clear(): this;
-    _notifyChange(): this;
+    private _notifyChange;
 }

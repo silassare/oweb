@@ -4,33 +4,39 @@ import OWebEvent from "./OWebEvent";
 import OWebCurrentUser from "./OWebCurrentUser";
 import OWebView from "./OWebView";
 import OWebDataStore from "./OWebDataStore";
+import OWebDate from "./plugins/OWebDate";
 import Utils from "./utils/Utils";
-import OWebCom from "./OWebCom";
+import OWebCom, {tComResponse} from "./OWebCom";
 import OWebFormValidator from "./OWebFormValidator";
 import OWebService from "./OWebService";
 import OWebConfigs, {tConfigList} from "./OWebConfigs";
-import {iPage, default as OWebPage} from "./OWebPage";
 import OWebUrl, {tUrlList} from "./OWebUrl";
+import OWebRouter from "./OWebRouter";
+
+const noop = () => {
+};
 
 export default class OWebApp extends OWebEvent {
 
 	static readonly EVT_APP_READY = "OWebApp:ready";
 	static readonly SELF          = "OWebApp";
 
-	private readonly pages: { [key: string]: iPage } = {};
-
 	readonly view: OWebView;
+	readonly router: OWebRouter;
 	readonly user: OWebCurrentUser;
 	readonly configs: OWebConfigs;
 	readonly url: OWebUrl;
-	readonly services: { [key: string]: OWebService } = {};
+	readonly services: { [key: string]: OWebService<any> } = {};
 
-	constructor(private readonly app_name: string, app_config: tConfigList, app_url: tUrlList) {
+	constructor(private readonly app_name: string, app_config_list: tConfigList, app_url_list: tUrlList) {
 		super();
-		this.configs = new OWebConfigs(this, app_config);
-		this.url     = new OWebUrl(this, app_url);
-		this.user    = new OWebCurrentUser(this);
-		this.view    = new OWebView();
+		this.configs  = new OWebConfigs(this, app_config_list);
+		this.url      = new OWebUrl(this, app_url_list);
+		this.user     = new OWebCurrentUser(this);
+		this.view     = new OWebView();
+		let base_url  = this.configs.get("OW_APP_LOCAL_BASE_URL"),
+			hash_mode = false !== this.configs.get("OW_APP_ROUTER_HASH_MODE");
+		this.router   = new OWebRouter(base_url, hash_mode);
 	}
 
 	getAppName() {
@@ -38,10 +44,11 @@ export default class OWebApp extends OWebEvent {
 	}
 
 	start() {
+		console.log("[OWebApp] app started!");
 		this.trigger(OWebApp.EVT_APP_READY);
 	}
 
-	getService(service_name: string): OWebService {
+	getService<T>(service_name: string): OWebService<T> {
 		return this.services[service_name];
 	}
 
@@ -52,20 +59,6 @@ export default class OWebApp extends OWebEvent {
 		}
 
 		return this;
-	}
-
-	registerPage(page: OWebPage): this {
-		let name = page.getPageName();
-		if (name in this.pages) {
-			console.warn(`OWebApp: page "${name}" will be redefined.`);
-		}
-
-		this.pages[name] = page;
-		return this;
-	}
-
-	getPage(name: string): iPage {
-		return this.pages[name];
 	}
 
 	getFormValidator(form: HTMLFormElement, required: Array<string> = [], excluded: Array<string> = []) {
@@ -79,6 +72,7 @@ export default class OWebApp extends OWebEvent {
 
 	reloadApp() {
 		// TODO: instead of reloading the current location, find a way to browse to web app entry point
+		// for android & ios restart the app
 		window.location.reload(true);
 	}
 
@@ -100,26 +94,14 @@ export default class OWebApp extends OWebEvent {
 		return Utils.isPlainObject(data) && this.sessionActive();
 	}
 
-	/*
-	 getLoginPageName: function() {
-	 return "PAGE_USER_LOGIN";
-	 },
-	 logInFirst : function(then) {
-	 let app  = this;
-	 let next = function(user_data) {
-	 app.user.setCurrentUserData(user_data, true);
-	 Utils.callback(then, [user_data]);
-	 };
+	requestPromise(method: string, url: string, data: any, freeze: boolean = false): Promise<tComResponse> {
+		let m = this;
+		return new Promise<tComResponse>(function (resolve, reject) {
+			m.request(method, url, data, resolve, reject, freeze);
+		});
+	}
 
-	 if (!this.userVerified()) {
-	 OWebPage.showPage(this.getLoginPageName(), {"next": next}, null,
-	 false);
-	 } else {
-	 Utils.callback(then, [app.user.getCurrentUserData()]);
-	 }
-	 },
-	 */
-	request(method: string, url: string, data: any, success?: Function, fail?: Function, freeze: boolean = false): OWebCom {
+	request(method: string, url: string, data: any, success: (response: tComResponse) => void = noop, fail: (response: tComResponse) => void = noop, freeze: boolean = false): OWebCom {
 		let app = this;
 
 		if (freeze) {
@@ -134,15 +116,15 @@ export default class OWebApp extends OWebEvent {
 		};
 
 		let com = new OWebCom(this, options);
-		com.on(OWebCom.EVT_COM_REQUEST_SUCCESS, (response: any) => {
-			setTimeout(function () {
-				if (freeze) {
-					app.view.unfreeze();
-				}
+		com.on(OWebCom.EVT_COM_REQUEST_SUCCESS, (response: tComResponse) => {
+			// setTimeout(function () {
+			if (freeze) {
+				app.view.unfreeze();
+			}
 
-				Utils.callback(success, [response]);
-			}, 1000);
-		}).on(OWebCom.EVT_COM_REQUEST_ERROR, (response: any) => {
+			success(response);
+			// }, 1000);
+		}).on(OWebCom.EVT_COM_REQUEST_ERROR, (response: tComResponse) => {
 			if (response["msg"] === "OZ_ERROR_YOU_ARE_NOT_ADMIN") {
 				app.destroyApp();
 			}
@@ -151,13 +133,20 @@ export default class OWebApp extends OWebEvent {
 				app.view.unfreeze();
 			}
 
-			Utils.callback(fail, [response]);
+			fail(response);
 		}).on(OWebCom.EVT_COM_NETWORK_ERROR, () => {
 			if (freeze) {
 				app.view.unfreeze();
 			}
+			let response: tComResponse = {
+				"error": 1,
+				"msg"  : "OZ_ERROR_REQUEST_FAIL",
+				"utime": OWebDate.timestamp()
+			};
 
-			Utils.callback(fail, [{"error": 1, "msg": "OZ_ERROR_REQUEST_FAIL", "is_network": true}]);
+			response.neterror = true;
+
+			fail(response);
 		}).send();
 
 		return com;

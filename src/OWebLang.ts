@@ -52,7 +52,7 @@ let runPlugins = (plugins: string, data: any, langCode: string): any => {
 		if (fn) {
 			data = fn(data, langCode);
 		} else {
-			console.error("OWebLang: undefined plugins \"%s\".", plugin);
+			console.error(`[OWebLang] undefined plugins "${plugin}".`);
 		}
 	}
 
@@ -133,21 +133,16 @@ let loadLangFiles = function () {
 				OWebLang.updateAll();
 			}
 			if (failed.length) {
-				console.warn("OWebLang: fail to load lang files ->", failed);
+				console.warn("[OWebLang] fail to load lang files ->", failed);
 			}
 		});
 	}
 };
 
-export class OTranslator {
-	private readonly ele: HTMLElement;
+export default class OWebLang {
 
-	constructor(element: HTMLElement) {
-		this.ele = element;
-	}
-
-	update(handler?: Function, context?: any) {
-		let $ele           = $(this.ele),
+	static update(ele: HTMLElement, handler?: Function, context?: any) {
+		let $ele           = $(ele),
 			translatedText = null,
 			langKey        = $ele.data("olang"),
 			langCode       = $ele.data("olangCode") || LANG_DEFAULT,
@@ -162,42 +157,36 @@ export class OTranslator {
 				if (Utils.isFunction(handler)) {
 					handler.call(context, translatedText);
 				} else {
-					let tag = this.ele.nodeName;
+					let tag = ele.nodeName;
 
 					if (!LANG_VALUE_TAG_REG.test(tag)) {
-						this.ele.innerHTML = translatedText;
+						ele.innerHTML = translatedText;
 					} else {
-						this.ele.setAttribute("value", translatedText);
+						ele.setAttribute("value", translatedText);
 					}
 				}
 			}
 
 			if (titleKey !== undefined) {
-				this.ele.setAttribute("title", translate(titleKey, langData, langCode));
+				ele.setAttribute("title", translate(titleKey, langData, langCode));
 			}
 
 			if (placeholderKey !== undefined) {
-				this.ele.setAttribute("placeholder", translate(placeholderKey, langData, langCode));
+				ele.setAttribute("placeholder", translate(placeholderKey, langData, langCode));
 			}
 		} else {
-			console.warn("OTranslator: please wait while the lang '%s' is loaded...", langCode);
+			console.warn(`[OWebLang] please wait while the lang "${langCode}" is loaded...`);
 		}
-	}
-}
-
-export default class OWebLang {
-	static getTranslator(ele: HTMLElement): OTranslator {
-		return new OTranslator(ele);
 	}
 
 	static setLangData(langCode: string, data: tLangDefinition) {
 
 		if (!Utils.isString(langCode)) {
-			throw new TypeError("OWebLang: your lang name should be a valid string");
+			throw new TypeError("[OWebLang] your lang name should be a valid string.");
 		}
 
 		if (!Utils.isPlainObject(data)) {
-			throw new TypeError("OWebLang: your lang data should be a valid plain object");
+			throw new TypeError("[OWebLang] your lang data should be a valid plain object.");
 		}
 
 		LANG_OBJECT[langCode] = Utils.assign(LANG_OBJECT[langCode] || {}, data);
@@ -249,7 +238,7 @@ export default class OWebLang {
 
 	static addPlugin(name: string, fn: Function) {
 		if (LANG_PLUGINS[name]) {
-			throw new Error(`OWebLang: plugin '${name}' already defined.`);
+			throw new Error(`[OWebLang] plugin '${name}' already defined.`);
 		}
 
 		LANG_PLUGINS[name] = fn;
@@ -263,28 +252,33 @@ export default class OWebLang {
 }
 
 $.extend($.fn, {
-	oLangAble: function () {
+	oLangAble      : function () {
 		return $(this).data("olang") !== undefined
-			|| $(this).data("olangTitle") !== undefined
-			|| $(this).data("olangPlaceholder") !== undefined
-			|| $(this).data("olangHidden") !== undefined;
-	}
-	, oLangDataObject: function () {
+			   || $(this).data("olangTitle") !== undefined
+			   || $(this).data("olangPlaceholder") !== undefined
+			   || $(this).data("olangHidden") !== undefined;
+	},
+	oLangDataObject: function () {
 		let $ele: any = $(this);
 
 		if (!$ele.oLangAble()) {
-			throw new Error("There is no olang data object.");
+			throw new Error("[OWebLang] there is no olang data object.");
 		}
 
 		return {
-			"olang": $ele.data("olang") || $ele.data("olangTitle") || $ele.data("olangPlaceholder") || $ele.data("olangHidden"),
-			"olangData": $ele.data("olangData") || $ele.data()
+			"olang"           : $ele.data("olang"),
+			"olangTitle"      : $ele.data("olangTitle"),
+			"olangPlaceholder": $ele.data("olangPlaceholder"),
+			"olangHidden"     : $ele.data("olangHidden"),
+			"olangData"       : $ele.data("olangData") || $ele.data()
 		};
-	}, oLang: function () {
+	},
+	oLang          : function () {
 		return $(this).each(function () {
-			OWebLang.getTranslator((this as any).get(0)).update();
+			OWebLang.update((this as any).get(0));
 		});
-	}, oLangUpdateTree: function () {
+	},
+	oLangUpdateTree: function () {
 		return $(this).find("*").each(function () {
 			let $ele: any = $(this);
 			if ($ele.oLangAble()) {

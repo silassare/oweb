@@ -12,26 +12,30 @@ export default class OWebConfigs extends OWebEvent {
 	static readonly SELF              = "OWebConfigs";
 	static readonly EVT_CONFIG_CHANGE = "OWebConfigs:change";
 
-	private readonly _default_configs: tConfigList = {};
-	private readonly _user_configs: tConfigList    = {};
-
+	private readonly _default_configs: tConfigList     = {};
+	private readonly _user_configs: tConfigList        = {};
+	private readonly _private_configs_map: tConfigList = {};
 	private readonly _tag_name: string;
 
 	constructor(private readonly app_context: OWebApp, configs: tConfigList) {
 		super();
 		this._tag_name = app_context.getAppName() + ":user_configs";
 
-		this.addDefaultConfig(configs);
-		this._loadSaved();
+		this.loadConfigs(configs);
+		this._loadSavedConfigs();
+
+		console.log("[OWebConfigs] ready!");
 	}
 
-	addDefaultConfig(configs: tConfigList): this {
+	loadConfigs(configs: tConfigList): this {
 		let s = this;
 
-		Utils.iterate(configs, (cfg: any, value: any) => {
+		Utils.forEach(configs, (cfg: string, value: any) => {
+			cfg                  = s._realConfigName(cfg);
 			s._user_configs[cfg] = s._default_configs[cfg] = value;
 		});
-		return this;
+
+		return s;
 	}
 
 	resetToDefault(config: string): this {
@@ -51,30 +55,31 @@ export default class OWebConfigs extends OWebEvent {
 	}
 
 	get(config: string): any {
+		this._warnUndefined(config);
 		return this._user_configs[config];
 	}
 
 	set(config: string, value: any): this {
 		let m = this;
 		if (Utils.isPlainObject(config)) {
-			Utils.iterate(config, (key, value) => {
+			Utils.forEach(config as {}, (key, value) => {
 				m._set(key, value);
 			});
 		} else {
-			this._set(config, value);
+			m._set(config, value);
 		}
 
 		OWebDataStore.save(this._tag_name, this._user_configs);
 		return this;
 	}
 
-	_loadSaved() {
+	private _loadSavedConfigs() {
 		let m         = this,
 			saved_cfg = OWebDataStore.load(this._tag_name) || {};
 
-		Utils.iterate(m._default_configs, (key) => {
+		Utils.forEach(m._default_configs, (key) => {
 
-			if (OWebConfigs._isPublic(key) && saved_cfg[key] !== undefined) {
+			if (this._isPublic(key) && saved_cfg[key] !== undefined) {
 				m._user_configs[key] = saved_cfg[key];
 			}
 
@@ -83,10 +88,12 @@ export default class OWebConfigs extends OWebEvent {
 		OWebDataStore.save(this._tag_name, m._user_configs);
 	}
 
-	_set(config: string, value: any): void {
+	private _set(config: string, value: any): void {
 
-		if (!OWebConfigs._isPublic(config)) {
-			throw new Error(`can't overwrite config "${config}" permission denied.`);
+		this._warnUndefined(config);
+
+		if (!this._isPublic(config)) {
+			throw new Error(`[OWebConfigs] can't overwrite config "${config}" permission denied.`);
 		}
 
 		if (config in this._user_configs) {
@@ -96,7 +103,22 @@ export default class OWebConfigs extends OWebEvent {
 		}
 	}
 
-	static _isPublic(config: string) {
-		return config.substr(0, 2) === "P_";
+	private _realConfigName(config: string): string {
+		if (config[0] === "!") {
+			config                            = config.substr(1);
+			this._private_configs_map[config] = 1;
+		}
+
+		return config;
+	}
+
+	private _isPublic(config: string): boolean {
+		return undefined === this._private_configs_map[config];
+	}
+
+	private _warnUndefined(config: string) {
+		if (!(config in this._user_configs)) {
+			console.warn(`[OWebConfigs] config "${config}" is not defined.`);
+		}
 	}
 }

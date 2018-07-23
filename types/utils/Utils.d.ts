@@ -14,13 +14,13 @@ declare let Utils: {
     getFrom: (from: object, key: string) => any;
     stringKeyReplace: (str: string, data: object) => string;
     textToLineString: (text: string) => string;
-    iterate: (obj: {} | any[], fn: (key: any, value: any) => void) => void;
-    date: {
-        [key: string]: Function;
-    };
+    forEach: <T>(obj: {
+        [key: string]: T;
+    } | T[], fn: (key: any, value: T) => void) => void;
     math: {
         numberFormat: (x: string | number, dec?: number, decimalSep?: string, digitsSep?: string) => string;
     };
+    isValidAge: (day: number, month: number, year: number, minAge: number, maxAge: number) => boolean;
     buildQueryString: (object: object, prefix: string) => string;
     parseQueryString: (str: string) => {};
     eventCancel: (e: Event) => void;

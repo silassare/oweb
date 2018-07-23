@@ -1,1 +1,0 @@
-{"version":3,"file":"oweb.js","sourceRoot":"","sources":["../src/oweb.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,MAAM,WAAW,CAAC;AAIhC,qBAAqB;AACrB,OAAO,iBAAiB,CAAC;AAEzB,MAAM,CAAC,OAAO,eAAe,QAAgB,EAAE,WAAwB,EAAE,OAAiB;IACzF,OAAO,IAAI,OAAO,CAAC,QAAQ,EAAE,WAAW,EAAE,OAAO,CAAC,CAAC;AACpD,CAAC"}

@@ -4,32 +4,31 @@
  * Emile Silas SARE (emile.silas@gmail.com)
  */
 
-const fs         = require("fs"),
-	  path       = require("path"),
-	  otpl       = require("otpl-js"),
-	  output_tpl = fs.readFileSync(__dirname + "/../assets/templates.bundle.otpl");
+const fs   = require("fs"),
+      path = require("path"),
+      otpl = require("otpl-js");
 
-let cleanFileContent = function (content) {
+let cleanFileContent = function(content) {
 	return content.toString()
-		.replace(/"/g, "\\\"")
-		.replace(/\t/g, "\\t")
-		.replace(/\n/g, "\\n")
-		.replace(/\r/g, "\\r");
+	              .replace(/"/g, "\\\"")
+	              .replace(/\t/g, "\\t")
+	              .replace(/\n/g, "\\n")
+	              .replace(/\r/g, "\\r");
 };
 
-let getWebSrc = function (root, src) {
+let getWebSrc = function(root, src) {
 	return src.replace(root, "")
-		.replace(/\\/g, "/").replace(/^\//, "");
+	          .replace(/\\/g, "/").replace(/^\//, "");
 };
 
 // walk into directory and search for file with given extension
 // make a bundle as output
-let dirTemplateBundle = function (dir, web_root, extensions, to) {
+let dirTemplateBundle = function(dir, web_root, extensions, to) {
 	let tpl_count = 0,
-		list      = fs.readdirSync(dir),
-		file_reg  = new RegExp("(" + extensions.join("|") + ")$");
+	    list      = fs.readdirSync(dir),
+	    file_reg  = new RegExp("(" + extensions.join("|") + ")$");
 
-	list.forEach(function (name) {
+	list.forEach(function(name) {
 		let src = path.resolve(dir, name);
 
 		if (fs.lstatSync(src).isDirectory()) {
@@ -45,10 +44,10 @@ let dirTemplateBundle = function (dir, web_root, extensions, to) {
 	return tpl_count;
 };
 
-module.exports = function (cli) {
+module.exports = function(cli) {
 
-	let {source_dir, web_root, dest_dir} = cli.getArgs();
-	const extensions                     = [".otpl", ".txt", ".html"];
+	let {source_dir, web_root, dest_dir, is_ts} = cli.getArgs();
+	const extensions                            = [".otpl", ".txt", ".html"];
 	if (!fs.existsSync(source_dir) || !fs.lstatSync(source_dir).isDirectory()) {
 		throw new Error("please set a valid source directory");
 	}
@@ -65,9 +64,13 @@ module.exports = function (cli) {
 	dest_dir   = path.resolve(dest_dir);
 	web_root   = path.resolve(web_root);
 
+	const bundle_name = `./oweb.templates.${is_ts ? "ts" : "js"}`,
+	      output_tpl  = fs.readFileSync(__dirname +
+		      `/../assets/templates.bundle.${is_ts ? "ts" : "js"}.otpl`);
+
 	let bundle_files    = {},//map file path to file content
-		templates_count = dirTemplateBundle(source_dir, web_root,
-			extensions, bundle_files);
+	    templates_count = dirTemplateBundle(source_dir, web_root,
+		    extensions, bundle_files);
 
 	if (templates_count) {
 		let o      = new otpl;
@@ -77,7 +80,7 @@ module.exports = function (cli) {
 			"bundle_date" : (new Date).toGMTString()
 		});
 
-		fs.writeFileSync(path.resolve(dest_dir, "./oweb.templates.js"), result);
+		fs.writeFileSync(path.resolve(dest_dir, bundle_name), result);
 		console.log("oweb: %d template(s) bundled.", templates_count);
 	} else {
 		console.log("oweb: there is no template to bundle.");

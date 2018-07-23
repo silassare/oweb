@@ -6,7 +6,7 @@ let document = window.document;
 let isOldIE  = /MSIE\s([5-9]\.0)/.test(navigator.userAgent);
 
 if (typeof document !== "object" || typeof document.createElement !== "function") {
-	throw "scriptLoader is for web use only";
+	throw new Error("scriptLoader is for web use only");
 }
 
 export type tScriptFile = [any, () => boolean] | [any];

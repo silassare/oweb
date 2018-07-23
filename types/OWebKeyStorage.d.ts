@@ -3,13 +3,15 @@ import OWebApp from "./OWebApp";
 export default class OWebKeyStorage extends OWebEvent {
     private readonly app_context;
     private persistent;
+    private max_life_time;
     private readonly _tag_name;
     private _store;
-    constructor(app_context: OWebApp, tag: string, persistent?: boolean);
+    constructor(app_context: OWebApp, tag: string, persistent?: boolean, max_life_time?: number);
     getStoreData(): {};
     getItem(key: string): any;
     setItem(key: string, value: any): this;
     removeItem(key: string): this;
-    save(): this;
+    private save;
     clear(): this;
+    private _clearExpired;
 }

@@ -12,7 +12,7 @@ export default class OWebCustomError extends Error {
 			this.message = e.message;
 			this.stack   = e.stack;
 		} else {
-			this.message = message || "OWebCustomError: something went wrong.";
+			this.message = message || "[OWebCustomError] something went wrong.";
 			this.stack   = (new Error()).stack;
 		}
 	}

@@ -3,9 +3,9 @@
 import Utils from "./utils/Utils";
 
 export default class OWebEvent {
-	_app_events: { [key: string]: Array<Function> } = {};
+	private _app_events: { [key: string]: Array<Function> } = {};
 
-	constructor() {}
+	protected constructor() {}
 
 	on(event: string, handler: Function) {
 		if (!this._app_events[event]) {
@@ -13,7 +13,7 @@ export default class OWebEvent {
 		}
 
 		if (!Utils.isFunction(handler)) {
-			throw new TypeError("OWebEvent: handler should be function.");
+			throw new TypeError("[OWebEvent] handler should be function.");
 		}
 
 		this._app_events[event].push(handler);

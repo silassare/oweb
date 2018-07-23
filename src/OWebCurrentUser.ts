@@ -4,9 +4,10 @@ import OWebEvent from "./OWebEvent";
 import Utils from "./utils/Utils";
 import OWebApp from "./OWebApp";
 import OWebKeyStorage from "./OWebKeyStorage";
-import OWebLogout from "./plugins/OWebLogout";
 
-export type tUserData = { [key: string]: any };
+export type tUserData = {
+	[key: string]: any
+};
 
 export default class OWebCurrentUser extends OWebEvent {
 	static readonly SELF                 = "OWebCurrentUser";
@@ -18,13 +19,10 @@ export default class OWebCurrentUser extends OWebEvent {
 		super();
 
 		this._key_store = new OWebKeyStorage(app_context, OWebCurrentUser.SELF);
+		console.log("[OWebCurrentUser] ready!");
 	}
 
-	logout() {
-		return (new OWebLogout(this.app_context)).logout();
-	}
-
-	getCurrentUserData(field?: string): any | tUserData {
+	getCurrentUserData(field?: keyof tUserData): any | tUserData {
 		let user_data = this._key_store.getItem("user_data");
 
 		if (field !== undefined) {
@@ -60,7 +58,7 @@ export default class OWebCurrentUser extends OWebEvent {
 		return this._notifyChange();
 	}
 
-	_notifyChange(): this {
+	private _notifyChange(): this {
 		this.trigger(OWebCurrentUser.EVT_USER_INFO_UPDATE, [this]);
 		return this;
 	}
