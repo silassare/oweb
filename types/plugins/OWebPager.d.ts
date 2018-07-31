@@ -1,11 +1,17 @@
 import OWebEvent from "../OWebEvent";
 import { tRouteAction, tRouteOptions } from "../OWebRouter";
 import OWebApp from "../OWebApp";
+export interface iPage {
+    name: string;
+    getLinks: () => tPageLink[];
+    onPageOpen?: tRouteAction;
+    onPageClose?: tRouteAction;
+}
 export declare type tPageLink = {
     title: string;
     path: string;
+    require_login?: boolean;
     description?: string;
-    action?: tRouteAction;
     options?: tRouteOptions;
     show?: boolean;
     slug?: string;
@@ -14,30 +20,29 @@ export declare type tPageLink = {
 };
 export declare type tPageLinkFull = tPageLink & {
     id: number;
+    href: string;
     active: boolean;
     active_child: boolean;
+    require_login: boolean;
     show: boolean;
     parent?: tPageLinkFull;
     sub?: tPageLinkFull[];
-};
-export declare type tPage = {
-    name: string;
-    links: tPageLink[];
 };
 export default class OWebPager extends OWebEvent {
     private readonly app_context;
     static readonly SELF: string;
     static readonly EVT_PAGE_CHANGE: string;
-    private readonly pages;
-    private active_page;
-    private links;
-    private links_flattened;
+    private readonly _pages;
+    private _active_page;
+    private _links;
+    private _links_flattened;
+    private _active_link?;
     constructor(app_context: OWebApp);
     getLinks(): tPageLinkFull[];
-    getPage(name: string): tPage;
-    getActivePage(): tPage | undefined;
+    getPage(name: string): iPage;
+    getActivePage(): iPage | undefined;
     getPageList(): any;
-    registerPage(page: tPage): this;
+    registerPage(page: iPage): this;
     private _registerLinks;
     private _addRoute;
     private _setActiveLink;

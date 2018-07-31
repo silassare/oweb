@@ -185,7 +185,7 @@ export default class OWebFormValidator {
 	}
 
 	static addFieldValidators(map: { [key: string]: tFormValidator }): void {
-		Utils.forEach(map, (key: string, fn: tFormValidator) => {
+		Utils.forEach(map, (fn: tFormValidator, key: string) => {
 			OWebFormValidator.addFieldValidator(key, fn);
 		});
 	}

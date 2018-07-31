@@ -40,12 +40,10 @@ export default class OWebUrl {
 	}
 
 	resolveLocal(url: string): string {
-		console.log("l", url);
 		return PathResolver.resolve(this._url_local_base, url);
 	}
 
 	resolveServer(url: string): string {
-		console.log("s", url);
 		return PathResolver.resolve(this._url_server_base, url);
 	}
 };

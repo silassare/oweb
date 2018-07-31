@@ -1,5 +1,4 @@
 "use strict";
-
 /*
  t = "path/to/:id/file/:index/name.:format";
  p = {id:"num",index:"alpha",format:"alpha-num"};
@@ -9,8 +8,20 @@ import Utils from "./utils/Utils";
 
 export type tRouteOptions = { [key: string]: keyof typeof token_type_reg_map };
 export type tRouteParams = { [key: string]: any };
-export type tRouteAction = (ctx: OWebRouteContext) => void;
-type tRouteInfo = { reg: RegExp | null, tokens: Array<string> };
+export type tRouteAction = (ctx: OWebDispatchContext) => void;
+export type tRouteInfo = { reg: RegExp | null, tokens: Array<string> };
+
+interface iRouteDispatcher {
+	readonly id: number,
+	readonly context: OWebDispatchContext,
+	readonly found: OWebRoute[]
+
+	isActive(): boolean,
+
+	dispatch(): void,
+
+	cancel(): void,
+}
 
 const token_type_reg_map = {
 		  "num"        : (/(\d+)/).source,
@@ -101,14 +112,14 @@ export class OWebRoute {
 	private tokens: Array<string>;
 	private readonly action: tRouteAction;
 
-	constructor(path: string | RegExp, rules: tRouteOptions, action: tRouteAction) {
+	constructor(path: string | RegExp, rules: tRouteOptions | Array<string>, action: tRouteAction) {
 
 		if (path instanceof RegExp) {
 			this.path   = path.toString();
 			this.reg    = path;
 			this.tokens = Utils.isArray(rules) ? rules : [];
 		} else if (Utils.isString(path) && path.length) {
-			rules       = Utils.isPlainObject(rules) ? rules : {};
+			rules       = <tRouteOptions> (Utils.isPlainObject(rules) ? rules : {});
 			let p       = parseDynamicPath(path, rules);
 			this.path   = path;
 			this.reg    = p.reg;
@@ -163,51 +174,38 @@ export type tRouteStateObject = {
 	[key: string]: tRouteStateItem
 };
 
-export class OWebRouteContext {
+export class OWebDispatchContext {
 	private _tokens: tRouteParams;
-	private readonly _params: tRouteParams;
-	private readonly _url: URL;
-	private readonly _path: string;
 	private _stopped: boolean = false;
-	private _saved: boolean   = false;
+	private readonly _path: string;
 	private readonly _state: tRouteStateObject;
+	private readonly _router: OWebRouter;
 
-	constructor(path: string, url: URL) {
-		this._url    = url;
+	constructor(router: OWebRouter, path: string, state: tRouteStateObject) {
 		this._path   = path;
 		this._tokens = {};
-		this._params = Utils.parseQueryString(this._url.search.replace(/^\?/, ""));
-
-		let hState  = history.state || {};
-		this._state = hState.data || {};
-
-		if (hState.path && hState.path !== path) {// should never be true
-			console.warn("[OWebRouteContext] using another path state, %s != %s", hState.path, path);
-		}
+		this._state  = state || {};
+		this._router = router;
 	}
 
-	getToken(key: string): any {
-		return this._tokens[key];
+	getToken(token: string): any {
+		return this._tokens[token];
 	}
 
 	getTokens() {
 		return Object.create(this._tokens);
 	}
 
-	getParam(key: string): any {
-		return this._params[key];
-	}
-
-	getParams() {
-		return Object.create(this._params);
-	}
-
 	getPath(): string {
 		return this._path;
 	}
 
-	stop(): this {
-		this._stopped = true;
+	getStateItem(key: string): tRouteStateItem {
+		return this._state[key];
+	}
+
+	setStateItem(key: string, value: tRouteStateItem): this {
+		this._state[key] = value;
 		return this;
 	}
 
@@ -215,55 +213,32 @@ export class OWebRouteContext {
 		return this._stopped;
 	}
 
-	saved(): boolean {
-		return this._saved;
-	}
-
-	setTitle(title: string): this {
-		if (title.length) {
-			wDoc.title = title;
-		}
-
-		return this;
-	}
-
-	pushState(): this {
-		if (!this._saved) {
-			this._saved = true;
-			let state   = {
-				"path": this._path,
-				"data": this._state
-			};
-			wHistory.pushState(state, wDoc.title, this._url.href);
-			console.log("[OWebRouteContext] state pushed", history.state, this._url.href);
+	stop(): this {
+		if (!this._stopped) {
+			console.warn("[OWebDispatchContext] route context will stop.");
+			this.save();// save before stop
+			this._stopped = true;
+			console.warn("[OWebDispatchContext] route context was stopped!");
 		} else {
-			// just update history state
-			console.log("[OWebRouteContext] state push ignored -> will replace");
-			this.replaceState();
+			console.warn("[OWebDispatchContext] route context already stopped!");
 		}
-
 		return this;
 	}
 
-	replaceState(): this {
-		this._saved = true;
-		let state   = {
-			"path": this._path,
-			"data": this._state
-		};
-
-		wHistory.replaceState(state, wDoc.title, this._url.href);
-
-		console.log("[OWebRouteContext] state replaced", history.state, this._url.href);
-
+	save(): this {
+		if (!this.stopped()) {
+			console.log("[OWebDispatchContext] saving state!");
+			this._router.replaceHistory(this._path, this._state);
+		} else {
+			console.error("[OWebDispatchContext] you shouldn't try to save when stopped.")
+		}
 		return this;
 	}
 
-	runAction(route: OWebRoute): this {
-		let fn       = route.getAction();
+	actionRunner(route: OWebRoute): this {
 		this._tokens = route.parse(this._path);
 
-		Utils.callback(fn, [this]);
+		route.getAction()(this);
 
 		return this;
 	}
@@ -272,13 +247,14 @@ export class OWebRouteContext {
 export default class OWebRouter {
 	private readonly _baseUrl: string;
 	private readonly _hashMode: boolean;
-	private _currentPath: string                            = "";
+	private _current_path: string                           = "";
 	private _routes: OWebRoute[]                            = [];
 	private _initialized: boolean                           = false;
 	private _listening: boolean                             = false;
-	private _historyCount: number                           = 0;
 	private _notFound: undefined | ((path: string) => void) = undefined;
 	private readonly _popStateListener: (e: PopStateEvent) => void;
+	private _dispatch_id                                    = 0;
+	private _current_dispatcher?: iRouteDispatcher;
 
 	constructor(baseUrl: string, hashMode: boolean = true) {
 		let r                  = this;
@@ -291,12 +267,13 @@ export default class OWebRouter {
 		console.log("[OWebRouter] ready!");
 	}
 
-	start(runBrowse: boolean = true, path: string = wLoc[this._hashMode ? "hash" : "pathname"]): this {
+	start(firstRun: boolean = true, path: string = this.getLocationPath()): this {
 		if (!this._initialized) {
 			this._initialized = true;
 			this.register();
 			console.log("[OWebRouter] start routing!");
-			runBrowse && this.browseTo(path);
+			console.log("[OWebRouter] watching routes ->", this._routes);
+			firstRun && this.browseTo(path, undefined, false);
 		} else {
 			console.warn("[OWebRouter] router already started!");
 		}
@@ -316,6 +293,20 @@ export default class OWebRouter {
 		return this;
 	}
 
+	getCurrentPath(): string {
+		return this._current_path;
+	}
+
+	getLocationPath(): string {
+		// TODO when using pathname make sure to remove base uri pathname for app in subdirectory
+		return fixPath(wLoc[this._hashMode ? "hash" : "pathname"]);
+	}
+
+	pathToURL(path: string): URL {
+		path = fixPath(path);
+		return new URL(this._hashMode ? "#" + path : path, this._baseUrl);
+	}
+
 	private register(): this {
 		if (!this._listening) {
 			this._listening = true;
@@ -333,17 +324,16 @@ export default class OWebRouter {
 	}
 
 	private onPopState(e: PopStateEvent) {
-		console.log("[OWebRouter] popstate ->", e);
+		console.log("[OWebRouter] popstate ->", arguments);
 
 		if (e.state) {
-			this.browseTo(e.state.path, e.state.data, true);
+			this.browseTo(e.state.path, e.state.data, false);
 		} else {
-			this.browseTo(wLoc[this._hashMode ? "hash" : "pathname"]);
+			this.browseTo(this.getLocationPath(), undefined, false);
 		}
 	}
 
 	on(path: string | RegExp, rules: tRouteOptions = {}, action: tRouteAction): this {
-		console.log("[OWebRouter] watching path ->", path, {rules, action});
 		this._routes.push(new OWebRoute(path, rules, action));
 		return this;
 	}
@@ -356,88 +346,146 @@ export default class OWebRouter {
 	goBack(distance: number = 1): this {
 		if (distance > 0) {
 			console.log("[OWebRouter] going back -> ", distance);
-			if (this._historyCount > 0) {
-				if (this._historyCount >= distance) {
-					this._historyCount -= distance;
+			let hLen = wHistory.length;
+			if (hLen > 1) {
+				if (hLen >= distance) {
 					wHistory.go(-distance);
 				} else {
-					let c              = this._historyCount;
-					this._historyCount = 0;
-					wHistory.go(-c);
+					wHistory.go(-hLen);
 				}
 			} else {
-				this._historyCount = 0;
-				this.browseTo(this._baseUrl);
+				console.warn("[OWebRouter] can't go back -> history.length === 1", distance);
 			}
 		}
 
 		return this;
 	}
 
-	browseTo(path: string, state: any = {}, replace: boolean = false): this {
-		console.log("[OWebRouter] browsing to -> ", path, state, replace);
-
+	browseTo(path: string, state: tRouteStateObject = {}, push: boolean = true, ignoreIfSamePath: boolean = false): this {
 		path = fixPath(path);
 
-		if (this._currentPath !== path) {
-			this._currentPath = path;
-			this._historyCount++;
-			let url  = new URL(path, this._baseUrl),
-				rCtx = new OWebRouteContext(path, url),
-				found;
+		console.log("[OWebRouter] browsing to -> ", path, state, push);
 
-			if (replace) {
-				rCtx.pushState();
-			}
+		if (ignoreIfSamePath && this._current_path !== path) {
+			console.log("[OWebRouter] ignore same path -> ", path);
+			return this;
+		}
 
-			found = this.dispatch(rCtx, true);
+		if (this._current_dispatcher && this._current_dispatcher.isActive()) {
+			this._current_dispatcher.cancel();
+		}
 
-			if (!found.length) {
-				console.log("[OWebRouter] no route found for path ->", path);
+		this._current_path = path;
+
+		push && this.addHistory(path, state);
+
+		let cd = this._current_dispatcher = this.createDispatcher(path, state, ++this._dispatch_id);
+
+		cd.dispatch();
+
+		if (cd.id === this._dispatch_id && !cd.context.stopped()) {
+			if (!cd.found.length) {
+				console.warn("[OWebRouter] no route found for path ->", path);
 				if (this._notFound) {
 					this._notFound(path);
 				} else {
-					console.warn("[OWebRouter] notFound action is not defined!");
+					console.error("[OWebRouter] notFound action is not defined!");
 					this.stopRouting();
 				}
-			} else if (!replace && !rCtx.saved()) {
-				rCtx.pushState();
+			} else {
+				cd.context.save();
+				console.log("[OWebRouter] success ->", path);
 			}
 		}
 
 		return this;
 	}
 
-	private dispatch(rCtx: OWebRouteContext, cancelable: boolean = true): OWebRoute[] {
-		console.log("[OWebRouter] dispatch start -> ", rCtx, cancelable);
+	addHistory(path: string, data: tRouteStateObject, title: string = ""): this {
+		path      = fixPath(path);
+		title     = title && title.length ? title : wDoc.title;
+		let state = {
+				"path": path,
+				"data": data
+			},
+			url   = this.pathToURL(path);
 
-		let path               = rCtx.getPath(),
+		wHistory.pushState(state, title, url.href);
+		console.warn("[OWebDispatchContext] history added", wHistory.state, url.href);
+
+		return this;
+	}
+
+	replaceHistory(path: string, data: tRouteStateObject, title: string = ""): this {
+		path      = fixPath(path);
+		title     = title && title.length ? title : wDoc.title;
+		let state = {
+				"path": path,
+				"data": data
+			},
+			url   = this.pathToURL(path);
+
+		wHistory.replaceState(state, title, url.href);
+		console.warn("[OWebDispatchContext] history updated", wHistory.state);
+
+		return this;
+	}
+
+	private createDispatcher(path: string, state: tRouteStateObject, id: number): iRouteDispatcher {
+
+		console.log(`[OWebRouter][dispatcher-${id}] creation.`);
+
+		let ctx                = this,
+			found: OWebRoute[] = [],
 			len                = this._routes.length,
-			i                  = -1,
-			found: OWebRoute[] = [];
+			active             = false,
+			dispatchContext    = new OWebDispatchContext(this, path, state),
+			o                  = {
+				context : dispatchContext,
+				id,
+				found,
+				isActive: () => active,
+				cancel  : function () {
+					if (active) {
+						active = false;
+						console.warn(`[OWebRouter][dispatcher-${id}] cancel called!`);
+					} else {
+						console.error(`[OWebRouter][dispatcher-${id}] cancel called when inactive.`);
+					}
+				},
+				dispatch: function () {
+					if (!active) {
+						console.log(`[OWebRouter][dispatcher-${id}] start ->`, o);
+						active = true;
+						let i  = -1;
 
-		while (++i < len) {
-			let route = this._routes[i];
+						while (++i < len) {
+							if (!active) {
+								console.warn(`[OWebRouter][dispatcher-${id}] browseTo called while dispatching: ${path} -> ${ctx._current_path}`);
+								break;
+							}
 
-			// check if the location change during
-			if (this._currentPath !== path) {
-				console.warn(`[OWebRouter] location change while dispatching: ${path} -> ${this._currentPath}`);
-				break;
-			}
+							let route = ctx._routes[i];
 
-			if (route.is(path)) {
-				found.push(route);
+							if (dispatchContext.stopped()) {
+								console.warn(`[OWebRouter][dispatcher-${id}] canceled for "${path}" by route action ->`, route.getAction());
+								o.cancel();
+								break;
+							}
 
-				rCtx.runAction(route);
+							if (route.is(path)) {
+								found.push(route);
+								dispatchContext.actionRunner(route);
+							}
+						}
 
-				if (rCtx.stopped() && cancelable) {
-					console.warn(`[OWebRouter] dispatch canceled for "${path}" by route action ->`, route.getAction());
-					break;
+						active = false;
+					} else {
+						console.warn(`[OWebRouter][dispatcher-${id}] is busy`);
+					}
 				}
-			}
-		}
+			};
 
-		console.log("[OWebRouter] dispatch end, routes ->", found);
-		return found;
+		return o;
 	}
 }

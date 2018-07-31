@@ -12,7 +12,7 @@ import OWebFormValidator from "./OWebFormValidator";
 import OWebKeyStorage from "./OWebKeyStorage";
 import OWebFS from "./OWebFS";
 import OWebLang from "./OWebLang";
-import OWebRouter, {OWebRouteContext, OWebRoute} from "./OWebRouter";
+import OWebRouter, {OWebDispatchContext, OWebRoute} from "./OWebRouter";
 import OWebView from "./OWebView";
 
 import OWebTNet from "./plugins/OWebTNet";
@@ -27,7 +27,8 @@ import PathResolver from "./utils/PathResolver";
 import scriptLoader from "./utils/scriptLoader";
 import Utils from "./utils/Utils";
 
-import oweb from "./oweb";
+// side-effect import
+import "./default/index";
 
 export {
 	OWebApp,
@@ -43,7 +44,7 @@ export {
 	OWebLang,
 	OWebRouter,
 	OWebRoute,
-	OWebRouteContext,
+	OWebDispatchContext,
 	OWebUrl,
 	OWebView,
 
@@ -61,7 +62,5 @@ export {
 
 	PathResolver,
 	Utils,
-	scriptLoader,
-
-	oweb
+	scriptLoader
 }

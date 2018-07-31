@@ -1,5 +1,6 @@
 "use strict";
 
+import {tComResponse} from "./OWebCom";
 import OWebEvent from "./OWebEvent";
 
 export type tViewDialog = {
@@ -48,14 +49,14 @@ export default class OWebView extends OWebEvent {
 		return this;
 	}
 
-	dialog(dialog: tViewDialog | any) {
-		let d: tViewDialog = dialog;
+	dialog(dialog: tViewDialog | tComResponse) {
+		let d = dialog;
 
-		if (dialog.error) {
+		if ((d as tComResponse).error) {
 			d = {
-				"type": dialog.error ? "error" : "done",
-				"text": dialog.msg,
-				"data": dialog.data || {}
+				"type": (d as tComResponse).error ? "error" : "done",
+				"text": (d as tComResponse).msg,
+				"data": d.data || {}
 			};
 
 			// console.error("[OWebView] please use new dialog mode -> ", d, "instead of ->", dialog);

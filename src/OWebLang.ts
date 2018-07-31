@@ -254,9 +254,9 @@ export default class OWebLang {
 $.extend($.fn, {
 	oLangAble      : function () {
 		return $(this).data("olang") !== undefined
-			   || $(this).data("olangTitle") !== undefined
-			   || $(this).data("olangPlaceholder") !== undefined
-			   || $(this).data("olangHidden") !== undefined;
+			|| $(this).data("olangTitle") !== undefined
+			|| $(this).data("olangPlaceholder") !== undefined
+			|| $(this).data("olangHidden") !== undefined;
 	},
 	oLangDataObject: function () {
 		let $ele: any = $(this);
@@ -275,7 +275,7 @@ $.extend($.fn, {
 	},
 	oLang          : function () {
 		return $(this).each(function () {
-			OWebLang.update((this as any).get(0));
+			OWebLang.update(this as any);
 		});
 	},
 	oLangUpdateTree: function () {

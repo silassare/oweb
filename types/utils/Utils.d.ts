@@ -16,7 +16,7 @@ declare let Utils: {
     textToLineString: (text: string) => string;
     forEach: <T>(obj: {
         [key: string]: T;
-    } | T[], fn: (key: any, value: T) => void) => void;
+    } | T[], fn: (value: T, key: any) => void) => void;
     math: {
         numberFormat: (x: string | number, dec?: number, decimalSep?: string, digitsSep?: string) => string;
     };

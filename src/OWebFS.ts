@@ -19,7 +19,7 @@ export default class OWebFS {
 	static createFileAlias(info: tFileAliasInfo): File {
 		let file_name = info.file_id + ".ofa",
 			content   = JSON.stringify({
-				"file_id": info.file_id,
+				"file_id" : info.file_id,
 				"file_key": info.file_key
 			}),
 			b         = new Blob([content], {type: OWebFS.OFA_MIME_TYPE});

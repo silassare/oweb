@@ -20,7 +20,7 @@ export default class OWebLogin extends OWebEvent {
 		if (ofv.validate()) {
 			let data = {
 				email: ofv.getField("email"),
-				pass: ofv.getField("pass")
+				pass : ofv.getField("pass")
 			};
 
 			m._tryLogin(data);
@@ -34,7 +34,7 @@ export default class OWebLogin extends OWebEvent {
 		if (ofv.validate()) {
 			let data = {
 				phone: ofv.getField("phone"),
-				pass: ofv.getField("pass")
+				pass : ofv.getField("pass")
 			};
 
 			m._tryLogin(data);

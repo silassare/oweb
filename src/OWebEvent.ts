@@ -5,7 +5,8 @@ import Utils from "./utils/Utils";
 export default class OWebEvent {
 	private _app_events: { [key: string]: Array<Function> } = {};
 
-	protected constructor() {}
+	protected constructor() {
+	}
 
 	on(event: string, handler: Function) {
 		if (!this._app_events[event]) {

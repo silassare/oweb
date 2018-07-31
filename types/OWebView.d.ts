@@ -1,3 +1,4 @@
+import { tComResponse } from "./OWebCom";
 import OWebEvent from "./OWebEvent";
 export declare type tViewDialog = {
     type: "info" | "error" | "done";
@@ -14,5 +15,5 @@ export default class OWebView extends OWebEvent {
     isFrozen(): boolean;
     freeze(): this;
     unfreeze(): this;
-    dialog(dialog: tViewDialog | any): void;
+    dialog(dialog: tViewDialog | tComResponse): void;
 }

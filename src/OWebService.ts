@@ -41,28 +41,28 @@ export interface iServiceUpdateAllData {
 }
 
 export interface iServiceDeleteData<T> {
-	item: T,
-	relations?: {
-		[key: string]: any
-	}
+	item: T
 }
 
 export interface iServiceDeleteAllData<T> {
 	affected: number
 }
 
-export interface iServiceGetRelationItemsData<T, R> {
-	target: T,
-	items: R[],
+export interface iServiceGetRelationItemsData<T> {
+	items: T[],
 	max?: number,
 	page?: number,
-	total?: number
-
+	total?: number,
+	relations: {
+		[key: string]: any
+	}
 }
 
-export interface iServiceGetRelationItemData<T, R> {
-	target: T,
-	item?: R
+export interface iServiceGetRelationItemData<T> {
+	item: T,
+	relations?: {
+		[key: string]: any
+	}
 }
 
 export type tServiceAddSuccess<T> = (response: iServiceAddData<T>) => void;
@@ -72,15 +72,17 @@ export type tServiceDeleteSuccess<T> = (response: iServiceDeleteData<T>) => void
 export type tServiceDeleteAllSuccess<T> = (response: iServiceDeleteAllData<T>) => void;
 export type tServiceGetSuccess<T> = (response: iServiceGetData<T>, fromCache: boolean) => void;
 export type tServiceGetAllSuccess<T> = (response: iServiceGetAllData<T>, fromCache: boolean) => void;
-export type tServiceGetRelationSuccess<T, R> = (response: iServiceGetRelationItemData<T, R>, fromCache: boolean) => void;
-export type tServiceGetRelationItemsSuccess<T, R> = (response: iServiceGetRelationItemsData<T, R>, fromCache: boolean) => void;
+export type tServiceGetRelationSuccess<T> = (response: iServiceGetRelationItemData<T>, fromCache: boolean) => void;
+export type tServiceGetRelationItemsSuccess<T> = (response: iServiceGetRelationItemsData<T>, fromCache: boolean) => void;
 
 export type tServiceFail = (response: tComResponse) => void;
 
 export type tServiceRequestOptions = {
 	max?: number,
 	page?: number,
-	filters?: any
+	filters?: any,
+	relations?: string,
+	order_by?: string
 };
 
 const uri_service         = ":api_url/:service_name",
@@ -96,7 +98,7 @@ export default class OWebService<T> {
 	private readonly _key_store: OWebKeyStorage;
 	private readonly _base_data: { api_url: any; service_name: string };
 
-	constructor(private readonly app_context: OWebApp, service_name: string, private readonly item_id_name: string) {
+	constructor(private readonly app_context: OWebApp, service_name: string) {
 
 		let s_url       = app_context.configs.get("OZ_API_BASE_URL")
 			.replace(/\/$/g, "");
@@ -193,10 +195,15 @@ export default class OWebService<T> {
 		}, fail, freeze);
 	}
 
-	get(id: string, success: tServiceGetSuccess<T>, fail: tServiceFail, freeze: boolean = false, load_cache_first: boolean = false): OWebCom {
-		let m        = this,
-			url      = this.getItemURI(id),
-			cache_id = id;
+	get(id: string, relations: string = "", success: tServiceGetSuccess<T>, fail: tServiceFail, freeze: boolean = false, load_cache_first: boolean = false): OWebCom {
+		let m         = this,
+			url       = this.getItemURI(id),
+			data: any = null,
+			cache_id  = id;
+
+		if (relations.length) {
+			data = {relations};
+		}
 
 		if (load_cache_first) {
 			let tmp_data = m.getCacheManager().getItem(cache_id);
@@ -207,7 +214,7 @@ export default class OWebService<T> {
 			}
 		}
 
-		return this.app_context.request("GET", url, null, (response: tComResponse) => {
+		return this.app_context.request("GET", url, data, (response: tComResponse) => {
 			let data = response["data"];
 			m.getCacheManager().setItem(id, data);
 			success(data, false);
@@ -234,6 +241,14 @@ export default class OWebService<T> {
 		}
 		if (typeof options["page"] === "number") {
 			request_data["page"] = options["page"];
+		}
+
+		if (typeof options.relations === "string") {
+			request_data["relations"] = options.relations
+		}
+
+		if (typeof options.order_by === "string") {
+			request_data["order_by"] = options.order_by
 		}
 
 		if (Utils.isPlainObject(filters)) {
@@ -268,17 +283,16 @@ export default class OWebService<T> {
 
 	}
 
-	getRelation<R>(id: string, relation: string, success: tServiceGetRelationSuccess<T, R>, fail: tServiceFail, freeze: boolean = false, force_cache: boolean = false, load_cache_first: boolean = false): OWebCom {
+	getRelation<R>(id: string, relation: string, success: tServiceGetRelationSuccess<R>, fail: tServiceFail, freeze: boolean = false, force_cache: boolean = false, load_cache_first: boolean = false): OWebCom {
 		let m   = this,
 			url = this.getItemRelationURI(id, relation);
 
 		let cache_id = toKey({id, relation});
 
 		if (force_cache && load_cache_first) {
-			let tmp_data = this.getCacheManager().getItem(cache_id);
+			let tmp_data = <iServiceGetRelationItemData<R>>this.getCacheManager().getItem(cache_id);
 
-			if (tmp_data && tmp_data.item &&
-				Object.keys(tmp_data.item).length) {
+			if (tmp_data && tmp_data.relations && tmp_data.relations[relation]) {
 				success(tmp_data, true);
 				freeze = false;
 			}
@@ -299,7 +313,7 @@ export default class OWebService<T> {
 		}, freeze);
 	}
 
-	getRelationItems<R>(id: string, relation: string, options: tServiceRequestOptions, success: tServiceGetRelationItemsSuccess<T, R>, fail: tServiceFail, freeze: boolean = false, force_cache: boolean = false, load_cache_first: boolean = false): OWebCom {
+	getRelationItems<R>(id: string, relation: string, options: tServiceRequestOptions, success: tServiceGetRelationItemsSuccess<R>, fail: tServiceFail, freeze: boolean = false, force_cache: boolean = false, load_cache_first: boolean = false): OWebCom {
 		let m                                    = this,
 			url                                  = this.getItemRelationURI(id, relation),
 			filters                              = options["filters"],
@@ -319,10 +333,9 @@ export default class OWebService<T> {
 		let cache_id = toKey(Utils.assign({relation: relation}, request_data));
 
 		if (force_cache && load_cache_first) {
-			let tmp_data = this.getCacheManager().getItem(cache_id);
+			let tmp_data = <iServiceGetRelationItemsData<R>>this.getCacheManager().getItem(cache_id);
 
-			if (tmp_data && tmp_data.items &&
-				Object.keys(tmp_data.items).length) {
+			if (tmp_data && tmp_data.relations && tmp_data.relations[relation]) {
 				success(tmp_data, true);
 				freeze = false;
 			}

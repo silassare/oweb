@@ -16,7 +16,7 @@ import OWebRouter from "./OWebRouter";
 const noop = () => {
 };
 
-export default class OWebApp extends OWebEvent {
+export default abstract class OWebApp extends OWebEvent {
 
 	static readonly EVT_APP_READY = "OWebApp:ready";
 	static readonly SELF          = "OWebApp";
@@ -28,7 +28,7 @@ export default class OWebApp extends OWebEvent {
 	readonly url: OWebUrl;
 	readonly services: { [key: string]: OWebService<any> } = {};
 
-	constructor(private readonly app_name: string, app_config_list: tConfigList, app_url_list: tUrlList) {
+	protected constructor(private readonly app_name: string, app_config_list: tConfigList, app_url_list: tUrlList) {
 		super();
 		this.configs  = new OWebConfigs(this, app_config_list);
 		this.url      = new OWebUrl(this, app_url_list);
@@ -52,10 +52,10 @@ export default class OWebApp extends OWebEvent {
 		return this.services[service_name];
 	}
 
-	registerService(service_name: string, item_id_name: string): this {
+	registerService(service_name: string): this {
 
 		if (!this.services[service_name]) {
-			this.services[service_name] = new OWebService(this, service_name, item_id_name);
+			this.services[service_name] = new OWebService(this, service_name);
 		}
 
 		return this;
@@ -90,8 +90,7 @@ export default class OWebApp extends OWebEvent {
 	}
 
 	userVerified(): boolean {
-		let data = this.user.getCurrentUserData();
-		return Utils.isPlainObject(data) && this.sessionActive();
+		return this.user.getCurrentUser() && this.sessionActive();
 	}
 
 	requestPromise(method: string, url: string, data: any, freeze: boolean = false): Promise<tComResponse> {
@@ -151,4 +150,10 @@ export default class OWebApp extends OWebEvent {
 
 		return com;
 	}
+
+	abstract showHomePage(): this
+
+	abstract showLoginPage(): this
+
+	abstract showSignUpPage(): this
 };

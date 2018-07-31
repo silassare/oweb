@@ -28,11 +28,10 @@ let callback = function (fn: any, args?: Array<any>, ctx?: any): any {
 	return null;
 };
 
-let forEach = function <T>(obj: { [key: string]: T } | Array<T>, fn: (key: any, value: T) => void) {
-
+let forEach = function <T>(obj: { [key: string]: T } | Array<T>, fn: (value: T, key: any) => void) {
 	Object.keys(obj).forEach((key: string) => {
 		let value: T = (obj as any)[key];
-		callback(fn, [key, value]);
+		fn(value, key);
 	});
 };
 

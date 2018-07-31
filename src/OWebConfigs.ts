@@ -30,7 +30,7 @@ export default class OWebConfigs extends OWebEvent {
 	loadConfigs(configs: tConfigList): this {
 		let s = this;
 
-		Utils.forEach(configs, (cfg: string, value: any) => {
+		Utils.forEach(configs, (value: any, cfg: string) => {
 			cfg                  = s._realConfigName(cfg);
 			s._user_configs[cfg] = s._default_configs[cfg] = value;
 		});
@@ -62,7 +62,7 @@ export default class OWebConfigs extends OWebEvent {
 	set(config: string, value: any): this {
 		let m = this;
 		if (Utils.isPlainObject(config)) {
-			Utils.forEach(config as {}, (key, value) => {
+			Utils.forEach(config as {}, (value, key) => {
 				m._set(key, value);
 			});
 		} else {
@@ -77,12 +77,10 @@ export default class OWebConfigs extends OWebEvent {
 		let m         = this,
 			saved_cfg = OWebDataStore.load(this._tag_name) || {};
 
-		Utils.forEach(m._default_configs, (key) => {
-
+		Utils.forEach(m._default_configs, (value, key) => {
 			if (this._isPublic(key) && saved_cfg[key] !== undefined) {
 				m._user_configs[key] = saved_cfg[key];
 			}
-
 		});
 
 		OWebDataStore.save(this._tag_name, m._user_configs);

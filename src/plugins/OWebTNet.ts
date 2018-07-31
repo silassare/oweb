@@ -31,8 +31,7 @@ export default class OWebTNet extends OWebEvent {
 				// user is verified
 				res = [OWebTNet.STATE_VERIFIED_USER, data["_current_user"]];
 
-				m.app_context.user.setCurrentUserData(
-					data["_current_user"], true);
+				m.app_context.user.setCurrentUser(data["_current_user"]);
 
 			} else if (Utils.isPlainObject(data["_info_sign_up"])) {
 				// user is in registration process

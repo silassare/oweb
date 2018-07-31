@@ -1,7 +1,0 @@
-import OWebApp from "./OWebApp";
-// side-effect import
-import "./default/index";
-export default function oweb(app_name, app_configs, app_url) {
-    return new OWebApp(app_name, app_configs, app_url);
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib3dlYi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3NyYy9vd2ViLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sT0FBTyxNQUFNLFdBQVcsQ0FBQztBQUloQyxxQkFBcUI7QUFDckIsT0FBTyxpQkFBaUIsQ0FBQztBQUV6QixNQUFNLENBQUMsT0FBTyxlQUFlLFFBQWdCLEVBQUUsV0FBd0IsRUFBRSxPQUFpQjtJQUN6RixPQUFPLElBQUksT0FBTyxDQUFDLFFBQVEsRUFBRSxXQUFXLEVBQUUsT0FBTyxDQUFDLENBQUM7QUFDcEQsQ0FBQyJ9

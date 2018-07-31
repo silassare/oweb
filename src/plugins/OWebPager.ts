@@ -1,14 +1,21 @@
 "use strict";
 
 import OWebEvent from "../OWebEvent";
-import {OWebRouteContext, tRouteAction, tRouteOptions} from "../OWebRouter";
+import OWebRouter, {OWebDispatchContext, tRouteAction, tRouteOptions} from "../OWebRouter";
 import OWebApp from "../OWebApp";
+
+export interface iPage {
+	name: string;
+	getLinks: () => tPageLink[];
+	onPageOpen?: tRouteAction;
+	onPageClose?: tRouteAction;
+}
 
 export type tPageLink = {
 	title: string,
 	path: string,
+	require_login?: boolean,
 	description?: string,
-	action?: tRouteAction,
 	options?: tRouteOptions,
 	show?: boolean,
 	slug?: string,
@@ -18,22 +25,16 @@ export type tPageLink = {
 
 export type tPageLinkFull = tPageLink & {
 	id: number,
+	href: string,
 	active: boolean,
 	active_child: boolean,
+	require_login: boolean,
 	show: boolean,
 	parent?: tPageLinkFull,
 	sub?: tPageLinkFull[]
 };
 
-let _getParents = (link: tPageLinkFull): tPageLinkFull[] => {
-	let parents: tPageLinkFull[] = [], p;
-	while (p = link.parent) {
-		parents.push(p);
-	}
-
-	return parents;
-};
-let linkId      = 1;
+let linkId      = 0;
 let _isParentOf = (parent: tPageLinkFull, link: tPageLinkFull): boolean => {
 	let p;
 	while (p = link.parent) {
@@ -46,19 +47,15 @@ let _isParentOf = (parent: tPageLinkFull, link: tPageLinkFull): boolean => {
 	return false;
 };
 
-export type tPage = {
-	name: string,
-	links: tPageLink[]
-};
-
 export default class OWebPager extends OWebEvent {
 	static readonly SELF            = "OWebPager";
 	static readonly EVT_PAGE_CHANGE = "OWebPager:page_change";
 
-	private readonly pages: { [key: string]: tPage } = {};
-	private active_page: tPage | undefined;
-	private links: tPageLinkFull[]                   = [];
-	private links_flattened: tPageLinkFull[]         = [];
+	private readonly _pages: { [key: string]: iPage } = {};
+	private _active_page: iPage | undefined;
+	private _links: tPageLinkFull[]                   = [];
+	private _links_flattened: tPageLinkFull[]         = [];
+	private _active_link?: tPageLinkFull;
 
 	constructor(private readonly app_context: OWebApp) {
 		super();
@@ -66,11 +63,11 @@ export default class OWebPager extends OWebEvent {
 	}
 
 	getLinks(): tPageLinkFull[] {
-		return this.links;
+		return this._links;
 	}
 
-	getPage(name: string): tPage {
-		let page: tPage = this.pages[name];
+	getPage(name: string): iPage {
+		let page: iPage = this._pages[name];
 		if (undefined === page) {
 			throw new Error(`[OWebPager] the page "${name}" is not defined.`);
 		}
@@ -78,43 +75,47 @@ export default class OWebPager extends OWebEvent {
 		return page;
 	}
 
-	getActivePage(): tPage | undefined {
-		if (!this.active_page) {
+	getActivePage(): iPage | undefined {
+		if (!this._active_page) {
 			console.warn("[OWebPager] no active page");
 		}
-		return this.active_page;
+		return this._active_page;
 	}
 
 	getPageList() {
-		return Object.create(this.pages);
+		return Object.create(this._pages);
 	}
 
-	registerPage(page: tPage): this {
+	registerPage(page: iPage): this {
 		let name = page.name;
-		if (name in this.pages) {
+		if (name in this._pages) {
 			console.warn(`[OWebPager] page "${name}" will be redefined.`);
 		}
 
-		this.pages[name] = page;
+		this._pages[name] = page;
 
-		let links = page.links;
+		let links = page.getLinks();
 
-		Array.prototype.push.apply(this.links, links);
+		Array.prototype.push.apply(this._links, links);
 
 		return this._registerLinks(links, page);
 	}
 
-	private _registerLinks(links: tPageLink[], page: tPage, parent?: tPageLinkFull): this {
+	private _registerLinks(links: tPageLink[], page: iPage, parent?: tPageLinkFull): this {
+
+		let router: OWebRouter = this.app_context.router;
 
 		for (let i = 0; i < links.length; i++) {
 			let link: tPageLinkFull = <any>links[i];
-			link.id                 = linkId++;
+			link.id                 = ++linkId;
 			link.parent             = parent;
+			link.href               = router.pathToURL(link.path).href;
 			link.active             = false;
 			link.active_child       = false;
+			link.require_login      = link.require_login || false;
 			link.show               = link.show !== false;
 
-			this.links_flattened.push(link);
+			this._links_flattened.push(link);
 
 			this._addRoute(link, page);
 
@@ -126,15 +127,24 @@ export default class OWebPager extends OWebEvent {
 		return this;
 	}
 
-	private _addRoute(link: tPageLinkFull, page: tPage): this {
-		let s = this;
+	private _addRoute(link: tPageLinkFull, page: iPage): this {
+		let ctx = this;
 
-		this.app_context.router.on(link.path, link.options || {}, (ctx: OWebRouteContext) => {
-			console.log("[OWebPager] page link match ->", link, page, ctx);
-			s._setActivePage(page)
+		this.app_context.router.on(link.path, link.options || {}, (routeContext: OWebDispatchContext) => {
+			console.log("[OWebPager] page link match ->", link, page, routeContext);
+
+			if (link.require_login && !ctx.app_context.userVerified()) {
+				return routeContext.stop() && ctx.app_context.showLoginPage();
+			}
+
+			let p = ctx._active_page;
+
+			p && p.onPageClose && p.onPageClose(routeContext);
+
+			page.onPageOpen && page.onPageOpen(routeContext);
+
+			ctx._setActivePage(page)
 				._setActiveLink(link);
-
-			link.action && link.action(ctx);
 		});
 
 		return this;
@@ -142,25 +152,28 @@ export default class OWebPager extends OWebEvent {
 	}
 
 	private _setActiveLink(link: tPageLinkFull): this {
-		let links = this.links_flattened;
+		let links         = this._links_flattened;
+		this._active_link = link;
+
 		for (let i = 0; i < links.length; i++) {
 			let c = links[i];
 
-			c.active = link.id === c.id;
-
-			if (!c.active) {
-				c.active_child = _isParentOf(c, link);
-			}
+			c.active       = link.id === c.id;
+			c.active_child = !c.active && _isParentOf(c, link);
 		}
 
 		return this;
 	}
 
-	private _setActivePage(newPage: tPage): this {
-		let oldPage = this.active_page;
+	private _setActivePage(newPage: iPage): this {
+		let oldPage = this._active_page;
+
 		if (oldPage !== newPage) {
-			this.active_page = newPage;
+			console.log(`[OWebPager] page changing ->`, newPage, oldPage);
+			this._active_page = newPage;
 			this.trigger(OWebPager.EVT_PAGE_CHANGE, [oldPage, newPage]);
+		} else {
+			console.log(`[OWebPager] same page ->`, oldPage, newPage);
 		}
 
 		return this;

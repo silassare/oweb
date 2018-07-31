@@ -1,13 +1,8 @@
 "use strict";
 
 import OWebEvent from "./OWebEvent";
-import Utils from "./utils/Utils";
 import OWebApp from "./OWebApp";
 import OWebKeyStorage from "./OWebKeyStorage";
-
-export type tUserData = {
-	[key: string]: any
-};
 
 export default class OWebCurrentUser extends OWebEvent {
 	static readonly SELF                 = "OWebCurrentUser";
@@ -22,24 +17,24 @@ export default class OWebCurrentUser extends OWebEvent {
 		console.log("[OWebCurrentUser] ready!");
 	}
 
-	getCurrentUserData(field?: keyof tUserData): any | tUserData {
-		let user_data = this._key_store.getItem("user_data");
+	getCurrentUser(): any {
+		let user = this._key_store.getItem("user_data");
 
-		if (field !== undefined) {
-			return user_data ? user_data[field] : undefined;
+		if (user) {
+			if ("id" in user) {
+				return user;
+			} else {
+				console.error("[OWebCurrentUser] invalid user data!");
+			}
 		}
 
-		return user_data;
+		return undefined;
 	}
 
-	setCurrentUserData(data: tUserData, overwrite: boolean = false): this {
-		let user_data = this._key_store.getItem("user_data");
+	setCurrentUser(user: any): this {
+		console.log("[OWebCurrentUser] setting new user ->", user);
+		this._key_store.setItem("user_data", user);
 
-		if (!overwrite && Utils.isPlainObject(user_data) && Utils.isPlainObject(data)) {
-			data = Utils.assign(user_data, data);
-		}
-
-		this._key_store.setItem("user_data", data);
 		return this._notifyChange();
 	}
 
