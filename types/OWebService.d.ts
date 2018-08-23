@@ -1,67 +1,83 @@
-import OWebApp from "./OWebApp";
-import OWebKeyStorage from "./OWebKeyStorage";
-import OWebCom, { tComResponse } from "./OWebCom";
-export interface iServiceAddData<T> {
-    item: T;
-    relations?: {
-        [key: string]: any;
+import { OWebApp, OWebKeyStorage, OWebCom, iComResponse } from "./oweb";
+export interface iServiceAddResponse<T> extends iComResponse {
+    data: {
+        item: T;
+        relations?: {
+            [key: string]: any;
+        };
     };
 }
-export interface iServiceGetData<T> {
-    item: T;
-    relations?: {
-        [key: string]: any;
+export interface iServiceGetResponse<T> extends iComResponse {
+    data: {
+        item: T;
+        relations?: {
+            [key: string]: any;
+        };
     };
 }
-export interface iServiceGetAllData<T> {
-    items: T[];
-    max?: number;
-    page?: number;
-    total?: number;
-    relations?: {
-        [key: string]: any;
+export interface iServiceGetAllResponse<T> extends iComResponse {
+    data: {
+        items: T[];
+        max?: number;
+        page?: number;
+        total?: number;
+        relations?: {
+            [key: string]: any;
+        };
     };
 }
-export interface iServiceUpdateData<T> {
-    item: T;
-    relations?: {
-        [key: string]: any;
+export interface iServiceUpdateResponse<T> extends iComResponse {
+    data: {
+        item: T;
+        relations?: {
+            [key: string]: any;
+        };
     };
 }
-export interface iServiceUpdateAllData {
-    affected: number;
-}
-export interface iServiceDeleteData<T> {
-    item: T;
-}
-export interface iServiceDeleteAllData<T> {
-    affected: number;
-}
-export interface iServiceGetRelationItemsData<T> {
-    items: T[];
-    max?: number;
-    page?: number;
-    total?: number;
-    relations: {
-        [key: string]: any;
+export interface iServiceUpdateAllData extends iComResponse {
+    data: {
+        affected: number;
     };
 }
-export interface iServiceGetRelationItemData<T> {
-    item: T;
-    relations?: {
-        [key: string]: any;
+export interface iServiceDeleteResponse<T> extends iComResponse {
+    data: {
+        item: T;
     };
 }
-export declare type tServiceAddSuccess<T> = (response: iServiceAddData<T>) => void;
-export declare type tServiceUpdateSuccess<T> = (response: iServiceUpdateData<T>) => void;
+export interface iServiceDeleteAllResponse<T> extends iComResponse {
+    data: {
+        affected: number;
+    };
+}
+export interface iServiceGetRelationItemsResponse<T> extends iComResponse {
+    data: {
+        items: T[];
+        max?: number;
+        page?: number;
+        total?: number;
+        relations: {
+            [key: string]: any;
+        };
+    };
+}
+export interface iServiceGetRelationItemResponse<T> extends iComResponse {
+    data: {
+        item: T;
+        relations?: {
+            [key: string]: any;
+        };
+    };
+}
+export declare type tServiceAddSuccess<T> = (response: iServiceAddResponse<T>) => void;
+export declare type tServiceUpdateSuccess<T> = (response: iServiceUpdateResponse<T>) => void;
 export declare type tServiceUpdateAllSuccess<T> = (response: iServiceUpdateAllData) => void;
-export declare type tServiceDeleteSuccess<T> = (response: iServiceDeleteData<T>) => void;
-export declare type tServiceDeleteAllSuccess<T> = (response: iServiceDeleteAllData<T>) => void;
-export declare type tServiceGetSuccess<T> = (response: iServiceGetData<T>, fromCache: boolean) => void;
-export declare type tServiceGetAllSuccess<T> = (response: iServiceGetAllData<T>, fromCache: boolean) => void;
-export declare type tServiceGetRelationSuccess<T> = (response: iServiceGetRelationItemData<T>, fromCache: boolean) => void;
-export declare type tServiceGetRelationItemsSuccess<T> = (response: iServiceGetRelationItemsData<T>, fromCache: boolean) => void;
-export declare type tServiceFail = (response: tComResponse) => void;
+export declare type tServiceDeleteSuccess<T> = (response: iServiceDeleteResponse<T>) => void;
+export declare type tServiceDeleteAllSuccess<T> = (response: iServiceDeleteAllResponse<T>) => void;
+export declare type tServiceGetSuccess<T> = (response: iServiceGetResponse<T>, fromCache: boolean) => void;
+export declare type tServiceGetAllSuccess<T> = (response: iServiceGetAllResponse<T>, fromCache: boolean) => void;
+export declare type tServiceGetRelationSuccess<T> = (response: iServiceGetRelationItemResponse<T>, fromCache: boolean) => void;
+export declare type tServiceGetRelationItemsSuccess<T> = (response: iServiceGetRelationItemsResponse<T>, fromCache: boolean) => void;
+export declare type tServiceFail = (response: iComResponse) => void;
 export declare type tServiceRequestOptions = {
     max?: number;
     page?: number;
@@ -70,10 +86,11 @@ export declare type tServiceRequestOptions = {
     order_by?: string;
 };
 export default class OWebService<T> {
-    private readonly app_context;
+    protected readonly app_context: OWebApp;
     private readonly _key_store;
     private readonly _base_data;
     constructor(app_context: OWebApp, service_name: string);
+    getName(): string;
     getServiceURI(): string;
     getItemURI(id: any): string;
     getItemRelationURI(id: string, relation: string): string;

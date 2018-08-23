@@ -1,5 +1,4 @@
-import OWebEvent from "../OWebEvent";
-import OWebApp from "../OWebApp";
+import { OWebApp, OWebEvent } from "../oweb";
 export default class OWebPassword extends OWebEvent {
     private readonly app_context;
     static readonly PASSWORD_EDIT_STEP_START: number;

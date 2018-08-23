@@ -1,32 +1,30 @@
-import OWebEvent from "../OWebEvent";
-import { tRouteAction, tRouteOptions } from "../OWebRouter";
-import OWebApp from "../OWebApp";
+import { Vue, VueConstructor } from "vue/types/vue";
+import { OWebEvent, OWebApp, OWebRouteContext, tRoute, tRouteOptions } from "../oweb";
 export interface iPage {
-    name: string;
-    getLinks: () => tPageLink[];
-    onPageOpen?: tRouteAction;
-    onPageClose?: tRouteAction;
+    getName(): string;
+    getLinks(): tPageLink[];
+    component(): Vue | VueConstructor | undefined;
 }
 export declare type tPageLink = {
-    title: string;
-    path: string;
-    require_login?: boolean;
-    description?: string;
-    options?: tRouteOptions;
-    show?: boolean;
-    slug?: string;
-    icon?: string;
-    sub?: tPageLink[];
+    readonly title: string;
+    readonly description?: string;
+    readonly path: tRoute;
+    readonly pathOptions?: tRouteOptions;
+    readonly slug?: string;
+    readonly icon?: string;
+    show?(): boolean;
+    sub?(): tPageLink[];
+    requireLogin?(): boolean;
+    onOpen?(ctx: OWebRouteContext): void;
+    onClose?(): void;
 };
 export declare type tPageLinkFull = tPageLink & {
     id: number;
     href: string;
     active: boolean;
     active_child: boolean;
-    require_login: boolean;
-    show: boolean;
     parent?: tPageLinkFull;
-    sub?: tPageLinkFull[];
+    show(): boolean;
 };
 export default class OWebPager extends OWebEvent {
     private readonly app_context;

@@ -1,7 +1,4 @@
-"use strict";
-
-import {tComResponse} from "./OWebCom";
-import OWebEvent from "./OWebEvent";
+import {iComResponse, OWebEvent} from "./oweb";
 
 export type tViewDialog = {
 	type: "info" | "error" | "done",
@@ -49,13 +46,13 @@ export default class OWebView extends OWebEvent {
 		return this;
 	}
 
-	dialog(dialog: tViewDialog | tComResponse) {
+	dialog(dialog: tViewDialog | iComResponse) {
 		let d = dialog;
 
-		if ((d as tComResponse).error) {
+		if ((d as iComResponse).error) {
 			d = {
-				"type": (d as tComResponse).error ? "error" : "done",
-				"text": (d as tComResponse).msg,
+				"type": (d as iComResponse).error ? "error" : "done",
+				"text": (d as iComResponse).msg,
 				"data": d.data || {}
 			};
 

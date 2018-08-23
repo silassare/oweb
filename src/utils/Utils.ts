@@ -13,6 +13,14 @@ let isEmpty       = function (a: any): boolean {
 		return !Object.keys(a).length;
 	}
 
+	if (typeof a === "string") {
+		return a.trim().length === 0
+	}
+
+	if (typeof a === "number") {
+		return isNaN(a);
+	}
+
 	return !a;
 };
 

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "dist/",
+    "moduleResolution": "node",
     "module": "es6",
     "target": "es6",
     "inlineSources": true,

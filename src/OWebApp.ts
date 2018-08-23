@@ -1,17 +1,19 @@
-"use strict";
-
-import OWebEvent from "./OWebEvent";
-import OWebCurrentUser from "./OWebCurrentUser";
-import OWebView from "./OWebView";
-import OWebDataStore from "./OWebDataStore";
-import OWebDate from "./plugins/OWebDate";
-import Utils from "./utils/Utils";
-import OWebCom, {tComResponse} from "./OWebCom";
-import OWebFormValidator from "./OWebFormValidator";
-import OWebService from "./OWebService";
-import OWebConfigs, {tConfigList} from "./OWebConfigs";
-import OWebUrl, {tUrlList} from "./OWebUrl";
-import OWebRouter from "./OWebRouter";
+import {
+	OWebConfigs,
+	OWebEvent,
+	OWebCurrentUser,
+	OWebView,
+	OWebDataStore,
+	OWebDate,
+	OWebCom,
+	OWebFormValidator,
+	OWebService,
+	tConfigList,
+	OWebUrl,
+	OWebRouter,
+	tUrlList,
+	iComResponse
+} from "./oweb";
 
 const noop = () => {
 };
@@ -48,15 +50,19 @@ export default abstract class OWebApp extends OWebEvent {
 		this.trigger(OWebApp.EVT_APP_READY);
 	}
 
-	getService<T>(service_name: string): OWebService<T> {
+	getService<T = any>(service_name: string): OWebService<T> | undefined {
 		return this.services[service_name];
 	}
 
-	registerService(service_name: string): this {
+	registerService<T extends OWebService<any>>(service: T): this {
 
-		if (!this.services[service_name]) {
-			this.services[service_name] = new OWebService(this, service_name);
+		let service_name = service.getName();
+
+		if (this.services[service_name]) {
+			throw new Error(`A service with the name "${service_name}" already defined.`);
 		}
+
+		this.services[service_name] = service;
 
 		return this;
 	}
@@ -93,14 +99,14 @@ export default abstract class OWebApp extends OWebEvent {
 		return this.user.getCurrentUser() && this.sessionActive();
 	}
 
-	requestPromise(method: string, url: string, data: any, freeze: boolean = false): Promise<tComResponse> {
+	requestPromise(method: string, url: string, data: any, freeze: boolean = false): Promise<iComResponse> {
 		let m = this;
-		return new Promise<tComResponse>(function (resolve, reject) {
+		return new Promise<iComResponse>(function (resolve, reject) {
 			m.request(method, url, data, resolve, reject, freeze);
 		});
 	}
 
-	request(method: string, url: string, data: any, success: (response: tComResponse) => void = noop, fail: (response: tComResponse) => void = noop, freeze: boolean = false): OWebCom {
+	request(method: string, url: string, data: any, success: (response: iComResponse) => void = noop, fail: (response: iComResponse) => void = noop, freeze: boolean = false): OWebCom {
 		let app = this;
 
 		if (freeze) {
@@ -115,7 +121,7 @@ export default abstract class OWebApp extends OWebEvent {
 		};
 
 		let com = new OWebCom(this, options);
-		com.on(OWebCom.EVT_COM_REQUEST_SUCCESS, (response: tComResponse) => {
+		com.on(OWebCom.EVT_COM_REQUEST_SUCCESS, (response: iComResponse) => {
 			// setTimeout(function () {
 			if (freeze) {
 				app.view.unfreeze();
@@ -123,7 +129,7 @@ export default abstract class OWebApp extends OWebEvent {
 
 			success(response);
 			// }, 1000);
-		}).on(OWebCom.EVT_COM_REQUEST_ERROR, (response: tComResponse) => {
+		}).on(OWebCom.EVT_COM_REQUEST_ERROR, (response: iComResponse) => {
 			if (response["msg"] === "OZ_ERROR_YOU_ARE_NOT_ADMIN") {
 				app.destroyApp();
 			}
@@ -137,7 +143,7 @@ export default abstract class OWebApp extends OWebEvent {
 			if (freeze) {
 				app.view.unfreeze();
 			}
-			let response: tComResponse = {
+			let response: iComResponse = {
 				"error": 1,
 				"msg"  : "OZ_ERROR_REQUEST_FAIL",
 				"utime": OWebDate.timestamp()

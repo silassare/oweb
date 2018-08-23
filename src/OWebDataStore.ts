@@ -1,20 +1,17 @@
-"use strict";
+const ls    = window.localStorage,
+	  parse = function (data: string | null): any {
+		  let value: any = undefined;
 
-let ls = window.localStorage;
+		  if (data !== null) {
+			  try {
+				  value = JSON.parse(data);
+			  } catch (e) {
+				  console.error(e);
+			  }
+		  }
 
-let parse = function (data: string | null): any {
-	let value: any = undefined;
-
-	if (data !== null) {
-		try {
-			value = JSON.parse(data);
-		} catch (e) {
-			console.error(e);
-		}
-	}
-
-	return value;
-};
+		  return value;
+	  };
 
 export default class OWebDataStore {
 

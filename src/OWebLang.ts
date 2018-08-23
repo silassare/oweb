@@ -1,7 +1,4 @@
-"use strict";
-
-import Utils from "./utils/Utils";
-import scriptLoader, {tScriptFile} from "./utils/scriptLoader";
+import {scriptLoader, tScriptFile, Utils} from "./oweb";
 
 export type tLangDefinition = { [key: string]: any };
 

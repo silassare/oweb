@@ -1,4 +1,4 @@
-import {tLangDefinition} from "../../OWebLang";
+import {tLangDefinition} from "../../oweb";
 
 export default {
 	"OZ_ERROR_REQUEST_FAIL"               : "Error: The request failed.",

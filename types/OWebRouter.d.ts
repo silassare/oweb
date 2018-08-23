@@ -1,10 +1,11 @@
+export declare type tRoute = string | RegExp;
 export declare type tRouteOptions = {
-    [key: string]: keyof typeof token_type_reg_map;
+    [key: string]: RegExp | keyof typeof token_type_reg_map;
 };
 export declare type tRouteParams = {
     [key: string]: any;
 };
-export declare type tRouteAction = (ctx: OWebDispatchContext) => void;
+export declare type tRouteAction = (ctx: OWebRouteContext) => void;
 export declare type tRouteInfo = {
     reg: RegExp | null;
     tokens: Array<string>;
@@ -35,7 +36,7 @@ export declare type tRouteStateItem = string | number | null | undefined | Date 
 export declare type tRouteStateObject = {
     [key: string]: tRouteStateItem;
 };
-export declare class OWebDispatchContext {
+export declare class OWebRouteContext {
     private _tokens;
     private _stopped;
     private readonly _path;
@@ -72,7 +73,7 @@ export default class OWebRouter {
     private register;
     private unregister;
     private onPopState;
-    on(path: string | RegExp, rules: tRouteOptions | undefined, action: tRouteAction): this;
+    on(path: tRoute, rules: tRouteOptions | undefined, action: tRouteAction): this;
     notFound(callback: (path: string) => void): this;
     goBack(distance?: number): this;
     browseTo(path: string, state?: tRouteStateObject, push?: boolean, ignoreIfSamePath?: boolean): this;

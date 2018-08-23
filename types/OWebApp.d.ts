@@ -1,12 +1,4 @@
-import OWebEvent from "./OWebEvent";
-import OWebCurrentUser from "./OWebCurrentUser";
-import OWebView from "./OWebView";
-import OWebCom, { tComResponse } from "./OWebCom";
-import OWebFormValidator from "./OWebFormValidator";
-import OWebService from "./OWebService";
-import OWebConfigs, { tConfigList } from "./OWebConfigs";
-import OWebUrl, { tUrlList } from "./OWebUrl";
-import OWebRouter from "./OWebRouter";
+import { OWebConfigs, OWebEvent, OWebCurrentUser, OWebView, OWebCom, OWebFormValidator, OWebService, tConfigList, OWebUrl, OWebRouter, tUrlList, iComResponse } from "./oweb";
 export default abstract class OWebApp extends OWebEvent {
     private readonly app_name;
     static readonly EVT_APP_READY: string;
@@ -22,16 +14,16 @@ export default abstract class OWebApp extends OWebEvent {
     protected constructor(app_name: string, app_config_list: tConfigList, app_url_list: tUrlList);
     getAppName(): string;
     start(): void;
-    getService<T>(service_name: string): OWebService<T>;
-    registerService(service_name: string): this;
+    getService<T = any>(service_name: string): OWebService<T> | undefined;
+    registerService<T extends OWebService<any>>(service: T): this;
     getFormValidator(form: HTMLFormElement, required?: Array<string>, excluded?: Array<string>): OWebFormValidator;
     forceLogin(): void;
     reloadApp(): void;
     destroyApp(): void;
     sessionActive(): boolean;
     userVerified(): boolean;
-    requestPromise(method: string, url: string, data: any, freeze?: boolean): Promise<tComResponse>;
-    request(method: string, url: string, data: any, success?: (response: tComResponse) => void, fail?: (response: tComResponse) => void, freeze?: boolean): OWebCom;
+    requestPromise(method: string, url: string, data: any, freeze?: boolean): Promise<iComResponse>;
+    request(method: string, url: string, data: any, success?: (response: iComResponse) => void, fail?: (response: iComResponse) => void, freeze?: boolean): OWebCom;
     abstract showHomePage(): this;
     abstract showLoginPage(): this;
     abstract showSignUpPage(): this;

@@ -1,5 +1,4 @@
-import OWebApp from "../OWebApp";
-import OWebEvent from "../OWebEvent";
+import { OWebApp, OWebEvent } from "../oweb";
 export default class OWebSignUp extends OWebEvent {
     private readonly app_context;
     static readonly SIGN_UP_STEP_START: number;

@@ -1,7 +1,4 @@
-"use strict";
-
-import OWebApp from "../OWebApp";
-import OWebEvent from "../OWebEvent";
+import {OWebApp, OWebEvent} from "../oweb";
 
 export default class OWebLogout extends OWebEvent {
 	static readonly EVT_LOGOUT_ERROR   = "OWebLogout:error";

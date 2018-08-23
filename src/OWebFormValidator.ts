@@ -1,16 +1,17 @@
-"use strict";
-import OWebApp from "./OWebApp";
-import OWebCustomError from "./OWebCustomError";
-import Utils from "./utils/Utils";
+import {OWebApp, Utils, OWebCustomError} from "./oweb";
 
 export type tFormValidator = (value: any, name: string, context: OWebFormValidator) => void;
 
 let formValidators: { [key: string]: tFormValidator } = {};
 
+export class OWebFormError extends OWebCustomError {
+	readonly __oweb_form_error = true;
+}
+
 export default class OWebFormValidator {
 	private readonly formData: FormData;
 	private validatorsMap: { [key: string]: string } = {};
-	private errorList: OWebCustomError[]             = [];
+	private errorList: OWebFormError[]               = [];
 
 	constructor(private readonly app_context: OWebApp, private readonly form: HTMLFormElement, private readonly required: Array<string> = [], private readonly excluded: Array<string> = [], private readonly checkAll: boolean = false) {
 		if (!form || form.nodeName !== "FORM") {
@@ -96,7 +97,7 @@ export default class OWebFormValidator {
 		return description;
 	}
 
-	getErrors(): Array<OWebCustomError> {
+	getErrors(): Array<OWebFormError> {
 		return this.errorList;
 	}
 
@@ -115,26 +116,39 @@ export default class OWebFormValidator {
 			}
 		});
 
-		while ((this.checkAll || !this.errorList.length) && (name = field_names[++c])) {
+		while (name = field_names[++c]) {
 			try {
 				if (context.excluded.indexOf(name) < 0) {
 					let value          = context.getField(name),
 						validator_name = context.validatorsMap[name] || name,
 						fn             = formValidators[validator_name];
 
-					if (~context.required.indexOf(name)) {
-						this.assert(Utils.isNotEmpty(value), "OZ_FORM_CONTAINS_EMPTY_FIELD", {"label": context.getFieldDescription(name)});
-					}
-
-					if (Utils.isFunction(fn)) {
-						fn(value, name, context);
-					} else {
-						console.warn("[OWebFormValidator] validator '%s' is not defined, field '%s' is then considered as safe.", validator_name, name);
+					if (Utils.isNotEmpty(value)) {
+						if (Utils.isFunction(fn)) {
+							fn(value, name, context);
+						} else {
+							console.warn("[OWebFormValidator] validator '%s' is not defined, field '%s' is then considered as safe.", validator_name, name);
+						}
+					} else if (~context.required.indexOf(name)) {
+						this.assert(false, "OZ_FORM_CONTAINS_EMPTY_FIELD", {"label": context.getFieldDescription(name)});
 					}
 				}
 			} catch (e) {
-				if (context.catchable(e)) {
-					throw e;
+				if (e.__oweb_form_error) {
+
+					this.errorList.push(e);
+
+					if (!this.checkAll) {
+						this.getAppContext().view.dialog({
+							type: "error",
+							text: e.message,
+							data: e.data
+						});
+						break;
+					}
+
+				} else {
+					throw e
 				}
 			}
 		}
@@ -144,27 +158,10 @@ export default class OWebFormValidator {
 
 	assert(assertion: any, message: string, data?: {}): this {
 		if (!assertion) {
-			throw new OWebCustomError(message, data);
+			throw new OWebFormError(message, data);
 		}
+
 		return this;
-	}
-
-	private catchable(e: any): boolean {
-		if (e instanceof OWebCustomError) {
-			if (this.checkAll) {
-				this.errorList.push(e);
-			} else {
-				this.getAppContext().view.dialog({
-					type: "error",
-					text: e.message,
-					data: e.getData()
-				});
-			}
-
-			return true;
-		}
-
-		return false;
 	}
 
 	static addFieldValidator(name: string, validator: tFormValidator): void {

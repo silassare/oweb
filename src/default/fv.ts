@@ -1,6 +1,4 @@
-import OWebDate from "../plugins/OWebDate";
-import Utils from "../utils/Utils";
-import OWebFormValidator from "../OWebFormValidator";
+import {OWebDate, OWebFormValidator, Utils} from "../oweb";
 import OTelInput from "o-tel-input";
 
 OWebFormValidator.addFieldValidators({

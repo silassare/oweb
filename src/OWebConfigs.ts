@@ -1,10 +1,4 @@
-"use strict";
-
-import OWebEvent from "./OWebEvent";
-import Utils from "./utils/Utils";
-import OWebApp from "./OWebApp";
-import OWebDataStore from "./OWebDataStore";
-import OWebLang from "./OWebLang";
+import {OWebApp, OWebEvent, OWebDataStore, OWebLang, Utils} from "./oweb";
 
 export type tConfigList = { [key: string]: any };
 

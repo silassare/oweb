@@ -1,19 +1,14 @@
-"use strict";
-/*
- t = "path/to/:id/file/:index/name.:format";
- p = {id:"num",index:"alpha",format:"alpha-num"};
- parseDynamicPath(t,p);
-*/
-import Utils from "./utils/Utils";
+import {Utils} from "./oweb";
 
-export type tRouteOptions = { [key: string]: keyof typeof token_type_reg_map };
+export type tRoute = string | RegExp;
+export type tRouteOptions = { [key: string]: RegExp | keyof typeof token_type_reg_map };
 export type tRouteParams = { [key: string]: any };
-export type tRouteAction = (ctx: OWebDispatchContext) => void;
+export type tRouteAction = (ctx: OWebRouteContext) => void;
 export type tRouteInfo = { reg: RegExp | null, tokens: Array<string> };
 
 interface iRouteDispatcher {
 	readonly id: number,
-	readonly context: OWebDispatchContext,
+	readonly context: OWebRouteContext,
 	readonly found: OWebRoute[]
 
 	isActive(): boolean,
@@ -59,6 +54,11 @@ let fixPath = (path: string): string => {
 	return path;
 };
 
+/*
+ t = "path/to/:id/file/:index/name.:format";
+ p = {id:"num",index:"alpha",format:"alpha-num"};
+ parseDynamicPath(t,p);
+*/
 let parseDynamicPath = function (path: string, options: tRouteOptions): tRouteInfo {
 
 	let tokens: Array<string> = [],
@@ -174,7 +174,7 @@ export type tRouteStateObject = {
 	[key: string]: tRouteStateItem
 };
 
-export class OWebDispatchContext {
+export class OWebRouteContext {
 	private _tokens: tRouteParams;
 	private _stopped: boolean = false;
 	private readonly _path: string;
@@ -333,7 +333,7 @@ export default class OWebRouter {
 		}
 	}
 
-	on(path: string | RegExp, rules: tRouteOptions = {}, action: tRouteAction): this {
+	on(path: tRoute, rules: tRouteOptions = {}, action: tRouteAction): this {
 		this._routes.push(new OWebRoute(path, rules, action));
 		return this;
 	}
@@ -366,7 +366,7 @@ export default class OWebRouter {
 
 		console.log("[OWebRouter] browsing to -> ", path, state, push);
 
-		if (ignoreIfSamePath && this._current_path !== path) {
+		if (ignoreIfSamePath && this._current_path === path) {
 			console.log("[OWebRouter] ignore same path -> ", path);
 			return this;
 		}
@@ -439,9 +439,9 @@ export default class OWebRouter {
 			found: OWebRoute[] = [],
 			len                = this._routes.length,
 			active             = false,
-			dispatchContext    = new OWebDispatchContext(this, path, state),
+			routeContext       = new OWebRouteContext(this, path, state),
 			o                  = {
-				context : dispatchContext,
+				context : routeContext,
 				id,
 				found,
 				isActive: () => active,
@@ -467,7 +467,7 @@ export default class OWebRouter {
 
 							let route = ctx._routes[i];
 
-							if (dispatchContext.stopped()) {
+							if (routeContext.stopped()) {
 								console.warn(`[OWebRouter][dispatcher-${id}] canceled for "${path}" by route action ->`, route.getAction());
 								o.cancel();
 								break;
@@ -475,7 +475,7 @@ export default class OWebRouter {
 
 							if (route.is(path)) {
 								found.push(route);
-								dispatchContext.actionRunner(route);
+								routeContext.actionRunner(route);
 							}
 						}
 

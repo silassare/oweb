@@ -1,5 +1,3 @@
-"use strict";
-
 export type tFileAliasInfo = {
 	file_id: string,
 	file_key: string

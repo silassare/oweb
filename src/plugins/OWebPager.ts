@@ -1,26 +1,26 @@
-"use strict";
-
-import OWebEvent from "../OWebEvent";
-import OWebRouter, {OWebDispatchContext, tRouteAction, tRouteOptions} from "../OWebRouter";
-import OWebApp from "../OWebApp";
+import {Vue, VueConstructor} from "vue/types/vue";
+import {OWebEvent, OWebApp, OWebRouteContext, tRoute, tRouteOptions, OWebRouter} from "../oweb";
 
 export interface iPage {
-	name: string;
-	getLinks: () => tPageLink[];
-	onPageOpen?: tRouteAction;
-	onPageClose?: tRouteAction;
+	getName(): string;
+
+	getLinks(): tPageLink[];
+
+	component(): Vue | VueConstructor | undefined
 }
 
 export type tPageLink = {
-	title: string,
-	path: string,
-	require_login?: boolean,
-	description?: string,
-	options?: tRouteOptions,
-	show?: boolean,
-	slug?: string,
-	icon?: string,
-	sub?: tPageLink[]
+	readonly title: string,
+	readonly description?: string,
+	readonly path: tRoute,
+	readonly pathOptions?: tRouteOptions,
+	readonly slug?: string,
+	readonly icon?: string,
+	show?(): boolean,
+	sub?(): tPageLink[],
+	requireLogin?(): boolean,
+	onOpen?(ctx: OWebRouteContext): void,
+	onClose?(): void
 };
 
 export type tPageLinkFull = tPageLink & {
@@ -28,13 +28,15 @@ export type tPageLinkFull = tPageLink & {
 	href: string,
 	active: boolean,
 	active_child: boolean,
-	require_login: boolean,
-	show: boolean,
 	parent?: tPageLinkFull,
-	sub?: tPageLinkFull[]
+	show(): boolean
+
 };
 
-let linkId      = 0;
+const wDoc = window.document;
+
+let linkId = 0;
+
 let _isParentOf = (parent: tPageLinkFull, link: tPageLinkFull): boolean => {
 	let p;
 	while (p = link.parent) {
@@ -87,7 +89,7 @@ export default class OWebPager extends OWebEvent {
 	}
 
 	registerPage(page: iPage): this {
-		let name = page.name;
+		let name = page.getName();
 		if (name in this._pages) {
 			console.warn(`[OWebPager] page "${name}" will be redefined.`);
 		}
@@ -109,18 +111,24 @@ export default class OWebPager extends OWebEvent {
 			let link: tPageLinkFull = <any>links[i];
 			link.id                 = ++linkId;
 			link.parent             = parent;
-			link.href               = router.pathToURL(link.path).href;
+			link.href               = router.pathToURL(typeof link.path === "string"? link.path : "/").href;
 			link.active             = false;
 			link.active_child       = false;
-			link.require_login      = link.require_login || false;
-			link.show               = link.show !== false;
+
+			if (!("show" in link)) {
+				link.show = function () {
+					return true;
+				};
+			}
 
 			this._links_flattened.push(link);
 
 			this._addRoute(link, page);
 
-			if (link.sub && link.sub.length) {
-				this._registerLinks(link.sub, page, link);
+			let sub = link.sub ? link.sub() : [];
+
+			if (sub.length) {
+				this._registerLinks(sub, page, link);
 			}
 		}
 
@@ -129,31 +137,28 @@ export default class OWebPager extends OWebEvent {
 
 	private _addRoute(link: tPageLinkFull, page: iPage): this {
 		let ctx = this;
-
-		this.app_context.router.on(link.path, link.options || {}, (routeContext: OWebDispatchContext) => {
+		this.app_context.router.on(link.path, link.pathOptions || {}, (routeContext: OWebRouteContext) => {
 			console.log("[OWebPager] page link match ->", link, page, routeContext);
 
-			if (link.require_login && !ctx.app_context.userVerified()) {
+			if (link.requireLogin && link.requireLogin() && !ctx.app_context.userVerified()) {
 				return routeContext.stop() && ctx.app_context.showLoginPage();
 			}
 
-			let p = ctx._active_page;
+			let al = ctx._active_link;
 
-			p && p.onPageClose && p.onPageClose(routeContext);
+			al && al.onClose && al.onClose();
 
-			page.onPageOpen && page.onPageOpen(routeContext);
+			link.onOpen && link.onOpen(routeContext);
 
 			ctx._setActivePage(page)
 				._setActiveLink(link);
 		});
 
 		return this;
-
 	}
 
 	private _setActiveLink(link: tPageLinkFull): this {
-		let links         = this._links_flattened;
-		this._active_link = link;
+		let links = this._links_flattened;
 
 		for (let i = 0; i < links.length; i++) {
 			let c = links[i];
@@ -161,6 +166,14 @@ export default class OWebPager extends OWebEvent {
 			c.active       = link.id === c.id;
 			c.active_child = !c.active && _isParentOf(c, link);
 		}
+
+		if (link.title.length) {
+			wDoc.title = link.title;
+		}
+
+		this._active_link = link;
+
+		console.log(`[OWebPager] active link ->`, this._active_link);
 
 		return this;
 	}

@@ -1,5 +1,4 @@
 export default class OWebCustomError extends Error {
-    private readonly data;
+    readonly data: any;
     constructor(message: any, data?: any);
-    getData(): any;
 }

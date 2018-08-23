@@ -2,8 +2,8 @@
   "name": "oweb",
   "version": "1.0.0",
   "description": "O'Web is a framework for web applications that use APIs built with the O'Zone framework.",
-  "main": "dist/index.js",
-  "typings": "types/index.d.ts",
+  "main": "dist/oweb.js",
+  "typings": "types/oweb.d.ts",
   "keywords": [
     "oweb",
     "O'Web",
@@ -27,7 +27,8 @@
   },
   "dependencies": {
     "o-tel-input": "file:../otelinput",
-    "otpl-js": "file:../../silo/otpl"
+    "otpl-js": "file:../../silo/otpl",
+    "vue": "^2.5.17"
   },
   "devDependencies": {
     "@types/jquery": "^3.3.4",

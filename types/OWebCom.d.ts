@@ -1,13 +1,12 @@
-import OWebEvent from "./OWebEvent";
-import OWebApp from "./OWebApp";
-export declare type tComResponse = {
+import { OWebApp, OWebEvent } from "./oweb";
+export interface iComResponse {
     error: number;
     msg: string;
     data?: any;
     utime: number;
     stime?: number;
     neterror?: boolean;
-};
+}
 export declare type tComOptions = {
     url: string;
     method: string;

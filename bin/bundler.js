@@ -23,17 +23,16 @@ let getWebSrc = function(root, src) {
 
 // walk into directory and search for file with given extension
 // make a bundle as output
-let dirTemplateBundle = function(dir, web_root, extensions, to) {
+let dirTemplateBundle = function(dir, web_root, to) {
 	let tpl_count = 0,
-	    list      = fs.readdirSync(dir),
-	    file_reg  = new RegExp("(" + extensions.join("|") + ")$");
+	    list      = fs.readdirSync(dir);
 
 	list.forEach(function(name) {
 		let src = path.resolve(dir, name);
 
 		if (fs.lstatSync(src).isDirectory()) {
-			tpl_count += dirTemplateBundle(src, web_root, extensions, to);
-		} else if (fs.lstatSync(src).isFile() && file_reg.test(src)) {
+			tpl_count += dirTemplateBundle(src, web_root, to);
+		} else if (fs.lstatSync(src).isFile()) {
 			let src_web = getWebSrc(web_root, src);
 
 			to[src_web] = cleanFileContent(fs.readFileSync(src));
@@ -47,7 +46,7 @@ let dirTemplateBundle = function(dir, web_root, extensions, to) {
 module.exports = function(cli) {
 
 	let {source_dir, web_root, dest_dir, is_ts} = cli.getArgs();
-	const extensions                            = [".otpl", ".txt", ".html"];
+
 	if (!fs.existsSync(source_dir) || !fs.lstatSync(source_dir).isDirectory()) {
 		throw new Error("please set a valid source directory");
 	}
@@ -69,8 +68,7 @@ module.exports = function(cli) {
 		      `/../assets/templates.bundle.${is_ts ? "ts" : "js"}.otpl`);
 
 	let bundle_files    = {},//map file path to file content
-	    templates_count = dirTemplateBundle(source_dir, web_root,
-		    extensions, bundle_files);
+	    templates_count = dirTemplateBundle(source_dir, web_root, bundle_files);
 
 	if (templates_count) {
 		let o      = new otpl;

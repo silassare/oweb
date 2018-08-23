@@ -1,7 +1,4 @@
-"use strict";
-
-import OWebEvent from "../OWebEvent";
-import OWebApp from "../OWebApp";
+import {OWebApp, OWebEvent} from "../oweb";
 
 export default class OWebLogin extends OWebEvent {
 

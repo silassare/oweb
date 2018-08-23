@@ -1,9 +1,4 @@
-"use strict";
-
-import OWebEvent from "./OWebEvent";
-import OWebApp from "./OWebApp";
-import OWebDataStore from "./OWebDataStore";
-import Utils from "./utils/Utils";
+import {OWebApp, OWebEvent, OWebDataStore, Utils} from "./oweb";
 
 type tKeyData = {
 	value: any,

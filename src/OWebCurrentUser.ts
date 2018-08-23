@@ -1,8 +1,4 @@
-"use strict";
-
-import OWebEvent from "./OWebEvent";
-import OWebApp from "./OWebApp";
-import OWebKeyStorage from "./OWebKeyStorage";
+import {OWebApp, OWebEvent, OWebKeyStorage} from "./oweb";
 
 export default class OWebCurrentUser extends OWebEvent {
 	static readonly SELF                 = "OWebCurrentUser";

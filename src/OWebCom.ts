@@ -1,19 +1,14 @@
-"use strict";
-
-import Utils from "./utils/Utils";
-import OWebEvent from "./OWebEvent";
-import OWebApp from "./OWebApp";
-import OWebFS from "./OWebFS";
+import {OWebApp, OWebEvent, Utils, OWebFS} from "./oweb";
 import jqXHR = JQuery.jqXHR;
 
-export type tComResponse = {
+export interface iComResponse {
 	error: number,
 	msg: string,
 	data?: any,
 	utime: number,
 	stime?: number,
 	neterror?: boolean
-};
+}
 
 export type tComOptions = {
 	url: string,
@@ -152,7 +147,7 @@ export default class OWebCom extends OWebEvent {
 	}
 
 	// the connection to the server was successfully established
-	private _handleResponse(response: tComResponse) {
+	private _handleResponse(response: iComResponse) {
 		let m = this;
 
 		if (response.stime) {
