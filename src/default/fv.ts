@@ -1,5 +1,7 @@
-import {OWebDate, OWebFormValidator, Utils} from "../oweb";
 import OTelInput from "o-tel-input";
+import OWebFormValidator from "../OWebFormValidator";
+import OWebDate from "../plugins/OWebDate";
+import Utils from "../utils/Utils";
 
 OWebFormValidator.addFieldValidators({
 	"code"      : (value: any, name: string, fv: OWebFormValidator) => {
@@ -35,11 +37,11 @@ OWebFormValidator.addFieldValidators({
 			date    = od && od.describe(),
 			min_age = fv.getConfig("OZ_USER_MIN_AGE"),
 			max_age = fv.getConfig("OZ_USER_MAX_AGE"),
-			isValid = date && Utils.isValidAge(date.d, date.m, date.Y, min_age, max_age);
+			isValid = date && Utils.isValidAge(date.d, parseInt(date.mm), date.Y, min_age, max_age);
 
 		fv.assert(isValid, "OZ_FIELD_BIRTH_DATE_INVALID", {"input": value, "min": min_age, "max": max_age});
 
-		date && fv.setField(name, `${date.Y}-${date.m}-${date.d}`);
+		date && fv.setField(name, `${date.Y}-${date.mm}-${date.d}`);
 	},
 	"gender"    : (value: any, name: string, fv: OWebFormValidator) => {
 		let genders = fv.getConfig("OZ_USER_ALLOWED_GENDERS");

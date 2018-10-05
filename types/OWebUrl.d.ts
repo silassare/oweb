@@ -1,4 +1,4 @@
-import { OWebApp } from "./oweb";
+import OWebApp from "./OWebApp";
 export declare type tUrlList = {
     [key: string]: string;
 };

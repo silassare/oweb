@@ -1,3 +1,4 @@
+import OWebLang from "../OWebLang";
 /**
  * D The day of the week in three letters
  * l (L lowercase) The entire day of the week 0 to 6
@@ -20,7 +21,7 @@
  * ii The minutes 00, 01,..., 59
  * ss The seconds 00, 01,..., 59
  */
-import {OWebLang, Utils} from "../oweb";
+import Utils from "../utils/Utils";
 
 export type tDateDesc = {
 	D: string,

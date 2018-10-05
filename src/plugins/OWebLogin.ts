@@ -1,4 +1,6 @@
-import {OWebApp, OWebEvent} from "../oweb";
+import OWebApp from "../OWebApp";
+import {iComResponse} from "../OWebCom";
+import OWebEvent from "../OWebEvent";
 
 export default class OWebLogin extends OWebEvent {
 
@@ -36,6 +38,14 @@ export default class OWebLogin extends OWebEvent {
 
 			m._tryLogin(data);
 		}
+	}
+
+	onError(handler: (response: iComResponse) => void): this {
+		return this.on(OWebLogin.EVT_LOGIN_ERROR, handler);
+	}
+
+	onSuccess(handler: (response: iComResponse) => void): this {
+		return this.on(OWebLogin.EVT_LOGIN_SUCCESS, handler);
 	}
 
 	_tryLogin(data: any) {

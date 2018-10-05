@@ -1,4 +1,5 @@
-import { iComResponse, OWebEvent } from "./oweb";
+import { iComResponse } from "./OWebCom";
+import OWebEvent from "./OWebEvent";
 export declare type tViewDialog = {
     type: "info" | "error" | "done";
     text: string;
@@ -14,5 +15,8 @@ export default class OWebView extends OWebEvent {
     isFrozen(): boolean;
     freeze(): this;
     unfreeze(): this;
-    dialog(dialog: tViewDialog | iComResponse): void;
+    dialog(dialog: tViewDialog | iComResponse, can_use_alert?: boolean): void;
+    onFreeze(cb: () => void): this;
+    onUnFreeze(cb: () => void): this;
+    onDialog(cb: (dialog: tViewDialog, can_use_alert: boolean) => void): this;
 }

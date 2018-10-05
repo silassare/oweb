@@ -1,4 +1,7 @@
-import {OWebApp, OWebEvent, Utils, OWebFS} from "./oweb";
+import OWebApp from "./OWebApp";
+import OWebEvent from "./OWebEvent";
+import OWebFS from "./OWebFS";
+import Utils from "./utils/Utils";
 import jqXHR = JQuery.jqXHR;
 
 export interface iComResponse {

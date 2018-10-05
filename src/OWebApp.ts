@@ -1,19 +1,14 @@
-import {
-	OWebConfigs,
-	OWebEvent,
-	OWebCurrentUser,
-	OWebView,
-	OWebDataStore,
-	OWebDate,
-	OWebCom,
-	OWebFormValidator,
-	OWebService,
-	tConfigList,
-	OWebUrl,
-	OWebRouter,
-	tUrlList,
-	iComResponse
-} from "./oweb";
+import OWebCom, {iComResponse} from "./OWebCom";
+import OWebConfigs, {tConfigList} from "./OWebConfigs";
+import OWebCurrentUser from "./OWebCurrentUser";
+import OWebDataStore from "./OWebDataStore";
+import OWebEvent from "./OWebEvent";
+import OWebFormValidator from "./OWebFormValidator";
+import OWebRouter from "./OWebRouter";
+import OWebService from "./OWebService";
+import OWebUrl, {tUrlList} from "./OWebUrl";
+import OWebView from "./OWebView";
+import OWebDate from "./plugins/OWebDate";
 
 const noop = () => {
 };
@@ -24,6 +19,7 @@ export default abstract class OWebApp extends OWebEvent {
 	static readonly SELF          = "OWebApp";
 
 	readonly view: OWebView;
+	readonly ls: OWebDataStore;
 	readonly router: OWebRouter;
 	readonly user: OWebCurrentUser;
 	readonly configs: OWebConfigs;
@@ -32,6 +28,7 @@ export default abstract class OWebApp extends OWebEvent {
 
 	protected constructor(private readonly app_name: string, app_config_list: tConfigList, app_url_list: tUrlList) {
 		super();
+		this.ls       = new OWebDataStore(this);
 		this.configs  = new OWebConfigs(this, app_config_list);
 		this.url      = new OWebUrl(this, app_url_list);
 		this.user     = new OWebCurrentUser(this);
@@ -41,13 +38,18 @@ export default abstract class OWebApp extends OWebEvent {
 		this.router   = new OWebRouter(base_url, hash_mode);
 	}
 
-	getAppName() {
+	getAppName(): string {
 		return this.app_name;
 	}
 
-	start() {
+	isMobileApp(): boolean {
+		return "cordova" in window;
+	}
+
+	start(): this {
 		console.log("[OWebApp] app started!");
 		this.trigger(OWebApp.EVT_APP_READY);
+		return this;
 	}
 
 	getService<T = any>(service_name: string): OWebService<T> | undefined {
@@ -72,20 +74,30 @@ export default abstract class OWebApp extends OWebEvent {
 	}
 
 	forceLogin() {
-		OWebDataStore.clear();
-		this.reloadApp();
+		this.ls.clear();
+		this.showLoginPage();
 	}
 
 	reloadApp() {
 		// TODO: instead of reloading the current location, find a way to browse to web app entry point
 		// for android & ios restart the app
-		window.location.reload(true);
+		// window.location.reload(true);
+		this.showHomePage();
 	}
 
 	destroyApp() {
 		// erase data
-		OWebDataStore.clear();
+		this.ls.clear();
 		this.reloadApp();
+	}
+
+	closeApp() {
+		// cordova
+		if (window.navigator && (window.navigator as any).app) {
+			(window.navigator as any).app.exitApp();
+		} else {
+			window.close();
+		}
 	}
 
 	sessionActive(): boolean {
@@ -96,7 +108,7 @@ export default abstract class OWebApp extends OWebEvent {
 	}
 
 	userVerified(): boolean {
-		return this.user.getCurrentUser() && this.sessionActive();
+		return Boolean(this.user.getCurrentUser() && this.sessionActive());
 	}
 
 	requestPromise(method: string, url: string, data: any, freeze: boolean = false): Promise<iComResponse> {

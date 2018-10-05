@@ -1,4 +1,6 @@
-import {OWebApp, OWebEvent} from "../oweb";
+import OWebApp from "../OWebApp";
+import {iComResponse} from "../OWebCom";
+import OWebEvent from "../OWebEvent";
 
 export default class OWebLogout extends OWebEvent {
 	static readonly EVT_LOGOUT_ERROR   = "OWebLogout:error";
@@ -7,6 +9,14 @@ export default class OWebLogout extends OWebEvent {
 
 	constructor(private readonly app_context: OWebApp) {
 		super();
+	}
+
+	onError(handler: (response: iComResponse) => void): this {
+		return this.on(OWebLogout.EVT_LOGOUT_ERROR, handler);
+	}
+
+	onSuccess(handler: (response: iComResponse) => void): this {
+		return this.on(OWebLogout.EVT_LOGOUT_SUCCESS, handler);
 	}
 
 	logout() {

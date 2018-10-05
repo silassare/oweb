@@ -1,4 +1,4 @@
-import {Utils} from "./oweb";
+import Utils from "./utils/Utils";
 
 export default class OWebEvent {
 	private _app_events: { [key: string]: Array<Function> } = {};

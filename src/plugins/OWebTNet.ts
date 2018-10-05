@@ -1,4 +1,6 @@
-import {OWebApp, OWebEvent, Utils} from "../oweb";
+import OWebApp from "../OWebApp";
+import OWebEvent from "../OWebEvent";
+import Utils from "../utils/Utils";
 
 export default class OWebTNet extends OWebEvent {
 

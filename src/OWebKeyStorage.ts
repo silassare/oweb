@@ -1,4 +1,6 @@
-import {OWebApp, OWebEvent, OWebDataStore, Utils} from "./oweb";
+import OWebApp from "./OWebApp";
+import OWebEvent from "./OWebEvent";
+import Utils from "./utils/Utils";
 
 type tKeyData = {
 	value: any,
@@ -12,16 +14,19 @@ let _hasExpired = (data: tKeyData): boolean => {
 };
 
 export default class OWebKeyStorage extends OWebEvent {
-	private readonly _tag_name: string;
 	private readonly _max_life_time: number;
 	private _store: { [key: string]: tKeyData };
 
-	constructor(private readonly app_context: OWebApp, tag: string, private persistent: boolean = true, max_life_time: number = Infinity) {
+	constructor(private readonly app_context: OWebApp, private readonly tag_name: string, private persistent: boolean = true, max_life_time: number = Infinity) {
 		super();
 
-		this._tag_name      = app_context.getAppName() + ":" + tag;
-		this._store         = OWebDataStore.load(this._tag_name) || {};
+		let m = this;
+		this._store         = app_context.ls.load(this.tag_name) || {};
 		this._max_life_time = max_life_time * 1000;
+
+		app_context.ls.onClear(function () {
+			m._store = {};
+		});
 
 		this._clearExpired();
 	}
@@ -67,7 +72,7 @@ export default class OWebKeyStorage extends OWebEvent {
 
 	private save(): this {
 		if (this.persistent) {
-			OWebDataStore.save(this._tag_name, this._store);
+			this.app_context.ls.save(this.tag_name, this._store);
 		}
 
 		return this;

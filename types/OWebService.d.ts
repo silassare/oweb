@@ -1,4 +1,6 @@
-import { OWebApp, OWebKeyStorage, OWebCom, iComResponse } from "./oweb";
+import OWebApp from "./OWebApp";
+import OWebCom, { iComResponse } from "./OWebCom";
+import OWebKeyStorage from "./OWebKeyStorage";
 export interface iServiceAddResponse<T> extends iComResponse {
     data: {
         item: T;
@@ -83,6 +85,7 @@ export declare type tServiceRequestOptions = {
     page?: number;
     filters?: any;
     relations?: string;
+    collection?: string;
     order_by?: string;
 };
 export default class OWebService<T> {

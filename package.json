@@ -16,9 +16,9 @@
   "files": [
     "src",
     "assets",
-    "dist/*.js",
-    "bin/*.js",
-    "build/*.js",
+    "dist",
+    "bin",
+    "lib",
     "types/*.d.ts"
   ],
   "scripts": {
@@ -26,8 +26,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "make-dir": "^1.3.0",
     "o-tel-input": "file:../otelinput",
-    "otpl-js": "file:../../silo/otpl",
+    "otpl-js": "latest",
     "vue": "^2.5.17"
   },
   "devDependencies": {

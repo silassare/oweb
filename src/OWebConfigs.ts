@@ -1,4 +1,7 @@
-import {OWebApp, OWebEvent, OWebDataStore, OWebLang, Utils} from "./oweb";
+import OWebApp from "./OWebApp";
+import OWebEvent from "./OWebEvent";
+import OWebLang from "./OWebLang";
+import Utils from "./utils/Utils";
 
 export type tConfigList = { [key: string]: any };
 
@@ -9,11 +12,10 @@ export default class OWebConfigs extends OWebEvent {
 	private readonly _default_configs: tConfigList     = {};
 	private readonly _user_configs: tConfigList        = {};
 	private readonly _private_configs_map: tConfigList = {};
-	private readonly _tag_name: string;
+	private readonly _tag_name: string                 = "user_configs";
 
 	constructor(private readonly app_context: OWebApp, configs: tConfigList) {
 		super();
-		this._tag_name = app_context.getAppName() + ":user_configs";
 
 		this.loadConfigs(configs);
 		this._loadSavedConfigs();
@@ -42,7 +44,7 @@ export default class OWebConfigs extends OWebEvent {
 
 	resetAllToDefault(): void {
 		if (confirm(OWebLang.toHuman("OZ_CONFIRM_RESET_CONFIGS"))) {
-			OWebDataStore.save(this._tag_name, this._default_configs);
+			this.app_context.ls.save(this._tag_name, this._default_configs);
 
 			this.app_context.reloadApp();
 		}
@@ -63,13 +65,13 @@ export default class OWebConfigs extends OWebEvent {
 			m._set(config, value);
 		}
 
-		OWebDataStore.save(this._tag_name, this._user_configs);
+		this.app_context.ls.save(this._tag_name, this._user_configs);
 		return this;
 	}
 
 	private _loadSavedConfigs() {
 		let m         = this,
-			saved_cfg = OWebDataStore.load(this._tag_name) || {};
+			saved_cfg = this.app_context.ls.load(this._tag_name) || {};
 
 		Utils.forEach(m._default_configs, (value, key) => {
 			if (this._isPublic(key) && saved_cfg[key] !== undefined) {
@@ -77,7 +79,7 @@ export default class OWebConfigs extends OWebEvent {
 			}
 		});
 
-		OWebDataStore.save(this._tag_name, m._user_configs);
+		this.app_context.ls.save(this._tag_name, m._user_configs);
 	}
 
 	private _set(config: string, value: any): void {

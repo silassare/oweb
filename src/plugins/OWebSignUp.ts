@@ -1,4 +1,6 @@
-import {OWebApp, OWebEvent} from "../oweb";
+import OWebApp from "../OWebApp";
+import {iComResponse} from "../OWebCom";
+import OWebEvent from "../OWebEvent";
 
 export default class OWebSignUp extends OWebEvent {
 
@@ -6,10 +8,10 @@ export default class OWebSignUp extends OWebEvent {
 	static readonly SIGN_UP_STEP_VALIDATE = 2;
 	static readonly SIGN_UP_STEP_END      = 3;
 
-	static readonly EVT_NEXT_STEP       = "OWebSignUp:next_step";
-	static readonly EVT_SIGN_UP_SUCCESS = "OWebSignUp:success";
-	static readonly EVT_SIGN_UP_ERROR   = "OWebSignUp:error";
-	static readonly SELF                = "OWebSignUp";
+	static readonly EVT_SIGN_UP_NEXT_STEP = "OWebSignUp:next_step";
+	static readonly EVT_SIGN_UP_SUCCESS   = "OWebSignUp:success";
+	static readonly EVT_SIGN_UP_ERROR     = "OWebSignUp:error";
+	static readonly SELF                  = "OWebSignUp";
 
 	constructor(private readonly app_context: OWebApp) {
 		super()
@@ -60,8 +62,13 @@ export default class OWebSignUp extends OWebEvent {
 
 		if (ofv.validate()) {
 
-			if ((agreeChk = form.querySelector("input[name=oweb_cgu_agree_checkbox]")) && !agreeChk.checked) {
-				this.trigger(OWebSignUp.EVT_SIGN_UP_ERROR, ["OZ_ERROR_SHOULD_ACCEPT_CGU", form]);
+			if ((agreeChk = form.querySelector("input[name=oweb_signup_cgu_agree_checkbox]")) && !agreeChk.checked) {
+				let error: iComResponse = {
+					error: 1,
+					msg  : "OZ_ERROR_SHOULD_ACCEPT_CGU",
+					utime: 0
+				};
+				this.trigger(OWebSignUp.EVT_SIGN_UP_ERROR, [error]);
 				return false;
 			}
 
@@ -73,18 +80,30 @@ export default class OWebSignUp extends OWebEvent {
 
 	}
 
+	onError(handler: (response: iComResponse) => void): this {
+		return this.on(OWebSignUp.EVT_SIGN_UP_ERROR, handler);
+	}
+
+	onNextStep(handler: (response: iComResponse, step: number) => void): this {
+		return this.on(OWebSignUp.EVT_SIGN_UP_NEXT_STEP, handler);
+	}
+
+	onSuccess(handler: (response: iComResponse) => void): this {
+		return this.on(OWebSignUp.EVT_SIGN_UP_SUCCESS, handler);
+	}
+
 	_sendForm(form: HTMLFormElement, data: any, next_step?: number) {
 		let m   = this,
 			url = this.app_context.url.get("OZ_SERVER_SIGNUP_SERVICE");
 
 		this.app_context.request("POST", url, data, function (response: any) {
 			if (next_step) {
-				m.trigger(OWebSignUp.EVT_NEXT_STEP, [{"response": response, "step": next_step,}]);
+				m.trigger(OWebSignUp.EVT_SIGN_UP_NEXT_STEP, [response, next_step]);
 			} else {
-				m.trigger(OWebSignUp.EVT_SIGN_UP_SUCCESS, [{"response": response}]);
+				m.trigger(OWebSignUp.EVT_SIGN_UP_SUCCESS, [response]);
 			}
 		}, function (response: any) {
-			m.trigger(OWebSignUp.EVT_SIGN_UP_ERROR, [{"step": next_step, "response": response}]);
+			m.trigger(OWebSignUp.EVT_SIGN_UP_ERROR, [response]);
 		}, true);
 	}
 };

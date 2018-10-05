@@ -1,4 +1,6 @@
-import { OWebApp, OWebEvent } from "../oweb";
+import OWebApp from "../OWebApp";
+import { iComResponse } from "../OWebCom";
+import OWebEvent from "../OWebEvent";
 export default class OWebLogin extends OWebEvent {
     private readonly app_context;
     static readonly SELF: string;
@@ -7,5 +9,7 @@ export default class OWebLogin extends OWebEvent {
     constructor(app_context: OWebApp);
     loginWithEmail(form: HTMLFormElement): void;
     loginWithPhone(form: HTMLFormElement): void;
+    onError(handler: (response: iComResponse) => void): this;
+    onSuccess(handler: (response: iComResponse) => void): this;
     _tryLogin(data: any): void;
 }

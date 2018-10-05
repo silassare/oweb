@@ -1,9 +1,19 @@
-import { OWebConfigs, OWebEvent, OWebCurrentUser, OWebView, OWebCom, OWebFormValidator, OWebService, tConfigList, OWebUrl, OWebRouter, tUrlList, iComResponse } from "./oweb";
+import OWebCom, { iComResponse } from "./OWebCom";
+import OWebConfigs, { tConfigList } from "./OWebConfigs";
+import OWebCurrentUser from "./OWebCurrentUser";
+import OWebDataStore from "./OWebDataStore";
+import OWebEvent from "./OWebEvent";
+import OWebFormValidator from "./OWebFormValidator";
+import OWebRouter from "./OWebRouter";
+import OWebService from "./OWebService";
+import OWebUrl, { tUrlList } from "./OWebUrl";
+import OWebView from "./OWebView";
 export default abstract class OWebApp extends OWebEvent {
     private readonly app_name;
     static readonly EVT_APP_READY: string;
     static readonly SELF: string;
     readonly view: OWebView;
+    readonly ls: OWebDataStore;
     readonly router: OWebRouter;
     readonly user: OWebCurrentUser;
     readonly configs: OWebConfigs;
@@ -13,13 +23,15 @@ export default abstract class OWebApp extends OWebEvent {
     };
     protected constructor(app_name: string, app_config_list: tConfigList, app_url_list: tUrlList);
     getAppName(): string;
-    start(): void;
+    isMobileApp(): boolean;
+    start(): this;
     getService<T = any>(service_name: string): OWebService<T> | undefined;
     registerService<T extends OWebService<any>>(service: T): this;
     getFormValidator(form: HTMLFormElement, required?: Array<string>, excluded?: Array<string>): OWebFormValidator;
     forceLogin(): void;
     reloadApp(): void;
     destroyApp(): void;
+    closeApp(): void;
     sessionActive(): boolean;
     userVerified(): boolean;
     requestPromise(method: string, url: string, data: any, freeze?: boolean): Promise<iComResponse>;

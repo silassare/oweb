@@ -1,4 +1,4 @@
-import {tLangDefinition} from "../../oweb";
+import {tLangDefinition} from "../../OWebLang";
 
 export default {
 	// ---------START NEW

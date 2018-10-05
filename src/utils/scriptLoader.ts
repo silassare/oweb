@@ -1,5 +1,3 @@
-"use strict";
-
 import Utils from "./Utils";
 
 let document = window.document;

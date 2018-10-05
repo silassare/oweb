@@ -1,4 +1,5 @@
-import {OWebApp, PathResolver} from "./oweb";
+import OWebApp from "./OWebApp";
+import PathResolver from "./utils/PathResolver";
 
 let isServerUrl = function (url_key: string): boolean {
 	return /^OZ_SERVER_/.test(url_key);

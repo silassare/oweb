@@ -1,4 +1,5 @@
-import {iComResponse, OWebEvent} from "./oweb";
+import {iComResponse} from "./OWebCom";
+import OWebEvent from "./OWebEvent";
 
 export type tViewDialog = {
 	type: "info" | "error" | "done",
@@ -46,7 +47,7 @@ export default class OWebView extends OWebEvent {
 		return this;
 	}
 
-	dialog(dialog: tViewDialog | iComResponse) {
+	dialog(dialog: tViewDialog | iComResponse, can_use_alert: boolean = false) {
 		let d = dialog;
 
 		if ((d as iComResponse).error) {
@@ -59,6 +60,18 @@ export default class OWebView extends OWebEvent {
 			// console.error("[OWebView] please use new dialog mode -> ", d, "instead of ->", dialog);
 		}
 
-		this.trigger(OWebView.EVT_VIEW_DIALOG, [d]);
+		this.trigger(OWebView.EVT_VIEW_DIALOG, [d, can_use_alert]);
+	}
+
+	onFreeze(cb: () => void) {
+		return this.on(OWebView.EVT_VIEW_FREEZE, cb);
+	}
+
+	onUnFreeze(cb: () => void) {
+		return this.on(OWebView.EVT_VIEW_UNFREEZE, cb);
+	}
+
+	onDialog(cb: (dialog: tViewDialog, can_use_alert: boolean) => void) {
+		return this.on(OWebView.EVT_VIEW_DIALOG, cb);
 	}
 }

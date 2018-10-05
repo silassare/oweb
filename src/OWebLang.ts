@@ -1,4 +1,5 @@
-import {scriptLoader, tScriptFile, Utils} from "./oweb";
+import scriptLoader, {tScriptFile} from "./utils/scriptLoader";
+import Utils from "./utils/Utils";
 
 export type tLangDefinition = { [key: string]: any };
 

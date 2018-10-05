@@ -1,3 +1,6 @@
+import OWebApp from "./OWebApp";
+import OWebEvent from "./OWebEvent";
+
 const ls    = window.localStorage,
 	  parse = function (data: string | null): any {
 		  let value: any = undefined;
@@ -13,12 +16,31 @@ const ls    = window.localStorage,
 		  return value;
 	  };
 
-export default class OWebDataStore {
+export default class OWebDataStore extends OWebEvent {
+	static readonly EVT_DATA_STORE_CLEAR = "OWebDataStore:clear";
+	private readonly key: string;
+	private data: any                    = {};
 
-	static save(keyName: string, data: any): boolean {
+	constructor(private readonly _app_context: OWebApp) {
+		super();
+		this.key  = _app_context.getAppName();
+		this.data = parse(ls.getItem(this.key)) || {};
+	}
+
+	save(keyName: string, data: any): boolean {
+
+		this.data[keyName] = data;
+
+		this._persist();
+
+		return false;
+	}
+
+	_persist(): boolean {
+
 		if (ls) {
 			try {
-				ls.setItem(keyName, JSON.stringify(data));
+				ls.setItem(this.key, JSON.stringify(this.data));
 				return true;
 			} catch (e) {
 				console.error(e);
@@ -28,47 +50,42 @@ export default class OWebDataStore {
 		return false;
 	}
 
-	static load(keyName: string): any {
-		if (ls) {
-			if (arguments[0] instanceof RegExp) {
-				let keyReg      = arguments[0];
-				let list        = Object.keys(ls);
-				let result: any = {};
+	load(keyName: string): any {
+		if (arguments[0] instanceof RegExp) {
+			let keyReg      = arguments[0];
+			let list        = Object.keys(this.data);
+			let result: any = {};
 
-				for (let i = 0; i < list.length; i++) {
-					let k = list[i];
-					if (keyReg.test(k)) {
-						result[k] = parse(ls.getItem(k));
-					}
+			for (let i = 0; i < list.length; i++) {
+				let k = list[i];
+				if (keyReg.test(k)) {
+					result[k] = this.data[k];
 				}
-
-				return result;
-
-			} else {
-				return parse(ls.getItem(keyName));
 			}
-		}
 
-		return null;
+			return result;
+		} else {
+			return this.data[keyName];
+		}
 	}
 
-	static remove(keyName: string): boolean {
+	remove(keyName: string): boolean {
 		if (ls) {
 			if (arguments[0] instanceof RegExp) {
-				let list   = Object.keys(ls);
+				let list   = Object.keys(this.data);
 				let keyReg = arguments[0];
-				let count  = 0;
 
 				for (let i = 0; i < list.length; i++) {
 					let k = list[i];
 					if (keyReg.test(k)) {
-						ls.removeItem(k);
-						count++;
+						delete this.data[k];
 					}
 				}
 			} else {
-				ls.removeItem(keyName);
+				delete this.data[keyName];
 			}
+
+			this._persist();
 
 			return true;
 		}
@@ -76,7 +93,17 @@ export default class OWebDataStore {
 		return false;
 	}
 
-	static clear(): boolean {
-		return ls && !ls.clear() && true;
+	clear(): boolean {
+		this.data = {};
+
+		this._persist();
+
+		this.trigger(OWebDataStore.EVT_DATA_STORE_CLEAR);
+
+		return true;
+	}
+
+	onClear(cb: () => void) {
+		return this.on(OWebDataStore.EVT_DATA_STORE_CLEAR, cb);
 	}
 };

@@ -1,4 +1,5 @@
-import { OWebApp, OWebCustomError } from "./oweb";
+import OWebApp from "./OWebApp";
+import OWebCustomError from "./OWebCustomError";
 export declare type tFormValidator = (value: any, name: string, context: OWebFormValidator) => void;
 export declare class OWebFormError extends OWebCustomError {
     readonly __oweb_form_error: boolean;
@@ -16,7 +17,7 @@ export default class OWebFormValidator {
     getForm(): HTMLFormElement;
     getAppContext(): OWebApp;
     getConfig(key: string): any;
-    getFormData(fields: Array<string>): FormData;
+    getFormData(fields?: Array<string>): FormData;
     getField(name: string): any;
     setField(name: string, value: any): this;
     getAllFields(name: string): any;

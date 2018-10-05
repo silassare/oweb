@@ -1,4 +1,6 @@
-import {OWebApp, Utils, OWebCustomError} from "./oweb";
+import OWebApp from "./OWebApp";
+import OWebCustomError from "./OWebCustomError";
+import Utils from "./utils/Utils";
 
 export type tFormValidator = (value: any, name: string, context: OWebFormValidator) => void;
 
@@ -49,9 +51,9 @@ export default class OWebFormValidator {
 		return this.getAppContext().configs.get(key);
 	}
 
-	getFormData(fields: Array<string>): FormData {
+	getFormData(fields: Array<string> = []): FormData {
 
-		if (Utils.isArray(fields)) {
+		if (fields.length) {
 			let formData = new FormData();
 			for (let i = 0; i < fields.length; i++) {
 				let field  = fields[i];

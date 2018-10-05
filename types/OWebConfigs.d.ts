@@ -1,4 +1,5 @@
-import { OWebApp, OWebEvent } from "./oweb";
+import OWebApp from "./OWebApp";
+import OWebEvent from "./OWebEvent";
 export declare type tConfigList = {
     [key: string]: any;
 };

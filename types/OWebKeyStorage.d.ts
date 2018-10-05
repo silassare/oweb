@@ -1,11 +1,12 @@
-import { OWebApp, OWebEvent } from "./oweb";
+import OWebApp from "./OWebApp";
+import OWebEvent from "./OWebEvent";
 export default class OWebKeyStorage extends OWebEvent {
     private readonly app_context;
+    private readonly tag_name;
     private persistent;
-    private readonly _tag_name;
     private readonly _max_life_time;
     private _store;
-    constructor(app_context: OWebApp, tag: string, persistent?: boolean, max_life_time?: number);
+    constructor(app_context: OWebApp, tag_name: string, persistent?: boolean, max_life_time?: number);
     getStoreData(): {};
     getItem(key: string): any;
     setItem(key: string, value: any): this;
