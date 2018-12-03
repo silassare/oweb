@@ -72,12 +72,12 @@ let searchAndReplaceMarkedFile = function (data?: { [key: string]: any } | FormD
 
 export default class OWebCom extends OWebEvent {
 
-	static readonly EVT_COM_REQUEST_SUCCESS = "OWebCom:success";
-	static readonly EVT_COM_REQUEST_ERROR   = "OWebCom:error";
-	static readonly EVT_COM_NETWORK_ERROR   = "OWebCom:net_error";
-	static readonly EVT_COM_UPLOAD_PROGRESS = "OWebCom:upload_progress";
-	static readonly EVT_COM_FINISH          = "OWebCom:finish";
-	static readonly SELF                    = "OWebCom";
+	static readonly SELF                    = Utils.id();
+	static readonly EVT_COM_REQUEST_SUCCESS = Utils.id();
+	static readonly EVT_COM_REQUEST_ERROR   = Utils.id();
+	static readonly EVT_COM_NETWORK_ERROR   = Utils.id();
+	static readonly EVT_COM_UPLOAD_PROGRESS = Utils.id();
+	static readonly EVT_COM_FINISH          = Utils.id();
 
 	private readonly _options: tComOptions;
 	private readonly _original_data: any;
@@ -109,7 +109,7 @@ export default class OWebCom extends OWebEvent {
 			api_key_header     = this.app_context.configs.get("OZ_API_KEY_HEADER_NAME"),
 			real_method_header = this.app_context.configs.get("OZ_API_REAL_METHOD_HEADER_NAME");
 
-		let headers: any = this._options.headers = this._options.headers || {};
+		let headers: any        = this._options.headers = this._options.headers || {};
 		headers[api_key_header] = this.app_context.configs.get("OZ_API_KEY");
 
 		// update request method
@@ -162,6 +162,7 @@ export default class OWebCom extends OWebEvent {
 			m.trigger(OWebCom.EVT_COM_FINISH, [response, m]);
 		} else {
 			if (response.msg === "OZ_ERROR_YOU_MUST_LOGIN") {
+				m.trigger(OWebCom.EVT_COM_REQUEST_ERROR, [response, m]);
 				m.app_context.forceLogin();
 			} else if (~file_alias_errors.indexOf(response.msg)) {
 				// our attempt to minimize file upload failed

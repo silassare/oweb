@@ -1,5 +1,6 @@
 import Vue from "vue";
 import OWebApp from "../OWebApp";
+import { tFileQuality } from "../OWebFS";
 export default function (app: OWebApp): import("vue/types/vue").VueConstructor<{
-    oz_file_link: (file_id: string, file_key?: string | undefined, file_quality?: 0 | 2 | 3 | 1, def?: string | undefined) => string;
+    oz_file_link: (file: string, quality?: tFileQuality, def?: string | undefined) => string;
 } & Record<never, any> & Vue>;

@@ -23,12 +23,12 @@ export declare type tComOptions = {
 };
 export default class OWebCom extends OWebEvent {
     private readonly app_context;
+    static readonly SELF: string;
     static readonly EVT_COM_REQUEST_SUCCESS: string;
     static readonly EVT_COM_REQUEST_ERROR: string;
     static readonly EVT_COM_NETWORK_ERROR: string;
     static readonly EVT_COM_UPLOAD_PROGRESS: string;
     static readonly EVT_COM_FINISH: string;
-    static readonly SELF: string;
     private readonly _options;
     private readonly _original_data;
     private _modified_data;

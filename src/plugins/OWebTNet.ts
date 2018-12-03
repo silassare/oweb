@@ -4,14 +4,14 @@ import Utils from "../utils/Utils";
 
 export default class OWebTNet extends OWebEvent {
 
-	static readonly STATE_UNKNOWN         = -1;
-	static readonly STATE_NO_USER         = 0;
-	static readonly STATE_OFFLINE_USER    = 1;
-	static readonly STATE_VERIFIED_USER   = 2;
-	static readonly STATE_SIGN_UP_PROCESS = 3;
+	static readonly SELF                  = Utils.id();
+	static readonly EVT_TNET_READY        = Utils.id();
 
-	static readonly EVT_TNET_READY = "OWebTNet:ready";
-	static readonly SELF           = "OWebTNet";
+	static readonly STATE_UNKNOWN         = Utils.id();
+	static readonly STATE_NO_USER         = Utils.id();
+	static readonly STATE_OFFLINE_USER    = Utils.id();
+	static readonly STATE_VERIFIED_USER   = Utils.id();
+	static readonly STATE_SIGN_UP_PROCESS = Utils.id();
 
 	constructor(private readonly app_context: OWebApp) {
 		super();

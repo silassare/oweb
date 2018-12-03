@@ -6,10 +6,10 @@ export declare type tViewDialog = {
     data?: {};
 };
 export default class OWebView extends OWebEvent {
+    static readonly SELF: string;
     static readonly EVT_VIEW_FREEZE: string;
     static readonly EVT_VIEW_UNFREEZE: string;
     static readonly EVT_VIEW_DIALOG: string;
-    static readonly SELF: string;
     private _freeze_counter;
     constructor();
     isFrozen(): boolean;

@@ -10,8 +10,8 @@ import OWebUrl, { tUrlList } from "./OWebUrl";
 import OWebView from "./OWebView";
 export default abstract class OWebApp extends OWebEvent {
     private readonly app_name;
-    static readonly EVT_APP_READY: string;
     static readonly SELF: string;
+    static readonly EVT_APP_READY: string;
     readonly view: OWebView;
     readonly ls: OWebDataStore;
     readonly router: OWebRouter;
@@ -27,7 +27,7 @@ export default abstract class OWebApp extends OWebEvent {
     start(): this;
     getService<T = any>(service_name: string): OWebService<T> | undefined;
     registerService<T extends OWebService<any>>(service: T): this;
-    getFormValidator(form: HTMLFormElement, required?: Array<string>, excluded?: Array<string>): OWebFormValidator;
+    getFormValidator(form: HTMLFormElement, required?: Array<string>, excluded?: Array<string>, checkAll?: boolean): OWebFormValidator;
     forceLogin(): void;
     reloadApp(): void;
     destroyApp(): void;

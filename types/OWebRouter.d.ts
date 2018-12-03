@@ -10,7 +10,8 @@ export declare type tRouteInfo = {
     reg: RegExp | null;
     tokens: Array<string>;
 };
-export declare type tRouteStateItem = string | number | null | undefined | Date | tRouteStateObject;
+declare type _tRouteStateItem = string | number | boolean | null | undefined | Date | tRouteStateObject;
+export declare type tRouteStateItem = _tRouteStateItem | Array<_tRouteStateItem>;
 export declare type tRouteStateObject = {
     [key: string]: tRouteStateItem;
 };

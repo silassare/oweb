@@ -18,6 +18,7 @@ import OWebLogin from "./plugins/OWebLogin";
 import OWebLogout from "./plugins/OWebLogout";
 import OWebPager from "./OWebPager";
 import OWebPassword from "./plugins/OWebPassword";
+import OWebAccountRecovery from "./plugins/OWebAccountRecovery";
 import OWebSignUp from "./plugins/OWebSignUp";
 import OWebTNet from "./plugins/OWebTNet";
 import PathResolver from "./utils/PathResolver";
@@ -106,6 +107,7 @@ export {
 	OWebLogin,
 	OWebLogout,
 	OWebPassword,
+	OWebAccountRecovery,
 	OWebSignUp,
 	OWebDate,
 	OWebTNet,

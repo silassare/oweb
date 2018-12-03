@@ -1,3 +1,4 @@
+export declare type tFileQuality = 0 | 1 | 2 | 3;
 export declare type tFileAliasInfo = {
     file_id: string;
     file_key: string;

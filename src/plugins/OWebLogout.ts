@@ -1,11 +1,13 @@
 import OWebApp from "../OWebApp";
 import {iComResponse} from "../OWebCom";
 import OWebEvent from "../OWebEvent";
+import Utils from "../utils/Utils";
 
 export default class OWebLogout extends OWebEvent {
-	static readonly EVT_LOGOUT_ERROR   = "OWebLogout:error";
-	static readonly EVT_LOGOUT_SUCCESS = "OWebLogout:success";
-	static readonly SELF               = "OWebLogout";
+
+	static readonly SELF               = Utils.id();
+	static readonly EVT_LOGOUT_ERROR   = Utils.id();
+	static readonly EVT_LOGOUT_SUCCESS = Utils.id();
 
 	constructor(private readonly app_context: OWebApp) {
 		super();

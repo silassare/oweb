@@ -9,14 +9,15 @@ import OWebService from "./OWebService";
 import OWebUrl, {tUrlList} from "./OWebUrl";
 import OWebView from "./OWebView";
 import OWebDate from "./plugins/OWebDate";
+import Utils from "./utils/Utils";
 
 const noop = () => {
 };
 
 export default abstract class OWebApp extends OWebEvent {
 
-	static readonly EVT_APP_READY = "OWebApp:ready";
-	static readonly SELF          = "OWebApp";
+	static readonly SELF          = Utils.id();
+	static readonly EVT_APP_READY = Utils.id();
 
 	readonly view: OWebView;
 	readonly ls: OWebDataStore;
@@ -69,8 +70,8 @@ export default abstract class OWebApp extends OWebEvent {
 		return this;
 	}
 
-	getFormValidator(form: HTMLFormElement, required: Array<string> = [], excluded: Array<string> = []) {
-		return new OWebFormValidator(this, form, required, excluded);
+	getFormValidator(form: HTMLFormElement, required: Array<string> = [], excluded: Array<string> = [], checkAll: boolean = false) {
+		return new OWebFormValidator(this, form, required, excluded, checkAll);
 	}
 
 	forceLogin() {

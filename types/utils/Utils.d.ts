@@ -8,6 +8,7 @@ declare let Utils: {
     toArray: (a: any) => any[];
     isInDOM: (element: any, inBody?: boolean) => boolean;
     shuffle: (a: any[]) => any[];
+    id: () => string;
     callback: (fn: any, args?: any[] | undefined, ctx?: any) => any;
     assign: any;
     expose: (items: string[], ctx: any) => object;

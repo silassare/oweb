@@ -1,10 +1,11 @@
 import OWebApp from "./OWebApp";
 import OWebEvent from "./OWebEvent";
 import OWebKeyStorage from "./OWebKeyStorage";
+import Utils from "./utils/Utils";
 
 export default class OWebCurrentUser extends OWebEvent {
-	static readonly SELF                 = "OWebCurrentUser";
-	static readonly EVT_USER_INFO_UPDATE = "OWebCurrentUser:update";
+	static readonly SELF                 = Utils.id();
+	static readonly EVT_USER_INFO_UPDATE = Utils.id();
 
 	private _key_store: OWebKeyStorage;
 

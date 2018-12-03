@@ -3,6 +3,7 @@ import OWebApp from "./OWebApp";
 import OWebEvent from "./OWebEvent";
 import OWebLang from "./OWebLang";
 import OWebRouter, {OWebRouteContext, tRoutePath, tRoutePathOptions} from "./OWebRouter";
+import Utils from "./utils/Utils";
 
 export type tPageRoute = {
 	slug?: string,
@@ -55,8 +56,8 @@ let routeId       = 0,
 	  };
 
 export default class OWebPager extends OWebEvent {
-	static readonly SELF            = "OWebPager";
-	static readonly EVT_PAGE_CHANGE = "OWebPager:page_change";
+	static readonly SELF            = Utils.id();
+	static readonly EVT_PAGE_CHANGE = Utils.id();
 
 	private readonly _pages: { [key: string]: iPage } = {};
 	private _active_page: iPage | undefined;

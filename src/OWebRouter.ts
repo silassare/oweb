@@ -5,7 +5,8 @@ export type tRoutePathOptions = { [key: string]: RegExp | keyof typeof tokenType
 export type tRouteTokensMap = { [key: string]: string };
 export type tRouteAction = (ctx: OWebRouteContext) => void;
 export type tRouteInfo = { reg: RegExp | null, tokens: Array<string> };
-export type tRouteStateItem = string | number | null | undefined | Date | tRouteStateObject;
+type _tRouteStateItem = string | number | boolean | null | undefined | Date | tRouteStateObject;
+export type tRouteStateItem = _tRouteStateItem | Array<_tRouteStateItem>;
 export type tRouteStateObject = { [key: string]: tRouteStateItem };
 export type tRouteTarget = { parsed: string, href: string, path: string, fullPath: string };
 

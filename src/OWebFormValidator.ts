@@ -2,6 +2,7 @@ import OWebApp from "./OWebApp";
 import OWebCustomError from "./OWebCustomError";
 import Utils from "./utils/Utils";
 
+type tFormErrorMap = { [key: string]: OWebFormError[] };
 export type tFormValidator = (value: any, name: string, context: OWebFormValidator) => void;
 
 let formValidators: { [key: string]: tFormValidator } = {};
@@ -13,7 +14,7 @@ export class OWebFormError extends OWebCustomError {
 export default class OWebFormValidator {
 	private readonly formData: FormData;
 	private validatorsMap: { [key: string]: string } = {};
-	private errorList: OWebFormError[]               = [];
+	private errorMap: tFormErrorMap                  = {};
 
 	constructor(private readonly app_context: OWebApp, private readonly form: HTMLFormElement, private readonly required: Array<string> = [], private readonly excluded: Array<string> = [], private readonly checkAll: boolean = false) {
 		if (!form || form.nodeName !== "FORM") {
@@ -31,7 +32,7 @@ export default class OWebFormValidator {
 
 			if (name) {
 				if (!formValidators[validator_name]) {
-					throw new Error(`[OWebFormValidator] validator "${validator_name}" is explicitly set for field "${ name }" but is not defined.`);
+					throw new Error(`[OWebFormValidator] validator "${validator_name}" is explicitly set for field "${name}" but is not defined.`);
 				}
 
 				m.validatorsMap[name] = validator_name;
@@ -99,8 +100,8 @@ export default class OWebFormValidator {
 		return description;
 	}
 
-	getErrors(): Array<OWebFormError> {
-		return this.errorList;
+	getErrors(): tFormErrorMap {
+		return this.errorMap;
 	}
 
 	validate(): boolean {
@@ -110,7 +111,7 @@ export default class OWebFormValidator {
 			name;
 
 		// empty error list
-		context.errorList.splice(0);
+		context.errorMap = {};
 
 		Utils.toArray(context.form.elements).forEach(function (i) {
 			if (i.name !== undefined && field_names.indexOf(i.name) < 0) {
@@ -138,7 +139,11 @@ export default class OWebFormValidator {
 			} catch (e) {
 				if (e.__oweb_form_error) {
 
-					this.errorList.push(e);
+					if (!this.errorMap[name]) {
+						this.errorMap[name] = [];
+					}
+
+					this.errorMap[name].push(e);
 
 					if (!this.checkAll) {
 						this.getAppContext().view.dialog({
@@ -155,7 +160,7 @@ export default class OWebFormValidator {
 			}
 		}
 
-		return this.errorList.length === 0;
+		return Object.keys(this.errorMap).length === 0;
 	}
 
 	assert(assertion: any, message: string, data?: {}): this {

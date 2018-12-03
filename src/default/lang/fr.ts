@@ -6,7 +6,9 @@ export default {
 	"OZ_ERROR_NETWORK"          : "Erreur: problèmes de connexion internet.",
 	"OZ_ERROR_SERVER"           : "Erreur: echec de récupération des informations.",
 	"OZ_ERROR_YOU_ARE_NOT_ADMIN": "Erreur: Vous n'etes pas un administrateur.",
+	"OZ_ERROR_NOT_FOUND"        : "Erreur: La ressource recherchée n'est pas retrouvée.",
 	"OZ_ERROR_SHOULD_ACCEPT_CGU": "Vous devez accepter les Conditions Générales d'Utilisation.",
+
 	// ---------END NEW
 
 	"OZ_IMAGE_NOT_VALID"           : "Fichier image invalide. Veuillez choisir une image de type png, jpg, jpeg, ou gif.",

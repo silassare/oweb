@@ -1,5 +1,6 @@
 import OWebApp from "./OWebApp";
 import OWebEvent from "./OWebEvent";
+import Utils from "./utils/Utils";
 
 const ls    = window.localStorage,
 	  parse = function (data: string | null): any {
@@ -17,7 +18,7 @@ const ls    = window.localStorage,
 	  };
 
 export default class OWebDataStore extends OWebEvent {
-	static readonly EVT_DATA_STORE_CLEAR = "OWebDataStore:clear";
+	static readonly EVT_DATA_STORE_CLEAR = Utils.id();
 	private readonly key: string;
 	private data: any                    = {};
 

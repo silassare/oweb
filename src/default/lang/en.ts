@@ -5,6 +5,7 @@ export default {
 	"OZ_ERROR_NETWORK"                    : "Error: internet connection problems.",
 	"OZ_ERROR_SERVER"                     : "Error: Failed to retrieve information.",
 	"OZ_ERROR_YOU_ARE_NOT_ADMIN"          : "Error: You are not an administrator.",
+	"OZ_ERROR_NOT_FOUND"                  : "Error: Resource not found.",
 	"OZ_ERROR_SHOULD_ACCEPT_CGU"          : "You must accept the Terms of Use.",
 	"OZ_IMAGE_NOT_VALID"                  : "Invalid image file. Please choose an image of type png, jpg, jpeg, or gif.",
 	"OZ_PROFILE_PIC_SET_TO_DEFAULT"       : "Default profile picture chosen.",

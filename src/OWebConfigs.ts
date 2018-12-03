@@ -6,8 +6,8 @@ import Utils from "./utils/Utils";
 export type tConfigList = { [key: string]: any };
 
 export default class OWebConfigs extends OWebEvent {
-	static readonly SELF              = "OWebConfigs";
-	static readonly EVT_CONFIG_CHANGE = "OWebConfigs:change";
+	static readonly SELF              = Utils.id();
+	static readonly EVT_CONFIG_CHANGE = Utils.id();
 
 	private readonly _default_configs: tConfigList     = {};
 	private readonly _user_configs: tConfigList        = {};

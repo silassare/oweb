@@ -1,6 +1,8 @@
 // ==========TYPE CHECKERS====================================
 
+let _naturalId    = 0;
 let isArray       = Array.isArray;
+let naturalId     = (): string => "id_" + (_naturalId++);
 let isPlainObject = (a: any): boolean => Object.prototype.toString.call(a) === "[object Object]";
 let isString      = (a: any): a is string => typeof a === "string";
 let isFunction    = (a: any): a is Function => typeof a === "function";
@@ -263,8 +265,7 @@ let parseQueryString = function (str: string) {
 				(params as any)[key] = [(params as any)[key]];
 			}
 			(params as any)[key].push(value)
-		}
-		else (params as any)[key] = value;
+		} else (params as any)[key] = value;
 	}
 	return params
 };
@@ -327,7 +328,7 @@ let isValidAge = (day: number, month: number, year: number, minAge: number, maxA
 let Utils = {
 	isPlainObject, isString, isArray,
 	isFunction, isEmpty, isNotEmpty,
-	toArray, isInDOM, shuffle,
+	toArray, isInDOM, shuffle, id: naturalId,
 // ============
 	callback, assign, expose, getFrom,
 	stringKeyReplace, textToLineString,

@@ -1,17 +1,18 @@
 import OWebApp from "../OWebApp";
 import {iComResponse} from "../OWebCom";
 import OWebEvent from "../OWebEvent";
+import Utils from "../utils/Utils";
 
 export default class OWebSignUp extends OWebEvent {
+
+	static readonly SELF                  = Utils.id();
+	static readonly EVT_SIGN_UP_NEXT_STEP = Utils.id();
+	static readonly EVT_SIGN_UP_SUCCESS   = Utils.id();
+	static readonly EVT_SIGN_UP_ERROR     = Utils.id();
 
 	static readonly SIGN_UP_STEP_START    = 1;
 	static readonly SIGN_UP_STEP_VALIDATE = 2;
 	static readonly SIGN_UP_STEP_END      = 3;
-
-	static readonly EVT_SIGN_UP_NEXT_STEP = "OWebSignUp:next_step";
-	static readonly EVT_SIGN_UP_SUCCESS   = "OWebSignUp:success";
-	static readonly EVT_SIGN_UP_ERROR     = "OWebSignUp:error";
-	static readonly SELF                  = "OWebSignUp";
 
 	constructor(private readonly app_context: OWebApp) {
 		super()

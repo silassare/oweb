@@ -1,5 +1,6 @@
 import {iComResponse} from "./OWebCom";
 import OWebEvent from "./OWebEvent";
+import Utils from "./utils/Utils";
 
 export type tViewDialog = {
 	type: "info" | "error" | "done",
@@ -9,10 +10,10 @@ export type tViewDialog = {
 
 export default class OWebView extends OWebEvent {
 
-	static readonly EVT_VIEW_FREEZE   = "OWebView:freeze";
-	static readonly EVT_VIEW_UNFREEZE = "OWebView:unfreeze";
-	static readonly EVT_VIEW_DIALOG   = "OWebView:dialog";
-	static readonly SELF              = "OWebView";
+	static readonly SELF              = Utils.id();
+	static readonly EVT_VIEW_FREEZE   = Utils.id();
+	static readonly EVT_VIEW_UNFREEZE = Utils.id();
+	static readonly EVT_VIEW_DIALOG   = Utils.id();
 
 	private _freeze_counter: number = 0;
 

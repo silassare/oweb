@@ -22,6 +22,13 @@ OWebFormValidator.addFieldValidators({
 		fv.assert(pass.length >= min, "OZ_FIELD_PASS_INVALID")
 			.assert(pass.length <= max, "OZ_FIELD_PASS_INVALID");
 	},
+	"cpass": (value: any, name: string, fv: OWebFormValidator) => {
+		let pass = value,
+			min  = fv.getConfig("OZ_PASS_MIN_LENGTH"),
+			max  = fv.getConfig("OZ_PASS_MAX_LENGTH");
+		fv.assert(pass.length >= min, "OZ_FIELD_PASS_INVALID")
+			.assert(pass.length <= max, "OZ_FIELD_PASS_INVALID");
+	},
 	"pass"      : (value: any, name: string, fv: OWebFormValidator) => {
 		let pass = value,
 			min  = fv.getConfig("OZ_PASS_MIN_LENGTH"),
