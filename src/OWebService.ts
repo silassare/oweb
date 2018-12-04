@@ -218,11 +218,11 @@ export default class OWebService<T> {
 	get(id: string, relations: string = "", success: tServiceGetSuccess<T>, fail: tServiceFail, freeze: boolean = false, load_cache_first: boolean = false): OWebCom {
 		let m         = this,
 			url       = this.getItemURI(id),
-			data: any = null,
-			cache_id  = id, __cached;
+			cache_id  = id,
+			data: any = {}, __cached;
 
 		if (relations.length) {
-			data = {relations};
+			data.relations = relations;
 		}
 
 		if (load_cache_first) {
