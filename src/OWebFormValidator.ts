@@ -89,11 +89,13 @@ export default class OWebFormValidator {
 			description: any = name;
 
 		if (field) {
-			let id = field.getAttribute("id"), label, placeholder;
+			let id = field.getAttribute("id"), label, placeholder, title;
 			if (id && (label = this.form.querySelector("label[for='" + id + "']"))) {
 				description = label.textContent;
 			} else if ((placeholder = field.getAttribute("placeholder")) && placeholder.trim().length) {
 				description = placeholder;
+			} else if ((title = field.getAttribute("title")) && title.trim().length) {
+				description = title;
 			}
 		}
 
