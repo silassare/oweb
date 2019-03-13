@@ -1,6 +1,6 @@
 {
   "name": "oweb",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "O'Web is a framework for web applications that use APIs built with the O'Zone framework.",
   "main": "dist/oweb.js",
   "typings": "types/oweb.d.ts",
@@ -10,29 +10,22 @@
     "OZone",
     "framework"
   ],
-  "bin": {
-    "oweb": "bin/index.js"
-  },
   "files": [
     "src",
-    "assets",
     "dist",
-    "bin",
-    "lib",
     "types/*.d.ts"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc & typedoc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "make-dir": "^1.3.0",
-    "o-tel-input": "file:../otelinput",
-    "otpl-js": "latest",
-    "vue": "^2.5.17"
+    "o-tel-input": "file:../o-tel-input",
+    "otpl-js": "latest"
   },
   "devDependencies": {
     "@types/jquery": "^3.3.4",
+    "typedoc": "^0.14.2",
     "typescript": "^2.6.2"
   },
   "repository": {
@@ -40,5 +33,5 @@
     "url": "git+https://github.com/silassare/oweb.git"
   },
   "author": "Emile Silas Sare (emile.silas@gmail.com)",
-  "license": "MIT License"
+  "license": "MIT"
 }
