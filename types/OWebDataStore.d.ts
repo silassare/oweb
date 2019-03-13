@@ -6,10 +6,45 @@ export default class OWebDataStore extends OWebEvent {
     private readonly key;
     private data;
     constructor(_app_context: OWebApp);
-    save(keyName: string, data: any): boolean;
-    _persist(): boolean;
-    load(keyName: string): any;
-    remove(keyName: string): boolean;
+    /**
+     * Save data to the store.
+     *
+     * @param key The data key name.
+     * @param value The data value.
+     */
+    save(key: string, value: any): boolean;
+    /**
+     * Load data with the given key.
+     *
+     * When the key is a regexp all data with a key name that match the given
+     * regexp will be returned in an object.
+     *
+     * @param key The data key name.
+     */
+    load(key: string | RegExp): any;
+    /**
+     * Remove data with the given key.
+     *
+     * When the key is a regexp all data with a key name that match the given
+     * regexp will be removed.
+     *
+     * @param key
+     */
+    remove(key: string | RegExp): boolean;
+    /**
+     * Clear the data store.
+     */
     clear(): boolean;
+    /**
+     * Register data store clear event handler.
+     *
+     * @param cb
+     */
     onClear(cb: () => void): this;
+    /**
+     * Helper to make data store persistent.
+     *
+     * @private
+     */
+    private _persist;
 }

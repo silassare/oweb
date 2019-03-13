@@ -1,5 +1,4 @@
 // ==========TYPE CHECKERS====================================
-
 let _naturalId    = 0;
 let isArray       = Array.isArray;
 let naturalId     = (): string => "id_" + (_naturalId++);
@@ -325,6 +324,31 @@ let isValidAge = (day: number, month: number, year: number, minAge: number, maxA
 	return true;
 };
 
+let fileSizeFormat = function (size: number, decimalSep: string = ".", digitsSep: string = " ") {
+	let units  = ["Kb", "Mb", "Gb", "Tb"],
+		i_max  = units.length,
+		i      = 0,
+		ko     = 1024,
+		result = 0;
+
+	size = parseFloat(String(size));
+
+	while (size >= 1 && i < i_max) {
+		result = size;
+		size /= ko;
+		i++;
+	}
+
+	if (!i) {
+		i = 1;
+	}
+
+	let parts = String(result).split("."),
+		head  = (parseInt(parts[0]) === result) ? result : Utils.math.numberFormat(result, 2, decimalSep, digitsSep);
+
+	return head + " " + units[i - 1];
+};
+
 let Utils = {
 	isPlainObject, isString, isArray,
 	isFunction, isEmpty, isNotEmpty,
@@ -338,7 +362,9 @@ let Utils = {
 // ============
 	buildQueryString, parseQueryString,
 // ============
-	eventCancel
+	eventCancel,
+// ============
+	fileSizeFormat
 };
 
 export default Utils;

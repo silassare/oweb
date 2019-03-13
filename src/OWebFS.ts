@@ -7,14 +7,28 @@ export type tFileAliasInfo = {
 export default class OWebFS {
 	static readonly OFA_MIME_TYPE = "text/x-ozone-file-alias";
 
+	/**
+	 * Check for file object.
+	 *
+	 * @param f
+	 */
 	static isFile(f: any): boolean {
 		return (f instanceof Blob || f instanceof File);
 	}
 
+	/**
+	 * Check for marked file object.
+	 * @param f
+	 */
 	static isMarkedFile(f: any): boolean {
 		return OWebFS.isFile(f) && f["oz_mark_file_id"] && f["oz_mark_file_key"];
 	}
 
+	/**
+	 * Create O'Zone file alias.
+	 *
+	 * @param info
+	 */
 	static createFileAlias(info: tFileAliasInfo): File {
 		let file_name = info.file_id + ".ofa",
 			content   = JSON.stringify({

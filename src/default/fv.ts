@@ -1,7 +1,7 @@
-import OTelInput from "o-tel-input";
 import OWebFormValidator from "../OWebFormValidator";
 import OWebDate from "../plugins/OWebDate";
 import Utils from "../utils/Utils";
+import {OTelInput} from "o-tel-input";
 
 OWebFormValidator.addFieldValidators({
 	"code"      : (value: any, name: string, fv: OWebFormValidator) => {
@@ -12,36 +12,36 @@ OWebFormValidator.addFieldValidators({
 		value = value.replace(/\s+/g, " ").trim();
 
 		fv.assert(value.length >= fv.getConfig("OZ_USER_NAME_MIN_LENGTH"), "OZ_FIELD_USER_NAME_TOO_SHORT")
-			.assert(value.length <= fv.getConfig("OZ_USER_NAME_MAX_LENGTH"), "OZ_FIELD_USER_NAME_TOO_LONG")
-			.setField(name, value);
+		  .assert(value.length <= fv.getConfig("OZ_USER_NAME_MAX_LENGTH"), "OZ_FIELD_USER_NAME_TOO_LONG")
+		  .setField(name, value);
 	},
 	"login_pass": (value: any, name: string, fv: OWebFormValidator) => {
 		let pass = value,
 			min  = fv.getConfig("OZ_PASS_MIN_LENGTH"),
 			max  = fv.getConfig("OZ_PASS_MAX_LENGTH");
 		fv.assert(pass.length >= min, "OZ_FIELD_PASS_INVALID")
-			.assert(pass.length <= max, "OZ_FIELD_PASS_INVALID");
+		  .assert(pass.length <= max, "OZ_FIELD_PASS_INVALID");
 	},
-	"cpass": (value: any, name: string, fv: OWebFormValidator) => {
+	"cpass"     : (value: any, name: string, fv: OWebFormValidator) => {
 		let pass = value,
 			min  = fv.getConfig("OZ_PASS_MIN_LENGTH"),
 			max  = fv.getConfig("OZ_PASS_MAX_LENGTH");
 		fv.assert(pass.length >= min, "OZ_FIELD_PASS_INVALID")
-			.assert(pass.length <= max, "OZ_FIELD_PASS_INVALID");
+		  .assert(pass.length <= max, "OZ_FIELD_PASS_INVALID");
 	},
 	"pass"      : (value: any, name: string, fv: OWebFormValidator) => {
 		let pass = value,
 			min  = fv.getConfig("OZ_PASS_MIN_LENGTH"),
 			max  = fv.getConfig("OZ_PASS_MAX_LENGTH");
 		fv.assert(pass.length >= min, "OZ_FIELD_PASS_TOO_SHORT", {"min": min, "max": max})
-			.assert(pass.length <= max, "OZ_FIELD_PASS_TOO_LONG", {"min": min, "max": max});
+		  .assert(pass.length <= max, "OZ_FIELD_PASS_TOO_LONG", {"min": min, "max": max});
 	},
 	"vpass"     : (value: any, name: string, fv: OWebFormValidator) => {
 		fv.assert(value === fv.getField("pass"), "OZ_FIELD_PASS_AND_VPASS_NOT_EQUAL");
 	},
 	"birth_date": (value: any, name: string, fv: OWebFormValidator) => {
-		let od      = OWebDate.fromInputValue(value),
-			date    = od && od.describe(),
+		let od      = new OWebDate(fv.getAppContext(), value),
+			date    = od.describe(),
 			min_age = fv.getConfig("OZ_USER_MIN_AGE"),
 			max_age = fv.getConfig("OZ_USER_MAX_AGE"),
 			isValid = date && Utils.isValidAge(date.d, parseInt(date.mm), date.Y, min_age, max_age);
@@ -83,6 +83,6 @@ OWebFormValidator.addFieldValidators({
 		let email    = value.replace(/\s/g, " ").trim();
 
 		fv.assert(emailReg.test(email), "OZ_FIELD_EMAIL_INVALID")
-			.setField(name, email);
+		  .setField(name, email);
 	}
 });

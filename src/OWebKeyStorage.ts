@@ -17,10 +17,16 @@ export default class OWebKeyStorage extends OWebEvent {
 	private readonly _max_life_time: number;
 	private _store: { [key: string]: tKeyData };
 
+	/**
+	 * @param app_context The app context.
+	 * @param tag_name The key storage name.
+	 * @param persistent True to persists the key storage data.
+	 * @param max_life_time The duration in seconds until key data deletion.
+	 */
 	constructor(private readonly app_context: OWebApp, private readonly tag_name: string, private persistent: boolean = true, max_life_time: number = Infinity) {
 		super();
 
-		let m = this;
+		let m               = this;
 		this._store         = app_context.ls.load(this.tag_name) || {};
 		this._max_life_time = max_life_time * 1000;
 
@@ -31,6 +37,9 @@ export default class OWebKeyStorage extends OWebEvent {
 		this._clearExpired();
 	}
 
+	/**
+	 * Returns the key storage data.
+	 */
 	getStoreData(): {} {
 		let items: any = {};
 
@@ -43,6 +52,11 @@ export default class OWebKeyStorage extends OWebEvent {
 		return items;
 	}
 
+	/**
+	 * Returns a given key value.
+	 *
+	 * @param key The key name.
+	 */
 	getItem(key: string): any {
 		let data: tKeyData = this._store[key];
 
@@ -53,24 +67,39 @@ export default class OWebKeyStorage extends OWebEvent {
 		return data;
 	}
 
+	/**
+	 * Sets an item to the key storage.
+	 *
+	 * @param key The key name.
+	 * @param value The key value.
+	 */
+
 	setItem(key: string, value: any): this {
 		this._store[key] = {
 			"value" : value,
 			"expire": this._max_life_time === Infinity ? -1 : Date.now() + this._max_life_time
 		};
 
-		return this.save();
+		return this._save();
 	}
 
+	/**
+	 * Removes item from the key storage.
+	 *
+	 * @param key The item key name.
+	 */
 	removeItem(key: string): this {
 		if (key in this._store) {
 			delete this._store[key];
 		}
 
-		return this.save();
+		return this._save();
 	}
 
-	private save(): this {
+	/**
+	 * Save the key storage.
+	 */
+	private _save(): this {
 		if (this.persistent) {
 			this.app_context.ls.save(this.tag_name, this._store);
 		}
@@ -78,11 +107,19 @@ export default class OWebKeyStorage extends OWebEvent {
 		return this;
 	}
 
+	/**
+	 * Clear the key storage.
+	 */
 	clear(): this {
 		this._store = {};
-		return this.save();
+		return this._save();
 	}
 
+	/**
+	 * Helper to clear all expired value from the key storage.
+	 *
+	 * @private
+	 */
 	private _clearExpired() {
 		let s = this, modified = false;
 		Utils.forEach(this._store, (data, key) => {
@@ -92,6 +129,6 @@ export default class OWebKeyStorage extends OWebEvent {
 			}
 		});
 
-		modified && this.save();
+		modified && this._save();
 	}
 }

@@ -12,11 +12,40 @@ export default class OWebView extends OWebEvent {
     static readonly EVT_VIEW_DIALOG: string;
     private _freeze_counter;
     constructor();
+    /**
+     * Check if the view is frozen.
+     */
     isFrozen(): boolean;
+    /**
+     * To freeze the view.
+     */
     freeze(): this;
+    /**
+     * Unfreeze the view.
+     */
     unfreeze(): this;
+    /**
+     * Trigger dialog event to the view.
+     * @param dialog
+     * @param can_use_alert
+     */
     dialog(dialog: tViewDialog | iComResponse, can_use_alert?: boolean): void;
-    onFreeze(cb: () => void): this;
-    onUnFreeze(cb: () => void): this;
-    onDialog(cb: (dialog: tViewDialog, can_use_alert: boolean) => void): this;
+    /**
+     * Register freeze event handler.
+     *
+     * @param handler
+     */
+    onFreeze(handler: () => void): this;
+    /**
+     * Register unfreeze event handler.
+     *
+     * @param handler
+     */
+    onUnFreeze(handler: () => void): this;
+    /**
+     * Register dialog event handler.
+     *
+     * @param handler
+     */
+    onDialog(handler: (dialog: tViewDialog, can_use_alert: boolean) => void): this;
 }

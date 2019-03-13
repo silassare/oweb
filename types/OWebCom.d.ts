@@ -35,8 +35,27 @@ export default class OWebCom extends OWebEvent {
     private _busy;
     private _request?;
     constructor(app_context: OWebApp, options: tComOptions);
-    private _init;
+    /**
+     * Prepare the request before sending.
+     *
+     * @private
+     */
+    private _prepare;
+    /**
+     * Handle server response.
+     *
+     * > Called only when the connection to the server was successfully established.
+     *
+     * @param response The server response.
+     * @private
+     */
     private _handleResponse;
+    /**
+     * Sends request.
+     */
     send(): void;
+    /**
+     * Try to abort the current request.
+     */
     abort(): void;
 }

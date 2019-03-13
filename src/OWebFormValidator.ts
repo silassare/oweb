@@ -16,6 +16,13 @@ export default class OWebFormValidator {
 	private validatorsMap: { [key: string]: string } = {};
 	private errorMap: tFormErrorMap                  = {};
 
+	/**
+	 * @param app_context The app context.
+	 * @param form The form element.
+	 * @param required The required fields.
+	 * @param excluded The fields to exclude from validation.
+	 * @param checkAll When true all fields will be validated.
+	 */
 	constructor(private readonly app_context: OWebApp, private readonly form: HTMLFormElement, private readonly required: Array<string> = [], private readonly excluded: Array<string> = [], private readonly checkAll: boolean = false) {
 		if (!form || form.nodeName !== "FORM") {
 			throw new Error("[OWebFormValidator] a valid form element is required.");
@@ -40,18 +47,34 @@ export default class OWebFormValidator {
 		});
 	}
 
+	/**
+	 * Returns the form element.
+	 */
 	getForm(): HTMLFormElement {
 		return this.form;
 	}
 
+	/**
+	 * Returns the app context.
+	 */
 	getAppContext(): OWebApp {
 		return this.app_context;
 	}
 
+	/**
+	 * Gets app config.
+	 *
+	 * @param key
+	 */
 	getConfig(key: string): any {
 		return this.getAppContext().configs.get(key);
 	}
 
+	/**
+	 * Returns a FormData containing the validated form fields.
+	 *
+	 * @param fields The fields name list. When empty all field will be added to the FormData.
+	 */
 	getFormData(fields: Array<string> = []): FormData {
 
 		if (fields.length) {
@@ -70,20 +93,41 @@ export default class OWebFormValidator {
 		return this.formData;
 	}
 
+	/**
+	 * Gets a given field name value.
+	 *
+	 * @param name
+	 */
 	getField(name: string): any {
 		return this.formData.get(name);
 	}
 
+	/**
+	 * Sets a given field value.
+	 * @param name
+	 * @param value
+	 */
 	setField(name: string, value: any): this {
 		this.formData.set(name, value);
 		return this;
 	}
 
-	// for checkboxes and others
+	/**
+	 * Gets checkboxes like fields value.
+	 *
+	 * @param name
+	 */
 	getAllFields(name: string): any {
 		return this.formData.getAll(name);
 	}
 
+	/**
+	 * Search for field description.
+	 *
+	 * We search the field label, placeholder or title.
+	 *
+	 * @param name
+	 */
 	getFieldDescription(name: string): string {
 		let field            = this.form.querySelector("[name='" + name + "']"),
 			description: any = name;
@@ -102,10 +146,16 @@ export default class OWebFormValidator {
 		return description;
 	}
 
+	/**
+	 * Returns error map.
+	 */
 	getErrors(): tFormErrorMap {
 		return this.errorMap;
 	}
 
+	/**
+	 * Run form validation.
+	 */
 	validate(): boolean {
 		let context                    = this,
 			c                          = -1,
@@ -121,7 +171,7 @@ export default class OWebFormValidator {
 			}
 		});
 
-		while (name = field_names[++c]) {
+		while ((name = field_names[++c])) {
 			try {
 				if (context.excluded.indexOf(name) < 0) {
 					let value          = context.getField(name),
@@ -165,14 +215,27 @@ export default class OWebFormValidator {
 		return Object.keys(this.errorMap).length === 0;
 	}
 
-	assert(assertion: any, message: string, data?: {}): this {
-		if (!assertion) {
+	/**
+	 * Make an assertions.
+	 *
+	 * @param predicate The assertion predicate.
+	 * @param message The error message when the predicate is false.
+	 * @param data The error data.
+	 */
+	assert(predicate: any, message: string, data?: {}): this {
+		if (!predicate) {
 			throw new OWebFormError(message, data);
 		}
 
 		return this;
 	}
 
+	/**
+	 * Adds a new validator.
+	 *
+	 * @param name The validator name.
+	 * @param validator The validator function.
+	 */
 	static addFieldValidator(name: string, validator: tFormValidator): void {
 
 		if (!Utils.isString(name)) {
@@ -190,6 +253,11 @@ export default class OWebFormValidator {
 		formValidators[name] = validator;
 	}
 
+	/**
+	 * Adds fields validators.
+	 *
+	 * @param map The map of fields validators.
+	 */
 	static addFieldValidators(map: { [key: string]: tFormValidator }): void {
 		Utils.forEach(map, (fn: tFormValidator, key: string) => {
 			OWebFormValidator.addFieldValidator(key, fn);

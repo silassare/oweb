@@ -3,9 +3,7 @@ import PathResolver from "./utils/PathResolver";
 
 let isServerUrl = function (url_key: string): boolean {
 	return /^OZ_SERVER_/.test(url_key);
-};
-
-let isLocalUrl = function (url_key: string): boolean {
+}, isLocalUrl   = function (url_key: string): boolean {
 	return /^OW_LOCAL_/.test(url_key);
 };
 
@@ -24,23 +22,38 @@ export default class OWebUrl {
 		console.log("[OWebUrl] ready!");
 	}
 
-	get(url_key: string): string {
-		let url: string = this._url_list[url_key];
+	/**
+	 * Gets url value with a given url key name.
+	 *
+	 * @param key The url key name.
+	 */
+	get(key: string): string {
+		let url: string = this._url_list[key];
 
 		if (!url) {
-			throw new Error(`[OWebUrl] url key "${url_key}" is not defined.`);
+			throw new Error(`[OWebUrl] url key "${key}" is not defined.`);
 		}
 
-		if (isServerUrl(url_key)) return this.resolveServer(url);
-		if (isLocalUrl(url_key)) return this.resolveLocal(url);
+		if (isServerUrl(key)) return this.resolveServer(url);
+		if (isLocalUrl(key)) return this.resolveLocal(url);
 
 		return url;
 	}
 
+	/**
+	 * Resolve url with local base.
+	 *
+	 * @param url
+	 */
 	resolveLocal(url: string): string {
 		return PathResolver.resolve(this._url_local_base, url);
 	}
 
+	/**
+	 * Resolve url with server base.
+	 *
+	 * @param url
+	 */
 	resolveServer(url: string): string {
 		return PathResolver.resolve(this._url_server_base, url);
 	}

@@ -6,6 +6,12 @@ export default class OWebEvent {
 	protected constructor() {
 	}
 
+	/**
+	 * Register event handler.
+	 *
+	 * @param event The event name.
+	 * @param handler The event handler function.
+	 */
 	on(event: string, handler: Function) {
 		if (!this._app_events[event]) {
 			this._app_events[event] = [];
@@ -20,6 +26,12 @@ export default class OWebEvent {
 		return this;
 	}
 
+	/**
+	 * Remove event handler.
+	 *
+	 * @param event The event name.
+	 * @param handler The event handler function.
+	 */
 	off(event: string, handler: Function) {
 
 		if (arguments.length === 1) {
@@ -52,6 +64,14 @@ export default class OWebEvent {
 		return this;
 	}
 
+	/**
+	 * Trigger an event.
+	 *
+	 * @param event The event name.
+	 * @param data The data to be passed as arguments to the event handlers.
+	 * @param cancelable When true the event will stop when a handler returns false.
+	 * @param callback The callback
+	 */
 	protected trigger(event: string, data: Array<any> = [], cancelable: boolean = false, callback?: Function) {
 		let handlers = this._app_events[event] || [],
 			i        = -1,

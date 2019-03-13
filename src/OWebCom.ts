@@ -26,22 +26,11 @@ export type tComOptions = {
 	badNewsShow?: boolean,
 	timeout?: number
 };
-const file_alias_errors            = [
-		  "OZ_FILE_ALIAS_UNKNOWN",
-		  "OZ_FILE_ALIAS_NOT_FOUND",
-		  "OZ_FILE_ALIAS_PARSE_ERROR"
-	  ],
-	  default_options: tComOptions = {
-		  url        : "",
-		  method     : "GET",
-		  data       : {},
-		  dataType   : "json",
-		  crossDomain: true,
-		  badNewsShow: false,
-		  // increase request timeout for mobile device
-		  // TODO: find a good way to check if mobile device
-		  timeout    : ("cordova" in window ? 10000 : undefined)
-	  };
+const file_alias_errors = [
+	"OZ_FILE_ALIAS_UNKNOWN",
+	"OZ_FILE_ALIAS_NOT_FOUND",
+	"OZ_FILE_ALIAS_PARSE_ERROR"
+];
 
 let searchAndReplaceMarkedFile = function (data?: { [key: string]: any } | FormData) {
 	let form_data       = new FormData(),
@@ -92,7 +81,16 @@ export default class OWebCom extends OWebEvent {
 			throw new TypeError(`[OWebCom] require an 'object' as options not:  ${typeof options}.`);
 		}
 
-		this._options       = Utils.assign({}, default_options, options || {});
+		this._options       = {
+			method     : "GET",
+			dataType   : "json",
+			data       : {},
+			crossDomain: true,
+			badNewsShow: false,
+			// increase request timeout for mobile device
+			timeout    : (app_context.isMobileApp() ? 10000 : undefined),
+			...(options || {})
+		};
 		this._original_data = options.data || {};
 		this._modified_data = searchAndReplaceMarkedFile(options.data);
 
@@ -102,7 +100,12 @@ export default class OWebCom extends OWebEvent {
 
 	}
 
-	private _init() {
+	/**
+	 * Prepare the request before sending.
+	 *
+	 * @private
+	 */
+	private _prepare() {
 		let m                  = this,
 			real_method        = m._options.method,
 			replace_methods    = ["PATCH", "PUT", "DELETE"],
@@ -125,7 +128,7 @@ export default class OWebCom extends OWebEvent {
 
 		// workaround because jqXHR does not expose upload property
 		this._options.xhr = function () {
-			let xhr = $.ajaxSettings.xhr!();
+			let xhr = $.ajaxSetup({}).xhr!();
 
 			// allow CORS
 			xhr.withCredentials = true;
@@ -149,7 +152,14 @@ export default class OWebCom extends OWebEvent {
 		};
 	}
 
-	// the connection to the server was successfully established
+	/**
+	 * Handle server response.
+	 *
+	 * > Called only when the connection to the server was successfully established.
+	 *
+	 * @param response The server response.
+	 * @private
+	 */
 	private _handleResponse(response: iComResponse) {
 		let m = this;
 
@@ -186,9 +196,12 @@ export default class OWebCom extends OWebEvent {
 		}
 	}
 
+	/**
+	 * Sends request.
+	 */
 	send() {
 		let m = this;
-		this._init();
+		this._prepare();
 
 		if (this._busy) {
 			console.warn("[OWebCom] instance is busy ->", m);
@@ -198,23 +211,26 @@ export default class OWebCom extends OWebEvent {
 		if (this._options) {
 			this._busy    = true;
 			this._request = $.ajax(m._options)
-				.done((response: any) => {
-					m._handleResponse(response);
-				})
-				.fail((request: any) => {
-					let network_error = !Utils.isPlainObject(
-						request["responseJSON"]);
-					if (network_error) {
-						console.error("[OWebCom] request network error ->", request);
-						m.trigger(OWebCom.EVT_COM_NETWORK_ERROR, [request, m]);
-					} else {
-						console.error("[OWebCom] request server error ->", request);
-						m._handleResponse(request["responseJSON"]);
-					}
-				});
+							 .done((response: any) => {
+								 m._handleResponse(response);
+							 })
+							 .fail((request: any) => {
+								 let network_error = !Utils.isPlainObject(
+									 request["responseJSON"]);
+								 if (network_error) {
+									 console.error("[OWebCom] request network error ->", request);
+									 m.trigger(OWebCom.EVT_COM_NETWORK_ERROR, [request, m]);
+								 } else {
+									 console.error("[OWebCom] request server error ->", request);
+									 m._handleResponse(request["responseJSON"]);
+								 }
+							 });
 		}
 	}
 
+	/**
+	 * Try to abort the current request.
+	 */
 	abort() {
 		this._busy = false;
 		if (this._request) {

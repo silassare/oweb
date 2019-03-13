@@ -25,7 +25,6 @@ import PathResolver from "./utils/PathResolver";
 import scriptLoader from "./utils/scriptLoader";
 import Utils from "./utils/Utils";
 import OWebVueMixin from "./mixins/index";
-import Vue from "vue";
 import OWebPageBase from "./OWebPageBase";
 
 export {tConfigList} from "./OWebConfigs";
@@ -112,9 +111,8 @@ export {
 	OWebDate,
 	OWebTNet,
 
-// Vue, Mixins
+// Mixins
 
-	Vue,
 	OWebVueMixin,
 
 // Utilities

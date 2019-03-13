@@ -115,37 +115,69 @@ export default class OWebService<T> {
 	private readonly _key_store: OWebKeyStorage;
 	private readonly _base_data: { api_url: any; service_name: string };
 
+	/**
+	 * @param app_context The app context.
+	 * @param service_name The service name.
+	 */
 	constructor(protected readonly app_context: OWebApp, service_name: string) {
 
 		let s_url       = app_context.configs.get("OZ_API_BASE_URL")
-			.replace(/\/$/g, "");
+									 .replace(/\/$/g, "");
 		this._base_data = {api_url: s_url, service_name: service_name};
 		this._key_store = new OWebKeyStorage(app_context, "services:" + service_name);
 
 	}
 
+	/**
+	 * Returns the service name.
+	 */
 	getName(): string {
 		return this._base_data.service_name;
 	}
 
+	/**
+	 * Returns the service URI.
+	 */
 	getServiceURI() {
 		return Utils.stringKeyReplace(uri_service, this._base_data);
 	}
 
+	/**
+	 * Returns entity URI.
+	 *
+	 * @param id The entity id.
+	 */
 	getItemURI(id: any): string {
 		let data = Utils.assign({id: id}, this._base_data);
 		return Utils.stringKeyReplace(uri_entity, data);
 	}
 
+	/**
+	 * Returns entity relation URI.
+	 *
+	 * @param id The entity id.
+	 * @param relation The relation name.
+	 */
 	getItemRelationURI(id: string, relation: string): string {
 		let data = Utils.assign({id: id, relation: relation}, this._base_data);
 		return Utils.stringKeyReplace(uri_entity_relation, data);
 	}
 
+	/**
+	 * Cache manager getter.
+	 */
 	getCacheManager(): OWebKeyStorage {
 		return this._key_store;
 	}
 
+	/**
+	 * Adds an entity.
+	 *
+	 * @param formData
+	 * @param success
+	 * @param fail
+	 * @param freeze
+	 */
 	add(formData: any, success: tServiceAddSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
 		let url = this.getServiceURI();
 
@@ -154,6 +186,14 @@ export default class OWebService<T> {
 		}, fail, freeze);
 	}
 
+	/**
+	 * Delete the entity with the given id.
+	 *
+	 * @param id The entity id.
+	 * @param success
+	 * @param fail
+	 * @param freeze
+	 */
 	delete(id: string, success: tServiceDeleteSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
 		let m   = this,
 			url = this.getItemURI(id);
@@ -164,6 +204,15 @@ export default class OWebService<T> {
 		}, fail, freeze);
 	}
 
+	/**
+	 * Update the entity with the given id.
+	 *
+	 * @param id The entity id.
+	 * @param formData
+	 * @param success
+	 * @param fail
+	 * @param freeze
+	 */
 	update(id: string, formData: any, success: tServiceUpdateSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
 		let url = this.getItemURI(id);
 
@@ -172,6 +221,14 @@ export default class OWebService<T> {
 		}, fail, freeze);
 	}
 
+	/**
+	 * Delete all entities.
+	 *
+	 * @param options
+	 * @param success
+	 * @param fail
+	 * @param freeze
+	 */
 	deleteAll(options: tServiceRequestOptions, success: tServiceDeleteAllSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
 		let url                                  = this.getServiceURI(),
 			filters                              = options.filters,
@@ -193,6 +250,15 @@ export default class OWebService<T> {
 		}, fail, freeze);
 	}
 
+	/**
+	 * Update all entities.
+	 *
+	 * @param options
+	 * @param formData
+	 * @param success
+	 * @param fail
+	 * @param freeze
+	 */
 	updateAll(options: tServiceRequestOptions, formData: any, success: tServiceUpdateAllSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
 		let url                 = this.getServiceURI(),
 			filters             = options.filters,
@@ -215,6 +281,19 @@ export default class OWebService<T> {
 		}, fail, freeze);
 	}
 
+	/**
+	 * Gets an entity with the given id.
+	 *
+	 * All requested relations names are joined with `|`.
+	 * example: `relation1|relation2|relationX`.
+	 *
+	 * @param id The entity id.
+	 * @param relations The relations string.
+	 * @param success
+	 * @param fail
+	 * @param freeze
+	 * @param load_cache_first
+	 */
 	get(id: string, relations: string = "", success: tServiceGetSuccess<T>, fail: tServiceFail, freeze: boolean = false, load_cache_first: boolean = false): OWebCom {
 		let m         = this,
 			url       = this.getItemURI(id),
@@ -248,6 +327,16 @@ export default class OWebService<T> {
 
 	}
 
+	/**
+	 * Gets all entities.
+	 *
+	 * @param options
+	 * @param success
+	 * @param fail
+	 * @param freeze
+	 * @param force_cache
+	 * @param load_cache_first
+	 */
 	getAll(options: tServiceRequestOptions, success: tServiceGetAllSuccess<T>, fail: tServiceFail, freeze: boolean = false, force_cache: boolean = false, load_cache_first: boolean = false): OWebCom {
 		let m                                    = this,
 			url                                  = this.getServiceURI(),
@@ -301,6 +390,17 @@ export default class OWebService<T> {
 
 	}
 
+	/**
+	 * Gets a single item relation for a given entity id.
+	 *
+	 * @param id The entity id.
+	 * @param relation The relation name
+	 * @param success
+	 * @param fail
+	 * @param freeze
+	 * @param force_cache
+	 * @param load_cache_first
+	 */
 	getRelation<R>(id: string, relation: string, success: tServiceGetRelationSuccess<R>, fail: tServiceFail, freeze: boolean = false, force_cache: boolean = false, load_cache_first: boolean = false): OWebCom {
 		let m        = this,
 			url      = this.getItemRelationURI(id, relation),
@@ -327,6 +427,18 @@ export default class OWebService<T> {
 		}, freeze);
 	}
 
+	/**
+	 * Gets multiple items relation for a given entity id.
+	 *
+	 * @param id The entity id.
+	 * @param relation The relation name.
+	 * @param options
+	 * @param success
+	 * @param fail
+	 * @param freeze
+	 * @param force_cache
+	 * @param load_cache_first
+	 */
 	getRelationItems<R>(id: string, relation: string, options: tServiceRequestOptions, success: tServiceGetRelationItemsSuccess<R>, fail: tServiceFail, freeze: boolean = false, force_cache: boolean = false, load_cache_first: boolean = false): OWebCom {
 		let m                                    = this,
 			url                                  = this.getItemRelationURI(id, relation),

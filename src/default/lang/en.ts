@@ -14,7 +14,7 @@ export default {
 	"OZ_FILE_TOO_BIG"                     : "File too heavy, maximum 100Mb.",
 	"OZ_FILE_IS_EMPTY"                    : "Empty file.",
 	"OZ_ERROR_INVALID_FORM"               : "The request is invalid. You may not be authorized to perform this action.",
-	"OZ_FIELD_PHONE_ALREADY_REGISTERED"   : "{Phone} is already linked to another account.",
+	"OZ_FIELD_PHONE_ALREADY_REGISTERED"   : "{phone} is already linked to another account.",
 	"OZ_FIELD_EMAIL_ALREADY_REGISTERED"   : "{email} is already associated with another account.",
 	"OZ_FIELD_PHONE_INVALID"              : "The number is invalid.",
 	"OZ_FIELD_PHONE_NOT_REGISTERED"       : "This number is not registered.",
@@ -53,5 +53,11 @@ export default {
 	"OZ_FILE_UPLOAD_FAIL"                 : "Failed to send file (s)",
 	"OZ_FILE_ALIAS_UNKNOWN"               : "Unknown alias file.",
 	"OZ_FILE_ALIAS_PARSE_ERROR"           : "Alias ​​file, analysis error.",
-	"OZ_FILE_ALIAS_NOT_FOUND"             : "The alias file or the targeted file can not be found ..."
+	"OZ_FILE_ALIAS_NOT_FOUND"             : "The alias file or the targeted file can not be found ...",
+
+	"OO_TIME_DAY_NAMES_SHORT"  : "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
+	"OO_TIME_DAY_NAMES_FULL"   : "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
+	"OO_TIME_MONTH_NAMES_SHORT": "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec",
+	"OO_TIME_MONTH_NAMES_FULL" : "January,February,March,April,May,June,July,August,September,October,November,December"
+
 } as tLangDefinition;

@@ -44,12 +44,54 @@ export declare class OWebRoute {
     private readonly reg;
     private tokens;
     private readonly action;
-    constructor(path: string | RegExp, rules: tRoutePathOptions | Array<string>, action: tRouteAction);
+    /**
+     *
+     * @param path The route path string or regexp.
+     * @param options The route options.
+     * @param action The route action function.
+     */
+    constructor(path: string | RegExp, options: tRoutePathOptions | Array<string>, action: tRouteAction);
+    /**
+     * Returns true if this route is dynamic false otherwise.
+     */
     isDynamic(): boolean;
-    getPath(): string;
+    /**
+     * Gets route action.
+     */
     getAction(): tRouteAction;
-    is(path: string): boolean;
-    parse(path: string): tRouteTokensMap;
+    /**
+     * Check if a given pathname match this route.
+     *
+     * @param pathname
+     */
+    is(pathname: string): boolean;
+    /**
+     * Parse a given pathname.
+     *
+     * @param pathname
+     */
+    parse(pathname: string): tRouteTokensMap;
+    /**
+     * Parse dynamic path and returns appropriate regexp and tokens list.
+     *
+     * ```js
+     * let format = "path/to/:id/file/:index/name.:format";
+     * let options = {
+     * 		id: "num",
+     * 		index: "alpha",
+     * 		format:	"alpha-num"
+     * };
+     * let info = parseDynamicPath(format,options);
+     *
+     * info === {
+     *     reg: RegExp,
+     *     tokens: ["id","index","format"]
+     * };
+     * ```
+     * @param path The path format string.
+     * @param options The path options.
+     */
+    static parseDynamicPath(path: string, options: tRoutePathOptions): tRouteInfo;
 }
 export declare class OWebRouteContext {
     private _tokens;

@@ -45,15 +45,15 @@ const which        = function (e: any) {
 	  },
 	  samePath     = function (url: URL) {
 		  return url.pathname === wLoc.pathname &&
-			  url.search === wLoc.search;
+				 url.search === wLoc.search;
 	  },
 	  sameOrigin   = function (href: string) {
 		  if (!href) return false;
 		  let url = new URL(href.toString(), wLoc.toString());
 
 		  return wLoc.protocol === url.protocol &&
-			  wLoc.hostname === url.hostname &&
-			  wLoc.port === url.port;
+				 wLoc.hostname === url.hostname &&
+				 wLoc.port === url.port;
 	  },
 	  escapeString = function (str: string) {
 		  return str.replace(/([.+*?=^!:${}()[\]|\/])/g, "\\$1");
@@ -67,60 +67,8 @@ const which        = function (e: any) {
 		  }
 
 		  return path[0] != "/" ? "/" + path : path;
-	  };
-
-/*
- t = "path/to/:id/file/:index/name.:format";
- p = {id:"num",index:"alpha",format:"alpha-num"};
- parseDynamicPath(t,p);
-*/
-const wrapReg          = (str: string, capture: boolean = false) => capture ? "(" + str + ")" : "(?:" + str + ")",
-	  parseDynamicPath = function (path: string, options: tRoutePathOptions): tRouteInfo {
-
-		  let tokens: Array<string> = [],
-			  reg: string           = "",
-			  _path: string         = path,
-			  match: RegExpExecArray | null;
-
-		  while ((match = token_reg.exec(_path)) != null) {
-			  let found: any   = match[0],
-				  token: any   = match[1],
-				  rule: any    = options[token] || "any",
-				  head: string = _path.slice(0, match.index);
-
-			  if (head.length) {
-				  reg += wrapReg(stringReg(head).source);
-			  }
-
-			  if (typeof rule === "string" && rule in tokenTypesRegMap) {
-				  reg += wrapReg((tokenTypesRegMap as any)[rule], true);
-			  } else if (rule instanceof RegExp) {
-				  reg += wrapReg(rule.source, true);
-			  } else {
-				  throw new Error("Invalid rule for token ':" + token + "' in path '" + path + "'");
-			  }
-
-			  tokens.push(token);
-
-			  _path = _path.slice(match.index + found.length);
-		  }
-
-		  if (!reg.length) {
-			  return {
-				  reg   : null,
-				  tokens: tokens
-			  };
-		  }
-
-		  if (_path.length) {
-			  reg += wrapReg(stringReg(_path).source);
-		  }
-
-		  return {
-			  reg   : new RegExp("^" + reg + "$"),
-			  tokens: tokens
-		  };
-	  };
+	  },
+	  wrapReg      = (str: string, capture: boolean = false) => capture ? "(" + str + ")" : "(?:" + str + ")";
 
 export class OWebRoute {
 	private readonly path: string;
@@ -128,15 +76,21 @@ export class OWebRoute {
 	private tokens: Array<string>;
 	private readonly action: tRouteAction;
 
-	constructor(path: string | RegExp, rules: tRoutePathOptions | Array<string>, action: tRouteAction) {
+	/**
+	 *
+	 * @param path The route path string or regexp.
+	 * @param options The route options.
+	 * @param action The route action function.
+	 */
+	constructor(path: string | RegExp, options: tRoutePathOptions | Array<string>, action: tRouteAction) {
 
 		if (path instanceof RegExp) {
 			this.path   = path.toString();
 			this.reg    = path;
-			this.tokens = Utils.isArray(rules) ? rules : [];
+			this.tokens = Utils.isArray(options) ? options : [];
 		} else if (Utils.isString(path) && path.length) {
-			rules       = <tRoutePathOptions> (Utils.isPlainObject(rules) ? rules : {});
-			let p       = parseDynamicPath(path, rules);
+			options     = <tRoutePathOptions>(Utils.isPlainObject(options) ? options : {});
+			let p       = OWebRoute.parseDynamicPath(path, options);
 			this.path   = path;
 			this.reg    = p.reg;
 			this.tokens = p.tokens;
@@ -145,34 +99,46 @@ export class OWebRoute {
 		}
 
 		if ("function" !== typeof action) {
-			throw new TypeError(`[OWebRoute] invalid action type, got "${ typeof action}" instead of "function".`);
+			throw new TypeError(`[OWebRoute] invalid action type, got "${typeof action}" instead of "function".`);
 		}
 
 		this.action = action;
 	}
 
+	/**
+	 * Returns true if this route is dynamic false otherwise.
+	 */
 	isDynamic() {
 		return this.reg != null;
 	}
 
-	getPath(): string {
-		return this.path;
-	}
-
+	/**
+	 * Gets route action.
+	 */
 	getAction(): tRouteAction {
 		return this.action;
 	}
 
-	is(path: string): boolean {
-		return (this.reg) ? this.reg.test(path) : this.path === path;
+	/**
+	 * Check if a given pathname match this route.
+	 *
+	 * @param pathname
+	 */
+	is(pathname: string): boolean {
+		return this.reg ? this.reg.test(pathname) : this.path === pathname;
 	}
 
-	parse(path: string): tRouteTokensMap {
+	/**
+	 * Parse a given pathname.
+	 *
+	 * @param pathname
+	 */
+	parse(pathname: string): tRouteTokensMap {
 
 		if (this.isDynamic()) {
-			let founds: any;
+			let founds: any = String(pathname).match(this.reg as RegExp);
 
-			if (founds = String(path).match(this.reg as RegExp)) {
+			if (founds) {
 				return this.tokens.reduce((acc: any, key: string, index: number) => {
 					acc[key] = founds[index + 1];
 					return acc;
@@ -182,6 +148,73 @@ export class OWebRoute {
 		}
 
 		return {};
+	}
+
+	/**
+	 * Parse dynamic path and returns appropriate regexp and tokens list.
+	 *
+	 * ```js
+	 * let format = "path/to/:id/file/:index/name.:format";
+	 * let options = {
+	 * 		id: "num",
+	 * 		index: "alpha",
+	 * 		format:	"alpha-num"
+	 * };
+	 * let info = parseDynamicPath(format,options);
+	 *
+	 * info === {
+	 *     reg: RegExp,
+	 *     tokens: ["id","index","format"]
+	 * };
+	 * ```
+	 * @param path The path format string.
+	 * @param options The path options.
+	 */
+	static parseDynamicPath(path: string, options: tRoutePathOptions): tRouteInfo {
+
+		let tokens: Array<string> = [],
+			reg: string           = "",
+			_path: string         = path,
+			match: RegExpExecArray | null;
+
+		while ((match = token_reg.exec(_path)) != null) {
+			let found: any   = match[0],
+				token: any   = match[1],
+				rule: any    = options[token] || "any",
+				head: string = _path.slice(0, match.index);
+
+			if (head.length) {
+				reg += wrapReg(stringReg(head).source);
+			}
+
+			if (typeof rule === "string" && rule in tokenTypesRegMap) {
+				reg += wrapReg((tokenTypesRegMap as any)[rule], true);
+			} else if (rule instanceof RegExp) {
+				reg += wrapReg(rule.source, true);
+			} else {
+				throw new Error("Invalid rule for token ':" + token + "' in path '" + path + "'");
+			}
+
+			tokens.push(token);
+
+			_path = _path.slice(match.index + found.length);
+		}
+
+		if (!reg.length) {
+			return {
+				reg   : null,
+				tokens: tokens
+			};
+		}
+
+		if (_path.length) {
+			reg += wrapReg(stringReg(_path).source);
+		}
+
+		return {
+			reg   : new RegExp("^" + reg + "$"),
+			tokens: tokens
+		};
 	}
 }
 
@@ -216,7 +249,7 @@ export class OWebRouteContext {
 	}
 
 	getSearchParam(param: string): string | null {
-		return new URL(wLoc.href).searchParams.get(param);
+		return new URL(this._target.href).searchParams.get(param);
 	}
 
 	setStateItem(key: string, value: tRouteStateItem): this {
@@ -641,11 +674,11 @@ export default class OWebRouter {
 
 		// strip leading "/[drive letter]:" on NW.js on Windows
 		/*
-		let hasProcess = typeof process !== 'undefined';
-		if (hasProcess && targetHref.match(/^\/[a-zA-Z]:\//)) {
-			targetHref = targetHref.replace(/^\/[a-zA-Z]:\//, "/");
-		}
-		*/
+		 let hasProcess = typeof process !== 'undefined';
+		 if (hasProcess && targetHref.match(/^\/[a-zA-Z]:\//)) {
+		 targetHref = targetHref.replace(/^\/[a-zA-Z]:\//, "/");
+		 }
+		 */
 
 		let orig = targetHref;
 

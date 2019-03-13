@@ -22,10 +22,16 @@ export default class OWebView extends OWebEvent {
 		console.log("[OWebView] ready!");
 	}
 
+	/**
+	 * Check if the view is frozen.
+	 */
 	isFrozen(): boolean {
 		return Boolean(this._freeze_counter);
 	}
 
+	/**
+	 * To freeze the view.
+	 */
 	freeze() {
 		++this._freeze_counter;
 
@@ -36,6 +42,9 @@ export default class OWebView extends OWebEvent {
 		return this;
 	}
 
+	/**
+	 * Unfreeze the view.
+	 */
 	unfreeze() {
 		if (this.isFrozen()) {
 			--this._freeze_counter;
@@ -48,6 +57,11 @@ export default class OWebView extends OWebEvent {
 		return this;
 	}
 
+	/**
+	 * Trigger dialog event to the view.
+	 * @param dialog
+	 * @param can_use_alert
+	 */
 	dialog(dialog: tViewDialog | iComResponse, can_use_alert: boolean = false) {
 		let d = dialog;
 
@@ -57,22 +71,35 @@ export default class OWebView extends OWebEvent {
 				"text": (d as iComResponse).msg,
 				"data": d.data || {}
 			};
-
-			// console.error("[OWebView] please use new dialog mode -> ", d, "instead of ->", dialog);
 		}
 
 		this.trigger(OWebView.EVT_VIEW_DIALOG, [d, can_use_alert]);
 	}
 
-	onFreeze(cb: () => void) {
-		return this.on(OWebView.EVT_VIEW_FREEZE, cb);
+	/**
+	 * Register freeze event handler.
+	 *
+	 * @param handler
+	 */
+	onFreeze(handler: () => void) {
+		return this.on(OWebView.EVT_VIEW_FREEZE, handler);
 	}
 
-	onUnFreeze(cb: () => void) {
-		return this.on(OWebView.EVT_VIEW_UNFREEZE, cb);
+	/**
+	 * Register unfreeze event handler.
+	 *
+	 * @param handler
+	 */
+	onUnFreeze(handler: () => void) {
+		return this.on(OWebView.EVT_VIEW_UNFREEZE, handler);
 	}
 
-	onDialog(cb: (dialog: tViewDialog, can_use_alert: boolean) => void) {
-		return this.on(OWebView.EVT_VIEW_DIALOG, cb);
+	/**
+	 * Register dialog event handler.
+	 *
+	 * @param handler
+	 */
+	onDialog(handler: (dialog: tViewDialog, can_use_alert: boolean) => void) {
+		return this.on(OWebView.EVT_VIEW_DIALOG, handler);
 	}
 }

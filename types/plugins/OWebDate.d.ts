@@ -1,3 +1,5 @@
+import OWebApp from "../OWebApp";
+export declare type tDateValue = Date | number | string;
 export declare type tDateDesc = {
     D: string;
     l: number;
@@ -22,10 +24,31 @@ export declare type tDateDesc = {
     A: string;
 };
 export default class OWebDate {
-    private readonly date;
-    constructor(date: string);
-    format(langKey: string, langCode: string): string;
-    describe(langCode?: string): tDateDesc;
-    static fromInputValue(date_str: string): OWebDate | false;
+    private app_context;
+    private date;
+    constructor(app_context: OWebApp, date?: tDateValue);
+    /**
+     * Format date with a given lang key.
+     *
+     * @param langKey
+     */
+    format(langKey: string): string;
+    /**
+     * Returns date description object.
+     */
+    describe(): tDateDesc;
+    /**
+     * Date setter.
+     *
+     * @param date
+     */
+    setDate(date: tDateValue): this;
+    /**
+     * Date getter.
+     */
+    getDate(): tDateValue;
+    /**
+     * Returns unix like timestamp.
+     */
     static timestamp(): number;
 }

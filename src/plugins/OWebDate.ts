@@ -22,7 +22,9 @@ import OWebLang from "../OWebLang";
  * ss The seconds 00, 01,..., 59
  */
 import Utils from "../utils/Utils";
+import OWebApp from "../OWebApp";
 
+export type tDateValue = Date | number | string;
 export type tDateDesc = {
 	D: string,
 	l: number,
@@ -46,20 +48,30 @@ export type tDateDesc = {
 	a: string,
 	A: string
 };
+
 export default class OWebDate {
 
-	constructor(private readonly date: string) {
+	constructor(private app_context: OWebApp, private date: tDateValue = new Date()) {
 	}
 
-	format(langKey: string, langCode: string): string {
-		return OWebLang.toHuman(langKey, this.describe(langCode), langCode);
+	/**
+	 * Format date with a given lang key.
+	 *
+	 * @param langKey
+	 */
+	format(langKey: string): string {
+		return this.app_context.i18n.toHuman(langKey, this.describe());
 	}
 
-	describe(langCode?: string): tDateDesc {
-		let day_names_short   = OWebLang.toHuman("OO_TIME_DAY_NAMES_SHORT", langCode).split(","),
-			day_names_full    = OWebLang.toHuman("OO_TIME_DAY_NAMES_FULL", langCode).split(","),
-			month_names_short = OWebLang.toHuman("OO_TIME_MONTH_NAMES_SHORT", langCode).split(","),
-			month_names_full  = OWebLang.toHuman("OO_TIME_MONTH_NAMES_FULL", langCode).split(","),
+	/**
+	 * Returns date description object.
+	 */
+	describe(): tDateDesc {
+		let i18n              = this.app_context.i18n,
+			day_names_short   = i18n.toHuman("OO_TIME_DAY_NAMES_SHORT").split(","),
+			day_names_full    = i18n.toHuman("OO_TIME_DAY_NAMES_FULL").split(","),
+			month_names_short = i18n.toHuman("OO_TIME_MONTH_NAMES_SHORT").split(","),
+			month_names_full  = i18n.toHuman("OO_TIME_MONTH_NAMES_FULL").split(","),
 			date              = new Date(this.date),
 			y: number         = (date as any).getYear(),
 			Y: number         = date.getFullYear(),
@@ -108,41 +120,36 @@ export default class OWebDate {
 		};
 	}
 
-	static fromInputValue(date_str: string): OWebDate | false {
-		let val   = date_str.replace(/ /g, ""),
-			reg_a = /^(\d{4})[\-\/](\d{1,2})[\-\/](\d{1,2})$/,// standard
-			reg_b = /^(\d{1,2})[\-\/](\d{1,2})[\-\/](\d{4})$/;// when browser threat date field as text field (in firefox)
-
-		if (reg_a.test(val)) {
-			return new OWebDate(date_str);
-		}
-		if (reg_b.test(val)) {
-			return new OWebDate(`${RegExp.$3}-${RegExp.$2}-${RegExp.$1}`);
-		}
-
-		return false;
+	/**
+	 * Date setter.
+	 *
+	 * @param date
+	 */
+	setDate(date: tDateValue): this {
+		this.date = new Date(date);
+		return this;
 	}
 
+	/**
+	 * Date getter.
+	 */
+	getDate(): tDateValue {
+		return this.date;
+	}
+
+	/**
+	 * Returns unix like timestamp.
+	 */
 	static timestamp(): number {
 		return Number(String(Date.now()).slice(0, -3));
 	}
 };
 
-OWebLang.addPlugin("oweb_date", function (data: any = {}, langCode: string) {
-	if (data["owebDate"]) {
-		let t = new OWebDate(data["owebDate"]);
-		return Utils.assign(data, t.describe(langCode));
+OWebLang.addPlugin("oweb_date", function (o) {
+	if (o.data["owebDate"]) {
+		let t = new OWebDate(o.context, o.data["owebDate"]);
+		return Utils.assign(o.data, t.describe());
 	}
 
-	return data;
-}).setLangData("fr", {
-	"OO_TIME_DAY_NAMES_SHORT"  : "dim.,lun.,mar.,mer.,jeu.,ven.,sam.",
-	"OO_TIME_DAY_NAMES_FULL"   : "dimanche,lundi,mardi,mercredi,jeudi,vendredi,samedi",
-	"OO_TIME_MONTH_NAMES_SHORT": "janv.,f\xe9vr.,mars,avr.,mai,juin,juil.,ao\xfbt,sept.,oct.,nov.,d\xe9c.",
-	"OO_TIME_MONTH_NAMES_FULL" : "janvier,f\xe9vrier,mars,avril,mai,juin,juillet,ao\xfbt,septembre,octobre,novembre,d\xe9cembre"
-}).setLangData("en", {
-	"OO_TIME_DAY_NAMES_SHORT"  : "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
-	"OO_TIME_DAY_NAMES_FULL"   : "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
-	"OO_TIME_MONTH_NAMES_SHORT": "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec",
-	"OO_TIME_MONTH_NAMES_FULL" : "January,February,March,April,May,June,July,August,September,October,November,December"
+	return o.data;
 });

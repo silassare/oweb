@@ -25,5 +25,6 @@ declare let Utils: {
     buildQueryString: (object: object, prefix: string) => string;
     parseQueryString: (str: string) => {};
     eventCancel: (e: Event) => void;
+    fileSizeFormat: (size: number, decimalSep?: string, digitsSep?: string) => string;
 };
 export default Utils;

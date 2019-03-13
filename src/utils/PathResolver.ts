@@ -4,11 +4,20 @@
  * This file is part of Otpl.
  */
 
-let PathResolver = {
+const PathResolver = {
+	/**
+	 * The directory separator.
+	 */
 	DS: "/",
 
-	resolve: function (ro_ot: string, path: string): string {
-		ro_ot = this.normalize(ro_ot);
+	/**
+	 * Resolve a given path to the the given root.
+	 *
+	 * @param root_
+	 * @param path
+	 */
+	resolve: function (root_: string, path: string): string {
+		root_ = this.normalize(root_);
 		path  = this.normalize(path);
 
 		if (this.isRelative(path)) {
@@ -21,7 +30,7 @@ let PathResolver = {
 
 				full_path = path;
 			} else {
-				full_path = ro_ot + this.DS + path;
+				full_path = root_ + this.DS + path;
 			}
 
 			path = this.job(full_path).replace(/^(https?):[/]([^/])/, "$1://$2");
@@ -30,6 +39,11 @@ let PathResolver = {
 		return path;
 	},
 
+	/**
+	 * Do the path resolving job.
+	 *
+	 * @param path
+	 */
 	job: function (path: string): string {
 		let _in = path.split(this.DS);
 		let out = [];
@@ -68,15 +82,24 @@ let PathResolver = {
 		return out.join(this.DS);
 	},
 
+	/**
+	 * Normalize a given path.
+	 *
+	 * @param path
+	 */
 	normalize: function (path: string): string {
 		return path.replace(/\\/g, "/");
 	},
 
+	/**
+	 * Check if a path is a relative path.
+	 * @param path
+	 */
 	isRelative: function (path: any): boolean {
 		return /^\.{1,2}[/\\]?/.test(path)
-			|| /[/\\]\.{1,2}[/\\]/.test(path)
-			|| /[/\\]\.{1,2}$/.test(path)
-			|| /^[a-zA-Z0-9_.][^:]*$/.test(path);
+			   || /[/\\]\.{1,2}[/\\]/.test(path)
+			   || /[/\\]\.{1,2}$/.test(path)
+			   || /^[a-zA-Z0-9_.][^:]*$/.test(path);
 	}
 };
 

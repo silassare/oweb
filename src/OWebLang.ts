@@ -1,182 +1,192 @@
-import scriptLoader, {tScriptFile} from "./utils/scriptLoader";
 import Utils from "./utils/Utils";
+import OWebEvent from "./OWebEvent";
+import OWebApp from "./OWebApp";
 
+export type tLangInjectData = { [key: string]: any };
 export type tLangDefinition = { [key: string]: any };
+export type tLangPluginArgs = { context: OWebApp, data: tLangInjectData, langCode: string };
+export type tLangPluginFn = (o: tLangPluginArgs) => tLangInjectData;
+export type tLangFormatterArgs = { context: OWebApp, args: string[], langCode: string };
+export type tLangFormatterFn = (o: tLangFormatterArgs) => string;
 
 const
 	LANG_PORTION_COPY_REG = /{{\s*([A-Z][A-Z0-9_]+)\s*}}/g, // for {{LANG_KEY}}
 	LANG_REPLACE_REG      = /{\s*(?:([a-zA-Z_]+):)?([a-zA-Z0-9_]+)\s*}/g,// for {variable} and {fn:variable}
 	LANG_VALUE_TAG_REG    = /(INPUT|TEXTAREA)/i;
 
-let LANG_OBJECT: { [key: string]: tLangDefinition }   = {},
-	LANG_DEFAULT: string,
-	LANG_DIRECTORIES: { [key: string]: boolean }      = {},
-	LANG_PLUGINS: { [key: string]: Function }         = {},
-	LANG_FORMATS_FN_LIST: { [key: string]: Function } = {
-		"file_size": function (size: any, langCode: string) {
-			let units         = OWebLang.getLangText("FILE_SIZE_UNITS", langCode) || ["Kb"],
-				decimal_point = OWebLang.getLangText("NUMBER_DECIMAL_SYMBOL", langCode) || ".",// ',' for french
-				sep           = OWebLang.getLangText("NUMBER_DIGIT_SEP", langCode) || " ",
-				i_max         = units.length,
-				i             = 0,
-				ko            = 1024,
-				result        = 0;
-
-			size = parseFloat(size);
-
-			while (size >= 1 && i < i_max) {
-				result = size;
-				size /= ko;
-				i++;
-			}
-
-			if (!i) {
-				i = 1;
-			}
-
-			let parts = String(result).split(".");
-			let head  = (parseInt(parts[0]) === result) ? result : Utils.math.numberFormat(result, 2, decimal_point, sep);
-
-			return head + " " + units[i - 1];
+let LANG_OBJECT: { [key: string]: tLangDefinition }           = {},
+	LANG_PLUGINS: { [key: string]: tLangPluginFn }            = {},
+	LANG_FORMATS_FN_LIST: { [key: string]: tLangFormatterFn } = {
+		"file_size": function (o) {
+			return Utils.fileSizeFormat(Number(o.args[0]));
 		}
 	};
 
-let runPlugins = (plugins: string, data: any, langCode: string): any => {
-	let len = plugins.length;
-	for (let i = 0; i < len; i++) {
-		let plugin = plugins[i],
-			fn     = LANG_PLUGINS[plugin];
+const runPlugins      = (app_context: OWebApp, plugins: string, data: tLangInjectData, langCode: string): any => {
+		  let len = plugins.length;
+		  for (let i = 0; i < len; i++) {
+			  let plugin = plugins[i],
+				  fn     = LANG_PLUGINS[plugin];
 
-		if (fn) {
-			data = fn(data, langCode);
-		} else {
-			console.error(`[OWebLang] undefined plugins "${plugin}".`);
+			  if (fn) {
+				  data = fn({
+					  context: app_context,
+					  data,
+					  langCode
+				  });
+			  } else {
+				  console.error(`[OWebLang] undefined plugins "${plugin}".`);
+			  }
+		  }
+
+		  return data;
+	  },
+	  runReplace      = (app_context: OWebApp, text: string, data: any, langCode: string): string => {
+
+		  let fnExec = function (name: string, value: any, langCode: string) {
+			  let fn = LANG_FORMATS_FN_LIST[name];
+
+			  if (typeof fn === "function") {
+				  return fn({
+					  context: app_context,
+					  args   : [value],
+					  langCode
+				  });
+			  }
+
+			  return value;
+		  };
+
+		  text = text.replace(LANG_REPLACE_REG, (text, fn, variable) => {
+			  let value = (data || {})[variable];
+
+			  if (fn) {
+				  value = fnExec(fn, value, langCode);
+			  }
+
+			  return value;
+		  });
+
+		  return text;
+	  },
+	  translate       = function (app_context: OWebApp, langKey: string, langData: tLangInjectData, langCode: string): string {
+
+		  if (!LANG_OBJECT[langKey]) {
+			  throw new Error(`[OWebLang] undefined language data for: ${langCode}`);
+		  }
+
+		  let data = langData || {},
+			  text = OWebLang.getLangText(langKey, langCode);
+
+		  if (data["olangPlugins"]) {
+			  let plugins = data["olangPlugins"].split("|");
+			  data        = runPlugins(app_context, plugins, data, langCode);
+		  }
+
+		  if (text !== undefined) {
+
+			  if (LANG_REPLACE_REG.test(text)) {
+				  text = runReplace(app_context, text, data, langCode);
+			  }
+
+			  return text;
+		  }
+
+		  return langKey;
+	  },
+	  portionReplacer = function (text: string, langCode: string): string {
+		  if (LANG_PORTION_COPY_REG.test(text)) {
+			  text = text.replace(LANG_PORTION_COPY_REG, function (text, p) {
+				  return OWebLang.getLangText(p, langCode);
+			  });
+		  }
+
+		  return text;
+	  };
+
+export default class OWebLang extends OWebEvent {
+	defaultLangCode: string = "en";
+
+	/**
+	 * @param app_context The app context.
+	 */
+	constructor(private app_context: OWebApp) {
+		super();
+	}
+
+	/**
+	 * Set default i18n lang code.
+	 *
+	 * @param langCode The i18n lang code.
+	 */
+	setDefaultLang(langCode: string) {
+
+		if (!LANG_OBJECT[langCode]) {
+			throw new Error(`[OWebLang] can't set default language, undefined language data for: ${langCode}.`)
 		}
-	}
 
-	return data;
-};
-
-let runReplace = (text: string, data: any, langCode: string): string => {
-
-	let fnExec = function (name: string, value: any, langCode: string) {
-		let fn = LANG_FORMATS_FN_LIST[name];
-
-		if (typeof fn === "function") {
-			return fn(value, langCode);
+		if (this.defaultLangCode !== langCode) {
+			this.defaultLangCode = langCode;
 		}
 
-		return value;
-	};
+		return this;
+	}
 
-	text = text.replace(LANG_REPLACE_REG, (text, fn, variable) => {
-		let value = (data || {})[variable];
+	/**
+	 * Returns i18n translation.
+	 *
+	 * @param langKey The i18n string key.
+	 * @param langData The data to inject in translation process.
+	 * @param langCode The i18n lang code to use.
+	 */
+	toHuman(langKey: string, langData: tLangInjectData = {}, langCode: string = this.defaultLangCode): string {
+		return translate(this.app_context, langKey, langData, langCode);
+	}
 
-		if (fn) {
-			value = fnExec(fn, value, langCode);
+	/**
+	 * Update an element content/placeholder/title.
+	 *
+	 * @param el The element to update.
+	 * @param data The data to inject in i18n translation process.
+	 */
+	updateElement(el: HTMLElement, data: tLangInjectData): this {
+		let translatedText  = null,
+			contentKey      = data.olang,
+			contentData     = data.olangData || data,
+			titleKey        = data.olangTitle,
+			titleData       = data.olangTitleData || data.olangData || data,
+			placeholderKey  = data.olangPlaceholder,
+			placeholderData = data.olangPlaceholderData || data.olangData || data,
+			langCode        = data.olangCode || this.defaultLangCode,
+			tag             = el.nodeName;
+
+		if (contentKey !== undefined) {
+			translatedText = translate(this.app_context, contentKey, contentData, langCode);
+
+			if (!LANG_VALUE_TAG_REG.test(tag)) {
+				el.innerHTML = translatedText;
+			} else {
+				el.setAttribute("value", translatedText);
+			}
 		}
 
-		return value;
-	});
-
-	return text;
-};
-
-let translate = function (langKey: string, langData: any, langCode: string): string {
-	let data = langData || {};
-	let text = OWebLang.getLangText(langKey, langCode);
-
-	if (data["olangPlugins"]) {
-		let plugins = data["olangPlugins"].split("|");
-		data        = runPlugins(plugins, data, langCode);
-	}
-
-	if (text !== undefined) {
-
-		if (LANG_REPLACE_REG.test(text)) {
-			text = runReplace(text, data, langCode);
+		if (titleKey !== undefined) {
+			el.setAttribute("title", translate(this.app_context, titleKey, titleData, langCode));
 		}
 
-		return text;
-	}
-
-	return langKey;
-};
-
-let portionReplacer = function (text: string, langCode: string): string {
-	if (LANG_PORTION_COPY_REG.test(text)) {
-		text = text.replace(LANG_PORTION_COPY_REG, function (text, p) {
-			return OWebLang.getLangText(p, langCode);
-		});
-	}
-
-	return text;
-};
-
-let loadLangFiles = function () {
-	let lang_codes                         = Object.keys(LANG_OBJECT);
-	let sources                            = Object.keys(LANG_DIRECTORIES);
-	let sources_bundle: Array<tScriptFile> = [];
-
-	lang_codes.forEach(function (langCode) {
-		sources.forEach(function (path) {
-			sources_bundle.push([path + langCode + ".js"]);
-		});
-	});
-
-	if (sources_bundle.length) {
-		scriptLoader.batchLoad(sources_bundle, (success: boolean, done, failed) => {
-			// at least one should be loaded
-			if (done.length) {
-				OWebLang.updateAll();
-			}
-			if (failed.length) {
-				console.warn("[OWebLang] fail to load lang files ->", failed);
-			}
-		});
-	}
-};
-
-export default class OWebLang {
-
-	static update(ele: HTMLElement, handler?: Function, context?: any) {
-		let $ele           = $(ele),
-			translatedText = null,
-			langKey        = $ele.data("olang"),
-			langCode       = $ele.data("olangCode") || LANG_DEFAULT,
-			titleKey       = $ele.data("olangTitle"),
-			placeholderKey = $ele.data("olangPlaceholder"),
-			langData       = $ele.data("olangData") || $ele.data();
-
-		if (LANG_OBJECT[langCode]) {
-			if (langKey !== undefined) {
-				translatedText = translate(langKey, langData, langCode);
-
-				if (Utils.isFunction(handler)) {
-					handler.call(context, translatedText);
-				} else {
-					let tag = ele.nodeName;
-
-					if (!LANG_VALUE_TAG_REG.test(tag)) {
-						ele.innerHTML = translatedText;
-					} else {
-						ele.setAttribute("value", translatedText);
-					}
-				}
-			}
-
-			if (titleKey !== undefined) {
-				ele.setAttribute("title", translate(titleKey, langData, langCode));
-			}
-
-			if (placeholderKey !== undefined) {
-				ele.setAttribute("placeholder", translate(placeholderKey, langData, langCode));
-			}
-		} else {
-			console.warn(`[OWebLang] please wait while the lang "${langCode}" is loaded...`);
+		if (placeholderKey !== undefined) {
+			el.setAttribute("placeholder", translate(this.app_context, placeholderKey, placeholderData, langCode));
 		}
+
+		return this;
 	}
 
+	/**
+	 * Sets the i18n lang data.
+	 *
+	 * @param langCode The i18n lang code
+	 * @param data The i18n lang data.
+	 */
 	static setLangData(langCode: string, data: tLangDefinition) {
 
 		if (!Utils.isString(langCode)) {
@@ -192,6 +202,12 @@ export default class OWebLang {
 		return this;
 	}
 
+	/**
+	 * Returns the i18n string.
+	 *
+	 * @param textKey The i18n text key.
+	 * @param langCode The i18n lang code
+	 */
 	static getLangText(textKey: string, langCode: string): any {
 		if (LANG_OBJECT[langCode]) {
 			return portionReplacer(LANG_OBJECT[langCode][textKey], langCode);
@@ -200,41 +216,13 @@ export default class OWebLang {
 		}
 	}
 
-	static setDefaultLang(langCode: string) {
-		if (LANG_DEFAULT !== langCode) {
-
-			LANG_DEFAULT = langCode;
-
-			if (!LANG_OBJECT[langCode]) {
-				LANG_OBJECT[langCode] = {};
-			}
-
-			loadLangFiles();
-		}
-
-		return this;
-	}
-
-	static addLangDirectories(path: string) {
-		let list = Utils.isArray(path) ? path : [path];
-
-		for (let i = 0; i < list.length; i++) {
-			if (LANG_DIRECTORIES[list[i]] === undefined) {
-				LANG_DIRECTORIES[list[i]] = true;
-			}
-		}
-
-		loadLangFiles();
-
-		return this;
-	}
-
-	static updateAll() {
-		($(document.body) as any).oLangUpdateTree();
-		return this;
-	}
-
-	static addPlugin(name: string, fn: Function) {
+	/**
+	 * Adds plugin.
+	 *
+	 * @param name The plugin name.
+	 * @param fn The plugin function.
+	 */
+	static addPlugin(name: string, fn: tLangPluginFn) {
 		if (LANG_PLUGINS[name]) {
 			throw new Error(`[OWebLang] plugin '${name}' already defined.`);
 		}
@@ -243,45 +231,4 @@ export default class OWebLang {
 
 		return this;
 	}
-
-	static toHuman(langKey: string, langData: any = {}, langCode: string = LANG_DEFAULT): string {
-		return translate(langKey, langData, langCode);
-	}
 }
-
-$.extend($.fn, {
-	oLangAble      : function () {
-		return $(this).data("olang") !== undefined
-			|| $(this).data("olangTitle") !== undefined
-			|| $(this).data("olangPlaceholder") !== undefined
-			|| $(this).data("olangHidden") !== undefined;
-	},
-	oLangDataObject: function () {
-		let $ele: any = $(this);
-
-		if (!$ele.oLangAble()) {
-			throw new Error("[OWebLang] there is no olang data object.");
-		}
-
-		return {
-			"olang"           : $ele.data("olang"),
-			"olangTitle"      : $ele.data("olangTitle"),
-			"olangPlaceholder": $ele.data("olangPlaceholder"),
-			"olangHidden"     : $ele.data("olangHidden"),
-			"olangData"       : $ele.data("olangData") || $ele.data()
-		};
-	},
-	oLang          : function () {
-		return $(this).each(function () {
-			OWebLang.update(this as any);
-		});
-	},
-	oLangUpdateTree: function () {
-		return $(this).find("*").each(function () {
-			let $ele: any = $(this);
-			if ($ele.oLangAble()) {
-				$ele.oLang();
-			}
-		});
-	}
-});
