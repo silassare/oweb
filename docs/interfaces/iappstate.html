@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>iServiceDeleteAllResponse | oweb</title>
+	<title>iAppState | oweb</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,34 +56,21 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="iservicedeleteallresponse.html">iServiceDeleteAllResponse</a>
+					<a href="iappstate.html">iAppState</a>
 				</li>
 			</ul>
-			<h1>Interface iServiceDeleteAllResponse&lt;T&gt;</h1>
+			<h1>Interface iAppState</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>T</h4>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="icomresponse.html" class="tsd-signature-type">iComResponse</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">iServiceDeleteAllResponse</span>
-							</li>
-						</ul>
+						<span class="target">iAppState</span>
 					</li>
 				</ul>
 			</section>
@@ -94,12 +81,12 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="iservicedeleteallresponse.html#data" class="tsd-kind-icon">data</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="iservicedeleteallresponse.html#error" class="tsd-kind-icon">error</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="iservicedeleteallresponse.html#msg" class="tsd-kind-icon">msg</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="iservicedeleteallresponse.html#neterror" class="tsd-kind-icon">neterror</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="iservicedeleteallresponse.html#stime" class="tsd-kind-icon">stime</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="iservicedeleteallresponse.html#utime" class="tsd-kind-icon">utime</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iappstate.html#current_page" class="tsd-kind-icon">current_<wbr>page</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iappstate.html#dialogs" class="tsd-kind-icon">dialogs</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iappstate.html#frozen" class="tsd-kind-icon">frozen</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iappstate.html#ready" class="tsd-kind-icon">ready</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iappstate.html#show_nav" class="tsd-kind-icon">show_<wbr>nav</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="iappstate.html#splash" class="tsd-kind-icon">splash</a></li>
 							</ul>
 						</section>
 					</div>
@@ -107,77 +94,63 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-					<a name="data" class="tsd-anchor"></a>
-					<h3>data</h3>
-					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="current_page" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> current_<wbr>page</h3>
+					<div class="tsd-signature tsd-kind-icon">current_<wbr>page<span class="tsd-signature-symbol">:</span> <a href="ipage.html" class="tsd-signature-type">iPage</a></div>
 					<aside class="tsd-sources">
-						<p>Overrides <a href="icomresponse.html">iComResponse</a>.<a href="icomresponse.html#data">data</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebService.ts#L58">OWebService.ts:58</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter">
-								<h5>affected<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
-							</li>
-						</ul>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="error" class="tsd-anchor"></a>
-					<h3>error</h3>
-					<div class="tsd-signature tsd-kind-icon">error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from <a href="icomresponse.html">iComResponse</a>.<a href="icomresponse.html#error">error</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebCom.ts#L8">OWebCom.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L27">OWebApp.ts:27</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="msg" class="tsd-anchor"></a>
-					<h3>msg</h3>
-					<div class="tsd-signature tsd-kind-icon">msg<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="dialogs" class="tsd-anchor"></a>
+					<h3>dialogs</h3>
+					<div class="tsd-signature tsd-kind-icon">dialogs<span class="tsd-signature-symbol">:</span> <a href="../globals.html#tviewdialog" class="tsd-signature-type">tViewDialog</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="icomresponse.html">iComResponse</a>.<a href="icomresponse.html#msg">msg</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebCom.ts#L9">OWebCom.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L28">OWebApp.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="neterror" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> neterror</h3>
-					<div class="tsd-signature tsd-kind-icon">neterror<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="frozen" class="tsd-anchor"></a>
+					<h3>frozen</h3>
+					<div class="tsd-signature tsd-kind-icon">frozen<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="icomresponse.html">iComResponse</a>.<a href="icomresponse.html#neterror">neterror</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebCom.ts#L13">OWebCom.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L25">OWebApp.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="stime" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> stime</h3>
-					<div class="tsd-signature tsd-kind-icon">stime<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="ready" class="tsd-anchor"></a>
+					<h3>ready</h3>
+					<div class="tsd-signature tsd-kind-icon">ready<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="icomresponse.html">iComResponse</a>.<a href="icomresponse.html#stime">stime</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebCom.ts#L12">OWebCom.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L23">OWebApp.ts:23</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="utime" class="tsd-anchor"></a>
-					<h3>utime</h3>
-					<div class="tsd-signature tsd-kind-icon">utime<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="show_nav" class="tsd-anchor"></a>
+					<h3>show_<wbr>nav</h3>
+					<div class="tsd-signature tsd-kind-icon">show_<wbr>nav<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="icomresponse.html">iComResponse</a>.<a href="icomresponse.html#utime">utime</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebCom.ts#L11">OWebCom.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L26">OWebApp.ts:26</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="splash" class="tsd-anchor"></a>
+					<h3>splash</h3>
+					<div class="tsd-signature tsd-kind-icon">splash<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L24">OWebApp.ts:24</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -195,26 +168,26 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-has-type-parameter">
-						<a href="iservicedeleteallresponse.html" class="tsd-kind-icon">i<wbr>Service<wbr>Delete<wbr>All<wbr>Response</a>
+					<li class="current tsd-kind-interface">
+						<a href="iappstate.html" class="tsd-kind-icon">i<wbr>App<wbr>State</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-								<a href="iservicedeleteallresponse.html#data" class="tsd-kind-icon">data</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="iappstate.html#current_page" class="tsd-kind-icon">current_<wbr>page</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="iservicedeleteallresponse.html#error" class="tsd-kind-icon">error</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="iappstate.html#dialogs" class="tsd-kind-icon">dialogs</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="iservicedeleteallresponse.html#msg" class="tsd-kind-icon">msg</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="iappstate.html#frozen" class="tsd-kind-icon">frozen</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="iservicedeleteallresponse.html#neterror" class="tsd-kind-icon">neterror</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="iappstate.html#ready" class="tsd-kind-icon">ready</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="iservicedeleteallresponse.html#stime" class="tsd-kind-icon">stime</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="iappstate.html#show_nav" class="tsd-kind-icon">show_<wbr>nav</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="iservicedeleteallresponse.html#utime" class="tsd-kind-icon">utime</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="iappstate.html#splash" class="tsd-kind-icon">splash</a>
 							</li>
 						</ul>
 					</li>

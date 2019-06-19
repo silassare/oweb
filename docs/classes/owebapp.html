@@ -92,12 +92,14 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="owebapp.html#app_name" class="tsd-kind-icon">app_<wbr>name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="owebapp.html#configs" class="tsd-kind-icon">configs</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="owebapp.html#i18n" class="tsd-kind-icon">i18n</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="owebapp.html#ls" class="tsd-kind-icon">ls</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="owebapp.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="owebapp.html#pager" class="tsd-kind-icon">pager</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="owebapp.html#router" class="tsd-kind-icon">router</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="owebapp.html#services" class="tsd-kind-icon">services</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="owebapp.html#state" class="tsd-kind-icon">state</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="owebapp.html#url" class="tsd-kind-icon">url</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="owebapp.html#user" class="tsd-kind-icon">user</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="owebapp.html#view" class="tsd-kind-icon">view</a></li>
@@ -117,6 +119,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebapp.html#ismobileapp" class="tsd-kind-icon">is<wbr>Mobile<wbr>App</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="owebapp.html#off" class="tsd-kind-icon">off</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="owebapp.html#on" class="tsd-kind-icon">on</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebapp.html#onready" class="tsd-kind-icon">on<wbr>Ready</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="owebapp.html#registerservice" class="tsd-kind-icon">register<wbr>Service</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebapp.html#reloadapp" class="tsd-kind-icon">reload<wbr>App</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebapp.html#request" class="tsd-kind-icon">request</a></li>
@@ -124,6 +127,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebapp.html#sessionactive" class="tsd-kind-icon">session<wbr>Active</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebapp.html#showhomepage" class="tsd-kind-icon">show<wbr>Home<wbr>Page</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebapp.html#showloginpage" class="tsd-kind-icon">show<wbr>Login<wbr>Page</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebapp.html#shownotfound" class="tsd-kind-icon">show<wbr>Not<wbr>Found</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebapp.html#showsignuppage" class="tsd-kind-icon">show<wbr>Sign<wbr>UpPage</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebapp.html#start" class="tsd-kind-icon">start</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="owebapp.html#trigger" class="tsd-kind-icon">trigger</a></li>
@@ -139,14 +143,14 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">new OWeb<wbr>App<span class="tsd-signature-symbol">(</span>app_name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, app_config_list<span class="tsd-signature-symbol">: </span><a href="../globals.html#tconfiglist" class="tsd-signature-type">tConfigList</a>, app_url_list<span class="tsd-signature-symbol">: </span><a href="../globals.html#turllist" class="tsd-signature-type">tUrlList</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebapp.html" class="tsd-signature-type">OWebApp</a></li>
+						<li class="tsd-signature tsd-kind-icon">new OWeb<wbr>App<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, configs<span class="tsd-signature-symbol">: </span><a href="../globals.html#tconfiglist" class="tsd-signature-type">tConfigList</a>, urls<span class="tsd-signature-symbol">: </span><a href="../globals.html#turllist" class="tsd-signature-type">tUrlList</a>, state<span class="tsd-signature-symbol">?: </span><a href="../interfaces/iappstateoptions.html" class="tsd-signature-type">iAppStateOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebapp.html" class="tsd-signature-type">OWebApp</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="owebevent.html">OWebEvent</a>.<a href="owebevent.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L33">OWebApp.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L54">OWebApp.ts:54</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -157,7 +161,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>app_name: <span class="tsd-signature-type">string</span></h5>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The app name.</p>
@@ -165,7 +169,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>app_config_list: <a href="../globals.html#tconfiglist" class="tsd-signature-type">tConfigList</a></h5>
+									<h5>configs: <a href="../globals.html#tconfiglist" class="tsd-signature-type">tConfigList</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The app config.</p>
@@ -173,10 +177,18 @@
 									</div>
 								</li>
 								<li>
-									<h5>app_url_list: <a href="../globals.html#turllist" class="tsd-signature-type">tUrlList</a></h5>
+									<h5>urls: <a href="../globals.html#turllist" class="tsd-signature-type">tUrlList</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The app url list.</p>
+										</div>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> state: <a href="../interfaces/iappstateoptions.html" class="tsd-signature-type">iAppStateOptions</a><span class="tsd-signature-symbol"> =&nbsp;({} as iAppStateOptions)</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The app state.</p>
 										</div>
 									</div>
 								</li>
@@ -188,38 +200,23 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="app_name" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> app_<wbr>name</h3>
-					<div class="tsd-signature tsd-kind-icon">app_<wbr>name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L42">OWebApp.ts:42</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The app name.</p>
-						</div>
-					</div>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="configs" class="tsd-anchor"></a>
 					<h3>configs</h3>
 					<div class="tsd-signature tsd-kind-icon">configs<span class="tsd-signature-symbol">:</span> <a href="owebconfigs.html" class="tsd-signature-type">OWebConfigs</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L30">OWebApp.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L51">OWebApp.ts:51</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="i18n" class="tsd-anchor"></a>
 					<h3>i18n</h3>
-					<div class="tsd-signature tsd-kind-icon">i18n<span class="tsd-signature-symbol">:</span> <a href="oweblang.html" class="tsd-signature-type">OWebLang</a></div>
+					<div class="tsd-signature tsd-kind-icon">i18n<span class="tsd-signature-symbol">:</span> <a href="owebi18n.html" class="tsd-signature-type">OWebI18n</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L33">OWebApp.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L54">OWebApp.ts:54</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -229,7 +226,32 @@
 					<div class="tsd-signature tsd-kind-icon">ls<span class="tsd-signature-symbol">:</span> <a href="owebdatastore.html" class="tsd-signature-type">OWebDataStore</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L27">OWebApp.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L48">OWebApp.ts:48</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="name" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L64">OWebApp.ts:64</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The app name.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="pager" class="tsd-anchor"></a>
+					<h3>pager</h3>
+					<div class="tsd-signature tsd-kind-icon">pager<span class="tsd-signature-symbol">:</span> <a href="owebpager.html" class="tsd-signature-type">OWebPager</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L47">OWebApp.ts:47</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -239,7 +261,7 @@
 					<div class="tsd-signature tsd-kind-icon">router<span class="tsd-signature-symbol">:</span> <a href="owebrouter.html" class="tsd-signature-type">OWebRouter</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L28">OWebApp.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L49">OWebApp.ts:49</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -249,7 +271,7 @@
 					<div class="tsd-signature tsd-kind-icon">services<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L32">OWebApp.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L53">OWebApp.ts:53</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -262,12 +284,22 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="state" class="tsd-anchor"></a>
+					<h3>state</h3>
+					<div class="tsd-signature tsd-kind-icon">state<span class="tsd-signature-symbol">:</span> <a href="../interfaces/iappstate.html" class="tsd-signature-type">iAppState</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L45">OWebApp.ts:45</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="url" class="tsd-anchor"></a>
 					<h3>url</h3>
 					<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <a href="oweburl.html" class="tsd-signature-type">OWebUrl</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L31">OWebApp.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L52">OWebApp.ts:52</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -277,7 +309,7 @@
 					<div class="tsd-signature tsd-kind-icon">user<span class="tsd-signature-symbol">:</span> <a href="owebcurrentuser.html" class="tsd-signature-type">OWebCurrentUser</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L29">OWebApp.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L50">OWebApp.ts:50</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -287,7 +319,7 @@
 					<div class="tsd-signature tsd-kind-icon">view<span class="tsd-signature-symbol">:</span> <a href="owebview.html" class="tsd-signature-type">OWebView</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L26">OWebApp.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L46">OWebApp.ts:46</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -297,7 +329,7 @@
 					<div class="tsd-signature tsd-kind-icon">EVT_<wbr>APP_<wbr>READY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;Utils.id()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L24">OWebApp.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L43">OWebApp.ts:43</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -307,7 +339,7 @@
 					<div class="tsd-signature tsd-kind-icon">SELF<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;Utils.id()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L23">OWebApp.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L42">OWebApp.ts:42</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -324,7 +356,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L151">OWebApp.ts:151</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L211">OWebApp.ts:211</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -346,7 +378,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L142">OWebApp.ts:142</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L202">OWebApp.ts:202</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -371,7 +403,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L122">OWebApp.ts:122</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L182">OWebApp.ts:182</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -396,7 +428,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L58">OWebApp.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L118">OWebApp.ts:118</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -418,7 +450,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L113">OWebApp.ts:113</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L173">OWebApp.ts:173</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -467,7 +499,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L83">OWebApp.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L143">OWebApp.ts:143</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -507,12 +539,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L65">OWebApp.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L125">OWebApp.ts:125</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Check if we are running in mobile app.</p>
+									<p>Checks if we are running in mobile app.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -530,12 +562,12 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebevent.html">OWebEvent</a>.<a href="owebevent.html#off">off</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebEvent.ts#L35">OWebEvent.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebEvent.ts#L35">OWebEvent.ts:35</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Remove event handler.</p>
+									<p>Removes event handler.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -561,14 +593,14 @@
 					<a name="on" class="tsd-anchor"></a>
 					<h3>on</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebevent.html">OWebEvent</a>.<a href="owebevent.html#on">on</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebEvent.ts#L15">OWebEvent.ts:15</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebEvent.ts#L15">OWebEvent.ts:15</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -585,10 +617,85 @@
 									</div>
 								</li>
 								<li>
-									<h5>handler: <span class="tsd-signature-type">Function</span></h5>
+									<h5>handler: <span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The event handler function.</p>
 									</div>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-siganture">
+											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>this: <span class="tsd-signature-type">this</span></h5>
+														</li>
+														<li>
+															<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span>
+														<span class="tsd-signature-symbol"> | </span>
+														<span class="tsd-signature-type">boolean</span>
+													</h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="onready" class="tsd-anchor"></a>
+					<h3>on<wbr>Ready</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Ready<span class="tsd-signature-symbol">(</span>handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L318">OWebApp.ts:318</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Register handler for OWebApp.EVT_APP_READY event</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>handler: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-siganture">
+											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>this: <span class="tsd-signature-type">this</span></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span>
+														<span class="tsd-signature-symbol"> | </span>
+														<span class="tsd-signature-type">boolean</span>
+													</h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -605,7 +712,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L92">OWebApp.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L152">OWebApp.ts:152</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -642,7 +749,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L130">OWebApp.ts:130</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L190">OWebApp.ts:190</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -664,7 +771,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L202">OWebApp.ts:202</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L262">OWebApp.ts:262</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -700,12 +807,15 @@
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>response<span class="tsd-signature-symbol">: </span><a href="../interfaces/icomresponse.html" class="tsd-signature-type">iComResponse</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a>, response<span class="tsd-signature-symbol">: </span><a href="../interfaces/icomresponse.html" class="tsd-signature-type">iComResponse</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
+														<li>
+															<h5>this: <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h5>
+														</li>
 														<li>
 															<h5>response: <a href="../interfaces/icomresponse.html" class="tsd-signature-type">iComResponse</a></h5>
 														</li>
@@ -724,12 +834,15 @@
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>response<span class="tsd-signature-symbol">: </span><a href="../interfaces/icomresponse.html" class="tsd-signature-type">iComResponse</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a>, response<span class="tsd-signature-symbol">: </span><a href="../interfaces/icomresponse.html" class="tsd-signature-type">iComResponse</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
+														<li>
+															<h5>this: <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h5>
+														</li>
 														<li>
 															<h5>response: <a href="../interfaces/icomresponse.html" class="tsd-signature-type">iComResponse</a></h5>
 														</li>
@@ -761,12 +874,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L185">OWebApp.ts:185</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L245">OWebApp.ts:245</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Sends request and return promise.</p>
+									<p>Send request and return promise.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -810,12 +923,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L163">OWebApp.ts:163</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L223">OWebApp.ts:223</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Check if user session is active.</p>
+									<p>Checks if user session is active.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -832,7 +945,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L256">OWebApp.ts:256</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L325">OWebApp.ts:325</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -854,7 +967,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L261">OWebApp.ts:261</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L335">OWebApp.ts:335</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -862,6 +975,34 @@
 									<p>Called when app should show the login page.</p>
 								</div>
 							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="shownotfound" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> show<wbr>Not<wbr>Found</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">show<wbr>Not<wbr>Found<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><a href="../globals.html#troutetarget" class="tsd-signature-type">tRouteTarget</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L330">OWebApp.ts:330</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Called when the requested route was not found.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>target: <a href="../globals.html#troutetarget" class="tsd-signature-type">tRouteTarget</a></h5>
+								</li>
+							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
@@ -876,7 +1017,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L266">OWebApp.ts:266</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L340">OWebApp.ts:340</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -898,7 +1039,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L72">OWebApp.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L132">OWebApp.ts:132</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -914,14 +1055,14 @@
 					<a name="trigger" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> trigger</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">trigger<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, cancelable<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">trigger<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span>, cancelable<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, callback<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebevent.html">OWebEvent</a>.<a href="owebevent.html#trigger">trigger</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebEvent.ts#L75">OWebEvent.ts:75</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebEvent.ts#L75">OWebEvent.ts:75</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -950,7 +1091,7 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <span class="tsd-signature-type">Function</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> callback: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The callback</p>
 									</div>
@@ -970,12 +1111,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/ab38e40/src/OWebApp.ts#L173">OWebApp.ts:173</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebApp.ts#L233">OWebApp.ts:233</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Check if the current user has been authenticated.</p>
+									<p>Checks if the current user has been authenticated.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -1002,9 +1143,6 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 								<a href="owebapp.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="owebapp.html#app_name" class="tsd-kind-icon">app_<wbr>name</a>
-							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="owebapp.html#configs" class="tsd-kind-icon">configs</a>
 							</li>
@@ -1014,11 +1152,20 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="owebapp.html#ls" class="tsd-kind-icon">ls</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="owebapp.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="owebapp.html#pager" class="tsd-kind-icon">pager</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="owebapp.html#router" class="tsd-kind-icon">router</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="owebapp.html#services" class="tsd-kind-icon">services</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="owebapp.html#state" class="tsd-kind-icon">state</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="owebapp.html#url" class="tsd-kind-icon">url</a>
@@ -1062,6 +1209,9 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="owebapp.html#on" class="tsd-kind-icon">on</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="owebapp.html#onready" class="tsd-kind-icon">on<wbr>Ready</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="owebapp.html#registerservice" class="tsd-kind-icon">register<wbr>Service</a>
 							</li>
@@ -1082,6 +1232,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="owebapp.html#showloginpage" class="tsd-kind-icon">show<wbr>Login<wbr>Page</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="owebapp.html#shownotfound" class="tsd-kind-icon">show<wbr>Not<wbr>Found</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="owebapp.html#showsignuppage" class="tsd-kind-icon">show<wbr>Sign<wbr>UpPage</a>
