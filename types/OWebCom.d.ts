@@ -51,7 +51,7 @@ export default class OWebCom extends OWebEvent {
      */
     private _handleResponse;
     /**
-     * Sends request.
+     * Send request.
      */
     send(): void;
     /**

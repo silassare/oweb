@@ -13,7 +13,7 @@ export default class OWebView extends OWebEvent {
     private _freeze_counter;
     constructor();
     /**
-     * Check if the view is frozen.
+     * Checks if the view is frozen.
      */
     isFrozen(): boolean;
     /**
@@ -35,17 +35,17 @@ export default class OWebView extends OWebEvent {
      *
      * @param handler
      */
-    onFreeze(handler: () => void): this;
+    onFreeze(handler: (this: this) => void): this;
     /**
      * Register unfreeze event handler.
      *
      * @param handler
      */
-    onUnFreeze(handler: () => void): this;
+    onUnFreeze(handler: (this: this) => void): this;
     /**
      * Register dialog event handler.
      *
      * @param handler
      */
-    onDialog(handler: (dialog: tViewDialog, can_use_alert: boolean) => void): this;
+    onDialog(handler: (this: this, dialog: tViewDialog, can_use_alert: boolean) => void): this;
 }

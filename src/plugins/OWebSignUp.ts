@@ -81,15 +81,15 @@ export default class OWebSignUp extends OWebEvent {
 
 	}
 
-	onError(handler: (response: iComResponse) => void): this {
+	onError(handler: (this: this, response: iComResponse) => void): this {
 		return this.on(OWebSignUp.EVT_SIGN_UP_ERROR, handler);
 	}
 
-	onNextStep(handler: (response: iComResponse, step: number) => void): this {
+	onNextStep(handler: (this: this, response: iComResponse, step: number) => void): this {
 		return this.on(OWebSignUp.EVT_SIGN_UP_NEXT_STEP, handler);
 	}
 
-	onSuccess(handler: (response: iComResponse) => void): this {
+	onSuccess(handler: (this: this, response: iComResponse) => void): this {
 		return this.on(OWebSignUp.EVT_SIGN_UP_SUCCESS, handler);
 	}
 

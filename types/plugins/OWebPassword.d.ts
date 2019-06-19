@@ -8,6 +8,6 @@ export default class OWebPassword extends OWebEvent {
     static readonly EVT_PASS_EDIT_ERROR: string;
     constructor(app_context: OWebApp);
     editPass(form: HTMLFormElement, uid?: string): void;
-    onError(handler: (response: iComResponse) => void): this;
-    onSuccess(handler: (response: iComResponse) => void): this;
+    onError(handler: (this: this, response: iComResponse) => void): this;
+    onSuccess(handler: (this: this, response: iComResponse) => void): this;
 }

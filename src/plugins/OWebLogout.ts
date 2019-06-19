@@ -2,6 +2,7 @@ import OWebApp from "../OWebApp";
 import {iComResponse} from "../OWebCom";
 import OWebEvent from "../OWebEvent";
 import Utils from "../utils/Utils";
+import OWebCom from "../OWebCom";
 
 export default class OWebLogout extends OWebEvent {
 
@@ -13,11 +14,11 @@ export default class OWebLogout extends OWebEvent {
 		super();
 	}
 
-	onError(handler: (response: iComResponse) => void): this {
+	onError(handler: (this: this, response: iComResponse) => void): this {
 		return this.on(OWebLogout.EVT_LOGOUT_ERROR, handler);
 	}
 
-	onSuccess(handler: (response: iComResponse) => void): this {
+	onSuccess(handler: (this: this, response: iComResponse) => void): this {
 		return this.on(OWebLogout.EVT_LOGOUT_SUCCESS, handler);
 	}
 

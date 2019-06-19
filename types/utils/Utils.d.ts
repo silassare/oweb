@@ -20,6 +20,10 @@ declare let Utils: {
     } | T[], fn: (value: T, key: any) => void) => void;
     math: {
         numberFormat: (x: string | number, dec?: number, decimalSep?: string, digitsSep?: string) => string;
+        gt: (x: number, y: number, eq?: boolean) => boolean;
+        lt: (x: number, y: number, eq?: boolean) => boolean;
+        between: (x: number, a: number, b: number, eq?: boolean) => boolean;
+        isRange: (a: number, b: number) => boolean;
     };
     isValidAge: (day: number, month: number, year: number, minAge: number, maxAge: number) => boolean;
     buildQueryString: (object: object, prefix: string) => string;

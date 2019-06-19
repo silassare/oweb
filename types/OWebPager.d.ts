@@ -61,9 +61,9 @@ export default class OWebPager extends OWebEvent {
     static readonly SELF: string;
     static readonly EVT_PAGE_CHANGE: string;
     private readonly _pages;
-    private _active_page;
     private _routes_cache;
     private _routes_flattened;
+    private _active_page;
     private _active_route?;
     /**
      * @param app_context The app context.
@@ -116,15 +116,9 @@ export default class OWebPager extends OWebEvent {
     /**
      * Helper to set the active route.
      *
+     * @param page
      * @param route
      * @private
      */
-    private _setActiveRoute;
-    /**
-     * Helper to set the active page.
-     *
-     * @param page
-     * @private
-     */
-    private _setActivePage;
+    private _setActive;
 }

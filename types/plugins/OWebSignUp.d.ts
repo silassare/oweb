@@ -14,8 +14,8 @@ export default class OWebSignUp extends OWebEvent {
     stepStart(form: HTMLFormElement): void;
     stepValidate(form: HTMLFormElement): void;
     stepEnd(form: HTMLFormElement): false | undefined;
-    onError(handler: (response: iComResponse) => void): this;
-    onNextStep(handler: (response: iComResponse, step: number) => void): this;
-    onSuccess(handler: (response: iComResponse) => void): this;
+    onError(handler: (this: this, response: iComResponse) => void): this;
+    onNextStep(handler: (this: this, response: iComResponse, step: number) => void): this;
+    onSuccess(handler: (this: this, response: iComResponse) => void): this;
     _sendForm(form: HTMLFormElement, data: any, next_step?: number): void;
 }

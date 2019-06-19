@@ -31,7 +31,7 @@ export default class OWebFormValidator {
 		let m         = this;
 		this.form     = form;
 		this.formData = new FormData(this.form);
-		let fo        = this.form.querySelectorAll("[data-oweb-form-v]");// return NodeList not Array of node (ex: in Firefox)
+		let fo        = this.form.querySelectorAll("[data-oweb-form-v]");// returns NodeList not Array of node (ex: in Firefox)
 
 		(Utils.isArray(fo) ? fo : Utils.toArray(fo)).forEach((field) => {
 			let name           = field.getAttribute("name"),
@@ -154,7 +154,7 @@ export default class OWebFormValidator {
 	}
 
 	/**
-	 * Run form validation.
+	 * Runs form validation.
 	 */
 	validate(): boolean {
 		let context                    = this,

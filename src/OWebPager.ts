@@ -85,9 +85,9 @@ export default class OWebPager extends OWebEvent {
 	static readonly EVT_PAGE_CHANGE = Utils.id();
 
 	private readonly _pages: { [key: string]: iPage } = {};
-	private _active_page: iPage | undefined;
 	private _routes_cache: tPageRoute[]               = [];
 	private _routes_flattened: tPageRouteFull[]       = [];
+	private _active_page: iPage | undefined;
 	private _active_route?: tPageRouteFull;
 
 	/**
@@ -224,7 +224,7 @@ export default class OWebPager extends OWebEvent {
 
 			page.onOpen(routeContext, route);
 
-			!routeContext.stopped() && ctx._setActivePage(page)._setActiveRoute(route);
+			!routeContext.stopped() && ctx._setActive(page, route);
 		});
 
 		return this;
@@ -233,44 +233,33 @@ export default class OWebPager extends OWebEvent {
 	/**
 	 * Helper to set the active route.
 	 *
+	 * @param page
 	 * @param route
 	 * @private
 	 */
-	private _setActiveRoute(route: tPageRouteFull): this {
-		let list = this._routes_flattened;
+	private _setActive(page: iPage, route: tPageRouteFull): this {
+		let current_page = this._active_page,
+			app          = this.app_context;
 
-		for (let i = 0; i < list.length; i++) {
-			let c = list[i];
+		for (let i = 0; i < this._routes_flattened.length; i++) {
+			let c = this._routes_flattened[i];
 
 			c.active       = route.id === c.id;
 			c.active_child = !c.active && _isParentOf(c, route);
 		}
 
-		wDoc.title = this.app_context.i18n.toHuman(route.title.length ? route.title : this.app_context.getAppName());
-
+		this._active_page  = page;
 		this._active_route = route;
+		wDoc.title         = app.i18n.toHuman(route.title.length ? route.title : app.getAppName());
 
-		console.log(`[OWebPager] active route ->`, this._active_route);
-
-		return this;
-	}
-
-	/**
-	 * Helper to set the active page.
-	 *
-	 * @param page
-	 * @private
-	 */
-	private _setActivePage(page: iPage): this {
-		let old_page = this._active_page;
-
-		if (old_page !== page) {
-			console.log(`[OWebPager] page changing ->`, page, old_page);
-			this._active_page = page;
-			this.trigger(OWebPager.EVT_PAGE_CHANGE, [old_page, page]);
+		if (current_page !== page) {
+			console.log(`[OWebPager] page change ->`, current_page, page);
+			this.trigger(OWebPager.EVT_PAGE_CHANGE, [current_page, page]);
 		} else {
-			console.log(`[OWebPager] same page ->`, old_page, page);
+			console.log(`[OWebPager] same page ->`, current_page, page);
 		}
+
+		console.log(`[OWebPager] active route ->`, route);
 
 		return this;
 	}

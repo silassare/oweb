@@ -81,12 +81,13 @@ export declare type tServiceGetRelationSuccess<T> = (response: iServiceGetRelati
 export declare type tServiceGetRelationItemsSuccess<T> = (response: iServiceGetRelationItemsResponse<T>, fromCache: boolean) => void;
 export declare type tServiceFail = (response: iComResponse) => void;
 export declare type tServiceRequestOptions = {
-    max?: number;
-    page?: number;
+    data?: any;
     filters?: any;
     relations?: string;
     collection?: string;
     order_by?: string;
+    max?: number;
+    page?: number;
 };
 export default class OWebService<T> {
     protected readonly app_context: OWebApp;
@@ -132,7 +133,7 @@ export default class OWebService<T> {
      */
     add(formData: any, success: tServiceAddSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
     /**
-     * Delete the entity with the given id.
+     * Deletes the entity with the given id.
      *
      * @param id The entity id.
      * @param success
@@ -141,7 +142,7 @@ export default class OWebService<T> {
      */
     delete(id: string, success: tServiceDeleteSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
     /**
-     * Update the entity with the given id.
+     * Updates the entity with the given id.
      *
      * @param id The entity id.
      * @param formData
@@ -151,7 +152,7 @@ export default class OWebService<T> {
      */
     update(id: string, formData: any, success: tServiceUpdateSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
     /**
-     * Delete all entities.
+     * Deletes all entities.
      *
      * @param options
      * @param success
@@ -160,7 +161,7 @@ export default class OWebService<T> {
      */
     deleteAll(options: tServiceRequestOptions, success: tServiceDeleteAllSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
     /**
-     * Update all entities.
+     * Updates all entities.
      *
      * @param options
      * @param formData

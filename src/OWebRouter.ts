@@ -120,7 +120,7 @@ export class OWebRoute {
 	}
 
 	/**
-	 * Check if a given pathname match this route.
+	 * Checks if a given pathname match this route.
 	 *
 	 * @param pathname
 	 */
@@ -642,7 +642,7 @@ export default class OWebRouter {
 		while (el && "A" !== el.nodeName.toUpperCase()) el = <any>el.parentNode;
 		if (!el || "A" !== el.nodeName.toUpperCase()) return;
 
-		// check if link is inside an svg
+		// we check if link is inside an svg
 		// in this case, both href and target are always inside an object
 		let svg = (typeof (el as any).href === "object") && (el as any).href.constructor.name === "SVGAnimatedString";
 
@@ -655,10 +655,10 @@ export default class OWebRouter {
 		let link = el.getAttribute("href");
 		if (!this._hashMode && samePath(el as any) && ((el as any).hash || "#" === link)) return;
 
-		// Check for mailto: in the href
+		// we check for mailto: in the href
 		if (link && link.indexOf("mailto:") > -1) return;
 
-		// check target
+		// we check target
 		// svg target is an object and its desired value is in .baseVal property
 		if (svg ? (el as any).target.baseVal : (el as any).target) return;
 

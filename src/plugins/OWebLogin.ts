@@ -41,11 +41,11 @@ export default class OWebLogin extends OWebEvent {
 		}
 	}
 
-	onError(handler: (response: iComResponse) => void): this {
+	onError(handler: (this: this, response: iComResponse) => void): this {
 		return this.on(OWebLogin.EVT_LOGIN_ERROR, handler);
 	}
 
-	onSuccess(handler: (response: iComResponse) => void): this {
+	onSuccess(handler: (this: this, response: iComResponse) => void): this {
 		return this.on(OWebLogin.EVT_LOGIN_SUCCESS, handler);
 	}
 

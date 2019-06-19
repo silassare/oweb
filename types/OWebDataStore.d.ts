@@ -23,7 +23,7 @@ export default class OWebDataStore extends OWebEvent {
      */
     load(key: string | RegExp): any;
     /**
-     * Remove data with the given key.
+     * Removes data with the given key.
      *
      * When the key is a regexp all data with a key name that match the given
      * regexp will be removed.
@@ -40,7 +40,7 @@ export default class OWebDataStore extends OWebEvent {
      *
      * @param cb
      */
-    onClear(cb: () => void): this;
+    onClear(cb: (this: this) => void): this;
     /**
      * Helper to make data store persistent.
      *

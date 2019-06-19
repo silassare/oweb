@@ -38,11 +38,11 @@ export default class OWebPassword extends OWebEvent {
 		}, true);
 	}
 
-	onError(handler: (response: iComResponse) => void): this {
+	onError(handler: (this: this, response: iComResponse) => void): this {
 		return this.on(OWebPassword.EVT_PASS_EDIT_ERROR, handler);
 	}
 
-	onSuccess(handler: (response: iComResponse) => void): this {
+	onSuccess(handler: (this: this, response: iComResponse) => void): this {
 		return this.on(OWebPassword.EVT_PASS_EDIT_SUCCESS, handler);
 	}
 };

@@ -75,7 +75,7 @@ export default class OWebFormValidator {
      */
     getErrors(): tFormErrorMap;
     /**
-     * Run form validation.
+     * Runs form validation.
      */
     validate(): boolean;
     /**

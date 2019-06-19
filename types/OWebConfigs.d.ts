@@ -13,19 +13,19 @@ export default class OWebConfigs extends OWebEvent {
     private readonly _tag_name;
     constructor(app_context: OWebApp, configs: tConfigList);
     /**
-     * Loads config list.
+     * Load config list.
      *
      * @param configs
      */
     loadConfigs(configs: tConfigList): this;
     /**
-     * Reset a given config to its default value.
+     * Resets a given config to its default value.
      *
      * @param config
      */
     resetToDefault(config: string): this;
     /**
-     * Reset all configs to their default values.
+     * Resets all configs to their default values.
      *
      * @param confirm_first When true a confirm will request will be sent to the user.
      */
@@ -37,14 +37,14 @@ export default class OWebConfigs extends OWebEvent {
      */
     get(config: string): any;
     /**
-     * Update a given config with the given value.
+     * Updates a given config with the given value.
      *
      * @param config The config name.
      * @param value The new value.
      */
     set(config: string, value: any): this;
     /**
-     * Loads all saved configs.
+     * Load all saved configs.
      *
      * @private
      */
@@ -58,21 +58,21 @@ export default class OWebConfigs extends OWebEvent {
      */
     private _set;
     /**
-     * Remove prefix and returns real config name.
+     * Removes prefix and returns real config name.
      *
      * @param config
      * @private
      */
     private _realConfigName;
     /**
-     * Check if the config is a public config name.
+     * Checks if the config is a public config name.
      *
      * @param config
      * @private
      */
     private _isPublic;
     /**
-     * Check if the config exists.
+     * Checks if the config exists.
      *
      * @param config
      * @private

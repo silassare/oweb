@@ -7,7 +7,7 @@ export default class OWebLogout extends OWebEvent {
     static readonly EVT_LOGOUT_ERROR: string;
     static readonly EVT_LOGOUT_SUCCESS: string;
     constructor(app_context: OWebApp);
-    onError(handler: (response: iComResponse) => void): this;
-    onSuccess(handler: (response: iComResponse) => void): this;
+    onError(handler: (this: this, response: iComResponse) => void): this;
+    onSuccess(handler: (this: this, response: iComResponse) => void): this;
     logout(): void;
 }

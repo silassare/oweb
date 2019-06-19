@@ -23,7 +23,7 @@ declare const PathResolver: {
      */
     normalize: (path: string) => string;
     /**
-     * Check if a path is a relative path.
+     * Checks if a path is a relative path.
      * @param path
      */
     isRelative: (path: any) => boolean;

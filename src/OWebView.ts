@@ -23,7 +23,7 @@ export default class OWebView extends OWebEvent {
 	}
 
 	/**
-	 * Check if the view is frozen.
+	 * Checks if the view is frozen.
 	 */
 	isFrozen(): boolean {
 		return Boolean(this._freeze_counter);
@@ -81,7 +81,7 @@ export default class OWebView extends OWebEvent {
 	 *
 	 * @param handler
 	 */
-	onFreeze(handler: () => void) {
+	onFreeze(handler: (this: this) => void) {
 		return this.on(OWebView.EVT_VIEW_FREEZE, handler);
 	}
 
@@ -90,7 +90,7 @@ export default class OWebView extends OWebEvent {
 	 *
 	 * @param handler
 	 */
-	onUnFreeze(handler: () => void) {
+	onUnFreeze(handler: (this: this) => void) {
 		return this.on(OWebView.EVT_VIEW_UNFREEZE, handler);
 	}
 
@@ -99,7 +99,7 @@ export default class OWebView extends OWebEvent {
 	 *
 	 * @param handler
 	 */
-	onDialog(handler: (dialog: tViewDialog, can_use_alert: boolean) => void) {
+	onDialog(handler: (this: this, dialog: tViewDialog, can_use_alert: boolean) => void) {
 		return this.on(OWebView.EVT_VIEW_DIALOG, handler);
 	}
 }

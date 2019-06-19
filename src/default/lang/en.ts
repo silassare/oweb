@@ -1,4 +1,4 @@
-import {tLangDefinition} from "../../OWebLang";
+import {tI18nDefinition} from "../../OWebI18n";
 
 export default {
 	"OZ_ERROR_REQUEST_FAIL"               : "Error: The request failed.",
@@ -7,7 +7,7 @@ export default {
 	"OZ_ERROR_YOU_ARE_NOT_ADMIN"          : "Error: You are not an administrator.",
 	"OZ_ERROR_NOT_FOUND"                  : "Error: Resource not found.",
 	"OZ_ERROR_SHOULD_ACCEPT_CGU"          : "You must accept the Terms of Use.",
-	"OZ_IMAGE_NOT_VALID"                  : "Invalid image file. Please choose an image of type png, jpg, jpeg, or gif.",
+	"OZ_IMAGE_NOT_VALID"                  : "Invalid image file. Please choose an image of type png, jpeg, or gif.",
 	"OZ_PROFILE_PIC_SET_TO_DEFAULT"       : "Default profile picture chosen.",
 	"OZ_PROFILE_PIC_CHANGED"              : "Profile picture change.",
 	"OZ_FORM_CONTAINS_EMPTY_FIELD"        : "The `{label}` field is empty.",
@@ -60,4 +60,4 @@ export default {
 	"OO_TIME_MONTH_NAMES_SHORT": "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec",
 	"OO_TIME_MONTH_NAMES_FULL" : "January,February,March,April,May,June,July,August,September,October,November,December"
 
-} as tLangDefinition;
+} as tI18nDefinition;

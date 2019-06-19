@@ -1,3 +1,3 @@
-// loads all default
+// load all default
 import "./fv";
 import "./lang/index";

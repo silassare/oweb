@@ -183,6 +183,18 @@ let math = {
 		}
 
 		return a.join("");
+	},
+	gt          : function (x: number, y: number, eq: boolean = false): boolean {
+		return eq ? x >= y : x > y;
+	},
+	lt          : function (x: number, y: number, eq: boolean = false): boolean {
+		return eq ? x <= y : x < y;
+	},
+	between     : function (x: number, a: number, b: number, eq: boolean = false): boolean {
+		return eq ? (x >= a && x <= b) : (x > a && x < b);
+	},
+	isRange     : function (a: number, b: number): boolean {
+		return typeof a === "number" && typeof b === "number" && a < b;
 	}
 };
 
@@ -306,7 +318,7 @@ let isValidAge = (day: number, month: number, year: number, minAge: number, maxA
 
 	// if required, verify the current date is LATER than the incoming date.
 	if (minAge !== undefined || maxAge !== undefined) {
-		// get current year
+		// we get current year
 		let currentYear = (new Date).getFullYear(),
 			age         = currentYear - year;
 

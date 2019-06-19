@@ -1,4 +1,4 @@
-import {tLangDefinition} from "../../OWebLang";
+import {tI18nDefinition} from "../../OWebI18n";
 
 export default {
 	// ---------START NEW
@@ -11,7 +11,7 @@ export default {
 
 	// ---------END NEW
 
-	"OZ_IMAGE_NOT_VALID"           : "Fichier image invalide. Veuillez choisir une image de type png, jpg, jpeg, ou gif.",
+	"OZ_IMAGE_NOT_VALID"           : "Fichier image invalide. Veuillez choisir une image de type png, jpeg, ou gif.",
 	"OZ_PROFILE_PIC_SET_TO_DEFAULT": "Photo de profil par défaut choisie.",
 	"OZ_PROFILE_PIC_CHANGED"       : "Photo de profil changer.",
 	"OZ_FORM_CONTAINS_EMPTY_FIELD" : "Le champ `{label}` est vide.",
@@ -69,4 +69,4 @@ export default {
 	"OO_TIME_MONTH_NAMES_SHORT": "janv.,f\xe9vr.,mars,avr.,mai,juin,juil.,ao\xfbt,sept.,oct.,nov.,d\xe9c.",
 	"OO_TIME_MONTH_NAMES_FULL" : "janvier,f\xe9vrier,mars,avril,mai,juin,juillet,ao\xfbt,septembre,octobre,novembre,d\xe9cembre"
 
-} as tLangDefinition;
+} as tI18nDefinition;

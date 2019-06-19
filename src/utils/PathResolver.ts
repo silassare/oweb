@@ -92,7 +92,7 @@ const PathResolver = {
 	},
 
 	/**
-	 * Check if a path is a relative path.
+	 * Checks if a path is a relative path.
 	 * @param path
 	 */
 	isRelative: function (path: any): boolean {

@@ -7,9 +7,9 @@ export default class OWebEvent {
      * @param event The event name.
      * @param handler The event handler function.
      */
-    on(event: string, handler: Function): this;
+    on(event: string, handler: (this: this, ...args: any[]) => void | boolean): this;
     /**
-     * Remove event handler.
+     * Removes event handler.
      *
      * @param event The event name.
      * @param handler The event handler function.
@@ -23,5 +23,5 @@ export default class OWebEvent {
      * @param cancelable When true the event will stop when a handler returns false.
      * @param callback The callback
      */
-    protected trigger(event: string, data?: Array<any>, cancelable?: boolean, callback?: Function): this;
+    protected trigger(event: string, data?: Array<any>, cancelable?: boolean, callback?: (this: this) => void): this;
 }

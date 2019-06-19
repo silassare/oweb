@@ -8,7 +8,7 @@ export default class OWebFS {
 	static readonly OFA_MIME_TYPE = "text/x-ozone-file-alias";
 
 	/**
-	 * Check for file object.
+	 * Checks for file object.
 	 *
 	 * @param f
 	 */
@@ -17,7 +17,7 @@ export default class OWebFS {
 	}
 
 	/**
-	 * Check for marked file object.
+	 * Checks for marked file object.
 	 * @param f
 	 */
 	static isMarkedFile(f: any): boolean {
@@ -25,7 +25,7 @@ export default class OWebFS {
 	}
 
 	/**
-	 * Create O'Zone file alias.
+	 * Creates O'Zone file alias.
 	 *
 	 * @param info
 	 */

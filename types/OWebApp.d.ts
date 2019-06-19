@@ -4,16 +4,35 @@ import OWebCurrentUser from "./OWebCurrentUser";
 import OWebDataStore from "./OWebDataStore";
 import OWebEvent from "./OWebEvent";
 import OWebFormValidator from "./OWebFormValidator";
-import OWebRouter from "./OWebRouter";
+import OWebRouter, { tRouteTarget } from "./OWebRouter";
 import OWebService from "./OWebService";
 import OWebUrl, { tUrlList } from "./OWebUrl";
-import OWebView from "./OWebView";
-import OWebLang from "./OWebLang";
+import OWebView, { tViewDialog } from "./OWebView";
+import OWebI18n from "./OWebI18n";
+import OWebPager, { iPage } from "./OWebPager";
+export interface iAppState {
+    ready: boolean;
+    splash: boolean;
+    frozen: boolean;
+    show_nav: boolean;
+    current_page?: iPage;
+    dialogs: tViewDialog[];
+}
+export interface iAppStateOptions {
+    ready?: boolean;
+    splash?: boolean;
+    frozen?: boolean;
+    show_nav?: boolean;
+    current_page?: iPage;
+    dialogs?: tViewDialog[];
+}
 export default abstract class OWebApp extends OWebEvent {
-    private readonly app_name;
+    private readonly name;
     static readonly SELF: string;
     static readonly EVT_APP_READY: string;
+    readonly state: iAppState;
     readonly view: OWebView;
+    readonly pager: OWebPager;
     readonly ls: OWebDataStore;
     readonly router: OWebRouter;
     readonly user: OWebCurrentUser;
@@ -22,21 +41,22 @@ export default abstract class OWebApp extends OWebEvent {
     readonly services: {
         [key: string]: OWebService<any>;
     };
-    readonly i18n: OWebLang;
+    readonly i18n: OWebI18n;
     /**
      * OWebApp constructor.
      *
-     * @param app_name The app name.
-     * @param app_config_list The app config.
-     * @param app_url_list The app url list.
+     * @param name The app name.
+     * @param configs The app config.
+     * @param urls The app url list.
+     * @param state The app state.
      */
-    protected constructor(app_name: string, app_config_list: tConfigList, app_url_list: tUrlList);
+    protected constructor(name: string, configs: tConfigList, urls: tUrlList, state?: iAppStateOptions);
     /**
      * App name getter.
      */
     getAppName(): string;
     /**
-     * Check if we are running in mobile app.
+     * Checks if we are running in mobile app.
      */
     isMobileApp(): boolean;
     /**
@@ -85,15 +105,15 @@ export default abstract class OWebApp extends OWebEvent {
      */
     closeApp(): void;
     /**
-     * Check if user session is active.
+     * Checks if user session is active.
      */
     sessionActive(): boolean;
     /**
-     * Check if the current user has been authenticated.
+     * Checks if the current user has been authenticated.
      */
     userVerified(): boolean;
     /**
-     * Sends request and return promise.
+     * Send request and return promise.
      *
      * @param method The request method.
      * @param url The request url.
@@ -111,11 +131,21 @@ export default abstract class OWebApp extends OWebEvent {
      * @param fail Request fail callback.
      * @param freeze Force app view to be frozen.
      */
-    request(method: string, url: string, data: any, success?: (response: iComResponse) => void, fail?: (response: iComResponse) => void, freeze?: boolean): OWebCom;
+    request(method: string, url: string, data: any, success?: (this: OWebCom, response: iComResponse) => void, fail?: (this: OWebCom, response: iComResponse) => void, freeze?: boolean): OWebCom;
+    /**
+     * Register handler for OWebApp.EVT_APP_READY event
+     *
+     * @param handler
+     */
+    onReady(handler: (this: this) => void | boolean): this;
     /**
      * Called when app should show the home page.
      */
     abstract showHomePage(): this;
+    /**
+     * Called when the requested route was not found.
+     */
+    abstract showNotFound(target: tRouteTarget): this;
     /**
      * Called when app should show the login page.
      */

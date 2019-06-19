@@ -1,4 +1,3 @@
-import OWebLang from "../OWebLang";
 /**
  * D The day of the week in three letters
  * l (L lowercase) The entire day of the week 0 to 6
@@ -21,7 +20,6 @@ import OWebLang from "../OWebLang";
  * ii The minutes 00, 01,..., 59
  * ss The seconds 00, 01,..., 59
  */
-import Utils from "../utils/Utils";
 import OWebApp from "../OWebApp";
 
 export type tDateValue = Date | number | string;
@@ -144,12 +142,3 @@ export default class OWebDate {
 		return Number(String(Date.now()).slice(0, -3));
 	}
 };
-
-OWebLang.addPlugin("oweb_date", function (o) {
-	if (o.data["owebDate"]) {
-		let t = new OWebDate(o.context, o.data["owebDate"]);
-		return Utils.assign(o.data, t.describe());
-	}
-
-	return o.data;
-});

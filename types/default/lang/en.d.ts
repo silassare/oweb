@@ -1,3 +1,3 @@
-import { tLangDefinition } from "../../OWebLang";
-declare const _default: tLangDefinition;
+import { tI18nDefinition } from "../../OWebI18n";
+declare const _default: tI18nDefinition;
 export default _default;

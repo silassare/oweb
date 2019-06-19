@@ -1,7 +1,7 @@
 import OWebFormValidator from "../OWebFormValidator";
 import OWebDate from "../plugins/OWebDate";
 import Utils from "../utils/Utils";
-import {OTelInput} from "o-tel-input";
+import OTelInput from "o-tel-input";
 
 OWebFormValidator.addFieldValidators({
 	"code"      : (value: any, name: string, fv: OWebFormValidator) => {
@@ -57,13 +57,13 @@ OWebFormValidator.addFieldValidators({
 	"phone"     : (value: any, name: string, fv: OWebFormValidator) => {
 		fv.assert(OTelInput.isPhoneNumberPossible(value), "OZ_FIELD_PHONE_INVALID");
 
-		let t     = OTelInput(null, {"number": value});
+		let t     = new OTelInput({"number": value});
 		let phone = t.getInput();
-		let cc2   = t.getCurrentData().cc2;
+		let cc2   = t.getCurrentCountry().cc2;
 
 		fv.setField(name, phone.replace(/[ -]/g, ""));
 
-		// set only if it is not already set
+		// we set only if it is not already done
 		// we may have multiple phone field or a cc2 field
 		if (!fv.getField("cc2")) {
 			fv.setField("cc2", cc2);

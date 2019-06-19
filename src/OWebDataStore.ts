@@ -70,7 +70,7 @@ export default class OWebDataStore extends OWebEvent {
 	}
 
 	/**
-	 * Remove data with the given key.
+	 * Removes data with the given key.
 	 *
 	 * When the key is a regexp all data with a key name that match the given
 	 * regexp will be removed.
@@ -118,7 +118,7 @@ export default class OWebDataStore extends OWebEvent {
 	 *
 	 * @param cb
 	 */
-	onClear(cb: () => void) {
+	onClear(cb: (this: this) => void) {
 		return this.on(OWebDataStore.EVT_DATA_STORE_CLEAR, cb);
 	}
 

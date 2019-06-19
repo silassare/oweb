@@ -60,7 +60,7 @@ export declare class OWebRoute {
      */
     getAction(): tRouteAction;
     /**
-     * Check if a given pathname match this route.
+     * Checks if a given pathname match this route.
      *
      * @param pathname
      */

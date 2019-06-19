@@ -115,7 +115,7 @@ export default class OWebCom extends OWebEvent {
 		let headers: any        = this._options.headers = this._options.headers || {};
 		headers[api_key_header] = this.app_context.configs.get("OZ_API_KEY");
 
-		// update request method
+		// we update request method
 		if (~replace_methods.indexOf(real_method)) {
 			headers[real_method_header] = real_method;
 			this._options.method        = "POST";
@@ -197,7 +197,7 @@ export default class OWebCom extends OWebEvent {
 	}
 
 	/**
-	 * Sends request.
+	 * Send request.
 	 */
 	send() {
 		let m = this;

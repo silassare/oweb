@@ -8,7 +8,7 @@ import OWebEvent from "./OWebEvent";
 import OWebFormValidator from "./OWebFormValidator";
 import OWebFS from "./OWebFS";
 import OWebKeyStorage from "./OWebKeyStorage";
-import OWebLang from "./OWebLang";
+import OWebI18n from "./OWebI18n";
 import OWebRouter, {OWebRoute, OWebRouteContext} from "./OWebRouter";
 import OWebService from "./OWebService";
 import OWebUrl from "./OWebUrl";
@@ -24,8 +24,8 @@ import OWebTNet from "./plugins/OWebTNet";
 import PathResolver from "./utils/PathResolver";
 import scriptLoader from "./utils/scriptLoader";
 import Utils from "./utils/Utils";
-import OWebVueMixin from "./mixins/index";
 import OWebPageBase from "./OWebPageBase";
+import owebMixins from "./mixins";
 
 export {tConfigList} from "./OWebConfigs";
 
@@ -35,9 +35,9 @@ export {tComOptions, iComResponse} from "./OWebCom";
 
 export {tFormValidator} from "./OWebFormValidator";
 
-export {tFileAliasInfo} from "./OWebFS";
+export {tFileAliasInfo, tFileQuality} from "./OWebFS";
 
-export {tLangDefinition} from "./OWebLang";
+export {tI18nData, tI18nDefinition, tI18nPluralize} from "./OWebI18n";
 
 export {
 	tRoutePath,
@@ -46,7 +46,9 @@ export {
 	tRouteStateItem,
 	tRouteAction,
 	tRouteInfo,
-	tRouteTokensMap
+	tRouteTarget,
+	tRouteTokensMap,
+	iRouteDispatcher
 } from "./OWebRouter";
 
 export {tViewDialog} from "./OWebView";
@@ -91,7 +93,7 @@ export {
 	OWebFormValidator,
 	OWebFS,
 	OWebKeyStorage,
-	OWebLang,
+	OWebI18n,
 	OWebRouter,
 	OWebRoute,
 	OWebRouteContext,
@@ -113,7 +115,7 @@ export {
 
 // Mixins
 
-	OWebVueMixin,
+	owebMixins,
 
 // Utilities
 

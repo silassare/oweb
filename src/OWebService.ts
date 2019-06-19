@@ -94,12 +94,13 @@ export type tServiceGetRelationItemsSuccess<T> = (response: iServiceGetRelationI
 export type tServiceFail = (response: iComResponse) => void;
 
 export type tServiceRequestOptions = {
-	max?: number,
-	page?: number,
+	data?: any,
 	filters?: any,
 	relations?: string,
 	collection?: string,
-	order_by?: string
+	order_by?: string,
+	max?: number,
+	page?: number
 };
 
 const uri_service         = ":api_url/:service_name",
@@ -179,15 +180,16 @@ export default class OWebService<T> {
 	 * @param freeze
 	 */
 	add(formData: any, success: tServiceAddSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
-		let url = this.getServiceURI();
+		let url = this.getServiceURI(),
+			request_data: tServiceRequestOptions = {data: formData};
 
-		return this.app_context.request("POST", url, formData, (response: iComResponse) => {
+		return this.app_context.request("POST", url, request_data, (response: iComResponse) => {
 			success(response as any);
 		}, fail, freeze);
 	}
 
 	/**
-	 * Delete the entity with the given id.
+	 * Deletes the entity with the given id.
 	 *
 	 * @param id The entity id.
 	 * @param success
@@ -205,7 +207,7 @@ export default class OWebService<T> {
 	}
 
 	/**
-	 * Update the entity with the given id.
+	 * Updates the entity with the given id.
 	 *
 	 * @param id The entity id.
 	 * @param formData
@@ -214,15 +216,16 @@ export default class OWebService<T> {
 	 * @param freeze
 	 */
 	update(id: string, formData: any, success: tServiceUpdateSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
-		let url = this.getItemURI(id);
+		let url = this.getItemURI(id),
+			request_data: tServiceRequestOptions = {data: formData};
 
-		return this.app_context.request("PATCH", url, formData, (response: iComResponse) => {
+		return this.app_context.request("PATCH", url, request_data, (response: iComResponse) => {
 			success(response as any);
 		}, fail, freeze);
 	}
 
 	/**
-	 * Delete all entities.
+	 * Deletes all entities.
 	 *
 	 * @param options
 	 * @param success
@@ -251,7 +254,7 @@ export default class OWebService<T> {
 	}
 
 	/**
-	 * Update all entities.
+	 * Updates all entities.
 	 *
 	 * @param options
 	 * @param formData
@@ -260,10 +263,9 @@ export default class OWebService<T> {
 	 * @param freeze
 	 */
 	updateAll(options: tServiceRequestOptions, formData: any, success: tServiceUpdateAllSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
-		let url                 = this.getServiceURI(),
-			filters             = options.filters,
-			request_data: tServiceRequestOptions
-				& { data: any } = {data: formData};
+		let url                                  = this.getServiceURI(),
+			filters                              = options.filters,
+			request_data: tServiceRequestOptions = {data: formData};
 
 		if (typeof options["max"] === "number") {// will be ignored by O'Zone
 			request_data["max"] = options["max"];

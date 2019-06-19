@@ -9,7 +9,7 @@ export default class OWebLogin extends OWebEvent {
     constructor(app_context: OWebApp);
     loginWithEmail(form: HTMLFormElement): void;
     loginWithPhone(form: HTMLFormElement): void;
-    onError(handler: (response: iComResponse) => void): this;
-    onSuccess(handler: (response: iComResponse) => void): this;
+    onError(handler: (this: this, response: iComResponse) => void): this;
+    onSuccess(handler: (this: this, response: iComResponse) => void): this;
     _tryLogin(data: any): void;
 }

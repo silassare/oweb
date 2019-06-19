@@ -6,18 +6,18 @@ export declare type tFileAliasInfo = {
 export default class OWebFS {
     static readonly OFA_MIME_TYPE: string;
     /**
-     * Check for file object.
+     * Checks for file object.
      *
      * @param f
      */
     static isFile(f: any): boolean;
     /**
-     * Check for marked file object.
+     * Checks for marked file object.
      * @param f
      */
     static isMarkedFile(f: any): boolean;
     /**
-     * Create O'Zone file alias.
+     * Creates O'Zone file alias.
      *
      * @param info
      */

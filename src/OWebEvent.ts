@@ -12,7 +12,7 @@ export default class OWebEvent {
 	 * @param event The event name.
 	 * @param handler The event handler function.
 	 */
-	on(event: string, handler: Function) {
+	on(event: string, handler: (this: this, ...args: any[]) => void | boolean) {
 		if (!this._app_events[event]) {
 			this._app_events[event] = [];
 		}
@@ -27,7 +27,7 @@ export default class OWebEvent {
 	}
 
 	/**
-	 * Remove event handler.
+	 * Removes event handler.
 	 *
 	 * @param event The event name.
 	 * @param handler The event handler function.
@@ -72,7 +72,7 @@ export default class OWebEvent {
 	 * @param cancelable When true the event will stop when a handler returns false.
 	 * @param callback The callback
 	 */
-	protected trigger(event: string, data: Array<any> = [], cancelable: boolean = false, callback?: Function) {
+	protected trigger(event: string, data: Array<any> = [], cancelable: boolean = false, callback?: (this: this) => void) {
 		let handlers = this._app_events[event] || [],
 			i        = -1,
 			canceled = false;
@@ -85,7 +85,7 @@ export default class OWebEvent {
 			}
 		}
 
-		callback && Utils.callback(callback, [canceled]);
+		callback && Utils.callback(callback, [canceled], this);
 
 		return this;
 	}
