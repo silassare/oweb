@@ -16,10 +16,10 @@ export declare type tPageRouteFull = tPageRoute & {
     readonly href: string;
     readonly parent?: tPageRouteFull;
     active: boolean;
-    active_child: boolean;
+    activeChild: boolean;
     show(): boolean;
 };
-export interface iPage {
+export interface iPage<Component> {
     /**
      * The page name getter.
      */
@@ -29,11 +29,15 @@ export interface iPage {
      */
     getRoutes(): tPageRoute[];
     /**
+     * The page component getter.
+     */
+    getComponent(): Component;
+    /**
      * Called once when registering the page.
      *
      * @param pager
      */
-    install(pager: OWebPager): this;
+    install(pager: OWebPager<Component>): this;
     /**
      * Does this page require a verified user for the requested page route.
      *
@@ -56,10 +60,10 @@ export interface iPage {
      */
     onClose(oldRoute: tPageRouteFull, newRoute: tPageRouteFull): void;
 }
-export default class OWebPager extends OWebEvent {
+export default class OWebPager<Component> extends OWebEvent {
     private readonly app_context;
     static readonly SELF: string;
-    static readonly EVT_PAGE_CHANGE: string;
+    static readonly EVT_PAGE_LOCATION_CHANGE: string;
     private readonly _pages;
     private _routes_cache;
     private _routes_flattened;
@@ -77,11 +81,11 @@ export default class OWebPager extends OWebEvent {
      * Returns the page with the given name.
      * @param name
      */
-    getPage(name: string): iPage;
+    getPage(name: string): iPage<Component>;
     /**
      * Returns the active page.
      */
-    getActivePage(): iPage;
+    getActivePage(): iPage<Component>;
     /**
      * Returns the active page route.
      */
@@ -95,7 +99,7 @@ export default class OWebPager extends OWebEvent {
      *
      * @param page
      */
-    registerPage(page: iPage): this;
+    registerPage(page: iPage<Component>): this;
     /**
      * Helpers to register page routes.
      *
@@ -121,4 +125,5 @@ export default class OWebPager extends OWebEvent {
      * @private
      */
     private _setActive;
+    onLocationChange(handler: (route: tPageRouteFull, page: iPage<Component>) => void): this;
 }

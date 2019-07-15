@@ -1,6 +1,6 @@
-import OWebApp from "./OWebApp";
-import OWebCom, { iComResponse } from "./OWebCom";
-import OWebKeyStorage from "./OWebKeyStorage";
+import OWebApp from './OWebApp';
+import OWebCom, { iComResponse } from './OWebCom';
+import OWebKeyStorage from './OWebKeyStorage';
 export interface iServiceAddResponse<T> extends iComResponse {
     data: {
         item: T;

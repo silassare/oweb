@@ -1,5 +1,4 @@
 import OWebEvent from "../src/OWebEvent";
-import OWebApp from "../src/OWebApp";
 export declare type tI18nDefinition = {
     [key: string]: any;
 };
@@ -14,14 +13,9 @@ export declare type tI18nOptions = {
     data?: tI18nData;
     pluralize?: tI18nPluralize;
 };
-export declare type tI18nPluralize = number | ((parts: string[]) => number);
+export declare type tI18nPluralize = number | ((data: tI18nData, parts: string[]) => number);
 export default class OWebI18n extends OWebEvent {
-    private app_context;
     defaultLangCode: string;
-    /**
-     * @param app_context The app context.
-     */
-    constructor(app_context: OWebApp);
     /**
      * Sets default i18n lang code.
      *

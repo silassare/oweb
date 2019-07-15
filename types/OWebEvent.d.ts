@@ -1,5 +1,5 @@
 export default class OWebEvent {
-    private _app_events;
+    private _events;
     protected constructor();
     /**
      * Register event handler.

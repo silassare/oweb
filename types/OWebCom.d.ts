@@ -1,5 +1,5 @@
-import OWebApp from "./OWebApp";
-import OWebEvent from "./OWebEvent";
+import OWebApp from './OWebApp';
+import OWebEvent from './OWebEvent';
 export interface iComResponse {
     error: number;
     msg: string;

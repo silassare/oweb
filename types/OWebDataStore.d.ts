@@ -1,5 +1,5 @@
-import OWebApp from "./OWebApp";
-import OWebEvent from "./OWebEvent";
+import OWebApp from './OWebApp';
+import OWebEvent from './OWebEvent';
 export default class OWebDataStore extends OWebEvent {
     private readonly _app_context;
     static readonly EVT_DATA_STORE_CLEAR: string;

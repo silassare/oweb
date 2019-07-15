@@ -1,17 +1,16 @@
-import OWebCom, {iComResponse} from "./OWebCom";
-import OWebConfigs, {tConfigList} from "./OWebConfigs";
+import OWebCom, { iComResponse } from "./OWebCom";
+import OWebConfigs, { tConfigList } from "./OWebConfigs";
 import OWebCurrentUser from "./OWebCurrentUser";
 import OWebDataStore from "./OWebDataStore";
 import OWebEvent from "./OWebEvent";
 import OWebFormValidator from "./OWebFormValidator";
-import OWebRouter, {tRouteTarget} from "./OWebRouter";
-import OWebService from "./OWebService";
-import OWebUrl, {tUrlList} from "./OWebUrl";
-import OWebView, {tViewDialog} from "./OWebView";
+import OWebRouter, { tRouteTarget } from "./OWebRouter";
+import OWebUrl, { tUrlList } from "./OWebUrl";
+import OWebView from "./OWebView";
 import OWebDate from "./plugins/OWebDate";
 import Utils from "./utils/Utils";
 import OWebI18n from "./OWebI18n";
-import OWebPager, {iPage} from "./OWebPager";
+import OWebPager from "./OWebPager";
 
 /**
  * @ignore
@@ -19,38 +18,19 @@ import OWebPager, {iPage} from "./OWebPager";
 const noop = () => {
 };
 
-export interface iAppState {
-	ready: boolean,
-	splash: boolean,
-	frozen: boolean,
-	show_nav: boolean,
-	current_page?: iPage,
-	dialogs: tViewDialog[]
-}
-
-export interface iAppStateOptions {
-	ready?: boolean,
-	splash?: boolean,
-	frozen?: boolean,
-	show_nav?: boolean,
-	current_page?: iPage,
-	dialogs?: tViewDialog[]
-}
 
 export default abstract class OWebApp extends OWebEvent {
 
-	static readonly SELF          = Utils.id();
+	static readonly SELF = Utils.id();
 	static readonly EVT_APP_READY = Utils.id();
 
-	readonly state: iAppState;
 	readonly view: OWebView;
-	readonly pager: OWebPager;
+	readonly pager: OWebPager<any>;
 	readonly ls: OWebDataStore;
 	readonly router: OWebRouter;
 	readonly user: OWebCurrentUser;
 	readonly configs: OWebConfigs;
 	readonly url: OWebUrl;
-	readonly services: { [key: string]: OWebService<any> } = {};
 	readonly i18n: OWebI18n;
 
 	/**
@@ -61,55 +41,25 @@ export default abstract class OWebApp extends OWebEvent {
 	 * @param urls The app url list.
 	 * @param state The app state.
 	 */
-	protected constructor(private readonly name: string, configs: tConfigList, urls: tUrlList, state: iAppStateOptions = ({} as iAppStateOptions)) {
+	protected constructor(private readonly name: string, configs: tConfigList, urls: tUrlList) {
 		super();
 
-		this.state = {
-			ready       : false,
-			frozen      : false,
-			splash      : true,
-			show_nav    : true,
-			current_page: undefined,
-			dialogs     : [],
-			...state
-		};
+		this.ls = new OWebDataStore(this);
+		this.configs = new OWebConfigs(this, configs);
+		this.url = new OWebUrl(this, urls);
+		this.user = new OWebCurrentUser(this);
+		this.view = new OWebView();
+		this.pager = new OWebPager(this);
+		this.i18n = new OWebI18n();
 
-		this.ls       = new OWebDataStore(this);
-		this.configs  = new OWebConfigs(this, configs);
-		this.url      = new OWebUrl(this, urls);
-		this.user     = new OWebCurrentUser(this);
-		this.view     = new OWebView();
-		this.pager    = new OWebPager(this);
-		this.i18n     = new OWebI18n(this);
-		let base_url  = this.configs.get("OW_APP_LOCAL_BASE_URL"),
-			hash_mode = false !== this.configs.get("OW_APP_ROUTER_HASH_MODE"),
-			m         = this;
-		this.router   = new OWebRouter(base_url, hash_mode);
+		let base_url = this.configs.get("OW_APP_LOCAL_BASE_URL"),
+			hash_mode = false !== this.configs.get("OW_APP_ROUTER_HASH_MODE");
+
+		this.router = new OWebRouter(base_url, hash_mode);
 
 		this.router.notFound(this.showNotFound.bind(this));
 
 		this.i18n.setDefaultLang(this.configs.get("OW_APP_DEFAULT_LANG"));
-
-		this.pager.on(OWebPager.EVT_PAGE_CHANGE, () => {
-			m.state.current_page = m.pager.getActivePage();
-		});
-
-		this.view.onFreeze(() => {
-			m.state.frozen = true;
-		}).onUnFreeze(() => {
-			m.state.frozen = false;
-		}).onDialog((dialog: tViewDialog, can_use_alert: boolean) => {
-
-			let {text, data} = dialog;
-
-			if (text && text.length) {
-				if (can_use_alert && m.isMobileApp()) {
-					alert(m.i18n.toHuman(text, data));
-				} else {
-					m.state.dialogs.push(dialog);
-				}
-			}
-		});
 	}
 
 	/**
@@ -132,33 +82,6 @@ export default abstract class OWebApp extends OWebEvent {
 	start(): this {
 		console.log("[OWebApp] app started!");
 		this.trigger(OWebApp.EVT_APP_READY);
-		return this;
-	}
-
-	/**
-	 * Returns registered service with a given name.
-	 *
-	 * @param service_name The service name.
-	 */
-	getService<T = any>(service_name: string): OWebService<T> | undefined {
-		return this.services[service_name];
-	}
-
-	/**
-	 * Register a new service.
-	 *
-	 * @param service The service object.
-	 */
-	registerService<T extends OWebService<any>>(service: T): this {
-
-		let service_name = service.getName();
-
-		if (this.services[service_name]) {
-			throw new Error(`A service with the name "${service_name}" already defined.`);
-		}
-
-		this.services[service_name] = service;
-
 		return this;
 	}
 
@@ -221,8 +144,8 @@ export default abstract class OWebApp extends OWebEvent {
 	 * Checks if user session is active.
 	 */
 	sessionActive(): boolean {
-		let now    = (new Date()).getTime();// milliseconds
-		let hour   = 60 * 60;// seconds
+		let now = (new Date()).getTime();// milliseconds
+		let hour = 60 * 60;// seconds
 		let expire = this.user.getSessionExpire() - hour;// seconds
 		return (expire * 1000) > now;
 	}
@@ -267,9 +190,9 @@ export default abstract class OWebApp extends OWebEvent {
 		}
 
 		let options = {
-			url        : url,
-			method     : method,
-			data       : data,
+			url: url,
+			method: method,
+			data: data,
 			badNewsShow: false
 		};
 
@@ -283,7 +206,7 @@ export default abstract class OWebApp extends OWebEvent {
 			success.call(com, response);
 			// }, 1000);
 		}).on(OWebCom.EVT_COM_REQUEST_ERROR, (response: iComResponse) => {
-			if (response["msg"] === "OZ_ERROR_YOU_ARE_NOT_ADMIN") {
+			if (response[ "msg" ] === "OZ_ERROR_YOU_ARE_NOT_ADMIN") {
 				app.destroyApp();
 			}
 
@@ -298,7 +221,7 @@ export default abstract class OWebApp extends OWebEvent {
 			}
 			let response: iComResponse = {
 				"error": 1,
-				"msg"  : "OZ_ERROR_REQUEST_FAIL",
+				"msg": "OZ_ERROR_REQUEST_FAIL",
 				"utime": OWebDate.timestamp()
 			};
 

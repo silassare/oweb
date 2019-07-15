@@ -1,6 +1,6 @@
 import OWebApp from "./OWebApp";
 import OWebEvent from "./OWebEvent";
-import OWebRouter, {OWebRouteContext, tRoutePath, tRoutePathOptions} from "./OWebRouter";
+import OWebRouter, { OWebRouteContext, tRoutePath, tRoutePathOptions } from "./OWebRouter";
 import Utils from "./utils/Utils";
 
 export type tPageRoute = {
@@ -19,11 +19,11 @@ export type tPageRouteFull = tPageRoute & {
 	readonly href: string,
 	readonly parent?: tPageRouteFull,
 	active: boolean,
-	active_child: boolean,
+	activeChild: boolean,
 	show(): boolean
 };
 
-export interface iPage {
+export interface iPage<Component> {
 	/**
 	 * The page name getter.
 	 */
@@ -35,11 +35,16 @@ export interface iPage {
 	getRoutes(): tPageRoute[];
 
 	/**
+	 * The page component getter.
+	 */
+	getComponent(): Component;
+
+	/**
 	 * Called once when registering the page.
 	 *
 	 * @param pager
 	 */
-	install(pager: OWebPager): this;
+	install(pager: OWebPager<Component>): this;
 
 	/**
 	 * Does this page require a verified user for the requested page route.
@@ -66,8 +71,8 @@ export interface iPage {
 	onClose(oldRoute: tPageRouteFull, newRoute: tPageRouteFull): void
 }
 
-const wDoc      = window.document;
-let routeId     = 0,
+const wDoc = window.document;
+let routeId = 0,
 	_isParentOf = (parent: tPageRouteFull, route: tPageRouteFull): boolean => {
 		let p;
 		while ((p = route.parent!)) {
@@ -80,14 +85,14 @@ let routeId     = 0,
 		return false;
 	};
 
-export default class OWebPager extends OWebEvent {
-	static readonly SELF            = Utils.id();
-	static readonly EVT_PAGE_CHANGE = Utils.id();
+export default class OWebPager<Component> extends OWebEvent {
+	static readonly SELF = Utils.id();
+	static readonly EVT_PAGE_LOCATION_CHANGE = Utils.id();
 
-	private readonly _pages: { [key: string]: iPage } = {};
-	private _routes_cache: tPageRoute[]               = [];
-	private _routes_flattened: tPageRouteFull[]       = [];
-	private _active_page: iPage | undefined;
+	private readonly _pages: { [ key: string ]: iPage<Component> } = {};
+	private _routes_cache: tPageRoute[] = [];
+	private _routes_flattened: tPageRouteFull[] = [];
+	private _active_page: iPage<Component> | undefined;
 	private _active_route?: tPageRouteFull;
 
 	/**
@@ -109,10 +114,10 @@ export default class OWebPager extends OWebEvent {
 	 * Returns the page with the given name.
 	 * @param name
 	 */
-	getPage(name: string): iPage {
-		let page: iPage = this._pages[name];
+	getPage(name: string): iPage<Component> {
+		let page: iPage<Component> = this._pages[ name ];
 		if (undefined === page) {
-			throw new Error(`[OWebPager] the page "${name}" is not defined.`);
+			throw new Error(`[OWebPager] the page "${ name }" is not defined.`);
 		}
 
 		return page;
@@ -121,7 +126,7 @@ export default class OWebPager extends OWebEvent {
 	/**
 	 * Returns the active page.
 	 */
-	getActivePage(): iPage {
+	getActivePage(): iPage<Component> {
 		if (!this._active_page) {
 			throw new Error("[OWebPager] no active page.");
 		}
@@ -150,15 +155,15 @@ export default class OWebPager extends OWebEvent {
 	 *
 	 * @param page
 	 */
-	registerPage(page: iPage): this {
+	registerPage(page: iPage<Component>): this {
 		let name = page.getName();
 
 		if (name in this._pages) {
-			throw new Error(`[OWebPager] page "${name}" already registered.`);
+			throw new Error(`[OWebPager] page "${ name }" already registered.`);
 		}
 
-		this._pages[name] = page.install(this);
-		let routes        = page.getRoutes();
+		this._pages[ name ] = page.install(this);
+		let routes = page.getRoutes();
 
 		this._routes_cache.push(...routes);
 
@@ -173,18 +178,18 @@ export default class OWebPager extends OWebEvent {
 	 * @param parent The page routes parent.
 	 * @private
 	 */
-	private _registerPageRoutes(page: iPage, routes: tPageRoute[], parent?: tPageRouteFull): this {
+	private _registerPageRoutes(page: iPage<Component>, routes: tPageRoute[], parent?: tPageRouteFull): this {
 
 		let router: OWebRouter = this.app_context.router;
 
 		for (let i = 0; i < routes.length; i++) {
-			let route: any = routes[i];
+			let route: any = routes[ i ];
 
-			route.id           = ++routeId;
-			route.parent       = parent;
-			route.href         = router.pathToURL(typeof route.path === "string" ? route.path : "/").href;
-			route.active       = false;
-			route.active_child = false;
+			route.id = ++routeId;
+			route.parent = parent;
+			route.href = router.pathToURL(typeof route.path === "string" ? route.path : "/").href;
+			route.active = false;
+			route.activeChild = false;
 
 			route.show = route.show || function () {
 				return true;
@@ -209,7 +214,7 @@ export default class OWebPager extends OWebEvent {
 	 * @param page The page to which that route belongs to.
 	 * @private
 	 */
-	private _addRoute(route: tPageRouteFull, page: iPage): this {
+	private _addRoute(route: tPageRouteFull, page: iPage<Component>): this {
 		let ctx = this;
 		this.app_context.router.on(route.path, route.pathOptions, (routeContext: OWebRouteContext) => {
 			console.log("[OWebPager] page route match ->", route, page, routeContext);
@@ -237,30 +242,36 @@ export default class OWebPager extends OWebEvent {
 	 * @param route
 	 * @private
 	 */
-	private _setActive(page: iPage, route: tPageRouteFull): this {
-		let current_page = this._active_page,
-			app          = this.app_context;
+	private _setActive(page: iPage<Component>, route: tPageRouteFull): this {
+		let oldPage = this._active_page,
+			oldRoute = this._active_route,
+			app = this.app_context;
 
 		for (let i = 0; i < this._routes_flattened.length; i++) {
-			let c = this._routes_flattened[i];
+			let c = this._routes_flattened[ i ];
 
-			c.active       = route.id === c.id;
-			c.active_child = !c.active && _isParentOf(c, route);
+			c.active = route.id === c.id;
+			c.activeChild = !c.active && _isParentOf(c, route);
 		}
 
-		this._active_page  = page;
+		this._active_page = page;
 		this._active_route = route;
-		wDoc.title         = app.i18n.toHuman(route.title.length ? route.title : app.getAppName());
+		wDoc.title = app.i18n.toHuman(route.title.length ? route.title : app.getAppName());
 
-		if (current_page !== page) {
-			console.log(`[OWebPager] page change ->`, current_page, page);
-			this.trigger(OWebPager.EVT_PAGE_CHANGE, [current_page, page]);
-		} else {
-			console.log(`[OWebPager] same page ->`, current_page, page);
-		}
+		let info: any = {
+			page,
+			oldPage,
+			route,
+			oldRoute,
+			samePage: oldPage === page
+		};
 
-		console.log(`[OWebPager] active route ->`, route);
+		console.log('[OWebPager] info', info);
 
-		return this;
+		return this.trigger(OWebPager.EVT_PAGE_LOCATION_CHANGE, [ route, page ]);
+	}
+
+	onLocationChange(handler: (route: tPageRouteFull, page: iPage<Component>) => void) {
+		return this.on(OWebPager.EVT_PAGE_LOCATION_CHANGE, handler);
 	}
 }

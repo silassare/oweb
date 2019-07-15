@@ -1,7 +1,7 @@
 import OWebPager, {iPage, tPageRoute, tPageRouteFull} from "./OWebPager";
 import {OWebRouteContext} from "./OWebRouter";
 
-export default abstract class OWebPageBase implements iPage {
+export default abstract class OWebPageBase<Component> implements iPage<Component> {
 	/**
 	 * The page name getter.
 	 */
@@ -13,11 +13,16 @@ export default abstract class OWebPageBase implements iPage {
 	abstract getRoutes(): tPageRoute[];
 
 	/**
+	 * The page component getter.
+	 */
+	abstract getComponent(): Component;
+
+	/**
 	 * Called once when registering the page.
 	 *
 	 * @param pager
 	 */
-	install(pager: OWebPager): this {
+	install(pager: OWebPager<Component>): this {
 		return this;
 	}
 

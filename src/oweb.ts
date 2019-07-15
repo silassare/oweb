@@ -1,43 +1,47 @@
-import OWebApp from "./OWebApp";
-import OWebCom from "./OWebCom";
-import OWebConfigs from "./OWebConfigs";
-import OWebCurrentUser from "./OWebCurrentUser";
-import OWebCustomError from "./OWebCustomError";
-import OWebDataStore from "./OWebDataStore";
-import OWebEvent from "./OWebEvent";
-import OWebFormValidator from "./OWebFormValidator";
-import OWebFS from "./OWebFS";
-import OWebKeyStorage from "./OWebKeyStorage";
-import OWebI18n from "./OWebI18n";
-import OWebRouter, {OWebRoute, OWebRouteContext} from "./OWebRouter";
-import OWebService from "./OWebService";
-import OWebUrl from "./OWebUrl";
-import OWebView from "./OWebView";
-import OWebDate from "./plugins/OWebDate";
-import OWebLogin from "./plugins/OWebLogin";
-import OWebLogout from "./plugins/OWebLogout";
-import OWebPager from "./OWebPager";
-import OWebPassword from "./plugins/OWebPassword";
-import OWebAccountRecovery from "./plugins/OWebAccountRecovery";
-import OWebSignUp from "./plugins/OWebSignUp";
-import OWebTNet from "./plugins/OWebTNet";
-import PathResolver from "./utils/PathResolver";
-import scriptLoader from "./utils/scriptLoader";
-import Utils from "./utils/Utils";
-import OWebPageBase from "./OWebPageBase";
-import owebMixins from "./mixins";
+import OWebApp from './OWebApp';
+import OWebCom from './OWebCom';
+import OWebConfigs from './OWebConfigs';
+import OWebCurrentUser from './OWebCurrentUser';
+import OWebCustomError from './OWebCustomError';
+import OWebDataStore from './OWebDataStore';
+import OWebEvent from './OWebEvent';
+import OWebFormValidator from './OWebFormValidator';
+import OWebFS from './OWebFS';
+import OWebKeyStorage from './OWebKeyStorage';
+import OWebI18n from './OWebI18n';
+import OWebRouter, { OWebRoute, OWebRouteContext } from './OWebRouter';
+import OWebService from './OWebService';
+import OWebUrl from './OWebUrl';
+import OWebView from './OWebView';
+import OWebDate from './plugins/OWebDate';
+import OWebLogin from './plugins/OWebLogin';
+import OWebLogout from './plugins/OWebLogout';
+import OWebPager from './OWebPager';
+import OWebPassword from './plugins/OWebPassword';
+import OWebAccountRecovery from './plugins/OWebAccountRecovery';
+import OWebSignUp from './plugins/OWebSignUp';
+import OWebTNet from './plugins/OWebTNet';
+import PathResolver from './utils/PathResolver';
+import scriptLoader from './utils/scriptLoader';
+import Utils from './utils/Utils';
+import OWebPageBase from './OWebPageBase';
 
-export {tConfigList} from "./OWebConfigs";
+export { tConfigList } from './OWebConfigs';
 
-export {tUrlList} from "./OWebUrl";
+export { tUrlList } from './OWebUrl';
 
-export {tComOptions, iComResponse} from "./OWebCom";
+export { tComOptions, iComResponse } from './OWebCom';
 
-export {tFormValidator} from "./OWebFormValidator";
+export { tFormValidator } from './OWebFormValidator';
 
-export {tFileAliasInfo, tFileQuality} from "./OWebFS";
+export { tFileAliasInfo, tFileQuality } from './OWebFS';
 
-export {tI18nData, tI18nDefinition, tI18nPluralize} from "./OWebI18n";
+export {
+	tI18nData,
+	tI18nDefinition,
+	tI18nPluralize,
+	tI18nOptions,
+} from './OWebI18n';
 
 export {
 	tRoutePath,
@@ -48,16 +52,16 @@ export {
 	tRouteInfo,
 	tRouteTarget,
 	tRouteTokensMap,
-	iRouteDispatcher
-} from "./OWebRouter";
+	iRouteDispatcher,
+} from './OWebRouter';
 
-export {tViewDialog} from "./OWebView";
+export { tViewDialog } from './OWebView';
 
-export {tDateDesc} from "./plugins/OWebDate";
+export { tDateDesc } from './plugins/OWebDate';
 
-export {tPageRoute, tPageRouteFull, iPage} from "./OWebPager";
+export { tPageRoute, tPageRouteFull, iPage } from './OWebPager';
 
-export {tScriptFile} from "./utils/scriptLoader";
+export { tScriptFile } from './utils/scriptLoader';
 
 export {
 	tServiceFail,
@@ -79,8 +83,8 @@ export {
 	iServiceGetRelationItemsResponse,
 	iServiceGetResponse,
 	iServiceUpdateAllData,
-	iServiceUpdateResponse
-} from "./OWebService";
+	iServiceUpdateResponse,
+} from './OWebService';
 
 export {
 	OWebEvent,
@@ -102,8 +106,7 @@ export {
 	OWebService,
 	OWebPager,
 	OWebPageBase,
-
-// Plugins
+	// Plugins
 
 	OWebLogin,
 	OWebLogout,
@@ -112,17 +115,12 @@ export {
 	OWebSignUp,
 	OWebDate,
 	OWebTNet,
-
-// Mixins
-
-	owebMixins,
-
-// Utilities
+	// Utilities
 
 	Utils,
 	PathResolver,
-	scriptLoader
-}
+	scriptLoader,
+};
 
 // side-effect import
-import "./default/index";
+import './default/index';

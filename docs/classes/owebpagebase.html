@@ -59,13 +59,21 @@
 					<a href="owebpagebase.html">OWebPageBase</a>
 				</li>
 			</ul>
-			<h1>Class OWebPageBase</h1>
+			<h1>Class OWebPageBase&lt;Component&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>Component</h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -77,7 +85,7 @@
 			<section class="tsd-panel">
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/ipage.html" class="tsd-signature-type">iPage</a></li>
+					<li><a href="../interfaces/ipage.html" class="tsd-signature-type">iPage</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Component</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -87,6 +95,7 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebpagebase.html#getcomponent" class="tsd-kind-icon">get<wbr>Component</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebpagebase.html#getname" class="tsd-kind-icon">get<wbr>Name</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebpagebase.html#getroutes" class="tsd-kind-icon">get<wbr>Routes</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebpagebase.html#install" class="tsd-kind-icon">install</a></li>
@@ -101,6 +110,29 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getcomponent" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> get<wbr>Component</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Component<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Component</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/ipage.html">iPage</a>.<a href="../interfaces/ipage.html#getcomponent">getComponent</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/f4db774/src/OWebPageBase.ts#L18">OWebPageBase.ts:18</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The page component getter.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Component</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="getname" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> get<wbr>Name</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -111,7 +143,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/ipage.html">iPage</a>.<a href="../interfaces/ipage.html#getname">getName</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebPageBase.ts#L8">OWebPageBase.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/f4db774/src/OWebPageBase.ts#L8">OWebPageBase.ts:8</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -134,7 +166,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/ipage.html">iPage</a>.<a href="../interfaces/ipage.html#getroutes">getRoutes</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebPageBase.ts#L13">OWebPageBase.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/f4db774/src/OWebPageBase.ts#L13">OWebPageBase.ts:13</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -150,14 +182,14 @@
 					<a name="install" class="tsd-anchor"></a>
 					<h3>install</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">install<span class="tsd-signature-symbol">(</span>pager<span class="tsd-signature-symbol">: </span><a href="owebpager.html" class="tsd-signature-type">OWebPager</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">install<span class="tsd-signature-symbol">(</span>pager<span class="tsd-signature-symbol">: </span><a href="owebpager.html" class="tsd-signature-type">OWebPager</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Component</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/ipage.html">iPage</a>.<a href="../interfaces/ipage.html#install">install</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebPageBase.ts#L20">OWebPageBase.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/f4db774/src/OWebPageBase.ts#L25">OWebPageBase.ts:25</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -168,7 +200,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>pager: <a href="owebpager.html" class="tsd-signature-type">OWebPager</a></h5>
+									<h5>pager: <a href="owebpager.html" class="tsd-signature-type">OWebPager</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Component</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
@@ -188,7 +220,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/ipage.html">iPage</a>.<a href="../interfaces/ipage.html#onclose">onClose</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebPageBase.ts#L49">OWebPageBase.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/f4db774/src/OWebPageBase.ts#L54">OWebPageBase.ts:54</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -222,7 +254,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/ipage.html">iPage</a>.<a href="../interfaces/ipage.html#onopen">onOpen</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebPageBase.ts#L40">OWebPageBase.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/f4db774/src/OWebPageBase.ts#L45">OWebPageBase.ts:45</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -256,7 +288,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/ipage.html">iPage</a>.<a href="../interfaces/ipage.html#requirelogin">requireLogin</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/7ea73b5/src/OWebPageBase.ts#L30">OWebPageBase.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/f4db774/src/OWebPageBase.ts#L35">OWebPageBase.ts:35</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -297,9 +329,12 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class">
+					<li class="current tsd-kind-class tsd-has-type-parameter">
 						<a href="owebpagebase.html" class="tsd-kind-icon">OWeb<wbr>Page<wbr>Base</a>
 						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="owebpagebase.html#getcomponent" class="tsd-kind-icon">get<wbr>Component</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="owebpagebase.html#getname" class="tsd-kind-icon">get<wbr>Name</a>
 							</li>

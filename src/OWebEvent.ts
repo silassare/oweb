@@ -1,7 +1,7 @@
 import Utils from "./utils/Utils";
 
 export default class OWebEvent {
-	private _app_events: { [key: string]: Array<Function> } = {};
+	private _events: { [ key: string ]: Array<Function> } = {};
 
 	protected constructor() {
 	}
@@ -13,15 +13,15 @@ export default class OWebEvent {
 	 * @param handler The event handler function.
 	 */
 	on(event: string, handler: (this: this, ...args: any[]) => void | boolean) {
-		if (!this._app_events[event]) {
-			this._app_events[event] = [];
+		if (!this._events[ event ]) {
+			this._events[ event ] = [];
 		}
 
 		if (!Utils.isFunction(handler)) {
 			throw new TypeError("[OWebEvent] handler should be function.");
 		}
 
-		this._app_events[event].push(handler);
+		this._events[ event ].push(handler);
 
 		return this;
 	}
@@ -36,14 +36,14 @@ export default class OWebEvent {
 
 		if (arguments.length === 1) {
 			if (Utils.isString(event)) {
-				delete this._app_events[event];
+				delete this._events[ event ];
 			} else if (Utils.isFunction(event)) {
 				handler = event;
-				for (let ev in this._app_events) {
-					let handlers = this._app_events[ev];
-					let i        = handlers.length;
+				for (let ev in this._events) {
+					let handlers = this._events[ ev ];
+					let i = handlers.length;
 					while (i--) {
-						if (handlers[i] === handler) {
+						if (handlers[ i ] === handler) {
 							handlers.splice(i, 1);
 							break;
 						}
@@ -51,10 +51,10 @@ export default class OWebEvent {
 				}
 			}
 		} else if (Utils.isString(event) && Utils.isFunction(handler)) {
-			let handlers = this._app_events[event] || [];
-			let i        = handlers.length;
+			let handlers = this._events[ event ] || [];
+			let i = handlers.length;
 			while (i--) {
-				if (handlers[i] === handler) {
+				if (handlers[ i ] === handler) {
 					handlers.splice(i, 1);
 					break;
 				}
@@ -73,19 +73,19 @@ export default class OWebEvent {
 	 * @param callback The callback
 	 */
 	protected trigger(event: string, data: Array<any> = [], cancelable: boolean = false, callback?: (this: this) => void) {
-		let handlers = this._app_events[event] || [],
-			i        = -1,
+		let handlers = this._events[ event ] || [],
+			i = -1,
 			canceled = false;
 
 		while (++i < handlers.length) {
-			if (handlers[i].apply(this, data) === false &&
+			if (handlers[ i ].apply(this, data) === false &&
 				cancelable) {
 				canceled = true;
 				break;
 			}
 		}
 
-		callback && Utils.callback(callback, [canceled], this);
+		callback && Utils.callback(callback, [ canceled ], this);
 
 		return this;
 	}

@@ -5,42 +5,21 @@ import OWebDataStore from "./OWebDataStore";
 import OWebEvent from "./OWebEvent";
 import OWebFormValidator from "./OWebFormValidator";
 import OWebRouter, { tRouteTarget } from "./OWebRouter";
-import OWebService from "./OWebService";
 import OWebUrl, { tUrlList } from "./OWebUrl";
-import OWebView, { tViewDialog } from "./OWebView";
+import OWebView from "./OWebView";
 import OWebI18n from "./OWebI18n";
-import OWebPager, { iPage } from "./OWebPager";
-export interface iAppState {
-    ready: boolean;
-    splash: boolean;
-    frozen: boolean;
-    show_nav: boolean;
-    current_page?: iPage;
-    dialogs: tViewDialog[];
-}
-export interface iAppStateOptions {
-    ready?: boolean;
-    splash?: boolean;
-    frozen?: boolean;
-    show_nav?: boolean;
-    current_page?: iPage;
-    dialogs?: tViewDialog[];
-}
+import OWebPager from "./OWebPager";
 export default abstract class OWebApp extends OWebEvent {
     private readonly name;
     static readonly SELF: string;
     static readonly EVT_APP_READY: string;
-    readonly state: iAppState;
     readonly view: OWebView;
-    readonly pager: OWebPager;
+    readonly pager: OWebPager<any>;
     readonly ls: OWebDataStore;
     readonly router: OWebRouter;
     readonly user: OWebCurrentUser;
     readonly configs: OWebConfigs;
     readonly url: OWebUrl;
-    readonly services: {
-        [key: string]: OWebService<any>;
-    };
     readonly i18n: OWebI18n;
     /**
      * OWebApp constructor.
@@ -50,7 +29,7 @@ export default abstract class OWebApp extends OWebEvent {
      * @param urls The app url list.
      * @param state The app state.
      */
-    protected constructor(name: string, configs: tConfigList, urls: tUrlList, state?: iAppStateOptions);
+    protected constructor(name: string, configs: tConfigList, urls: tUrlList);
     /**
      * App name getter.
      */
@@ -63,18 +42,6 @@ export default abstract class OWebApp extends OWebEvent {
      * To start the web app.
      */
     start(): this;
-    /**
-     * Returns registered service with a given name.
-     *
-     * @param service_name The service name.
-     */
-    getService<T = any>(service_name: string): OWebService<T> | undefined;
-    /**
-     * Register a new service.
-     *
-     * @param service The service object.
-     */
-    registerService<T extends OWebService<any>>(service: T): this;
     /**
      * Returns new form validator instance.
      *

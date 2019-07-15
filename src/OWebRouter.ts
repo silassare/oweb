@@ -1,13 +1,13 @@
 import Utils from "./utils/Utils";
 
 export type tRoutePath = string | RegExp;
-export type tRoutePathOptions = { [key: string]: RegExp | keyof typeof tokenTypesRegMap };
-export type tRouteTokensMap = { [key: string]: string };
+export type tRoutePathOptions = { [ key: string ]: RegExp | keyof typeof tokenTypesRegMap };
+export type tRouteTokensMap = { [ key: string ]: string };
 export type tRouteAction = (ctx: OWebRouteContext) => void;
 export type tRouteInfo = { reg: RegExp | null, tokens: Array<string> };
 type _tRouteStateItem = string | number | boolean | null | undefined | Date | tRouteStateObject;
 export type tRouteStateItem = _tRouteStateItem | Array<_tRouteStateItem>;
-export type tRouteStateObject = { [key: string]: tRouteStateItem };
+export type tRouteStateObject = { [ key: string ]: tRouteStateItem };
 export type tRouteTarget = { parsed: string, href: string, path: string, fullPath: string };
 
 export interface iRouteDispatcher {
@@ -23,52 +23,52 @@ export interface iRouteDispatcher {
 }
 
 const tokenTypesRegMap = {
-		  "num"        : /\d+/.source,
-		  "alpha"      : /[a-zA-Z]+/.source,
-		  "alpha-u"    : /[a-z]+/.source,
-		  "alpha-l"    : /[A-Z]+/.source,
-		  "alpha-num"  : /[a-zA-Z0-9]+/.source,
-		  "alpha-num-l": /[a-z0-9]+/.source,
-		  "alpha-num-u": /[A-Z0-9]+/.source,
-		  "any"        : /[^/]+/.source
-	  },
-	  token_reg        = /:([a-z][a-z0-9_]*)/i,
-	  wLoc             = window.location,
-	  wDoc             = window.document,
-	  wHistory         = window.history,
-	  linkClickEvent   = wDoc.ontouchstart ? "touchstart" : "click",
-	  hashTagStr       = "#!";
+	"num": /\d+/.source,
+	"alpha": /[a-zA-Z]+/.source,
+	"alpha-u": /[a-z]+/.source,
+	"alpha-l": /[A-Z]+/.source,
+	"alpha-num": /[a-zA-Z0-9]+/.source,
+	"alpha-num-l": /[a-z0-9]+/.source,
+	"alpha-num-u": /[A-Z0-9]+/.source,
+	"any": /[^/]+/.source
+},
+	token_reg = /:([a-z][a-z0-9_]*)/i,
+	wLoc = window.location,
+	wDoc = window.document,
+	wHistory = window.history,
+	linkClickEvent = wDoc.ontouchstart ? "touchstart" : "click",
+	hashTagStr = "#!";
 
-const which        = function (e: any) {
-		  e = e || window.event;
-		  return null == e.which ? e.button : e.which;
-	  },
-	  samePath     = function (url: URL) {
-		  return url.pathname === wLoc.pathname &&
-				 url.search === wLoc.search;
-	  },
-	  sameOrigin   = function (href: string) {
-		  if (!href) return false;
-		  let url = new URL(href.toString(), wLoc.toString());
+const which = function (e: any) {
+	e = e || window.event;
+	return null == e.which ? e.button : e.which;
+},
+	samePath = function (url: URL) {
+		return url.pathname === wLoc.pathname &&
+			url.search === wLoc.search;
+	},
+	sameOrigin = function (href: string) {
+		if (!href) return false;
+		let url = new URL(href.toString(), wLoc.toString());
 
-		  return wLoc.protocol === url.protocol &&
-				 wLoc.hostname === url.hostname &&
-				 wLoc.port === url.port;
-	  },
-	  escapeString = function (str: string) {
-		  return str.replace(/([.+*?=^!:${}()[\]|\/])/g, "\\$1");
-	  },
-	  stringReg    = function (str: string) {
-		  return new RegExp(escapeString(str));
-	  },
-	  leadingSlash = (path: string): string => {
-		  if (!path.length || path == "/") {
-			  return "/";
-		  }
+		return wLoc.protocol === url.protocol &&
+			wLoc.hostname === url.hostname &&
+			wLoc.port === url.port;
+	},
+	escapeString = function (str: string) {
+		return str.replace(/([.+*?=^!:${}()[\]|\/])/g, "\\$1");
+	},
+	stringReg = function (str: string) {
+		return new RegExp(escapeString(str));
+	},
+	leadingSlash = (path: string): string => {
+		if (!path.length || path == "/") {
+			return "/";
+		}
 
-		  return path[0] != "/" ? "/" + path : path;
-	  },
-	  wrapReg      = (str: string, capture: boolean = false) => capture ? "(" + str + ")" : "(?:" + str + ")";
+		return path[ 0 ] != "/" ? "/" + path : path;
+	},
+	wrapReg = (str: string, capture: boolean = false) => capture ? "(" + str + ")" : "(?:" + str + ")";
 
 export class OWebRoute {
 	private readonly path: string;
@@ -85,21 +85,21 @@ export class OWebRoute {
 	constructor(path: string | RegExp, options: tRoutePathOptions | Array<string>, action: tRouteAction) {
 
 		if (path instanceof RegExp) {
-			this.path   = path.toString();
-			this.reg    = path;
+			this.path = path.toString();
+			this.reg = path;
 			this.tokens = Utils.isArray(options) ? options : [];
 		} else if (Utils.isString(path) && path.length) {
-			options     = <tRoutePathOptions>(Utils.isPlainObject(options) ? options : {});
-			let p       = OWebRoute.parseDynamicPath(path, options);
-			this.path   = path;
-			this.reg    = p.reg;
+			options = <tRoutePathOptions>(Utils.isPlainObject(options) ? options : {});
+			let p = OWebRoute.parseDynamicPath(path, options);
+			this.path = path;
+			this.reg = p.reg;
 			this.tokens = p.tokens;
 		} else {
 			throw new TypeError("[OWebRoute] invalid route path, string or RegExp required.");
 		}
 
 		if ("function" !== typeof action) {
-			throw new TypeError(`[OWebRoute] invalid action type, got "${typeof action}" instead of "function".`);
+			throw new TypeError(`[OWebRoute] invalid action type, got "${ typeof action }" instead of "function".`);
 		}
 
 		this.action = action;
@@ -140,7 +140,7 @@ export class OWebRoute {
 
 			if (founds) {
 				return this.tokens.reduce((acc: any, key: string, index: number) => {
-					acc[key] = founds[index + 1];
+					acc[ key ] = founds[ index + 1 ];
 					return acc;
 				}, {});
 
@@ -173,14 +173,14 @@ export class OWebRoute {
 	static parseDynamicPath(path: string, options: tRoutePathOptions): tRouteInfo {
 
 		let tokens: Array<string> = [],
-			reg: string           = "",
-			_path: string         = path,
+			reg: string = "",
+			_path: string = path,
 			match: RegExpExecArray | null;
 
 		while ((match = token_reg.exec(_path)) != null) {
-			let found: any   = match[0],
-				token: any   = match[1],
-				rule: any    = options[token] || "any",
+			let found: any = match[ 0 ],
+				token: any = match[ 1 ],
+				rule: any = options[ token ] || "any",
 				head: string = _path.slice(0, match.index);
 
 			if (head.length) {
@@ -188,7 +188,7 @@ export class OWebRoute {
 			}
 
 			if (typeof rule === "string" && rule in tokenTypesRegMap) {
-				reg += wrapReg((tokenTypesRegMap as any)[rule], true);
+				reg += wrapReg((tokenTypesRegMap as any)[ rule ], true);
 			} else if (rule instanceof RegExp) {
 				reg += wrapReg(rule.source, true);
 			} else {
@@ -202,7 +202,7 @@ export class OWebRoute {
 
 		if (!reg.length) {
 			return {
-				reg   : null,
+				reg: null,
 				tokens: tokens
 			};
 		}
@@ -212,7 +212,7 @@ export class OWebRoute {
 		}
 
 		return {
-			reg   : new RegExp("^" + reg + "$"),
+			reg: new RegExp("^" + reg + "$"),
 			tokens: tokens
 		};
 	}
@@ -228,12 +228,12 @@ export class OWebRouteContext {
 	constructor(router: OWebRouter, target: tRouteTarget, state: tRouteStateObject) {
 		this._target = target;
 		this._tokens = {};
-		this._state  = state || {};
+		this._state = state || {};
 		this._router = router;
 	}
 
 	getToken(token: string): any {
-		return this._tokens[token];
+		return this._tokens[ token ];
 	}
 
 	getTokens() {
@@ -245,7 +245,7 @@ export class OWebRouteContext {
 	}
 
 	getStateItem(key: string): tRouteStateItem {
-		return this._state[key];
+		return this._state[ key ];
 	}
 
 	getSearchParam(param: string): string | null {
@@ -253,7 +253,7 @@ export class OWebRouteContext {
 	}
 
 	setStateItem(key: string, value: tRouteStateItem): this {
-		this._state[key] = value;
+		this._state[ key ] = value;
 		return this.save();
 	}
 
@@ -296,26 +296,26 @@ export class OWebRouteContext {
 export default class OWebRouter {
 	private readonly _baseUrl: string;
 	private readonly _hashMode: boolean;
-	private _current_target: tRouteTarget                           = {
-		parsed  : "",
-		href    : "",
-		path    : "",
+	private _current_target: tRouteTarget = {
+		parsed: "",
+		href: "",
+		path: "",
 		fullPath: ""
 	};
-	private _routes: OWebRoute[]                                    = [];
-	private _initialized: boolean                                   = false;
-	private _listening: boolean                                     = false;
+	private _routes: OWebRoute[] = [];
+	private _initialized: boolean = false;
+	private _listening: boolean = false;
 	private _notFound: undefined | ((target: tRouteTarget) => void) = undefined;
 	private readonly _popStateListener: (e: PopStateEvent) => void;
 	private readonly _linkClickListener: (e: MouseEvent | TouchEvent) => void;
-	private _dispatch_id                                            = 0;
+	private _dispatch_id = 0;
 	private _current_dispatcher?: iRouteDispatcher;
-	private _force_replace: boolean                                 = false;
+	private _force_replace: boolean = false;
 
 	constructor(baseUrl: string, hashMode: boolean = true) {
-		let r                  = this;
-		this._baseUrl          = baseUrl;
-		this._hashMode         = hashMode;
+		let r = this;
+		this._baseUrl = baseUrl;
+		this._hashMode = hashMode;
 		this._popStateListener = (e: PopStateEvent) => {
 			console.log("[OWebRouter] popstate ->", arguments);
 
@@ -387,9 +387,9 @@ export default class OWebRouter {
 
 		if (this._hashMode) {
 			_ = {
-				parsed  : url.toString(),
-				href    : u.href,
-				path    : u.hash.replace(hashTagStr, ""),
+				parsed: url.toString(),
+				href: u.href,
+				path: u.hash.replace(hashTagStr, ""),
 				fullPath: u.hash
 			};
 		} else {
@@ -402,9 +402,9 @@ export default class OWebRouter {
 			}
 
 			_ = {
-				parsed  : url.toString(),
-				href    : u.href,
-				path    : leadingSlash(pathname),
+				parsed: url.toString(),
+				href: u.href,
+				path: leadingSlash(pathname),
 				fullPath: leadingSlash(pathname + u.search + (u.hash || ""))
 			};
 		}
@@ -466,8 +466,8 @@ export default class OWebRouter {
 
 	browseTo(url: string, state: tRouteStateObject = {}, push: boolean = true, ignoreSameLocation: boolean = false): this {
 		let targetUrl = this.pathToURL(url),
-			target    = this.parseURL(targetUrl.href),
-			_cd       = this._current_dispatcher,
+			target = this.parseURL(targetUrl.href),
+			_cd = this._current_dispatcher,
 			cd: iRouteDispatcher;
 
 		if (!sameOrigin(target.href)) {
@@ -475,7 +475,7 @@ export default class OWebRouter {
 			return this;
 		}
 
-		console.log("[OWebRouter] browsing to -> ", target.path, {state, push, target});
+		console.log("[OWebRouter] browsing to -> ", target.path, { state, push, target });
 
 		if (ignoreSameLocation && this._current_target.href === target.href) {
 			console.log("[OWebRouter] ignore same location -> ", target.path);
@@ -489,11 +489,11 @@ export default class OWebRouter {
 
 		this._current_target = target;
 
-		if (!this._force_replace) {
-			push && this.addHistory(targetUrl.href, state);
-		} else {
+		if (this._force_replace) {
 			this._force_replace = false;
 			this.replaceHistory(targetUrl.href, state);
+		} else {
+			push && this.addHistory(targetUrl.href, state);
 		}
 
 		this._current_dispatcher = cd = this.createDispatcher(target, state, ++this._dispatch_id);
@@ -522,7 +522,7 @@ export default class OWebRouter {
 	addHistory(url: string, state: tRouteStateObject, title: string = ""): this {
 		title = title && title.length ? title : wDoc.title;
 
-		wHistory.pushState({url, data: state}, title, url);
+		wHistory.pushState({ url, data: state }, title, url);
 
 		console.warn("[OWebDispatchContext] history added", state, url);
 
@@ -532,7 +532,7 @@ export default class OWebRouter {
 	replaceHistory(url: string, state: tRouteStateObject, title: string = ""): this {
 		title = title && title.length ? title : wDoc.title;
 
-		wHistory.replaceState({url, data: state}, title, url);
+		wHistory.replaceState({ url, data: state }, title, url);
 
 		console.warn("[OWebDispatchContext] history replaced -> ", wHistory.state, url);
 
@@ -541,16 +541,16 @@ export default class OWebRouter {
 
 	private createDispatcher(target: tRouteTarget, state: tRouteStateObject, id: number): iRouteDispatcher {
 
-		console.log(`[OWebRouter][dispatcher-${id}] creation.`);
+		console.log(`[OWebRouter][dispatcher-${ id }] creation.`);
 
-		let ctx                = this,
+		let ctx = this,
 			found: OWebRoute[] = [],
-			active             = false,
-			routeContext       = new OWebRouteContext(this, target, state),
+			active = false,
+			routeContext = new OWebRouteContext(this, target, state),
 			o: iRouteDispatcher;
 
 		for (let i = 0; i < ctx._routes.length; i++) {
-			let route = ctx._routes[i];
+			let route = ctx._routes[ i ];
 
 			if (route.is(target.path)) {
 				found.push(route);
@@ -558,33 +558,33 @@ export default class OWebRouter {
 		}
 
 		o = {
-			context : routeContext,
+			context: routeContext,
 			id,
 			found,
 			isActive: () => active,
-			cancel  : function () {
+			cancel: function () {
 				if (active) {
 					active = false;
-					console.warn(`[OWebRouter][dispatcher-${id}] cancel called!`, o);
+					console.warn(`[OWebRouter][dispatcher-${ id }] cancel called!`, o);
 				} else {
-					console.error(`[OWebRouter][dispatcher-${id}] cancel called when inactive.`, o);
+					console.error(`[OWebRouter][dispatcher-${ id }] cancel called when inactive.`, o);
 				}
 				return o
 			},
 			dispatch: function () {
 				if (!active) {
-					console.log(`[OWebRouter][dispatcher-${id}] start ->`, o);
+					console.log(`[OWebRouter][dispatcher-${ id }] start ->`, o);
 
-					let j  = -1;
+					let j = -1;
 					active = true;
 
 					while (active && ++j < found.length) {
-						routeContext.actionRunner(found[j]);
+						routeContext.actionRunner(found[ j ]);
 					}
 
 					active = false;
 				} else {
-					console.warn(`[OWebRouter][dispatcher-${id}] is busy!`, o);
+					console.warn(`[OWebRouter][dispatcher-${ id }] is busy!`, o);
 				}
 
 				return o
@@ -624,22 +624,22 @@ export default class OWebRouter {
 
 		// ensure link
 		// use shadow dom when available if not, fall back to composedPath() for browsers that only have shady
-		let el: HTMLElement | null = <HTMLElement>e.target,
-			eventPath              = (e as any).path || ((e as any).composedPath ? (e as any).composedPath() : null);
+		let el: HTMLElement | null = <HTMLElement> e.target,
+			eventPath = (e as any).path || ((e as any).composedPath ? (e as any).composedPath() : null);
 
 		if (eventPath) {
 			for (let i = 0; i < eventPath.length; i++) {
-				if (!eventPath[i].nodeName) continue;
-				if (eventPath[i].nodeName.toUpperCase() !== "A") continue;
-				if (!eventPath[i].href) continue;
+				if (!eventPath[ i ].nodeName) continue;
+				if (eventPath[ i ].nodeName.toUpperCase() !== "A") continue;
+				if (!eventPath[ i ].href) continue;
 
-				el = eventPath[i];
+				el = eventPath[ i ];
 				break;
 			}
 		}
 		// continue ensure link
 		// el.nodeName for svg links are 'a' instead of 'A'
-		while (el && "A" !== el.nodeName.toUpperCase()) el = <any>el.parentNode;
+		while (el && "A" !== el.nodeName.toUpperCase()) el = <any> el.parentNode;
 		if (!el || "A" !== el.nodeName.toUpperCase()) return;
 
 		// we check if link is inside an svg
