@@ -30,14 +30,14 @@ export interface iRouteDispatcher {
     cancel(): this;
 }
 declare const tokenTypesRegMap: {
-    "num": string;
-    "alpha": string;
-    "alpha-u": string;
-    "alpha-l": string;
-    "alpha-num": string;
-    "alpha-num-l": string;
-    "alpha-num-u": string;
-    "any": string;
+    num: string;
+    alpha: string;
+    'alpha-u': string;
+    'alpha-l': string;
+    'alpha-num': string;
+    'alpha-num-l': string;
+    'alpha-num-u': string;
+    any: string;
 };
 export declare class OWebRoute {
     private readonly path;
@@ -45,6 +45,7 @@ export declare class OWebRoute {
     private tokens;
     private readonly action;
     /**
+     * OWebRoute Constructor.
      *
      * @param path The route path string or regexp.
      * @param options The route options.
@@ -99,16 +100,64 @@ export declare class OWebRouteContext {
     private readonly _target;
     private readonly _state;
     private readonly _router;
+    /**
+     * OWebRouteContext constructor.
+     *
+     * @param router
+     * @param target
+     * @param state
+     */
     constructor(router: OWebRouter, target: tRouteTarget, state: tRouteStateObject);
+    /**
+     * Gets route token value
+     *
+     * @param token The token.
+     */
     getToken(token: string): any;
+    /**
+     * Gets a map of all tokens and values.
+     */
     getTokens(): any;
+    /**
+     * Gets the path.
+     */
     getPath(): string;
+    /**
+     * Gets stored value in history state with a given key.
+     *
+     * @param key the state key
+     */
     getStateItem(key: string): tRouteStateItem;
-    getSearchParam(param: string): string | null;
+    /**
+     * Sets a key in history state.
+     *
+     * @param key the state key
+     * @param value  the state value
+     */
     setStateItem(key: string, value: tRouteStateItem): this;
+    /**
+     * Gets search param.
+     *
+     * @param param the param name
+     */
+    getSearchParam(param: string): string | null;
+    /**
+     * Check if the route dispatcher is stopped.
+     */
     stopped(): boolean;
+    /**
+     * Stop the route dispatcher.
+     */
     stop(): this;
+    /**
+     * Save history state.
+     */
     save(): this;
+    /**
+     * Runs action attached to a given route.
+     *
+     * @param route
+     */
     actionRunner(route: OWebRoute): this;
 }
 export default class OWebRouter {
@@ -124,24 +173,122 @@ export default class OWebRouter {
     private _dispatch_id;
     private _current_dispatcher?;
     private _force_replace;
+    /**
+     * OWebRouter constructor.
+     *
+     * @param baseUrl the base url
+     * @param hashMode weather to use hash mode
+     */
     constructor(baseUrl: string, hashMode?: boolean);
+    /**
+     * Starts the router.
+     *
+     * @param firstRun first run flag
+     * @param target initial target, usualy the entry point
+     * @param state initial state
+     */
     start(firstRun?: boolean, target?: string, state?: tRouteStateObject): this;
+    /**
+     * Stops the router.
+     */
     stopRouting(): this;
+    /**
+     * When called the current history will be replaced by the next history state.
+     */
     forceNextReplace(): this;
+    /**
+     * Returns the current route target.
+     */
     getCurrentTarget(): tRouteTarget;
+    /**
+     * Returns the current route event dispatcher.
+     */
     getCurrentDispatcher(): iRouteDispatcher | undefined;
+    /**
+     * Returns the current route context.
+     */
     getRouteContext(): OWebRouteContext;
+    /**
+     * Parse a given url.
+     *
+     * @param url the url to parse
+     */
     parseURL(url: string | URL): tRouteTarget;
+    /**
+     * Builds url with a given path and base url.
+     *
+     * @param path the path
+     * @param base the base url
+     */
     pathToURL(path: string, base?: string): URL;
+    /**
+     * Attach a route action.
+     *
+     * @param path the path to watch
+     * @param rules the path rules
+     * @param action the action to run
+     */
     on(path: tRoutePath, rules: tRoutePathOptions | undefined, action: tRouteAction): this;
-    notFound(callback: (target: tRouteTarget) => void): this;
+    /**
+     * Attach a route
+     *
+     * @param handler the notfound handler
+     */
+    notFound(handler: (target: tRouteTarget) => void): this;
+    /**
+     * Go back.
+     *
+     * @param distance the distance in history
+     */
     goBack(distance?: number): this;
+    /**
+     * Browse to a specific location
+     *
+     * @param url the next url
+     * @param state the initial state
+     * @param push should we push into the history state
+     * @param ignoreSameLocation  ignore browsing again to same location
+     */
     browseTo(url: string, state?: tRouteStateObject, push?: boolean, ignoreSameLocation?: boolean): this;
+    /**
+     * Adds history.
+     *
+     * @param url the url
+     * @param state the history state
+     * @param title the window title
+     */
     addHistory(url: string, state: tRouteStateObject, title?: string): this;
+    /**
+     * Replace the current history.
+     *
+     * @param url the url
+     * @param state the history state
+     * @param title the window title
+     */
     replaceHistory(url: string, state: tRouteStateObject, title?: string): this;
+    /**
+     * Create route event dispatcher
+     *
+     * @param target the route target
+     * @param state the history state
+     * @param id the dispatcher id
+     */
     private createDispatcher;
+    /**
+     * Register DOM events handler.
+     */
     private register;
+    /**
+     * Unregister all DOM events handler.
+     */
     private unregister;
+    /**
+     * Handle click event
+     *
+     * onclick from page.js library: github.com/visionmedia/page.js
+     *
+     * @param e the envent object
+     */
     private _onClick;
 }
 export {};
