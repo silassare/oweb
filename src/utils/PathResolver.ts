@@ -1,9 +1,3 @@
-/*
- * Copyright (c) Emile Silas Sare <emile.silas@gmail.com>
- *
- * This file is part of Otpl.
- */
-
 const PathResolver = {
 	/**
 	 * The directory separator.
