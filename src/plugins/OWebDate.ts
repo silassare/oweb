@@ -66,10 +66,10 @@ export default class OWebDate {
 	 */
 	describe(): tDateDesc {
 		let i18n              = this.app_context.i18n,
-			day_names_short   = i18n.toHuman("OO_TIME_DAY_NAMES_SHORT").split(","),
-			day_names_full    = i18n.toHuman("OO_TIME_DAY_NAMES_FULL").split(","),
-			month_names_short = i18n.toHuman("OO_TIME_MONTH_NAMES_SHORT").split(","),
-			month_names_full  = i18n.toHuman("OO_TIME_MONTH_NAMES_FULL").split(","),
+			day_names_short   = i18n.toHuman("OW_TIME_DAY_NAMES_SHORT").split(","),
+			day_names_full    = i18n.toHuman("OW_TIME_DAY_NAMES_FULL").split(","),
+			month_names_short = i18n.toHuman("OW_TIME_MONTH_NAMES_SHORT").split(","),
+			month_names_full  = i18n.toHuman("OW_TIME_MONTH_NAMES_FULL").split(","),
 			date              = new Date(this.date),
 			y: number         = (date as any).getYear(),
 			Y: number         = date.getFullYear(),

@@ -55,9 +55,9 @@ export default {
 	"OZ_FILE_ALIAS_PARSE_ERROR"           : "Alias ​​file, analysis error.",
 	"OZ_FILE_ALIAS_NOT_FOUND"             : "The alias file or the targeted file can not be found ...",
 
-	"OO_TIME_DAY_NAMES_SHORT"  : "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
-	"OO_TIME_DAY_NAMES_FULL"   : "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
-	"OO_TIME_MONTH_NAMES_SHORT": "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec",
-	"OO_TIME_MONTH_NAMES_FULL" : "January,February,March,April,May,June,July,August,September,October,November,December"
+	"OW_TIME_DAY_NAMES_SHORT"  : "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
+	"OW_TIME_DAY_NAMES_FULL"   : "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
+	"OW_TIME_MONTH_NAMES_SHORT": "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec",
+	"OW_TIME_MONTH_NAMES_FULL" : "January,February,March,April,May,June,July,August,September,October,November,December"
 
 } as tI18nDefinition;

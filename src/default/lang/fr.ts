@@ -64,9 +64,9 @@ export default {
 	"OZ_FILE_ALIAS_PARSE_ERROR": "Fichier alias, erreur d'analyse.",
 	"OZ_FILE_ALIAS_NOT_FOUND"  : "Le fichier alias ou le fichier ciblé est introuvable...",
 
-	"OO_TIME_DAY_NAMES_SHORT"  : "dim.,lun.,mar.,mer.,jeu.,ven.,sam.",
-	"OO_TIME_DAY_NAMES_FULL"   : "dimanche,lundi,mardi,mercredi,jeudi,vendredi,samedi",
-	"OO_TIME_MONTH_NAMES_SHORT": "janv.,f\xe9vr.,mars,avr.,mai,juin,juil.,ao\xfbt,sept.,oct.,nov.,d\xe9c.",
-	"OO_TIME_MONTH_NAMES_FULL" : "janvier,f\xe9vrier,mars,avril,mai,juin,juillet,ao\xfbt,septembre,octobre,novembre,d\xe9cembre"
+	"OW_TIME_DAY_NAMES_SHORT"  : "dim.,lun.,mar.,mer.,jeu.,ven.,sam.",
+	"OW_TIME_DAY_NAMES_FULL"   : "dimanche,lundi,mardi,mercredi,jeudi,vendredi,samedi",
+	"OW_TIME_MONTH_NAMES_SHORT": "janv.,f\xe9vr.,mars,avr.,mai,juin,juil.,ao\xfbt,sept.,oct.,nov.,d\xe9c.",
+	"OW_TIME_MONTH_NAMES_FULL" : "janvier,f\xe9vrier,mars,avril,mai,juin,juillet,ao\xfbt,septembre,octobre,novembre,d\xe9cembre"
 
 } as tI18nDefinition;
