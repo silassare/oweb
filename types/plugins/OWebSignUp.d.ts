@@ -7,9 +7,9 @@ export default class OWebSignUp extends OWebEvent {
     static readonly EVT_SIGN_UP_NEXT_STEP: string;
     static readonly EVT_SIGN_UP_SUCCESS: string;
     static readonly EVT_SIGN_UP_ERROR: string;
-    static readonly SIGN_UP_STEP_START: number;
-    static readonly SIGN_UP_STEP_VALIDATE: number;
-    static readonly SIGN_UP_STEP_END: number;
+    static readonly SIGN_UP_STEP_START = 1;
+    static readonly SIGN_UP_STEP_VALIDATE = 2;
+    static readonly SIGN_UP_STEP_END = 3;
     constructor(app_context: OWebApp);
     stepStart(form: HTMLFormElement): void;
     stepValidate(form: HTMLFormElement): void;

@@ -7,9 +7,9 @@ export default class OWebAccountRecovery extends OWebEvent {
     static readonly EVT_AR_NEXT_STEP: string;
     static readonly EVT_AR_SUCCESS: string;
     static readonly EVT_AR_ERROR: string;
-    static readonly AR_STEP_START: number;
-    static readonly AR_STEP_VALIDATE: number;
-    static readonly AR_STEP_END: number;
+    static readonly AR_STEP_START = 1;
+    static readonly AR_STEP_VALIDATE = 2;
+    static readonly AR_STEP_END = 3;
     constructor(app_context: OWebApp);
     stepStart(form: HTMLFormElement): void;
     stepValidate(form: HTMLFormElement): void;

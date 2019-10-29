@@ -131,7 +131,7 @@ export default class OWebService<T> {
      * @param fail
      * @param freeze
      */
-    add(formData: any, success: tServiceAddSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
+    addRequest(formData: any, success: tServiceAddSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
     /**
      * Deletes the entity with the given id.
      *
@@ -140,7 +140,7 @@ export default class OWebService<T> {
      * @param fail
      * @param freeze
      */
-    delete(id: string, success: tServiceDeleteSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
+    deleteRequest(id: string, success: tServiceDeleteSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
     /**
      * Updates the entity with the given id.
      *
@@ -150,7 +150,7 @@ export default class OWebService<T> {
      * @param fail
      * @param freeze
      */
-    update(id: string, formData: any, success: tServiceUpdateSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
+    updateRequest(id: string, formData: any, success: tServiceUpdateSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
     /**
      * Deletes all entities.
      *
@@ -159,7 +159,7 @@ export default class OWebService<T> {
      * @param fail
      * @param freeze
      */
-    deleteAll(options: tServiceRequestOptions, success: tServiceDeleteAllSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
+    deleteAllRequest(options: tServiceRequestOptions, success: tServiceDeleteAllSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
     /**
      * Updates all entities.
      *
@@ -169,7 +169,7 @@ export default class OWebService<T> {
      * @param fail
      * @param freeze
      */
-    updateAll(options: tServiceRequestOptions, formData: any, success: tServiceUpdateAllSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
+    updateAllRequest(options: tServiceRequestOptions, formData: any, success: tServiceUpdateAllSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
     /**
      * Gets an entity with the given id.
      *
@@ -183,7 +183,7 @@ export default class OWebService<T> {
      * @param freeze
      * @param load_cache_first
      */
-    get(id: string, relations: string | undefined, success: tServiceGetSuccess<T>, fail: tServiceFail, freeze?: boolean, load_cache_first?: boolean): OWebCom;
+    getRequest(id: string, relations: string | undefined, success: tServiceGetSuccess<T>, fail: tServiceFail, freeze?: boolean, load_cache_first?: boolean): OWebCom;
     /**
      * Gets all entities.
      *
@@ -194,7 +194,7 @@ export default class OWebService<T> {
      * @param force_cache
      * @param load_cache_first
      */
-    getAll(options: tServiceRequestOptions, success: tServiceGetAllSuccess<T>, fail: tServiceFail, freeze?: boolean, force_cache?: boolean, load_cache_first?: boolean): OWebCom;
+    getAllRequest(options: tServiceRequestOptions, success: tServiceGetAllSuccess<T>, fail: tServiceFail, freeze?: boolean, force_cache?: boolean, load_cache_first?: boolean): OWebCom;
     /**
      * Gets a single item relation for a given entity id.
      *
@@ -206,7 +206,7 @@ export default class OWebService<T> {
      * @param force_cache
      * @param load_cache_first
      */
-    getRelation<R>(id: string, relation: string, success: tServiceGetRelationSuccess<R>, fail: tServiceFail, freeze?: boolean, force_cache?: boolean, load_cache_first?: boolean): OWebCom;
+    getRelationRequest<R>(id: string, relation: string, success: tServiceGetRelationSuccess<R>, fail: tServiceFail, freeze?: boolean, force_cache?: boolean, load_cache_first?: boolean): OWebCom;
     /**
      * Gets multiple items relation for a given entity id.
      *
@@ -219,5 +219,5 @@ export default class OWebService<T> {
      * @param force_cache
      * @param load_cache_first
      */
-    getRelationItems<R>(id: string, relation: string, options: tServiceRequestOptions, success: tServiceGetRelationItemsSuccess<R>, fail: tServiceFail, freeze?: boolean, force_cache?: boolean, load_cache_first?: boolean): OWebCom;
+    getRelationItemsRequest<R>(id: string, relation: string, options: tServiceRequestOptions, success: tServiceGetRelationItemsSuccess<R>, fail: tServiceFail, freeze?: boolean, force_cache?: boolean, load_cache_first?: boolean): OWebCom;
 }

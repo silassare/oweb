@@ -179,7 +179,7 @@ export default class OWebService<T> {
 	 * @param fail
 	 * @param freeze
 	 */
-	add(formData: any, success: tServiceAddSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
+	addRequest(formData: any, success: tServiceAddSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
 		let url = this.getServiceURI(),
 			req_options: tServiceRequestOptions = formData;
 
@@ -203,7 +203,7 @@ export default class OWebService<T> {
 	 * @param fail
 	 * @param freeze
 	 */
-	delete(id: string, success: tServiceDeleteSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
+	deleteRequest(id: string, success: tServiceDeleteSuccess<T>, fail: tServiceFail, freeze: boolean = false): OWebCom {
 		let m = this,
 			url = this.getItemURI(id);
 
@@ -229,7 +229,7 @@ export default class OWebService<T> {
 	 * @param fail
 	 * @param freeze
 	 */
-	update(
+	updateRequest(
 		id: string,
 		formData: any,
 		success: tServiceUpdateSuccess<T>,
@@ -259,7 +259,7 @@ export default class OWebService<T> {
 	 * @param fail
 	 * @param freeze
 	 */
-	deleteAll(
+	deleteAllRequest(
 		options: tServiceRequestOptions,
 		success: tServiceDeleteAllSuccess<T>,
 		fail: tServiceFail,
@@ -303,7 +303,7 @@ export default class OWebService<T> {
 	 * @param fail
 	 * @param freeze
 	 */
-	updateAll(
+	updateAllRequest(
 		options: tServiceRequestOptions,
 		formData: any,
 		success: tServiceUpdateAllSuccess<T>,
@@ -352,7 +352,7 @@ export default class OWebService<T> {
 	 * @param freeze
 	 * @param load_cache_first
 	 */
-	get(
+	getRequest(
 		id: string,
 		relations: string = '',
 		success: tServiceGetSuccess<T>,
@@ -408,7 +408,7 @@ export default class OWebService<T> {
 	 * @param force_cache
 	 * @param load_cache_first
 	 */
-	getAll(
+	getAllRequest(
 		options: tServiceRequestOptions,
 		success: tServiceGetAllSuccess<T>,
 		fail: tServiceFail,
@@ -485,7 +485,7 @@ export default class OWebService<T> {
 	 * @param force_cache
 	 * @param load_cache_first
 	 */
-	getRelation<R>(
+	getRelationRequest<R>(
 		id: string,
 		relation: string,
 		success: tServiceGetRelationSuccess<R>,
@@ -539,7 +539,7 @@ export default class OWebService<T> {
 	 * @param force_cache
 	 * @param load_cache_first
 	 */
-	getRelationItems<R>(
+	getRelationItemsRequest<R>(
 		id: string,
 		relation: string,
 		options: tServiceRequestOptions,

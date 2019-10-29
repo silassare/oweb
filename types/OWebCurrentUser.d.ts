@@ -1,5 +1,5 @@
-import OWebApp from "./OWebApp";
-import OWebEvent from "./OWebEvent";
+import OWebApp from './OWebApp';
+import OWebEvent from './OWebEvent';
 export default class OWebCurrentUser extends OWebEvent {
     private readonly app_context;
     static readonly SELF: string;

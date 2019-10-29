@@ -11,6 +11,7 @@ import OWebKeyStorage from './OWebKeyStorage';
 import OWebI18n from './OWebI18n';
 import OWebRouter, { OWebRoute, OWebRouteContext } from './OWebRouter';
 import OWebService from './OWebService';
+import OWebServiceStore from './OWebServiceStore';
 import OWebUrl from './OWebUrl';
 import OWebView from './OWebView';
 import OWebDate from './plugins/OWebDate';
@@ -59,7 +60,7 @@ export { tViewDialog } from './OWebView';
 
 export { tDateDesc } from './plugins/OWebDate';
 
-export { tPageRoute, tPageRouteFull, iPage } from './OWebPager';
+export { iPage, iPageRoute, iPageRouteFull } from './OWebPager';
 
 export { tScriptFile } from './utils/scriptLoader';
 
@@ -104,6 +105,7 @@ export {
 	OWebUrl,
 	OWebView,
 	OWebService,
+	OWebServiceStore,
 	OWebPager,
 	OWebPageBase,
 	// Plugins

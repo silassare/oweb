@@ -5,7 +5,7 @@ declare type tFormErrorMap = {
 };
 export declare type tFormValidator = (value: any, name: string, context: OWebFormValidator) => void;
 export declare class OWebFormError extends OWebCustomError {
-    readonly __oweb_form_error: boolean;
+    readonly __oweb_form_error = true;
 }
 export default class OWebFormValidator {
     private readonly app_context;

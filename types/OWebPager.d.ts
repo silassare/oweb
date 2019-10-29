@@ -1,24 +1,29 @@
-import OWebApp from "./OWebApp";
-import OWebEvent from "./OWebEvent";
-import { OWebRouteContext, tRoutePath, tRoutePathOptions } from "./OWebRouter";
-export declare type tPageRoute = {
+import OWebApp from './OWebApp';
+import OWebEvent from './OWebEvent';
+import { OWebRouteContext, tRoutePath, tRoutePathOptions } from './OWebRouter';
+export interface iPageRoute {
     slug?: string;
     title: string;
     description?: string;
-    icon?: string;
     path: tRoutePath;
     pathOptions?: tRoutePathOptions;
-    sub?: tPageRoute[];
+    sub?: iPageRoute[];
     show?(): boolean;
-};
-export declare type tPageRouteFull = tPageRoute & {
+}
+export interface iPageRouteFull {
+    slug?: string;
+    title: string;
+    description?: string;
+    path: tRoutePath;
+    pathOptions?: tRoutePathOptions;
+    sub?: iPageRoute[];
+    show(): boolean;
     readonly id: number;
     readonly href: string;
-    readonly parent?: tPageRouteFull;
+    readonly parent?: iPageRouteFull;
     active: boolean;
     activeChild: boolean;
-    show(): boolean;
-};
+}
 export interface iPage<Component> {
     /**
      * The page name getter.
@@ -27,7 +32,7 @@ export interface iPage<Component> {
     /**
      * The page routes getter.
      */
-    getRoutes(): tPageRoute[];
+    getRoutes(): iPageRoute[];
     /**
      * The page component getter.
      */
@@ -44,21 +49,21 @@ export interface iPage<Component> {
      * @param context The app context.
      * @param route The request page route.
      */
-    requireLogin(context: OWebRouteContext, route: tPageRouteFull): boolean;
+    requireLogin(context: OWebRouteContext, route: iPageRouteFull): boolean;
     /**
      * Called before page open.
      *
      * @param context
      * @param route
      */
-    onOpen(context: OWebRouteContext, route: tPageRouteFull): void;
+    onOpen(context: OWebRouteContext, route: iPageRouteFull): void;
     /**
      * Called before page close.
      *
      * @param oldRoute
      * @param newRoute
      */
-    onClose(oldRoute: tPageRouteFull, newRoute: tPageRouteFull): void;
+    onClose(oldRoute: iPageRouteFull, newRoute: iPageRouteFull): void;
 }
 export default class OWebPager<Component> extends OWebEvent {
     private readonly app_context;
@@ -76,7 +81,7 @@ export default class OWebPager<Component> extends OWebEvent {
     /**
      * Returns registered pages routes.
      */
-    getRoutes(): tPageRoute[];
+    getRoutes(): iPageRoute[];
     /**
      * Returns the page with the given name.
      * @param name
@@ -89,11 +94,13 @@ export default class OWebPager<Component> extends OWebEvent {
     /**
      * Returns the active page route.
      */
-    getActivePageRoute(): tPageRouteFull;
+    getActivePageRoute(): iPageRouteFull;
     /**
      * Returns all pages list.
      */
-    getPageList(): any;
+    getPageList(): {
+        [x: string]: iPage<Component>;
+    };
     /**
      * Register a given page.
      *
@@ -125,5 +132,5 @@ export default class OWebPager<Component> extends OWebEvent {
      * @private
      */
     private _setActive;
-    onLocationChange(handler: (route: tPageRouteFull, page: iPage<Component>) => void): this;
+    onLocationChange(handler: (route: iPageRouteFull, page: iPage<Component>) => void): this;
 }

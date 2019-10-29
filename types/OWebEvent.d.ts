@@ -21,7 +21,7 @@ export default class OWebEvent {
      * @param event The event name.
      * @param data The data to be passed as arguments to the event handlers.
      * @param cancelable When true the event will stop when a handler returns false.
-     * @param callback The callback
+     * @param context The context in which each handler will be called. Default: this.
      */
-    protected trigger(event: string, data?: Array<any>, cancelable?: boolean, callback?: (this: this) => void): this;
+    protected trigger(event: string, data?: Array<any>, cancelable?: boolean, context?: any): boolean;
 }

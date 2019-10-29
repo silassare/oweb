@@ -1,26 +1,23 @@
-import OWebCom, { iComResponse } from "./OWebCom";
-import OWebConfigs, { tConfigList } from "./OWebConfigs";
-import OWebCurrentUser from "./OWebCurrentUser";
-import OWebDataStore from "./OWebDataStore";
-import OWebEvent from "./OWebEvent";
-import OWebFormValidator from "./OWebFormValidator";
-import OWebRouter, { tRouteTarget } from "./OWebRouter";
-import OWebUrl, { tUrlList } from "./OWebUrl";
-import OWebView from "./OWebView";
-import OWebDate from "./plugins/OWebDate";
-import Utils from "./utils/Utils";
-import OWebI18n from "./OWebI18n";
-import OWebPager from "./OWebPager";
+import OWebCom, { iComResponse } from './OWebCom';
+import OWebConfigs, { tConfigList } from './OWebConfigs';
+import OWebCurrentUser from './OWebCurrentUser';
+import OWebDataStore from './OWebDataStore';
+import OWebEvent from './OWebEvent';
+import OWebFormValidator from './OWebFormValidator';
+import OWebRouter, { tRouteTarget } from './OWebRouter';
+import OWebUrl, { tUrlList } from './OWebUrl';
+import OWebView from './OWebView';
+import OWebDate from './plugins/OWebDate';
+import Utils from './utils/Utils';
+import OWebI18n from './OWebI18n';
+import OWebPager from './OWebPager';
 
 /**
  * @ignore
  */
-const noop = () => {
-};
-
+const noop = () => {};
 
 export default abstract class OWebApp extends OWebEvent {
-
 	static readonly SELF = Utils.id();
 	static readonly EVT_APP_READY = Utils.id();
 
@@ -41,7 +38,11 @@ export default abstract class OWebApp extends OWebEvent {
 	 * @param urls The app url list.
 	 * @param state The app state.
 	 */
-	protected constructor(private readonly name: string, configs: tConfigList, urls: tUrlList) {
+	protected constructor(
+		private readonly name: string,
+		configs: tConfigList,
+		urls: tUrlList
+	) {
 		super();
 
 		this.ls = new OWebDataStore(this);
@@ -52,14 +53,14 @@ export default abstract class OWebApp extends OWebEvent {
 		this.pager = new OWebPager(this);
 		this.i18n = new OWebI18n();
 
-		let base_url = this.configs.get("OW_APP_LOCAL_BASE_URL"),
-			hash_mode = false !== this.configs.get("OW_APP_ROUTER_HASH_MODE");
+		let base_url = this.configs.get('OW_APP_LOCAL_BASE_URL'),
+			hash_mode = false !== this.configs.get('OW_APP_ROUTER_HASH_MODE');
 
 		this.router = new OWebRouter(base_url, hash_mode);
 
 		this.router.notFound(this.showNotFound.bind(this));
 
-		this.i18n.setDefaultLang(this.configs.get("OW_APP_DEFAULT_LANG"));
+		this.i18n.setDefaultLang(this.configs.get('OW_APP_DEFAULT_LANG'));
 	}
 
 	/**
@@ -73,14 +74,14 @@ export default abstract class OWebApp extends OWebEvent {
 	 * Checks if we are running in mobile app.
 	 */
 	isMobileApp(): boolean {
-		return "cordova" in window;
+		return 'cordova' in window;
 	}
 
 	/**
 	 * To start the web app.
 	 */
 	start(): this {
-		console.log("[OWebApp] app started!");
+		console.log('[OWebApp] app started!');
 		this.trigger(OWebApp.EVT_APP_READY);
 		return this;
 	}
@@ -93,7 +94,12 @@ export default abstract class OWebApp extends OWebEvent {
 	 * @param excluded The fields names to exclude.
 	 * @param checkAll Force the validator to check all fields.
 	 */
-	getFormValidator(form: HTMLFormElement, required: Array<string> = [], excluded: Array<string> = [], checkAll: boolean = false) {
+	getFormValidator(
+		form: HTMLFormElement,
+		required: Array<string> = [],
+		excluded: Array<string> = [],
+		checkAll: boolean = false
+	) {
 		return new OWebFormValidator(this, form, required, excluded, checkAll);
 	}
 
@@ -144,10 +150,10 @@ export default abstract class OWebApp extends OWebEvent {
 	 * Checks if user session is active.
 	 */
 	sessionActive(): boolean {
-		let now = (new Date()).getTime();// milliseconds
-		let hour = 60 * 60;// seconds
-		let expire = this.user.getSessionExpire() - hour;// seconds
-		return (expire * 1000) > now;
+		let now = new Date().getTime(); // milliseconds
+		let hour = 60 * 60; // seconds
+		let expire = this.user.getSessionExpire() - hour; // seconds
+		return expire * 1000 > now;
 	}
 
 	/**
@@ -165,9 +171,14 @@ export default abstract class OWebApp extends OWebEvent {
 	 * @param data The request payload.
 	 * @param freeze Force app view to be frozen.
 	 */
-	requestPromise(method: string, url: string, data: any, freeze: boolean = false): Promise<iComResponse> {
+	requestPromise(
+		method: string,
+		url: string,
+		data: any,
+		freeze: boolean = false
+	): Promise<iComResponse> {
 		let m = this;
-		return new Promise<iComResponse>(function (resolve, reject) {
+		return new Promise<iComResponse>(function(resolve, reject) {
 			m.request(method, url, data, resolve, reject, freeze);
 		});
 	}
@@ -182,7 +193,14 @@ export default abstract class OWebApp extends OWebEvent {
 	 * @param fail Request fail callback.
 	 * @param freeze Force app view to be frozen.
 	 */
-	request(method: string, url: string, data: any, success: (this: OWebCom, response: iComResponse) => void = noop, fail: (this: OWebCom, response: iComResponse) => void = noop, freeze: boolean = false): OWebCom {
+	request(
+		method: string,
+		url: string,
+		data: any,
+		success: (this: OWebCom, response: iComResponse) => void = noop,
+		fail: (this: OWebCom, response: iComResponse) => void = noop,
+		freeze: boolean = false
+	): OWebCom {
 		let app = this;
 
 		if (freeze) {
@@ -193,7 +211,7 @@ export default abstract class OWebApp extends OWebEvent {
 			url: url,
 			method: method,
 			data: data,
-			badNewsShow: false
+			badNewsShow: false,
 		};
 
 		let com = new OWebCom(this, options);
@@ -205,30 +223,33 @@ export default abstract class OWebApp extends OWebEvent {
 
 			success.call(com, response);
 			// }, 1000);
-		}).on(OWebCom.EVT_COM_REQUEST_ERROR, (response: iComResponse) => {
-			if (response[ "msg" ] === "OZ_ERROR_YOU_ARE_NOT_ADMIN") {
-				app.destroyApp();
-			}
+		})
+			.on(OWebCom.EVT_COM_REQUEST_ERROR, (response: iComResponse) => {
+				if (response['msg'] === 'OZ_ERROR_YOU_ARE_NOT_ADMIN') {
+					app.destroyApp();
+				}
 
-			if (freeze) {
-				app.view.unfreeze();
-			}
+				if (freeze) {
+					app.view.unfreeze();
+				}
 
-			fail.call(com, response);
-		}).on(OWebCom.EVT_COM_NETWORK_ERROR, () => {
-			if (freeze) {
-				app.view.unfreeze();
-			}
-			let response: iComResponse = {
-				"error": 1,
-				"msg": "OZ_ERROR_REQUEST_FAIL",
-				"utime": OWebDate.timestamp()
-			};
+				fail.call(com, response);
+			})
+			.on(OWebCom.EVT_COM_NETWORK_ERROR, () => {
+				if (freeze) {
+					app.view.unfreeze();
+				}
+				let response: iComResponse = {
+					error: 1,
+					msg: 'OZ_ERROR_REQUEST_FAIL',
+					utime: OWebDate.timestamp(),
+				};
 
-			response.neterror = true;
+				response.neterror = true;
 
-			fail.call(com, response);
-		}).send();
+				fail.call(com, response);
+			})
+			.send();
 
 		return com;
 	}
@@ -245,20 +266,20 @@ export default abstract class OWebApp extends OWebEvent {
 	/**
 	 * Called when app should show the home page.
 	 */
-	abstract showHomePage(): this
+	abstract showHomePage(): this;
 
 	/**
 	 * Called when the requested route was not found.
 	 */
-	abstract showNotFound(target: tRouteTarget): this
+	abstract showNotFound(target: tRouteTarget): this;
 
 	/**
 	 * Called when app should show the login page.
 	 */
-	abstract showLoginPage(): this
+	abstract showLoginPage(): this;
 
 	/**
 	 * Called when app should show the signup page.
 	 */
-	abstract showSignUpPage(): this
-};
+	abstract showSignUpPage(): this;
+}

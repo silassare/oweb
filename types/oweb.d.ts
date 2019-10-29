@@ -11,6 +11,7 @@ import OWebKeyStorage from './OWebKeyStorage';
 import OWebI18n from './OWebI18n';
 import OWebRouter, { OWebRoute, OWebRouteContext } from './OWebRouter';
 import OWebService from './OWebService';
+import OWebServiceStore from './OWebServiceStore';
 import OWebUrl from './OWebUrl';
 import OWebView from './OWebView';
 import OWebDate from './plugins/OWebDate';
@@ -34,8 +35,8 @@ export { tI18nData, tI18nDefinition, tI18nPluralize, tI18nOptions, } from './OWe
 export { tRoutePath, tRoutePathOptions, tRouteStateObject, tRouteStateItem, tRouteAction, tRouteInfo, tRouteTarget, tRouteTokensMap, iRouteDispatcher, } from './OWebRouter';
 export { tViewDialog } from './OWebView';
 export { tDateDesc } from './plugins/OWebDate';
-export { tPageRoute, tPageRouteFull, iPage } from './OWebPager';
+export { iPage, iPageRoute, iPageRouteFull } from './OWebPager';
 export { tScriptFile } from './utils/scriptLoader';
 export { tServiceFail, tServiceAddSuccess, tServiceDeleteAllSuccess, tServiceGetAllSuccess, tServiceGetSuccess, tServiceUpdateAllSuccess, tServiceUpdateSuccess, tServiceDeleteSuccess, tServiceGetRelationItemsSuccess, tServiceGetRelationSuccess, tServiceRequestOptions, iServiceGetRelationItemResponse, iServiceAddResponse, iServiceDeleteAllResponse, iServiceDeleteResponse, iServiceGetAllResponse, iServiceGetRelationItemsResponse, iServiceGetResponse, iServiceUpdateAllData, iServiceUpdateResponse, } from './OWebService';
-export { OWebEvent, OWebApp, OWebCom, OWebConfigs, OWebCurrentUser, OWebCustomError, OWebDataStore, OWebFormValidator, OWebFS, OWebKeyStorage, OWebI18n, OWebRouter, OWebRoute, OWebRouteContext, OWebUrl, OWebView, OWebService, OWebPager, OWebPageBase, OWebLogin, OWebLogout, OWebPassword, OWebAccountRecovery, OWebSignUp, OWebDate, OWebTNet, Utils, PathResolver, scriptLoader, };
+export { OWebEvent, OWebApp, OWebCom, OWebConfigs, OWebCurrentUser, OWebCustomError, OWebDataStore, OWebFormValidator, OWebFS, OWebKeyStorage, OWebI18n, OWebRouter, OWebRoute, OWebRouteContext, OWebUrl, OWebView, OWebService, OWebServiceStore, OWebPager, OWebPageBase, OWebLogin, OWebLogout, OWebPassword, OWebAccountRecovery, OWebSignUp, OWebDate, OWebTNet, Utils, PathResolver, scriptLoader, };
 import './default/index';

@@ -1,14 +1,14 @@
-import OWebCom, { iComResponse } from "./OWebCom";
-import OWebConfigs, { tConfigList } from "./OWebConfigs";
-import OWebCurrentUser from "./OWebCurrentUser";
-import OWebDataStore from "./OWebDataStore";
-import OWebEvent from "./OWebEvent";
-import OWebFormValidator from "./OWebFormValidator";
-import OWebRouter, { tRouteTarget } from "./OWebRouter";
-import OWebUrl, { tUrlList } from "./OWebUrl";
-import OWebView from "./OWebView";
-import OWebI18n from "./OWebI18n";
-import OWebPager from "./OWebPager";
+import OWebCom, { iComResponse } from './OWebCom';
+import OWebConfigs, { tConfigList } from './OWebConfigs';
+import OWebCurrentUser from './OWebCurrentUser';
+import OWebDataStore from './OWebDataStore';
+import OWebEvent from './OWebEvent';
+import OWebFormValidator from './OWebFormValidator';
+import OWebRouter, { tRouteTarget } from './OWebRouter';
+import OWebUrl, { tUrlList } from './OWebUrl';
+import OWebView from './OWebView';
+import OWebI18n from './OWebI18n';
+import OWebPager from './OWebPager';
 export default abstract class OWebApp extends OWebEvent {
     private readonly name;
     static readonly SELF: string;

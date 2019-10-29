@@ -4,7 +4,7 @@ export declare type tFileAliasInfo = {
     file_key: string;
 };
 export default class OWebFS {
-    static readonly OFA_MIME_TYPE: string;
+    static readonly OFA_MIME_TYPE = "text/x-ozone-file-alias";
     /**
      * Checks for file object.
      *
