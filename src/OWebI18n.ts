@@ -31,7 +31,7 @@ let parse = function (str: string) {
 			let l, x;
 			if (is_sub) {
 				l = lang ? '"' + lang + '"' : 'l';
-				x = `_("${ path }", d, ${ l })`;
+				x = `_(d["${ path }"] || "${ path }", d, 0, ${ l })`;
 			} else {
 				x = 'd.' + path;
 			}
@@ -44,7 +44,6 @@ let parse = function (str: string) {
 
 let _tmp = new Map,
 	translate = function (key: string, data: tI18nData, pluralize: tI18nPluralize = 0, lang: string): string {
-
 		let id = `${ lang }:${ key }`,
 			message = key,
 			format,
