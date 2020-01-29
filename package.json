@@ -21,8 +21,8 @@
 	},
 	"dependencies": {
 		"@types/jquery": "^3.3.31",
-		"gobl-utils-ts": "file:../gobl-utils-ts",
-		"o-tel-input": "file:../o-tel-input",
+		"gobl-utils-ts": "silassare/gobl-utils-ts",
+		"o-tel-input": "silassare/o-tel-input",
 		"otpl-js": "latest"
 	},
 	"devDependencies": {
