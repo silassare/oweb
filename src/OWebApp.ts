@@ -17,6 +17,10 @@ import OWebPager from './OWebPager';
  */
 const noop = () => {};
 
+const requestDefaultOptions: any = {
+	headers: {},
+};
+
 export default abstract class OWebApp extends OWebEvent {
 	static readonly SELF = Utils.id();
 	static readonly EVT_APP_READY = Utils.id();
@@ -61,6 +65,31 @@ export default abstract class OWebApp extends OWebEvent {
 		this.router.notFound(this.showNotFound.bind(this));
 
 		this.i18n.setDefaultLang(this.configs.get('OW_APP_DEFAULT_LANG'));
+
+		let api_key_header = this.configs.get('OZ_API_KEY_HEADER_NAME');
+		requestDefaultOptions.headers = {
+			[api_key_header]: this.configs.get('OZ_API_KEY'),
+		};
+	}
+
+	/**
+	 * Get request default options
+	 */
+	getRequestDefaultOptions() {
+		return Utils.copy(requestDefaultOptions);
+	}
+
+	/**
+	 * Set session token
+	 */
+	setSessionToken(token: string) {
+		let header_name = this.configs.get('OZ_SESSION_TOKEN_HEADER_NAME');
+
+		if (header_name && token) {
+			requestDefaultOptions.headers[header_name] = token;
+		}
+
+		return this;
 	}
 
 	/**

@@ -6,6 +6,7 @@ export interface iComResponse {
     data?: any;
     utime: number;
     stime?: number;
+    stoken?: string;
     neterror?: boolean;
 }
 export declare type tComOptions = {

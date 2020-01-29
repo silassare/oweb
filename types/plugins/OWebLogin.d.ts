@@ -1,6 +1,6 @@
-import OWebApp from "../OWebApp";
-import { iComResponse } from "../OWebCom";
-import OWebEvent from "../OWebEvent";
+import OWebApp from '../OWebApp';
+import { iComResponse } from '../OWebCom';
+import OWebEvent from '../OWebEvent';
 export default class OWebLogin extends OWebEvent {
     private readonly app_context;
     static readonly SELF: string;

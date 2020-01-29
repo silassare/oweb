@@ -75,6 +75,9 @@ let assign =
 
 		return to;
 	};
+let copy = function<T>(a: T): T {
+	return JSON.parse(JSON.stringify(a));
+};
 
 let stringKeyReplace = function(str: string, data: object): string {
 	if (isString(str) && str.length && isPlainObject(data)) {
@@ -414,6 +417,7 @@ let Utils = {
 	// ============
 	callback,
 	assign,
+	copy,
 	expose,
 	getFrom,
 	stringKeyReplace,

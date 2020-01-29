@@ -11,13 +11,14 @@ declare let Utils: {
     id: () => string;
     callback: (fn: any, args?: any[] | undefined, ctx?: any) => any;
     assign: any;
+    copy: <T>(a: T) => T;
     expose: (items: string[], ctx: any) => object;
     getFrom: (from: object, key: string) => any;
     stringKeyReplace: (str: string, data: object) => string;
     textToLineString: (text: string) => string;
-    forEach: <T>(obj: {
-        [key: string]: T;
-    } | T[], fn: (value: T, key: any) => void) => void;
+    forEach: <T_1>(obj: {
+        [key: string]: T_1;
+    } | T_1[], fn: (value: T_1, key: any) => void) => void;
     math: {
         numberFormat: (x: string | number, dec?: number, decimalSep?: string, digitsSep?: string) => string;
         gt: (x: number, y: number, eq?: boolean) => boolean;
@@ -29,6 +30,6 @@ declare let Utils: {
     buildQueryString: (object: object, prefix: string) => string;
     parseQueryString: (str: string) => {};
     eventCancel: (e: Event) => void;
-    fileSizeFormat: (size: number, decimalSep?: string, digitsSep?: string) => string;
+    fileSizeFormat: (size: number, decimalPoint?: string, thousandsSep?: string) => string;
 };
 export default Utils;

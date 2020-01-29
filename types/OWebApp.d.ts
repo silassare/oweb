@@ -31,6 +31,14 @@ export default abstract class OWebApp extends OWebEvent {
      */
     protected constructor(name: string, configs: tConfigList, urls: tUrlList);
     /**
+     * Get request default options
+     */
+    getRequestDefaultOptions(): any;
+    /**
+     * Set session token
+     */
+    setSessionToken(token: string): this;
+    /**
      * App name getter.
      */
     getAppName(): string;

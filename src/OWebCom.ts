@@ -8,8 +8,9 @@ export interface iComResponse {
 	error: number;
 	msg: string;
 	data?: any;
-	utime: number;
-	stime?: number;
+	utime: number; // response time
+	stime?: number; // session expire time
+	stoken?: string; // session token
 	neterror?: boolean;
 }
 
@@ -93,6 +94,8 @@ export default class OWebCom extends OWebEvent {
 			);
 		}
 
+		let appOptions = this.app_context.getRequestDefaultOptions();
+
 		this._options = {
 			method: 'GET',
 			dataType: 'json',
@@ -101,8 +104,18 @@ export default class OWebCom extends OWebEvent {
 			badNewsShow: false,
 			// increase request timeout for mobile device
 			timeout: app_context.isMobileApp() ? 10000 : undefined,
-			...(options || {}),
+
+			...appOptions,
+
+			...options,
 		};
+
+		this._options.headers = Utils.assign(
+			{},
+			appOptions.headers,
+			options.headers || {}
+		);
+
 		this._original_data = options.data || {};
 		this._modified_data = searchAndReplaceMarkedFile(options.data);
 
@@ -120,16 +133,10 @@ export default class OWebCom extends OWebEvent {
 		let m = this,
 			real_method = m._options.method,
 			replace_methods = ['PATCH', 'PUT', 'DELETE'],
-			api_key_header = this.app_context.configs.get(
-				'OZ_API_KEY_HEADER_NAME'
-			),
 			real_method_header = this.app_context.configs.get(
 				'OZ_API_REAL_METHOD_HEADER_NAME'
-			);
-
-		let headers: any = (this._options.headers =
-			this._options.headers || {});
-		headers[api_key_header] = this.app_context.configs.get('OZ_API_KEY');
+			),
+			headers: any = this._options.headers;
 
 		// we update request method
 		if (~replace_methods.indexOf(real_method)) {
@@ -189,6 +196,9 @@ export default class OWebCom extends OWebEvent {
 
 		if (response.stime) {
 			m.app_context.user.setSessionExpire(response.stime);
+		}
+		if (response.stoken) {
+			m.app_context.setSessionToken(response.stoken);
 		}
 
 		if (response.error === 0) {

@@ -1,12 +1,11 @@
-import OWebApp from "../OWebApp";
-import {iComResponse} from "../OWebCom";
-import OWebEvent from "../OWebEvent";
-import Utils from "../utils/Utils";
+import OWebApp from '../OWebApp';
+import { iComResponse } from '../OWebCom';
+import OWebEvent from '../OWebEvent';
+import Utils from '../utils/Utils';
 
 export default class OWebLogin extends OWebEvent {
-
-	static readonly SELF              = Utils.id();
-	static readonly EVT_LOGIN_ERROR   = Utils.id();
+	static readonly SELF = Utils.id();
+	static readonly EVT_LOGIN_ERROR = Utils.id();
 	static readonly EVT_LOGIN_SUCCESS = Utils.id();
 
 	constructor(private readonly app_context: OWebApp) {
@@ -14,13 +13,13 @@ export default class OWebLogin extends OWebEvent {
 	}
 
 	loginWithEmail(form: HTMLFormElement) {
-		let m   = this,
-			ofv = this.app_context.getFormValidator(form, ["email", "pass"]);
+		let m = this,
+			ofv = this.app_context.getFormValidator(form, ['email', 'pass']);
 
 		if (ofv.validate()) {
 			let data = {
-				email: ofv.getField("email"),
-				pass : ofv.getField("pass")
+				email: ofv.getField('email'),
+				pass: ofv.getField('pass'),
 			};
 
 			m._tryLogin(data);
@@ -28,13 +27,13 @@ export default class OWebLogin extends OWebEvent {
 	}
 
 	loginWithPhone(form: HTMLFormElement) {
-		let m   = this,
-			ofv = this.app_context.getFormValidator(form, ["phone", "pass"]);
+		let m = this,
+			ofv = this.app_context.getFormValidator(form, ['phone', 'pass']);
 
 		if (ofv.validate()) {
 			let data = {
-				phone: ofv.getField("phone"),
-				pass : ofv.getField("pass")
+				phone: ofv.getField('phone'),
+				pass: ofv.getField('pass'),
 			};
 
 			m._tryLogin(data);
@@ -50,13 +49,20 @@ export default class OWebLogin extends OWebEvent {
 	}
 
 	_tryLogin(data: any) {
-		let m   = this,
-			url = this.app_context.url.get("OZ_SERVER_LOGIN_SERVICE");
+		let m = this,
+			url = this.app_context.url.get('OZ_SERVER_LOGIN_SERVICE');
 
-		this.app_context.request("POST", url, data, function (response: any) {
-			m.trigger(OWebLogin.EVT_LOGIN_SUCCESS, [response]);
-		}, function (response: any) {
-			m.trigger(OWebLogin.EVT_LOGIN_ERROR, [response]);
-		}, true);
+		this.app_context.request(
+			'POST',
+			url,
+			data,
+			function(response: iComResponse) {
+				m.trigger(OWebLogin.EVT_LOGIN_SUCCESS, [response]);
+			},
+			function(response: any) {
+				m.trigger(OWebLogin.EVT_LOGIN_ERROR, [response]);
+			},
+			true
+		);
 	}
-};
+}
