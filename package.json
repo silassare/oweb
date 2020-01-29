@@ -13,7 +13,7 @@
 	"files": [
 		"src",
 		"dist",
-		"types/*.d.ts"
+		"types"
 	],
 	"scripts": {
 		"build": "tsc & typedoc",
