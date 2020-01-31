@@ -409,10 +409,15 @@ export default class OWebRouter {
 	 * @param baseUrl the base url
 	 * @param hashMode weather to use hash mode
 	 */
-	constructor(baseUrl: string, hashMode: boolean = true) {
+	constructor(
+		baseUrl: string,
+		hashMode: boolean = true,
+		notFound: (target: tRouteTarget) => void
+	) {
 		let r = this;
 		this._baseUrl = baseUrl;
 		this._hashMode = hashMode;
+		this._notFound = notFound;
 		this._popStateListener = (e: PopStateEvent) => {
 			console.log('[OWebRouter] popstate ->', arguments);
 
@@ -576,16 +581,6 @@ export default class OWebRouter {
 		action: tRouteAction
 	): this {
 		this._routes.push(new OWebRoute(path, rules, action));
-		return this;
-	}
-
-	/**
-	 * Attach a route
-	 *
-	 * @param handler the notfound handler
-	 */
-	notFound(handler: (target: tRouteTarget) => void): this {
-		this._notFound = handler;
 		return this;
 	}
 
