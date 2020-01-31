@@ -4,7 +4,7 @@ import OWebCurrentUser from './OWebCurrentUser';
 import OWebDataStore from './OWebDataStore';
 import OWebEvent from './OWebEvent';
 import OWebFormValidator from './OWebFormValidator';
-import OWebRouter, { tRouteTarget } from './OWebRouter';
+import OWebRouter, { tRouteTarget, tRouteStateObject } from './OWebRouter';
 import OWebUrl, { tUrlList } from './OWebUrl';
 import OWebView from './OWebView';
 import OWebDate from './plugins/OWebDate';
@@ -17,13 +17,17 @@ import OWebPager from './OWebPager';
  */
 const noop = () => {};
 
-const requestDefaultOptions: any = {
-	headers: {},
-};
-
-export default abstract class OWebApp extends OWebEvent {
+export default class OWebApp extends OWebEvent {
 	static readonly SELF = Utils.id();
 	static readonly EVT_APP_READY = Utils.id();
+	static readonly EVT_NOT_FOUND = Utils.id();
+	static readonly EVT_SHOW_HOME = Utils.id();
+	static readonly EVT_SHOW_LOGIN = Utils.id();
+	static readonly EVT_SHOW_REGISTRATION_PAGE = Utils.id();
+
+	private readonly _requestDefaultOptions: any = {
+		headers: {},
+	};
 
 	readonly view: OWebView;
 	readonly pager: OWebPager<any>;
@@ -57,17 +61,20 @@ export default abstract class OWebApp extends OWebEvent {
 		this.pager = new OWebPager(this);
 		this.i18n = new OWebI18n();
 
-		let base_url = this.configs.get('OW_APP_LOCAL_BASE_URL'),
+		const ctx = this,
+			base_url = this.configs.get('OW_APP_LOCAL_BASE_URL'),
 			hash_mode = false !== this.configs.get('OW_APP_ROUTER_HASH_MODE');
 
-		this.router = new OWebRouter(base_url, hash_mode);
-
-		this.router.notFound(this.showNotFound.bind(this));
+		this.router = new OWebRouter(base_url, hash_mode, function(
+			target: tRouteTarget
+		) {
+			ctx.trigger(OWebApp.EVT_NOT_FOUND, [target]);
+		});
 
 		this.i18n.setDefaultLang(this.configs.get('OW_APP_DEFAULT_LANG'));
 
 		let api_key_header = this.configs.get('OZ_API_KEY_HEADER_NAME');
-		requestDefaultOptions.headers = {
+		this._requestDefaultOptions.headers = {
 			[api_key_header]: this.configs.get('OZ_API_KEY'),
 		};
 	}
@@ -76,7 +83,7 @@ export default abstract class OWebApp extends OWebEvent {
 	 * Get request default options
 	 */
 	getRequestDefaultOptions() {
-		return Utils.copy(requestDefaultOptions);
+		return Utils.copy(this._requestDefaultOptions);
 	}
 
 	/**
@@ -86,7 +93,7 @@ export default abstract class OWebApp extends OWebEvent {
 		let header_name = this.configs.get('OZ_SESSION_TOKEN_HEADER_NAME');
 
 		if (header_name && token) {
-			requestDefaultOptions.headers[header_name] = token;
+			this._requestDefaultOptions.headers[header_name] = token;
 		}
 
 		return this;
@@ -104,15 +111,6 @@ export default abstract class OWebApp extends OWebEvent {
 	 */
 	isMobileApp(): boolean {
 		return 'cordova' in window;
-	}
-
-	/**
-	 * To start the web app.
-	 */
-	start(): this {
-		console.log('[OWebApp] app started!');
-		this.trigger(OWebApp.EVT_APP_READY);
-		return this;
 	}
 
 	/**
@@ -139,7 +137,7 @@ export default abstract class OWebApp extends OWebEvent {
 	 */
 	forceLogin() {
 		this.ls.clear();
-		this.showLoginPage();
+		this.showLoginPage({});
 	}
 
 	/**
@@ -149,7 +147,7 @@ export default abstract class OWebApp extends OWebEvent {
 		// TODO: instead of reloading the current location, find a way to browse to web app entry point
 		// for android & ios restart the app
 		// window.location.reload(true);
-		this.showHomePage();
+		this.showHomePage({});
 	}
 
 	/**
@@ -284,6 +282,36 @@ export default abstract class OWebApp extends OWebEvent {
 	}
 
 	/**
+	 * To start the web app.
+	 */
+	start(): this {
+		console.log('[OWebApp] app started!');
+		this.trigger(OWebApp.EVT_APP_READY);
+		return this;
+	}
+
+	/**
+	 * Called when app should show the home page.
+	 */
+	showHomePage(options: tRouteStateObject = {}) {
+		this.trigger(OWebApp.EVT_SHOW_HOME, [options]);
+	}
+
+	/**
+	 * Called when app should show the login page.
+	 */
+	showLoginPage(options: tRouteStateObject = {}) {
+		this.trigger(OWebApp.EVT_SHOW_LOGIN, [options]);
+	}
+
+	/**
+	 * Called when app should show the registration page.
+	 */
+	showRegistrationPage(options: tRouteStateObject = {}) {
+		this.trigger(OWebApp.EVT_SHOW_LOGIN, [options]);
+	}
+
+	/**
 	 * Register handler for OWebApp.EVT_APP_READY event
 	 *
 	 * @param handler
@@ -293,22 +321,46 @@ export default abstract class OWebApp extends OWebEvent {
 	}
 
 	/**
-	 * Called when app should show the home page.
+	 * Register handler for OWebApp.EVT_SHOW_HOME event
+	 *
+	 * @param handler
 	 */
-	abstract showHomePage(): this;
+	onShowHomePage(
+		handler: (this: this, options: tRouteStateObject) => void | boolean
+	) {
+		return this.on(OWebApp.EVT_SHOW_HOME, handler);
+	}
 
 	/**
-	 * Called when the requested route was not found.
+	 * Register handler for OWebApp.EVT_SHOW_LOGIN event
+	 *
+	 * @param handler
 	 */
-	abstract showNotFound(target: tRouteTarget): this;
+	onShowLoginPage(
+		handler: (this: this, options: tRouteStateObject) => void | boolean
+	) {
+		return this.on(OWebApp.EVT_SHOW_LOGIN, handler);
+	}
 
 	/**
-	 * Called when app should show the login page.
+	 * Register handler for OWebApp.EVT_SHOW_REGISTRATION_PAGE event
+	 *
+	 * @param handler
 	 */
-	abstract showLoginPage(): this;
+	onShowRegistrationPage(
+		handler: (this: this, options: tRouteStateObject) => void | boolean
+	) {
+		return this.on(OWebApp.EVT_SHOW_REGISTRATION_PAGE, handler);
+	}
 
 	/**
-	 * Called when app should show the signup page.
+	 * Register handler for OWebApp.EVT_NOT_FOUND event
+	 *
+	 * @param handler
 	 */
-	abstract showSignUpPage(): this;
+	onPageNotFound(
+		handler: (this: this, target: tRouteTarget) => void | boolean
+	) {
+		return this.on(OWebApp.EVT_NOT_FOUND, handler);
+	}
 }
