@@ -249,7 +249,10 @@ export default class OWebPager<Component> extends OWebEvent {
 					!ctx.app_context.userVerified()
 				) {
 					return (
-						routeContext.stop() && ctx.app_context.showLoginPage()
+						routeContext.stop() &&
+						ctx.app_context.showLoginPage({
+							next: routeContext.getPath(),
+						})
 					);
 				}
 
