@@ -4,15 +4,20 @@ import OWebCurrentUser from './OWebCurrentUser';
 import OWebDataStore from './OWebDataStore';
 import OWebEvent from './OWebEvent';
 import OWebFormValidator from './OWebFormValidator';
-import OWebRouter, { tRouteTarget } from './OWebRouter';
+import OWebRouter, { tRouteTarget, tRouteStateObject } from './OWebRouter';
 import OWebUrl, { tUrlList } from './OWebUrl';
 import OWebView from './OWebView';
 import OWebI18n from './OWebI18n';
 import OWebPager from './OWebPager';
-export default abstract class OWebApp extends OWebEvent {
+export default class OWebApp extends OWebEvent {
     private readonly name;
     static readonly SELF: string;
     static readonly EVT_APP_READY: string;
+    static readonly EVT_NOT_FOUND: string;
+    static readonly EVT_SHOW_HOME: string;
+    static readonly EVT_SHOW_LOGIN: string;
+    static readonly EVT_SHOW_REGISTRATION_PAGE: string;
+    private readonly _requestDefaultOptions;
     readonly view: OWebView;
     readonly pager: OWebPager<any>;
     readonly ls: OWebDataStore;
@@ -46,10 +51,6 @@ export default abstract class OWebApp extends OWebEvent {
      * Checks if we are running in mobile app.
      */
     isMobileApp(): boolean;
-    /**
-     * To start the web app.
-     */
-    start(): this;
     /**
      * Returns new form validator instance.
      *
@@ -108,25 +109,49 @@ export default abstract class OWebApp extends OWebEvent {
      */
     request(method: string, url: string, data: any, success?: (this: OWebCom, response: iComResponse) => void, fail?: (this: OWebCom, response: iComResponse) => void, freeze?: boolean): OWebCom;
     /**
+     * To start the web app.
+     */
+    start(): this;
+    /**
+     * Called when app should show the home page.
+     */
+    showHomePage(options?: tRouteStateObject): void;
+    /**
+     * Called when app should show the login page.
+     */
+    showLoginPage(options?: tRouteStateObject): void;
+    /**
+     * Called when app should show the registration page.
+     */
+    showRegistrationPage(options?: tRouteStateObject): void;
+    /**
      * Register handler for OWebApp.EVT_APP_READY event
      *
      * @param handler
      */
     onReady(handler: (this: this) => void | boolean): this;
     /**
-     * Called when app should show the home page.
+     * Register handler for OWebApp.EVT_SHOW_HOME event
+     *
+     * @param handler
      */
-    abstract showHomePage(): this;
+    onShowHomePage(handler: (this: this, options: tRouteStateObject) => void | boolean): this;
     /**
-     * Called when the requested route was not found.
+     * Register handler for OWebApp.EVT_SHOW_LOGIN event
+     *
+     * @param handler
      */
-    abstract showNotFound(target: tRouteTarget): this;
+    onShowLoginPage(handler: (this: this, options: tRouteStateObject) => void | boolean): this;
     /**
-     * Called when app should show the login page.
+     * Register handler for OWebApp.EVT_SHOW_REGISTRATION_PAGE event
+     *
+     * @param handler
      */
-    abstract showLoginPage(): this;
+    onShowRegistrationPage(handler: (this: this, options: tRouteStateObject) => void | boolean): this;
     /**
-     * Called when app should show the signup page.
+     * Register handler for OWebApp.EVT_NOT_FOUND event
+     *
+     * @param handler
      */
-    abstract showSignUpPage(): this;
+    onPageNotFound(handler: (this: this, target: tRouteTarget) => void | boolean): this;
 }

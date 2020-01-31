@@ -179,7 +179,7 @@ export default class OWebRouter {
      * @param baseUrl the base url
      * @param hashMode weather to use hash mode
      */
-    constructor(baseUrl: string, hashMode?: boolean);
+    constructor(baseUrl: string, hashMode: boolean | undefined, notFound: (target: tRouteTarget) => void);
     /**
      * Starts the router.
      *
@@ -229,12 +229,6 @@ export default class OWebRouter {
      * @param action the action to run
      */
     on(path: tRoutePath, rules: tRoutePathOptions | undefined, action: tRouteAction): this;
-    /**
-     * Attach a route
-     *
-     * @param handler the notfound handler
-     */
-    notFound(handler: (target: tRouteTarget) => void): this;
     /**
      * Go back.
      *
