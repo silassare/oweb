@@ -939,9 +939,17 @@ export default class OWebRouter {
 			targetHref = targetHref.substr(this._baseUrl.length);
 		}
 
-		if (orig === targetHref) return;
+		if (orig === targetHref) {
+			if (el.getAttribute('target') === '_blank') {
+				Utils.safeOpen(orig);
+				Utils.preventDefault(e);
+			}
 
-		e.preventDefault();
+			return;
+		}
+
+		Utils.preventDefault(e);
+
 		console.log(
 			'[OWebRouter][click] ->',
 			el,
