@@ -17,5 +17,4 @@ export declare class App<S extends iAppStore> extends OWebApp {
         [name: string]: OWebService<GoblEntity>;
     };
 }
-declare const createApp: <S extends iAppStore>(name: string, configs: tConfigList, urls: tUrlList, storeFn: (app: App<S>) => S) => App<S>;
-export default createApp;
+export declare const createApp: <S extends iAppStore>(name: string, configs: tConfigList, urls: tUrlList, storeFn: (app: App<S>) => S) => App<S>;

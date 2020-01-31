@@ -1,4 +1,4 @@
-declare let Utils: {
+declare const Utils: {
     isPlainObject: (a: any) => boolean;
     isString: (a: any) => a is string;
     isArray: (arg: any) => arg is any[];
@@ -30,6 +30,8 @@ declare let Utils: {
     buildQueryString: (object: object, prefix: string) => string;
     parseQueryString: (str: string) => {};
     eventCancel: (e: Event) => void;
+    preventDefault: (e: Event) => void;
     fileSizeFormat: (size: number, decimalPoint?: string, thousandsSep?: string) => string;
+    safeOpen: (url?: string, strWindowName?: string, strWindowFeatures?: string) => Window | null;
 };
 export default Utils;
