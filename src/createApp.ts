@@ -31,7 +31,7 @@ export class App<S extends iAppStore> extends OWebApp {
 	}
 }
 
-const createApp = function<S extends iAppStore>(
+export const createApp = function<S extends iAppStore>(
 	name: string,
 	configs: tConfigList,
 	urls: tUrlList,
@@ -39,5 +39,3 @@ const createApp = function<S extends iAppStore>(
 ) {
 	return new App(name, configs, urls, storeFn);
 };
-
-export default createApp;

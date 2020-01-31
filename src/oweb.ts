@@ -26,7 +26,7 @@ import PathResolver from './utils/PathResolver';
 import scriptLoader from './utils/scriptLoader';
 import Utils from './utils/Utils';
 import OWebPageBase from './OWebPageBase';
-import createApp from './createApp';
+import { createApp } from './createApp';
 
 export { tConfigList } from './OWebConfigs';
 
