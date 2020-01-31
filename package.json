@@ -1,6 +1,6 @@
 {
 	"name": "oweb",
-	"version": "1.4.0",
+	"version": "1.5.0",
 	"description": "O'Web is a framework for web applications that use APIs built with the O'Zone framework.",
 	"main": "dist/oweb.js",
 	"typings": "types/oweb.d.ts",
