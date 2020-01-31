@@ -1,12 +1,12 @@
 // ==========TYPE CHECKERS====================================
 let _naturalId = 0;
-let isArray = Array.isArray;
-let naturalId = (): string => 'id_' + _naturalId++;
-let isPlainObject = (a: any): boolean =>
+const isArray = Array.isArray;
+const naturalId = (): string => 'id-' + _naturalId++;
+const isPlainObject = (a: any): boolean =>
 	Object.prototype.toString.call(a) === '[object Object]';
-let isString = (a: any): a is string => typeof a === 'string';
-let isFunction = (a: any): a is Function => typeof a === 'function';
-let isEmpty = function(a: any): boolean {
+const isString = (a: any): a is string => typeof a === 'string';
+const isFunction = (a: any): a is Function => typeof a === 'function';
+const isEmpty = function(a: any): boolean {
 	if (isArray(a)) {
 		return !a.length;
 	}
@@ -25,11 +25,11 @@ let isEmpty = function(a: any): boolean {
 	return !a;
 };
 
-let isNotEmpty = (a: any): boolean => !isEmpty(a);
-let toArray = (a: any): Array<any> => [].concat.apply([], a);
+const isNotEmpty = (a: any): boolean => !isEmpty(a);
+const toArray = (a: any): Array<any> => [].concat.apply([], a);
 
 // ==========HELPERS====================================
-let callback = function(fn: any, args?: Array<any>, ctx?: any): any {
+const callback = function(fn: any, args?: Array<any>, ctx?: any): any {
 	if (typeof fn === 'function') {
 		return fn.apply(ctx, args);
 	}
@@ -37,7 +37,7 @@ let callback = function(fn: any, args?: Array<any>, ctx?: any): any {
 	return null;
 };
 
-let forEach = function<T>(
+const forEach = function<T>(
 	obj: { [key: string]: T } | Array<T>,
 	fn: (value: T, key: any) => void
 ) {
@@ -47,7 +47,7 @@ let forEach = function<T>(
 	});
 };
 
-let assign =
+const assign =
 	(Object as any).assign ||
 	function(target: object, source: object) {
 		let to = target,
@@ -75,11 +75,12 @@ let assign =
 
 		return to;
 	};
-let copy = function<T>(a: T): T {
+
+const copy = function<T>(a: T): T {
 	return JSON.parse(JSON.stringify(a));
 };
 
-let stringKeyReplace = function(str: string, data: object): string {
+const stringKeyReplace = function(str: string, data: object): string {
 	if (isString(str) && str.length && isPlainObject(data)) {
 		let keys = Object.keys(data)
 				.sort()
@@ -105,7 +106,7 @@ let stringKeyReplace = function(str: string, data: object): string {
 	return str;
 };
 
-let textToLineString = (text: string): string => {
+const textToLineString = (text: string): string => {
 	let reg = /["'\\\n\r\t\u2028\u2029]/g,
 		to_escapes: object = {
 			'"': '"',
@@ -121,7 +122,7 @@ let textToLineString = (text: string): string => {
 	return text.replace(reg, match => '\\' + (to_escapes as any)[match]);
 };
 
-let expose = function(items: Array<string>, ctx: any): object {
+const expose = function(items: Array<string>, ctx: any): object {
 	let out: object = {};
 	items.forEach(function(key) {
 		let item = ctx[key];
@@ -140,7 +141,7 @@ let expose = function(items: Array<string>, ctx: any): object {
 	return out;
 };
 
-let getFrom = function(from: object, key: string): any {
+const getFrom = function(from: object, key: string): any {
 	let { [key]: value }: any = from || {};
 
 	return value;
@@ -148,7 +149,7 @@ let getFrom = function(from: object, key: string): any {
 
 // ==========MATH====================================
 
-let _setDigitsSep = function(x: number, sep: string): string {
+const _setDigitsSep = function(x: number, sep: string): string {
 	let s = String(x),
 		count = 0,
 		ans = [],
@@ -170,7 +171,7 @@ let _setDigitsSep = function(x: number, sep: string): string {
 	return ans.concat(end).join('');
 };
 
-let math = {
+const math = {
 	numberFormat: function(
 		x: number | string,
 		dec: number = 2,
@@ -218,7 +219,7 @@ let math = {
 	},
 };
 
-let isInDOM = function(element: any, inBody: boolean = false): boolean {
+const isInDOM = function(element: any, inBody: boolean = false): boolean {
 	let _ = element,
 		last;
 
@@ -233,8 +234,8 @@ let isInDOM = function(element: any, inBody: boolean = false): boolean {
 	return inBody ? last === document.body : last === document;
 };
 
-let buildQueryString = function(object: object, prefix: string): string {
-	let duplicates = {},
+const buildQueryString = function(object: object, prefix: string): string {
+	const duplicates = {},
 		str = [];
 
 	for (let prop in object) {
@@ -278,7 +279,7 @@ let buildQueryString = function(object: object, prefix: string): string {
 	return str.join('&');
 };
 
-let shuffle = (a: Array<any>): Array<any> => {
+const shuffle = (a: Array<any>): Array<any> => {
 	let j, x, i;
 
 	for (i = a.length - 1; i > 0; i--) {
@@ -291,11 +292,11 @@ let shuffle = (a: Array<any>): Array<any> => {
 	return a;
 };
 
-let parseQueryString = function(str: string) {
+const parseQueryString = function(str: string) {
 	if (str.charAt(0) === '?') str = str.substring(1);
 	if (!str.length) return {};
 
-	let pairs = str.split('&'),
+	const pairs = str.split('&'),
 		params = {};
 	for (let i = 0, len = pairs.length; i < len; i++) {
 		let pair = pairs[i].split('='),
@@ -311,20 +312,27 @@ let parseQueryString = function(str: string) {
 	return params;
 };
 
-let eventCancel = function(e: Event) {
-	if (!e) {
-		if (window.event) e = window.event;
-		else return;
-	}
+const preventDefault = function(e: Event) {
+		if (!e) {
+			if (window.event) e = window.event;
+			else return;
+		}
 
-	if (e.cancelBubble != null) e.cancelBubble = true;
-	if (e.stopPropagation) e.stopPropagation();
-	if (e.preventDefault) e.preventDefault();
-	if (window.event) e.returnValue = false;
-	// if (e.cancel != null) e.cancel = true;
-};
+		if (e.preventDefault) e.preventDefault();
+		if (e.cancelBubble != null) e.cancelBubble = true;
+		if (e.stopPropagation) e.stopPropagation();
+		if (window.event) e.returnValue = false;
+		// if (e.cancel != null) e.cancel = true;
+	},
+	eventCancel = function(e: Event) {
+		console.warn(
+			'"Utils.eventCancel" is deprecated, use "Utils.preventDefault" instead'
+		);
 
-let isValidAge = (
+		preventDefault(e);
+	};
+
+const isValidAge = (
 	day: number,
 	month: number,
 	year: number,
@@ -371,7 +379,7 @@ let isValidAge = (
 	return true;
 };
 
-let fileSizeFormat = function(
+const fileSizeFormat = function(
 	size: number /* in bytes */,
 	decimalPoint: string = '.',
 	thousandsSep: string = ' '
@@ -403,7 +411,66 @@ let fileSizeFormat = function(
 	return head + ' ' + units[i == 0 ? 0 : i - 1];
 };
 
-let Utils = {
+/**
+ * Opens the provided url by injecting a hidden iframe that calls
+ * window.open(), then removes the iframe from the DOM.
+ *
+ * Prevent reverse tabnabbing phishing attacks caused by _blank
+ *
+ * https://mathiasbynens.github.io/rel-noopener/
+ *
+ * https://github.com/danielstjules/blankshield/blob/6e208bf25a44bf50d1a5e85ae96fee0c015d05bc/blankshield.js#L166
+ *
+ * @param url
+ * @param strWindowName
+ * @param strWindowFeatures
+ */
+const safeOpen = function(
+	url: string = '',
+	strWindowName: string = '',
+	strWindowFeatures: string = ''
+) {
+	if (window.navigator.userAgent.indexOf('MSIE') !== -1) {
+		// IE before 11
+		let child = open.apply(window, [url, strWindowName, strWindowFeatures]);
+		if (child) {
+			child.opener = null;
+		}
+		return child;
+	}
+
+	let iframe, iframeDoc, script, openArgs, newWin;
+
+	iframe = document.createElement('iframe') as HTMLIFrameElement;
+	iframe.style.display = 'none';
+	document.body.appendChild(iframe);
+	iframeDoc = (iframe.contentDocument ||
+		(iframe.contentWindow as any).document) as Document;
+
+	openArgs = '"' + url + '"';
+	if (strWindowName) {
+		openArgs += ', "' + strWindowName + '"';
+	}
+	if (strWindowFeatures) {
+		openArgs += ', "' + strWindowFeatures + '"';
+	}
+
+	script = iframeDoc.createElement('script');
+	script.type = 'text/javascript';
+	script.text =
+		'window.parent = null; window.top = null;' +
+		'window.frameElement = null; var child = window.open(' +
+		openArgs +
+		');' +
+		'if (child) { child.opener = null }';
+	iframeDoc.body.appendChild(script);
+	newWin = (iframe.contentWindow as any).child as Window;
+
+	document.body.removeChild(iframe);
+	return newWin;
+};
+
+const Utils = {
 	isPlainObject,
 	isString,
 	isArray,
@@ -431,8 +498,11 @@ let Utils = {
 	parseQueryString,
 	// ============
 	eventCancel,
+	preventDefault,
 	// ============
 	fileSizeFormat,
+	// ============
+	safeOpen,
 };
 
 export default Utils;
