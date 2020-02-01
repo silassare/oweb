@@ -26,7 +26,7 @@ export class App<S extends iAppStore> extends OWebApp {
 	/**
 	 * Store services shortcut
 	 */
-	get services() {
+	get services(): S['services'] {
 		return this.store.services;
 	}
 }
