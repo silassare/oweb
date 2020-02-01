@@ -24,7 +24,7 @@ export default class OWebCurrentUser extends OWebEvent {
 		let data = this._key_store.getItem('user_data');
 		let user = undefined;
 
-		if (data instanceof GoblEntity) {
+		if (data && data.id && typeof data.getId === 'function') {
 			return data;
 		} else if (
 			Utils.isPlainObject(data) &&
