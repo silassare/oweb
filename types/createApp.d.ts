@@ -13,8 +13,6 @@ export declare class App<S extends iAppStore> extends OWebApp {
     /**
      * Store services shortcut
      */
-    readonly services: {
-        [name: string]: OWebService<GoblEntity>;
-    };
+    readonly services: S['services'];
 }
 export declare const createApp: <S extends iAppStore>(name: string, configs: tConfigList, urls: tUrlList, storeFn: (app: App<S>) => S) => App<S>;
