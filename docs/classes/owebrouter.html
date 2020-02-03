@@ -137,28 +137,43 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new OWeb<wbr>Router<span class="tsd-signature-symbol">(</span>baseUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, hashMode<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, notFound<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebrouter.html" class="tsd-signature-type">OWebRouter</a></li>
+						<li class="tsd-signature tsd-kind-icon">new OWeb<wbr>Router<span class="tsd-signature-symbol">(</span>baseUrl<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, hashMode<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, notFound<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><a href="../globals.html#troutetarget" class="tsd-signature-type">tRouteTarget</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebrouter.html" class="tsd-signature-type">OWebRouter</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L404">OWebRouter.ts:404</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L404">src/OWebRouter.ts:404</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>OWebRouter constructor.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>baseUrl: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>the base url</p>
+										</div>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> hashMode: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> hashMode: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>weather to use hash mode</p>
+										</div>
+									</div>
 								</li>
 								<li>
-									<h5>notFound: <span class="tsd-signature-type">function</span></h5>
+									<h5>notFound: <span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><a href="../globals.html#troutetarget" class="tsd-signature-type">tRouteTarget</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+											<ul class="tsd-signatures tsd-kind-type-literal">
 												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><a href="../globals.html#troutetarget" class="tsd-signature-type">tRouteTarget</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
@@ -189,7 +204,7 @@
 					<div class="tsd-signature tsd-kind-icon">_base<wbr>Url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L388">OWebRouter.ts:388</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L388">src/OWebRouter.ts:388</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -199,27 +214,27 @@
 					<div class="tsd-signature tsd-kind-icon">_current_<wbr>dispatcher<span class="tsd-signature-symbol">:</span> <a href="../interfaces/iroutedispatcher.html" class="tsd-signature-type">iRouteDispatcher</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L403">OWebRouter.ts:403</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L403">src/OWebRouter.ts:403</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_dispatch_id" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _dispatch_<wbr>id</h3>
-					<div class="tsd-signature tsd-kind-icon">_dispatch_<wbr>id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
+					<div class="tsd-signature tsd-kind-icon">_dispatch_<wbr>id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L402">OWebRouter.ts:402</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L402">src/OWebRouter.ts:402</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_force_replace" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _force_<wbr>replace</h3>
-					<div class="tsd-signature tsd-kind-icon">_force_<wbr>replace<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
+					<div class="tsd-signature tsd-kind-icon">_force_<wbr>replace<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L404">OWebRouter.ts:404</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L404">src/OWebRouter.ts:404</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -229,34 +244,34 @@
 					<div class="tsd-signature tsd-kind-icon">_hash<wbr>Mode<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L389">OWebRouter.ts:389</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L389">src/OWebRouter.ts:389</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_initialized" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _initialized</h3>
-					<div class="tsd-signature tsd-kind-icon">_initialized<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
+					<div class="tsd-signature tsd-kind-icon">_initialized<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L397">OWebRouter.ts:397</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L397">src/OWebRouter.ts:397</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_linkclicklistener" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _link<wbr>Click<wbr>Listener</h3>
-					<div class="tsd-signature tsd-kind-icon">_link<wbr>Click<wbr>Listener<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">_link<wbr>Click<wbr>Listener<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>e<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L401">OWebRouter.ts:401</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L401">src/OWebRouter.ts:401</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>e<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -277,37 +292,37 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_listening" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _listening</h3>
-					<div class="tsd-signature tsd-kind-icon">_listening<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
+					<div class="tsd-signature tsd-kind-icon">_listening<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L398">OWebRouter.ts:398</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L398">src/OWebRouter.ts:398</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_notfound" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _not<wbr>Found</h3>
-					<div class="tsd-signature tsd-kind-icon">_not<wbr>Found<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> =&nbsp;undefined</span></div>
+					<div class="tsd-signature tsd-kind-icon">_not<wbr>Found<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><a href="../globals.html#troutetarget" class="tsd-signature-type">tRouteTarget</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> = undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L399">OWebRouter.ts:399</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L399">src/OWebRouter.ts:399</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_popstatelistener" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _pop<wbr>State<wbr>Listener</h3>
-					<div class="tsd-signature tsd-kind-icon">_pop<wbr>State<wbr>Listener<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<div class="tsd-signature tsd-kind-icon">_pop<wbr>State<wbr>Listener<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>e<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PopStateEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L400">OWebRouter.ts:400</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L400">src/OWebRouter.ts:400</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property">
 									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>e<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PopStateEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
@@ -328,10 +343,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_routes" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _routes</h3>
-					<div class="tsd-signature tsd-kind-icon">_routes<span class="tsd-signature-symbol">:</span> <a href="owebroute.html" class="tsd-signature-type">OWebRoute</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">_routes<span class="tsd-signature-symbol">:</span> <a href="owebroute.html" class="tsd-signature-type">OWebRoute</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L396">OWebRouter.ts:396</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L396">src/OWebRouter.ts:396</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -348,13 +363,22 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L859">OWebRouter.ts:859</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L859">src/OWebRouter.ts:859</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Handle click event</p>
+								</div>
+								<p>onclick from page.js library: github.com/visionmedia/page.js</p>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>e: <span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TouchEvent</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the envent object</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -371,19 +395,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L704">OWebRouter.ts:704</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L704">src/OWebRouter.ts:704</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Adds history.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>url: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the url</p>
+									</div>
 								</li>
 								<li>
 									<h5>state: <a href="../globals.html#troutestateobject" class="tsd-signature-type">tRouteStateObject</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the history state</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> title: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> title: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the window title</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -400,22 +438,39 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L623">OWebRouter.ts:623</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L623">src/OWebRouter.ts:623</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Browse to a specific location</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>url: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the next url</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> state: <a href="../globals.html#troutestateobject" class="tsd-signature-type">tRouteStateObject</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> state: <a href="../globals.html#troutestateobject" class="tsd-signature-type">tRouteStateObject</a><span class="tsd-signature-symbol"> = {}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the initial state</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> push: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> push: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>should we push into the history state</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> ignoreSameLocation: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> ignoreSameLocation: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>ignore browsing again to same location</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -432,19 +487,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L750">OWebRouter.ts:750</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L750">src/OWebRouter.ts:750</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Create route event dispatcher</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>target: <a href="../globals.html#troutetarget" class="tsd-signature-type">tRouteTarget</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the route target</p>
+									</div>
 								</li>
 								<li>
 									<h5>state: <a href="../globals.html#troutestateobject" class="tsd-signature-type">tRouteStateObject</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the history state</p>
+									</div>
 								</li>
 								<li>
 									<h5>id: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the dispatcher id</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/iroutedispatcher.html" class="tsd-signature-type">iRouteDispatcher</a></h4>
@@ -461,9 +530,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L481">OWebRouter.ts:481</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L481">src/OWebRouter.ts:481</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>When called the current history will be replaced by the next history state.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
@@ -478,13 +552,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L496">OWebRouter.ts:496</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L496">src/OWebRouter.ts:496</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/iroutedispatcher.html" class="tsd-signature-type">iRouteDispatcher</a>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">undefined</span>
-							</h4>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the current route event dispatcher.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/iroutedispatcher.html" class="tsd-signature-type">iRouteDispatcher</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -498,9 +574,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L489">OWebRouter.ts:489</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L489">src/OWebRouter.ts:489</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the current route target.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="../globals.html#troutetarget" class="tsd-signature-type">tRouteTarget</a></h4>
 						</li>
 					</ul>
@@ -515,9 +596,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L503">OWebRouter.ts:503</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L503">src/OWebRouter.ts:503</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the current route context.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="owebroutecontext.html" class="tsd-signature-type">OWebRouteContext</a></h4>
 						</li>
 					</ul>
@@ -532,13 +618,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L592">OWebRouter.ts:592</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L592">src/OWebRouter.ts:592</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Go back.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> distance: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> distance: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the distance in history</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -555,19 +649,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L578">OWebRouter.ts:578</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L578">src/OWebRouter.ts:578</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Attach a route action.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>path: <a href="../globals.html#troutepath" class="tsd-signature-type">tRoutePath</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the path to watch</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> rules: <a href="../globals.html#troutepathoptions" class="tsd-signature-type">tRoutePathOptions</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> rules: <a href="../globals.html#troutepathoptions" class="tsd-signature-type">tRoutePathOptions</a><span class="tsd-signature-symbol"> = {}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the path rules</p>
+									</div>
 								</li>
 								<li>
 									<h5>action: <a href="../globals.html#trouteaction" class="tsd-signature-type">tRouteAction</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the action to run</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -584,13 +692,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L516">OWebRouter.ts:516</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L516">src/OWebRouter.ts:516</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Parse a given url.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>url: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">URL</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the url to parse</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../globals.html#troutetarget" class="tsd-signature-type">tRouteTarget</a></h4>
@@ -601,22 +717,33 @@
 					<a name="pathtourl" class="tsd-anchor"></a>
 					<h3>path<wbr>ToURL</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">path<wbr>ToURL<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">URL</span></li>
+						<li class="tsd-signature tsd-kind-icon">path<wbr>ToURL<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, base<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">URL</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L555">OWebRouter.ts:555</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L555">src/OWebRouter.ts:555</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Builds url with a given path and base url.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>path: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the path</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> base: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the base url</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">URL</span></h4>
@@ -633,9 +760,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L817">OWebRouter.ts:817</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L817">src/OWebRouter.ts:817</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Register DOM events handler.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
@@ -650,19 +782,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L725">OWebRouter.ts:725</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L725">src/OWebRouter.ts:725</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Replace the current history.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>url: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the url</p>
+									</div>
 								</li>
 								<li>
 									<h5>state: <a href="../globals.html#troutestateobject" class="tsd-signature-type">tRouteStateObject</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the history state</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> title: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> title: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the window title</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -673,25 +819,39 @@
 					<a name="start" class="tsd-anchor"></a>
 					<h3>start</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">start<span class="tsd-signature-symbol">(</span>firstRun<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, target<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, state<span class="tsd-signature-symbol">: </span><a href="../globals.html#troutestateobject" class="tsd-signature-type">tRouteStateObject</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">start<span class="tsd-signature-symbol">(</span>firstRun<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, target<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, state<span class="tsd-signature-symbol">?: </span><a href="../globals.html#troutestateobject" class="tsd-signature-type">tRouteStateObject</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L445">OWebRouter.ts:445</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L445">src/OWebRouter.ts:445</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Starts the router.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> firstRun: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> firstRun: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>first run flag</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> target: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;wLoc.href</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> target: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = wLoc.href</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>initial target, usualy the entry point</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> state: <a href="../globals.html#troutestateobject" class="tsd-signature-type">tRouteStateObject</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>initial state</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -708,9 +868,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L466">OWebRouter.ts:466</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L466">src/OWebRouter.ts:466</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Stops the router.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
@@ -725,9 +890,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L834">OWebRouter.ts:834</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L834">src/OWebRouter.ts:834</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Unregister all DOM events handler.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
@@ -741,46 +911,46 @@
 					<div class="tsd-signature tsd-kind-icon">_current_<wbr>target<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L390">OWebRouter.ts:390</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L390">src/OWebRouter.ts:390</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="_current_target.fullpath" class="tsd-anchor"></a>
 						<h3>full<wbr>Path</h3>
-						<div class="tsd-signature tsd-kind-icon">full<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></div>
+						<div class="tsd-signature tsd-kind-icon">full<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L394">OWebRouter.ts:394</a></li>
+								<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L394">src/OWebRouter.ts:394</a></li>
 							</ul>
 						</aside>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="_current_target.href" class="tsd-anchor"></a>
 						<h3>href</h3>
-						<div class="tsd-signature tsd-kind-icon">href<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></div>
+						<div class="tsd-signature tsd-kind-icon">href<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L392">OWebRouter.ts:392</a></li>
+								<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L392">src/OWebRouter.ts:392</a></li>
 							</ul>
 						</aside>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="_current_target.parsed" class="tsd-anchor"></a>
 						<h3>parsed</h3>
-						<div class="tsd-signature tsd-kind-icon">parsed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></div>
+						<div class="tsd-signature tsd-kind-icon">parsed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L391">OWebRouter.ts:391</a></li>
+								<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L391">src/OWebRouter.ts:391</a></li>
 							</ul>
 						</aside>
 					</section>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
 						<a name="_current_target.path" class="tsd-anchor"></a>
 						<h3>path</h3>
-						<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></div>
+						<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebRouter.ts#L393">OWebRouter.ts:393</a></li>
+								<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebRouter.ts#L393">src/OWebRouter.ts:393</a></li>
 							</ul>
 						</aside>
 					</section>

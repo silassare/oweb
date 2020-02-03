@@ -123,7 +123,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebevent.html">OWebEvent</a>.<a href="owebevent.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebEvent.ts#L4">OWebEvent.ts:4</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebEvent.ts#L4">src/OWebEvent.ts:4</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="owebi18n.html" class="tsd-signature-type">OWebI18n</a></h4>
@@ -136,10 +136,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="defaultlangcode" class="tsd-anchor"></a>
 					<h3>default<wbr>Lang<wbr>Code</h3>
-					<div class="tsd-signature tsd-kind-icon">default<wbr>Lang<wbr>Code<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;en&quot;</span></div>
+					<div class="tsd-signature tsd-kind-icon">default<wbr>Lang<wbr>Code<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;en&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebI18n.ts#L76">OWebI18n.ts:76</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebI18n.ts#L76">src/OWebI18n.ts:76</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -156,9 +156,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebI18n.ts#L112">OWebI18n.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebI18n.ts#L112">src/OWebI18n.ts:112</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets i18n for HTMLElement</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -166,6 +171,8 @@
 								</li>
 								<li>
 									<h5>options: <a href="../globals.html#ti18noptions" class="tsd-signature-type">tI18nOptions</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -183,16 +190,27 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebevent.html">OWebEvent</a>.<a href="owebevent.html#off">off</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebEvent.ts#L34">OWebEvent.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebEvent.ts#L34">src/OWebEvent.ts:34</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Removes event handler.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>event: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The event name.</p>
+									</div>
 								</li>
 								<li>
 									<h5>handler: <span class="tsd-signature-type">Function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The event handler function.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -203,27 +221,38 @@
 					<a name="on" class="tsd-anchor"></a>
 					<h3>on</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebevent.html">OWebEvent</a>.<a href="owebevent.html#on">on</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebEvent.ts#L14">OWebEvent.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebEvent.ts#L14">src/OWebEvent.ts:14</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Register event handler.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>event: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The event name.</p>
+									</div>
 								</li>
 								<li>
-									<h5>handler: <span class="tsd-signature-type">function</span></h5>
+									<h5>handler: <span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The event handler function.</p>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span>, args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></li>
+											<ul class="tsd-signatures tsd-kind-type-literal">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
@@ -233,13 +262,10 @@
 															<h5>this: <span class="tsd-signature-type">this</span></h5>
 														</li>
 														<li>
-															<h5><span class="tsd-flag ts-flagRest">Rest</span> args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+															<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
 														</li>
 													</ul>
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span>
-														<span class="tsd-signature-symbol"> | </span>
-														<span class="tsd-signature-type">boolean</span>
-													</h4>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></h4>
 												</li>
 											</ul>
 										</li>
@@ -260,13 +286,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebI18n.ts#L83">OWebI18n.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebI18n.ts#L83">src/OWebI18n.ts:83</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets default i18n lang code.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>lang: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The i18n lang code.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -283,22 +317,36 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebI18n.ts#L102">OWebI18n.ts:102</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebI18n.ts#L102">src/OWebI18n.ts:102</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns i18n translation.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The i18n string key.</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> data: <a href="../globals.html#ti18ndata" class="tsd-signature-type">tI18nData</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> data: <a href="../globals.html#ti18ndata" class="tsd-signature-type">tI18nData</a><span class="tsd-signature-symbol"> = {}</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The data to inject in translation process.</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> pluralize: <a href="../globals.html#ti18npluralize" class="tsd-signature-type">tI18nPluralize</a><span class="tsd-signature-symbol"> =&nbsp;0</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> pluralize: <a href="../globals.html#ti18npluralize" class="tsd-signature-type">tI18nPluralize</a><span class="tsd-signature-symbol"> = 0</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> lang: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;this.defaultLangCode</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> lang: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = this.defaultLangCode</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The i18n lang code to use.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -316,22 +364,39 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebevent.html">OWebEvent</a>.<a href="owebevent.html#trigger">trigger</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebEvent.ts#L71">OWebEvent.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebEvent.ts#L71">src/OWebEvent.ts:71</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Trigger an event.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>event: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The event name.</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> data: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> data: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = []</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The data to be passed as arguments to the event handlers.</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> cancelable: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> cancelable: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>When true the event will stop when a handler returns false.</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> context: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;this</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> context: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = this</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The context in which each handler will be called. Default: this.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -348,16 +413,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/9b5768f/src/OWebI18n.ts#L149">OWebI18n.ts:149</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/1f34f3e/src/OWebI18n.ts#L149">src/OWebI18n.ts:149</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets the i18n lang data.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>lang: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The i18n lang code</p>
+									</div>
 								</li>
 								<li>
 									<h5>data: <a href="../globals.html#ti18ndefinition" class="tsd-signature-type">tI18nDefinition</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The i18n lang data.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="owebi18n.html" class="tsd-signature-type">OWebI18n</a></h4>
