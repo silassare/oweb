@@ -27,6 +27,7 @@ import scriptLoader from './utils/scriptLoader';
 import Utils from './utils/Utils';
 import OWebPageBase from './OWebPageBase';
 import { createApp } from './createApp';
+import OWebTelInput from 'oweb-tel-input';
 
 export { tConfigList } from './OWebConfigs';
 
@@ -118,6 +119,7 @@ export {
 	OWebSignUp,
 	OWebDate,
 	OWebTNet,
+	OWebTelInput,
 	// Utilities
 
 	Utils,
