@@ -8,6 +8,7 @@ declare const Utils: {
     toArray: (a: any) => any[];
     isInDOM: (element: any, inBody?: boolean) => boolean;
     shuffle: (a: any[]) => any[];
+    escapeRegExp: (str: string) => string;
     id: () => string;
     callback: (fn: any, args?: any[] | undefined, ctx?: any) => any;
     assign: any;
