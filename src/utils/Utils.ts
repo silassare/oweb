@@ -27,7 +27,8 @@ const isEmpty = function(a: any): boolean {
 
 const isNotEmpty = (a: any): boolean => !isEmpty(a);
 const toArray = (a: any): Array<any> => [].concat.apply([], a);
-
+const escapeRegExp = (str: string) =>
+	str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 // ==========HELPERS====================================
 const callback = function(fn: any, args?: Array<any>, ctx?: any): any {
 	if (typeof fn === 'function') {
@@ -480,6 +481,7 @@ const Utils = {
 	toArray,
 	isInDOM,
 	shuffle,
+	escapeRegExp,
 	id: naturalId,
 	// ============
 	callback,

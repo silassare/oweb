@@ -17,8 +17,7 @@ import Utils from './utils/Utils';
 
 export type tEntitiesOrderByCb<T> = (a: T, b: T) => number;
 
-const getId = (item: GoblSinglePKEntity) => item.singlePKValue(),
-	escapeRegExp = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const getId = (item: GoblSinglePKEntity) => item.singlePKValue();
 
 const _with = (target: any, key: string | number, item: any) => {
 		return { ...target, [key]: item };
@@ -347,7 +346,7 @@ export default class OWebServiceStore<
 			return list;
 		}
 
-		let reg = new RegExp(escapeRegExp(search), 'i');
+		let reg = new RegExp(Utils.escapeRegExp(search), 'i');
 
 		return list.filter((item: any, index: number) => {
 			let v = stringBuilder(item, index);
