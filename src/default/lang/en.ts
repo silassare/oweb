@@ -56,7 +56,6 @@ export default {
 		'The password is too short. ({min} characters minimum)',
 	OZ_SIGNUP_SUCCESS: 'Successful registration.',
 	OZ_ERROR_INTERNAL: 'Internal error ...',
-	OZ_SESSION_INVALID: 'Invalid session Restart the application.',
 	OZ_ERROR_YOU_MUST_LOGIN: 'You must log in first.',
 	OZ_ERROR_NOT_ALLOWED:
 		'An error has occurred. You may not be allowed to perform this action.',

@@ -68,7 +68,6 @@ export default {
 	OZ_SIGNUP_SUCCESS: 'Inscription Réussie.',
 
 	OZ_ERROR_INTERNAL: 'Erreur iterne...',
-	OZ_SESSION_INVALID: "Session non valide. Relancer l'application.",
 	OZ_ERROR_YOU_MUST_LOGIN: "Vous devez vous connecter d'abord.",
 	OZ_ERROR_NOT_ALLOWED:
 		"Une erreur s'est produite. Vous n'êtes peut-être pas autoriser à effectuer cette action.",
