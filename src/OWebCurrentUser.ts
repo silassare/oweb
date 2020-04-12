@@ -13,7 +13,7 @@ export default class OWebCurrentUser extends OWebEvent {
 	constructor(private readonly app_context: OWebApp) {
 		super();
 
-		this._key_store = new OWebKeyStorage(app_context, OWebCurrentUser.SELF);
+		this._key_store = new OWebKeyStorage(app_context, 'current_user');
 		console.log('[OWebCurrentUser] ready!');
 	}
 

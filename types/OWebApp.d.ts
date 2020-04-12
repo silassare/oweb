@@ -32,7 +32,6 @@ export default class OWebApp extends OWebEvent {
      * @param name The app name.
      * @param configs The app config.
      * @param urls The app url list.
-     * @param state The app state.
      */
     protected constructor(name: string, configs: tConfigList, urls: tUrlList);
     /**

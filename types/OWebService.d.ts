@@ -96,8 +96,9 @@ export default class OWebService<T> {
     /**
      * @param app_context The app context.
      * @param service_name The service name.
+     * @param persistent_cache To enable persistence data caching.
      */
-    constructor(app_context: OWebApp, service_name: string);
+    constructor(app_context: OWebApp, service_name: string, persistent_cache?: boolean);
     /**
      * Returns the service name.
      */
