@@ -95,10 +95,33 @@ export type tServiceGetRelationItemsSuccess<T> = (
 ) => void;
 
 export type tServiceFail = (response: iComResponse) => void;
+export type tFilterCondition = "eq"
+	| "neq"
+	| "lt"
+	| "lte"
+	| "gt"
+	| "gte"
+	| "in"
+	| "not_in"
+	| "is_null"
+	| "is_not_null"
+	| "like"
+	| "not_like";
+
+export type tFilter = {
+	0: tFilterCondition,
+	1: string | string[] | number,
+	2?: "or" | "and"
+} | {
+	0: "is_null" | "is_not_null",
+	1?: "or" | "and"
+};
+
+export type tFiltersMap = { [key: string]: tFilter[] };
 
 export type tServiceRequestOptions = {
 	data?: any;
-	filters?: any;
+	filters?: tFiltersMap;
 	relations?: string;
 	collection?: string;
 	order_by?: string;

@@ -80,9 +80,21 @@ export declare type tServiceGetAllSuccess<T> = (response: iServiceGetAllResponse
 export declare type tServiceGetRelationSuccess<T> = (response: iServiceGetRelationItemResponse<T>, fromCache: boolean) => void;
 export declare type tServiceGetRelationItemsSuccess<T> = (response: iServiceGetRelationItemsResponse<T>, fromCache: boolean) => void;
 export declare type tServiceFail = (response: iComResponse) => void;
+export declare type tFilterCondition = "eq" | "neq" | "lt" | "lte" | "gt" | "gte" | "in" | "not_in" | "is_null" | "is_not_null" | "like" | "not_like";
+export declare type tFilter = {
+    0: tFilterCondition;
+    1: string | string[] | number;
+    2?: "or" | "and";
+} | {
+    0: "is_null" | "is_not_null";
+    1?: "or" | "and";
+};
+export declare type tFiltersMap = {
+    [key: string]: tFilter[];
+};
 export declare type tServiceRequestOptions = {
     data?: any;
-    filters?: any;
+    filters?: tFiltersMap;
     relations?: string;
     collection?: string;
     order_by?: string;

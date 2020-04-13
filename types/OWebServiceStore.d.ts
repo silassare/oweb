@@ -11,7 +11,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
     protected relations: {
         [key: string]: any;
     };
-    constructor(app_context: OWebApp, entity: typeof GoblSinglePKEntity, service_name: string);
+    constructor(app_context: OWebApp, entity: typeof GoblSinglePKEntity, service_name: string, persistent_cache?: boolean);
     getItem(id: string, relations?: string, then?: tServiceGetSuccess<T>, fail?: tServiceFail, freeze?: boolean, load_cache_first?: boolean, dialog?: boolean): OWebCom;
     getAllItems(options?: tServiceRequestOptions, then?: tServiceGetAllSuccess<T>, fail?: tServiceFail, freeze?: boolean, force_cache?: boolean, dialog?: boolean): OWebCom;
     addItem(data: any, then?: tServiceAddSuccess<T>, fail?: tServiceFail, freeze?: boolean, dialog?: boolean): OWebCom;

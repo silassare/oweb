@@ -36,9 +36,10 @@ export default class OWebServiceStore<
 	constructor(
 		app_context: OWebApp,
 		private readonly entity: typeof GoblSinglePKEntity,
-		service_name: string
+		service_name: string,
+		persistent_cache: boolean = false
 	) {
-		super(app_context, service_name);
+		super(app_context, service_name, persistent_cache);
 	}
 
 	getItem(

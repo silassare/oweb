@@ -87,6 +87,9 @@ export {
 	iServiceGetResponse,
 	iServiceUpdateAllData,
 	iServiceUpdateResponse,
+	tFilterCondition,
+	tFilter,
+	tFiltersMap
 } from './OWebService';
 
 export {
