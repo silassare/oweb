@@ -44,6 +44,7 @@ export {
 	tI18nDefinition,
 	tI18nPluralize,
 	tI18nOptions,
+	tI18n,
 } from './OWebI18n';
 
 export {
