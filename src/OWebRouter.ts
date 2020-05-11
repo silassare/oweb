@@ -396,7 +396,7 @@ export default class OWebRouter {
 	private _routes: OWebRoute[] = [];
 	private _initialized: boolean = false;
 	private _listening: boolean = false;
-	private _notFound: undefined | ((target: tRouteTarget) => void) = undefined;
+	private readonly _notFound: undefined | ((target: tRouteTarget) => void) = undefined;
 	private readonly _popStateListener: (e: PopStateEvent) => void;
 	private readonly _linkClickListener: (e: MouseEvent | TouchEvent) => void;
 	private _dispatch_id = 0;
@@ -408,6 +408,7 @@ export default class OWebRouter {
 	 *
 	 * @param baseUrl the base url
 	 * @param hashMode weather to use hash mode
+	 * @param notFound called when a route is not found
 	 */
 	constructor(
 		baseUrl: string,
