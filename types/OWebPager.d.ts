@@ -1,22 +1,27 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 import { OWebRouteContext, tRoutePath, tRoutePathOptions } from './OWebRouter';
+import { tI18n } from "./oweb";
 export interface iPageRoute {
     slug?: string;
-    title: string;
-    description?: string;
+    title: tI18n;
+    description?: tI18n;
     path: tRoutePath;
     pathOptions?: tRoutePathOptions;
     sub?: iPageRoute[];
+    showSub?: boolean;
+    disabled?: boolean;
     show?(): boolean;
 }
 export interface iPageRouteFull {
     slug?: string;
-    title: string;
-    description?: string;
+    title: tI18n;
+    description?: tI18n;
     path: tRoutePath;
     pathOptions?: tRoutePathOptions;
-    sub?: iPageRoute[];
+    sub?: iPageRouteFull[];
+    showSub?: boolean;
+    disabled?: boolean;
     show(): boolean;
     readonly id: number;
     readonly href: string;

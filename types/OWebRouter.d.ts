@@ -167,7 +167,7 @@ export default class OWebRouter {
     private _routes;
     private _initialized;
     private _listening;
-    private _notFound;
+    private readonly _notFound;
     private readonly _popStateListener;
     private readonly _linkClickListener;
     private _dispatch_id;
@@ -178,6 +178,7 @@ export default class OWebRouter {
      *
      * @param baseUrl the base url
      * @param hashMode weather to use hash mode
+     * @param notFound called when a route is not found
      */
     constructor(baseUrl: string, hashMode: boolean | undefined, notFound: (target: tRouteTarget) => void);
     /**

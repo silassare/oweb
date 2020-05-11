@@ -33,7 +33,7 @@ export { tUrlList } from './OWebUrl';
 export { tComOptions, iComResponse } from './OWebCom';
 export { tFormValidator } from './OWebFormValidator';
 export { tFileAliasInfo, tFileQuality } from './OWebFS';
-export { tI18nData, tI18nDefinition, tI18nPluralize, tI18nOptions, } from './OWebI18n';
+export { tI18nData, tI18nDefinition, tI18nPluralize, tI18nOptions, tI18n, } from './OWebI18n';
 export { tRoutePath, tRoutePathOptions, tRouteStateObject, tRouteStateItem, tRouteAction, tRouteInfo, tRouteTarget, tRouteTokensMap, iRouteDispatcher, } from './OWebRouter';
 export { tViewDialog } from './OWebView';
 export { tDateDesc } from './plugins/OWebDate';

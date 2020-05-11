@@ -13,6 +13,7 @@ export declare type tI18nOptions = {
     data?: tI18nData;
     pluralize?: tI18nPluralize;
 };
+export declare type tI18n = tI18nOptions | string;
 export declare type tI18nPluralize = number | ((data: tI18nData, parts: string[]) => number);
 export default class OWebI18n extends OWebEvent {
     defaultLangCode: string;
@@ -30,14 +31,14 @@ export default class OWebI18n extends OWebEvent {
      * @param pluralize
      * @param lang The i18n lang code to use.
      */
-    toHuman(key: string, data?: tI18nData, pluralize?: tI18nPluralize, lang?: string): string;
+    toHuman(key: tI18n, data?: tI18nData, pluralize?: tI18nPluralize, lang?: string): string;
     /**
      * Sets i18n for HTMLElement
      *
      * @param el
      * @param options
      */
-    el(el: HTMLElement, options: tI18nOptions | string): void;
+    el(el: HTMLElement, options: tI18n): void;
     /**
      * Sets the i18n lang data.
      *
