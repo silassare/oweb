@@ -1,10 +1,10 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 import OWebFS from './OWebFS';
-import Utils from './utils/Utils';
 import jqXHR = JQuery.jqXHR;
+import { assign, id, isPlainObject } from './utils/Utils';
 
-export interface iComResponse {
+export interface IComResponse {
 	error: number;
 	msg: string;
 	data?: any;
@@ -27,74 +27,75 @@ export type tComOptions = {
 	badNewsShow?: boolean;
 	timeout?: number;
 };
-const file_alias_errors = [
+const fileAliasErrors = [
 	'OZ_FILE_ALIAS_UNKNOWN',
 	'OZ_FILE_ALIAS_NOT_FOUND',
 	'OZ_FILE_ALIAS_PARSE_ERROR',
 ];
 
-let searchAndReplaceMarkedFile = function(
-	data?: { [key: string]: any } | FormData
+const searchAndReplaceMarkedFile = function (
+	data?: { [key: string]: any } | FormData,
 ) {
-	let form_data = new FormData(),
-		has_marked_file = false,
+	let hasMarkedFile = false;
+	const formData = new FormData(),
 		check = (value: any, name: string) => {
 			let v = value;
 
 			if (OWebFS.isMarkedFile(v)) {
 				v = OWebFS.createFileAlias(v);
-				has_marked_file = true;
+				hasMarkedFile = true;
 			}
 
-			form_data.append(name, v);
+			formData.append(name, v);
 		};
 
 	if (data) {
 		if (data instanceof FormData) {
 			(data as any).forEach(check);
-		} else if (Utils.isPlainObject(data)) {
-			Object.keys(data).forEach(function(key_name) {
-				check(data[key_name], key_name);
+		} else if (isPlainObject(data)) {
+			Object.keys(data).forEach(function (keyName) {
+				check(data[keyName], keyName);
 			});
 		}
 	}
 
-	return has_marked_file ? form_data : false;
+	return hasMarkedFile ? formData : false;
 };
 
 const ajaxTransport = {
 	// FOR GOBL JSON HELPER: WE DO NOT TRUST JQUERY JSON.parse
 	converters: {
-		'text json': function(a: string) {
+		'text json'(a: string) {
 			return JSON.parse(a);
 		},
 	},
 };
 
 export default class OWebCom extends OWebEvent {
-	static readonly SELF = Utils.id();
-	static readonly EVT_COM_REQUEST_SUCCESS = Utils.id();
-	static readonly EVT_COM_REQUEST_ERROR = Utils.id();
-	static readonly EVT_COM_NETWORK_ERROR = Utils.id();
-	static readonly EVT_COM_UPLOAD_PROGRESS = Utils.id();
-	static readonly EVT_COM_FINISH = Utils.id();
+	static readonly SELF = id();
+	static readonly EVT_COM_REQUEST_SUCCESS = id();
+	static readonly EVT_COM_REQUEST_ERROR = id();
+	static readonly EVT_COM_NETWORK_ERROR = id();
+	static readonly EVT_COM_UPLOAD_PROGRESS = id();
+	static readonly EVT_COM_FINISH = id();
 
 	private readonly _options: tComOptions;
-	private readonly _original_data: any;
-	private _modified_data: FormData | boolean;
+	private readonly _originalData: any;
+	private _modifiedData: FormData | boolean;
 	private _busy: boolean = false;
 	private _request?: jqXHR;
+	private _aborted = false;
 
-	constructor(private readonly app_context: OWebApp, options: tComOptions) {
+	constructor(private readonly appContext: OWebApp, options: tComOptions) {
 		super();
 
-		if (options && !Utils.isPlainObject(options)) {
+		if (options && !isPlainObject(options)) {
 			throw new TypeError(
-				`[OWebCom] require an 'object' as options not:  ${typeof options}.`
+				`[OWebCom] require an 'object' as options not:  ${typeof options}.`,
 			);
 		}
 
-		let appOptions = this.app_context.getRequestDefaultOptions();
+		const appOptions = this.appContext.getRequestDefaultOptions();
 
 		this._options = {
 			method: 'GET',
@@ -103,24 +104,24 @@ export default class OWebCom extends OWebEvent {
 			crossDomain: true,
 			badNewsShow: false,
 			// increase request timeout for mobile device
-			timeout: app_context.isMobileApp() ? 10000 : undefined,
+			timeout: appContext.isMobileApp() ? 10000 : undefined,
 
 			...appOptions,
 
 			...options,
 		};
 
-		this._options.headers = Utils.assign(
+		this._options.headers = assign(
 			{},
 			appOptions.headers,
-			options.headers || {}
+			options.headers || {},
 		);
 
-		this._original_data = options.data || {};
-		this._modified_data = searchAndReplaceMarkedFile(options.data);
+		this._originalData = options.data || {};
+		this._modifiedData = searchAndReplaceMarkedFile(options.data);
 
-		if (this._modified_data) {
-			this._options.data = this._modified_data;
+		if (this._modifiedData) {
+			this._options.data = this._modifiedData;
 		}
 	}
 
@@ -130,17 +131,19 @@ export default class OWebCom extends OWebEvent {
 	 * @private
 	 */
 	private _prepare() {
-		let m = this,
-			real_method = m._options.method,
-			replace_methods = ['PATCH', 'PUT', 'DELETE'],
-			real_method_header = this.app_context.configs.get(
-				'OZ_API_REAL_METHOD_HEADER_NAME'
+		const m = this,
+			realMethod = m._options.method,
+			replaceMethods = ['PATCH', 'PUT', 'DELETE'],
+			realMethodHeader = this.appContext.configs.get(
+				'OZ_API_REAL_METHOD_HEADER_NAME',
 			),
 			headers: any = this._options.headers;
 
+		this._aborted = false;
+
 		// we update request method
-		if (~replace_methods.indexOf(real_method)) {
-			headers[real_method_header] = real_method;
+		if (~replaceMethods.indexOf(realMethod)) {
+			headers[realMethodHeader] = realMethod;
 			this._options.method = 'POST';
 		}
 
@@ -150,19 +153,23 @@ export default class OWebCom extends OWebEvent {
 		}
 
 		// workaround because jqXHR does not expose upload property
-		this._options.xhr = function() {
-			let xhr = $.ajaxSetup(ajaxTransport).xhr!();
+		this._options.xhr = function () {
+			const xhr = $.ajaxSetup(ajaxTransport).xhr!();
 
 			// allow CORS
 			xhr.withCredentials = true;
+
+			xhr.addEventListener('abort', function () {
+				m._aborted = true;
+			});
 
 			if (xhr.upload) {
 				xhr.upload.addEventListener(
 					'progress',
 					(e: any) => {
 						let percent = 0;
-						let position = e.loaded || e.position; // e.position
-						let total = e.total;
+						const position = e.loaded || e.position; // e.position
+						const total = e.total;
 
 						if (e.lengthComputable) {
 							percent = Math.floor((position / total) * 100);
@@ -175,7 +182,7 @@ export default class OWebCom extends OWebEvent {
 							percent,
 						]);
 					},
-					false
+					false,
 				);
 			}
 
@@ -191,14 +198,14 @@ export default class OWebCom extends OWebEvent {
 	 * @param response The server response.
 	 * @private
 	 */
-	private _handleResponse(response: iComResponse) {
-		let m = this;
+	private _handleResponse(response: IComResponse) {
+		const m = this;
 
 		if (response.stime) {
-			m.app_context.user.setSessionExpire(response.stime);
+			m.appContext.user.setSessionExpire(response.stime);
 		}
 		if (response.stoken) {
-			m.app_context.setSessionToken(response.stoken);
+			m.appContext.setSessionToken(response.stoken);
 		}
 
 		if (response.error === 0) {
@@ -207,21 +214,21 @@ export default class OWebCom extends OWebEvent {
 		} else {
 			if (response.msg === 'OZ_ERROR_YOU_MUST_LOGIN') {
 				m.trigger(OWebCom.EVT_COM_REQUEST_ERROR, [response, m]);
-				m.app_context.forceLogin();
-			} else if (~file_alias_errors.indexOf(response.msg)) {
+				m.appContext.forceLogin();
+			} else if (~fileAliasErrors.indexOf(response.msg)) {
 				// our attempt to minimize file upload failed
 				console.warn(
 					'[OWebCom] unable to minimize file upload data ->',
 					response,
-					m._options.data
+					m._options.data,
 				);
-				this._modified_data = false;
-				this._options.data = this._original_data;
+				this._modifiedData = false;
+				this._options.data = this._originalData;
 				m._busy = false;
 				m.send();
 			} else {
 				if (m._options.badNewsShow) {
-					m.app_context.view.dialog({
+					m.appContext.view.dialog({
 						type: 'error',
 						text: response.msg,
 						data: response.data,
@@ -238,7 +245,7 @@ export default class OWebCom extends OWebEvent {
 	 * Send request.
 	 */
 	send() {
-		let m = this;
+		const m = this;
 		this._prepare();
 
 		if (this._busy) {
@@ -253,24 +260,29 @@ export default class OWebCom extends OWebEvent {
 					m._handleResponse(response);
 				})
 				.fail((request: any) => {
-					let network_error = !Utils.isPlainObject(
-						request['responseJSON']
-					);
-					if (network_error) {
+					const networkError = !isPlainObject(request.responseJSON);
+					if (networkError) {
 						console.error(
 							'[OWebCom] request network error ->',
-							request
+							request,
 						);
 						m.trigger(OWebCom.EVT_COM_NETWORK_ERROR, [request, m]);
 					} else {
 						console.error(
 							'[OWebCom] request server error ->',
-							request
+							request,
 						);
-						m._handleResponse(request['responseJSON']);
+						m._handleResponse(request.responseJSON);
 					}
 				});
 		}
+	}
+
+	/**
+	 * Checks if the current request has been aborted.
+	 */
+	isAborted() {
+		return this._aborted;
 	}
 
 	/**
