@@ -1,12 +1,20 @@
+export const id = (function () {
+	let _naturalId = 0;
+
+	return (): string => 'id-' + _naturalId++;
+})();
+
+// tslint:disable-next-line: no-empty
+export const noop = () => {};
+
 // ==========TYPE CHECKERS====================================
-let _naturalId = 0;
-const isArray = Array.isArray;
-const naturalId = (): string => 'id-' + _naturalId++;
-const isPlainObject = (a: any): boolean =>
+export const isArray = Array.isArray;
+export const isPlainObject = (a: any): boolean =>
 	Object.prototype.toString.call(a) === '[object Object]';
-const isString = (a: any): a is string => typeof a === 'string';
-const isFunction = (a: any): a is Function => typeof a === 'function';
-const isEmpty = function(a: any): boolean {
+export const isString = (a: any): a is string => typeof a === 'string';
+export const isFunction = (a: any): a is (...args: any[]) => any =>
+	typeof a === 'function';
+export const isEmpty = function (a: any): boolean {
 	if (isArray(a)) {
 		return !a.length;
 	}
@@ -25,12 +33,12 @@ const isEmpty = function(a: any): boolean {
 	return !a;
 };
 
-const isNotEmpty = (a: any): boolean => !isEmpty(a);
-const toArray = (a: any): Array<any> => [].concat.apply([], a);
-const escapeRegExp = (str: string) =>
-	str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+export const isNotEmpty = (a: any): boolean => !isEmpty(a);
+export const toArray = (a: any): any[] => [].concat.apply([], a);
+export const escapeRegExp = (str: string) =>
+	str.replace(/([.+*?=^!:${}()[\]|\/])/g, '\\$1');
 // ==========HELPERS====================================
-const callback = function(fn: any, args?: Array<any>, ctx?: any): any {
+export const callback = function (fn: any, args?: any[], ctx?: any): any {
 	if (typeof fn === 'function') {
 		return fn.apply(ctx, args);
 	}
@@ -38,28 +46,27 @@ const callback = function(fn: any, args?: Array<any>, ctx?: any): any {
 	return null;
 };
 
-const forEach = function<T>(
-	obj: { [key: string]: T } | Array<T>,
-	fn: (value: T, key: any) => void
+export const forEach = function <T>(
+	obj: { [key: string]: T } | T[],
+	fn: (value: T, key: any) => void,
 ) {
 	Object.keys(obj).forEach((key: string) => {
-		let value: T = (obj as any)[key];
+		const value: T = (obj as any)[key];
 		fn(value, key);
 	});
 };
 
-const assign =
+export const assign =
 	(Object as any).assign ||
-	function(target: object, source: object) {
-		let to = target,
-			from,
-			symbols;
+	function (target: object, source: object) {
+		const to = target;
+		let from, symbols;
 
 		for (let s = 1; s < arguments.length; s++) {
 			from = Object(arguments[s]);
 
-			for (let key in from) {
-				if (from.hasOwnProperty(key)) {
+			for (const key in from) {
+				if (Object.prototype.hasOwnProperty.call(from, key)) {
 					(to as any)[key] = from[key];
 				}
 			}
@@ -77,23 +84,24 @@ const assign =
 		return to;
 	};
 
-const copy = function<T>(a: T): T {
+export const clone = function <T>(a: T): T {
 	return JSON.parse(JSON.stringify(a));
 };
 
-const stringKeyReplace = function(str: string, data: object): string {
+export const stringPlaceholderReplace = function (
+	str: string,
+	data: object,
+): string {
 	if (isString(str) && str.length && isPlainObject(data)) {
-		let keys = Object.keys(data)
-				.sort()
-				.reverse(),
-			reg;
+		const keys = Object.keys(data).sort().reverse();
+		let reg;
 
 		if (keys.length) {
-			let m = keys.join('|');
+			const m = keys.join('|');
 			reg = new RegExp(':(' + m + ')', 'g');
 
-			return str.replace(reg, function() {
-				let replacement = (data as any)[arguments[1]];
+			return str.replace(reg, function () {
+				const replacement = (data as any)[arguments[1]];
 
 				if (replacement === undefined) {
 					return arguments[0];
@@ -107,9 +115,9 @@ const stringKeyReplace = function(str: string, data: object): string {
 	return str;
 };
 
-const textToLineString = (text: string): string => {
-	let reg = /["'\\\n\r\t\u2028\u2029]/g,
-		to_escapes: object = {
+export const textToLineString = (text: string): string => {
+	const reg = /["'\\\n\r\t\u2028\u2029]/g,
+		toEscapes: object = {
 			'"': '"',
 			"'": "'",
 			'\\': '\\',
@@ -120,43 +128,18 @@ const textToLineString = (text: string): string => {
 			'\u2029': '2029',
 		};
 
-	return text.replace(reg, match => '\\' + (to_escapes as any)[match]);
-};
-
-const expose = function(items: Array<string>, ctx: any): object {
-	let out: object = {};
-	items.forEach(function(key) {
-		let item = ctx[key];
-		// methods and properties
-		if (isFunction(item)) {
-			(out as any)[key] = function() {
-				let res = item.apply(ctx, arguments);
-
-				return res === ctx ? out : res;
-			};
-		} else {
-			(out as any)[key] = item;
-		}
-	});
-
-	return out;
-};
-
-const getFrom = function(from: object, key: string): any {
-	let { [key]: value }: any = from || {};
-
-	return value;
+	return text.replace(reg, (match) => '\\' + (toEscapes as any)[match]);
 };
 
 // ==========MATH====================================
 
-const _setDigitsSep = function(x: number, sep: string): string {
-	let s = String(x),
-		count = 0,
+export const _setDigitsSep = function (x: number, sep: string): string {
+	const s = String(x),
 		ans = [],
 		j = s.indexOf('.'),
 		start = j !== -1 ? j : s.length,
-		end = j !== -1 ? s.slice(start + 1) : [],
+		end = j !== -1 ? s.slice(start + 1) : [];
+	let count = 0,
 		i = start;
 
 	for (; i >= 0; i--) {
@@ -172,55 +155,67 @@ const _setDigitsSep = function(x: number, sep: string): string {
 	return ans.concat(end).join('');
 };
 
-const math = {
-	numberFormat: function(
-		x: number | string,
-		dec: number = 2,
-		decimalSep: string = '.',
-		digitsSep: string = ' '
-	): string {
-		if (!x) {
-			return '';
-		}
+export const numberFormat = function (
+	x: number | string,
+	dec: number = 2,
+	decimalSep: string = '.',
+	digitsSep: string = ' ',
+): string {
+	if (!x) {
+		return '';
+	}
 
-		let ans = parseFloat(String(x)),
-			decimalPos;
+	let ans = parseFloat(String(x)),
+		decimalPos;
 
-		if (dec >= 0) {
-			let decimalPow = Math.pow(10, dec);
-			ans = Math.floor(ans * decimalPow) / decimalPow;
-		}
+	if (dec >= 0) {
+		const decimalPow = Math.pow(10, dec);
+		ans = Math.floor(ans * decimalPow) / decimalPow;
+	}
 
-		let n = _setDigitsSep(ans, digitsSep);
-		let a = n.split('');
+	const n = _setDigitsSep(ans, digitsSep);
+	const a = n.split('');
 
-		decimalPos = a.lastIndexOf('.');
-		if (decimalPos >= 0 && decimalSep !== '.') {
-			a[decimalPos] = decimalSep;
-		}
+	decimalPos = a.lastIndexOf('.');
+	if (decimalPos >= 0 && decimalSep !== '.') {
+		a[decimalPos] = decimalSep;
+	}
 
-		return a.join('');
-	},
-	gt: function(x: number, y: number, eq: boolean = false): boolean {
-		return eq ? x >= y : x > y;
-	},
-	lt: function(x: number, y: number, eq: boolean = false): boolean {
-		return eq ? x <= y : x < y;
-	},
-	between: function(
-		x: number,
-		a: number,
-		b: number,
-		eq: boolean = false
-	): boolean {
-		return eq ? x >= a && x <= b : x > a && x < b;
-	},
-	isRange: function(a: number, b: number): boolean {
-		return typeof a === 'number' && typeof b === 'number' && a < b;
-	},
+	return a.join('');
 };
 
-const isInDOM = function(element: any, inBody: boolean = false): boolean {
+export const gt = function (
+	x: number,
+	y: number,
+	eq: boolean = false,
+): boolean {
+	return eq ? x >= y : x > y;
+};
+export const lt = function (
+	x: number,
+	y: number,
+	eq: boolean = false,
+): boolean {
+	return eq ? x <= y : x < y;
+};
+
+export const between = function (
+	x: number,
+	a: number,
+	b: number,
+	eq: boolean = false,
+): boolean {
+	return eq ? x >= a && x <= b : x > a && x < b;
+};
+
+export const isRange = function (a: any, b: any): boolean {
+	return typeof a === 'number' && typeof b === 'number' && a < b;
+};
+
+export const isInDOM = function (
+	element: any,
+	inBody: boolean = false,
+): boolean {
 	let _ = element,
 		last;
 
@@ -235,26 +230,29 @@ const isInDOM = function(element: any, inBody: boolean = false): boolean {
 	return inBody ? last === document.body : last === document;
 };
 
-const buildQueryString = function(object: object, prefix: string): string {
+export const buildQueryString = function (
+	object: object,
+	prefix: string,
+): string {
 	const duplicates = {},
 		str = [];
 
-	for (let prop in object) {
+	for (const prop in object) {
 		if (!Object.prototype.hasOwnProperty.call(object, prop)) {
 			continue;
 		}
 
-		let key = prefix ? prefix + '[' + prop + ']' : prop,
-			value = (object as any)[prop],
-			pair;
+		const key = prefix ? prefix + '[' + prop + ']' : prop,
+			value = (object as any)[prop];
+		let pair;
 		if (value !== undefined) {
 			if (value === null) {
 				pair = encodeURIComponent(key);
-			} else if (Utils.isPlainObject(value)) {
+			} else if (isPlainObject(value)) {
 				pair = buildQueryString(value, key);
-			} else if (Utils.isArray(value)) {
+			} else if (isArray(value)) {
 				pair = value
-					.reduce(function(memo, item) {
+					.reduce(function (memo, item) {
 						if (!(duplicates as any)[key])
 							(duplicates as any)[key] = {};
 						if (!(duplicates as any)[key][item]) {
@@ -262,7 +260,7 @@ const buildQueryString = function(object: object, prefix: string): string {
 							return memo.concat(
 								encodeURIComponent(key) +
 									'=' +
-									encodeURIComponent(item)
+									encodeURIComponent(item),
 							);
 						}
 						return memo;
@@ -280,7 +278,7 @@ const buildQueryString = function(object: object, prefix: string): string {
 	return str.join('&');
 };
 
-const shuffle = (a: Array<any>): Array<any> => {
+export const shuffle = (a: any[]): any[] => {
 	let j, x, i;
 
 	for (i = a.length - 1; i > 0; i--) {
@@ -293,18 +291,18 @@ const shuffle = (a: Array<any>): Array<any> => {
 	return a;
 };
 
-const parseQueryString = function(str: string) {
+export const parseQueryString = function (str: string) {
 	if (str.charAt(0) === '?') str = str.substring(1);
 	if (!str.length) return {};
 
 	const pairs = str.split('&'),
 		params = {};
 	for (let i = 0, len = pairs.length; i < len; i++) {
-		let pair = pairs[i].split('='),
+		const pair = pairs[i].split('='),
 			key = decodeURIComponent(pair[0]),
-			value = pair.length == 2 ? decodeURIComponent(pair[1]) : null;
+			value = pair.length === 2 ? decodeURIComponent(pair[1]) : null;
 		if ((params as any)[key] != null) {
-			if (!Utils.isArray((params as any)[key])) {
+			if (!isArray((params as any)[key])) {
 				(params as any)[key] = [(params as any)[key]];
 			}
 			(params as any)[key].push(value);
@@ -313,7 +311,7 @@ const parseQueryString = function(str: string) {
 	return params;
 };
 
-const preventDefault = function(e: Event) {
+export const preventDefault = function (e: Event) {
 		if (!e) {
 			if (window.event) e = window.event;
 			else return;
@@ -325,26 +323,37 @@ const preventDefault = function(e: Event) {
 		if (window.event) e.returnValue = false;
 		// if (e.cancel != null) e.cancel = true;
 	},
-	eventCancel = function(e: Event) {
+	eventCancel = function (e: Event) {
 		console.warn(
-			'"Utils.eventCancel" is deprecated, use "Utils.preventDefault" instead'
+			'"Utils.eventCancel" is deprecated, use "Utils.preventDefault" instead',
 		);
 
 		preventDefault(e);
 	};
 
-const isValidAge = (
+export const isValidAge = (
 	day: number,
 	month: number,
 	year: number,
 	minAge: number,
-	maxAge: number
+	maxAge: number,
 ): boolean => {
 	// depending on the year, calculate the number of days in the month
-	let daysInMonth,
-		februaryDays = year % 4 === 0 ? 29 : 28;
-
-	daysInMonth = [31, februaryDays, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	const februaryDays = year % 4 === 0 ? 29 : 28,
+		daysInMonth = [
+			31,
+			februaryDays,
+			31,
+			30,
+			31,
+			30,
+			31,
+			31,
+			30,
+			31,
+			30,
+			31,
+		];
 
 	// first, check the incoming month and year are valid.
 	if (!month || !day || !year) {
@@ -363,7 +372,7 @@ const isValidAge = (
 	// if required, verify the current date is LATER than the incoming date.
 	if (minAge !== undefined || maxAge !== undefined) {
 		// we get current year
-		let currentYear = new Date().getFullYear(),
+		const currentYear = new Date().getFullYear(),
 			age = currentYear - year;
 
 		if (age < 0) {
@@ -380,36 +389,31 @@ const isValidAge = (
 	return true;
 };
 
-const fileSizeFormat = function(
+export const fileSizeFormat = function (
 	size: number /* in bytes */,
 	decimalPoint: string = '.',
-	thousandsSep: string = ' '
+	thousandsSep: string = ' ',
 ) {
-	let units = ['byte', 'Kb', 'Mb', 'Gb', 'Tb'],
-		i_max = units.length,
-		i = 0,
+	const units = ['byte', 'Kb', 'Mb', 'Gb', 'Tb'],
+		iMax = units.length;
+	let i = 0,
 		result = 0;
 
 	size = parseFloat(String(size));
 
-	while (size >= 1 && i < i_max) {
+	while (size >= 1 && i < iMax) {
 		result = size;
 		size /= 1000; // not 1024
 		i++;
 	}
 
-	let parts = String(result).split('.'),
+	const parts = String(result).split('.'),
 		head =
 			parseInt(parts[0]) === result
 				? result
-				: Utils.math.numberFormat(
-						result,
-						2,
-						decimalPoint,
-						thousandsSep
-				  );
+				: numberFormat(result, 2, decimalPoint, thousandsSep);
 
-	return head + ' ' + units[i == 0 ? 0 : i - 1];
+	return head + ' ' + units[i === 0 ? 0 : i - 1];
 };
 
 /**
@@ -426,14 +430,18 @@ const fileSizeFormat = function(
  * @param strWindowName
  * @param strWindowFeatures
  */
-const safeOpen = function(
+export const safeOpen = function (
 	url: string = '',
 	strWindowName: string = '',
-	strWindowFeatures: string = ''
+	strWindowFeatures: string = '',
 ) {
 	if (window.navigator.userAgent.indexOf('MSIE') !== -1) {
 		// IE before 11
-		let child = open.apply(window, [url, strWindowName, strWindowFeatures]);
+		const child = open.apply(window, [
+			url,
+			strWindowName,
+			strWindowFeatures,
+		]);
 		if (child) {
 			child.opener = null;
 		}
@@ -470,41 +478,3 @@ const safeOpen = function(
 	document.body.removeChild(iframe);
 	return newWin;
 };
-
-const Utils = {
-	isPlainObject,
-	isString,
-	isArray,
-	isFunction,
-	isEmpty,
-	isNotEmpty,
-	toArray,
-	isInDOM,
-	shuffle,
-	escapeRegExp,
-	id: naturalId,
-	// ============
-	callback,
-	assign,
-	copy,
-	expose,
-	getFrom,
-	stringKeyReplace,
-	textToLineString,
-	forEach,
-	// ============
-	math,
-	isValidAge,
-	// ============
-	buildQueryString,
-	parseQueryString,
-	// ============
-	eventCancel,
-	preventDefault,
-	// ============
-	fileSizeFormat,
-	// ============
-	safeOpen,
-};
-
-export default Utils;
