@@ -1,27 +1,17 @@
-export declare type tRoutePath = string | RegExp;
-export declare type tRoutePathOptions = {
-    [key: string]: RegExp | keyof typeof tokenTypesRegMap;
-};
-export declare type tRouteTokensMap = {
-    [key: string]: string;
-};
-export declare type tRouteAction = (ctx: OWebRouteContext) => void;
-export declare type tRouteInfo = {
-    reg: RegExp | null;
-    tokens: Array<string>;
-};
-declare type _tRouteStateItem = string | number | boolean | null | undefined | Date | tRouteStateObject;
-export declare type tRouteStateItem = _tRouteStateItem | Array<_tRouteStateItem>;
-export declare type tRouteStateObject = {
-    [key: string]: tRouteStateItem;
-};
+import OWebRoute, { tRoutePath, tRoutePathOptions, tRouteAction } from './OWebRoute';
+import OWebRouteContext from './OWebRouteContext';
 export declare type tRouteTarget = {
     parsed: string;
     href: string;
     path: string;
     fullPath: string;
 };
-export interface iRouteDispatcher {
+declare type _tRouteStateItem = string | number | boolean | null | undefined | Date | tRouteStateObject;
+export declare type tRouteStateItem = _tRouteStateItem | _tRouteStateItem[];
+export declare type tRouteStateObject = {
+    [key: string]: tRouteStateItem;
+};
+export interface IRouteDispatcher {
     readonly id: number;
     readonly context: OWebRouteContext;
     readonly found: OWebRoute[];
@@ -29,150 +19,19 @@ export interface iRouteDispatcher {
     dispatch(): this;
     cancel(): this;
 }
-declare const tokenTypesRegMap: {
-    num: string;
-    alpha: string;
-    'alpha-u': string;
-    'alpha-l': string;
-    'alpha-num': string;
-    'alpha-num-l': string;
-    'alpha-num-u': string;
-    any: string;
-};
-export declare class OWebRoute {
-    private readonly path;
-    private readonly reg;
-    private tokens;
-    private readonly action;
-    /**
-     * OWebRoute Constructor.
-     *
-     * @param path The route path string or regexp.
-     * @param options The route options.
-     * @param action The route action function.
-     */
-    constructor(path: string | RegExp, options: tRoutePathOptions | Array<string>, action: tRouteAction);
-    /**
-     * Returns true if this route is dynamic false otherwise.
-     */
-    isDynamic(): boolean;
-    /**
-     * Gets route action.
-     */
-    getAction(): tRouteAction;
-    /**
-     * Checks if a given pathname match this route.
-     *
-     * @param pathname
-     */
-    is(pathname: string): boolean;
-    /**
-     * Parse a given pathname.
-     *
-     * @param pathname
-     */
-    parse(pathname: string): tRouteTokensMap;
-    /**
-     * Parse dynamic path and returns appropriate regexp and tokens list.
-     *
-     * ```js
-     * let format = "path/to/:id/file/:index/name.:format";
-     * let options = {
-     * 		id: "num",
-     * 		index: "alpha",
-     * 		format:	"alpha-num"
-     * };
-     * let info = parseDynamicPath(format,options);
-     *
-     * info === {
-     *     reg: RegExp,
-     *     tokens: ["id","index","format"]
-     * };
-     * ```
-     * @param path The path format string.
-     * @param options The path options.
-     */
-    static parseDynamicPath(path: string, options: tRoutePathOptions): tRouteInfo;
-}
-export declare class OWebRouteContext {
-    private _tokens;
-    private _stopped;
-    private readonly _target;
-    private readonly _state;
-    private readonly _router;
-    /**
-     * OWebRouteContext constructor.
-     *
-     * @param router
-     * @param target
-     * @param state
-     */
-    constructor(router: OWebRouter, target: tRouteTarget, state: tRouteStateObject);
-    /**
-     * Gets route token value
-     *
-     * @param token The token.
-     */
-    getToken(token: string): any;
-    /**
-     * Gets a map of all tokens and values.
-     */
-    getTokens(): any;
-    /**
-     * Gets the path.
-     */
-    getPath(): string;
-    /**
-     * Gets stored value in history state with a given key.
-     *
-     * @param key the state key
-     */
-    getStateItem(key: string): tRouteStateItem;
-    /**
-     * Sets a key in history state.
-     *
-     * @param key the state key
-     * @param value  the state value
-     */
-    setStateItem(key: string, value: tRouteStateItem): this;
-    /**
-     * Gets search param.
-     *
-     * @param param the param name
-     */
-    getSearchParam(param: string): string | null;
-    /**
-     * Check if the route dispatcher is stopped.
-     */
-    stopped(): boolean;
-    /**
-     * Stop the route dispatcher.
-     */
-    stop(): this;
-    /**
-     * Save history state.
-     */
-    save(): this;
-    /**
-     * Runs action attached to a given route.
-     *
-     * @param route
-     */
-    actionRunner(route: OWebRoute): this;
-}
 export default class OWebRouter {
     private readonly _baseUrl;
     private readonly _hashMode;
-    private _current_target;
+    private _currentTarget;
     private _routes;
     private _initialized;
     private _listening;
     private readonly _notFound;
     private readonly _popStateListener;
     private readonly _linkClickListener;
-    private _dispatch_id;
-    private _current_dispatcher?;
-    private _force_replace;
+    private _dispatchId;
+    private _currentDispatcher?;
+    private _forceReplace;
     /**
      * OWebRouter constructor.
      *
@@ -204,7 +63,7 @@ export default class OWebRouter {
     /**
      * Returns the current route event dispatcher.
      */
-    getCurrentDispatcher(): iRouteDispatcher | undefined;
+    getCurrentDispatcher(): IRouteDispatcher | undefined;
     /**
      * Returns the current route context.
      */

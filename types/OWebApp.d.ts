@@ -1,10 +1,10 @@
-import OWebCom, { iComResponse } from './OWebCom';
+import OWebCom, { IComResponse } from './OWebCom';
 import OWebConfigs, { tConfigList } from './OWebConfigs';
 import OWebCurrentUser from './OWebCurrentUser';
 import OWebDataStore from './OWebDataStore';
 import OWebEvent from './OWebEvent';
 import OWebFormValidator from './OWebFormValidator';
-import OWebRouter, { tRouteTarget, tRouteStateObject } from './OWebRouter';
+import OWebRouter, { tRouteStateObject, tRouteTarget } from './OWebRouter';
 import OWebUrl, { tUrlList } from './OWebUrl';
 import OWebView from './OWebView';
 import OWebI18n from './OWebI18n';
@@ -58,7 +58,7 @@ export default class OWebApp extends OWebEvent {
      * @param excluded The fields names to exclude.
      * @param checkAll Force the validator to check all fields.
      */
-    getFormValidator(form: HTMLFormElement, required?: Array<string>, excluded?: Array<string>, checkAll?: boolean): OWebFormValidator;
+    getFormValidator(form: HTMLFormElement, required?: string[], excluded?: string[], checkAll?: boolean): OWebFormValidator;
     /**
      * Force login.
      *
@@ -95,7 +95,7 @@ export default class OWebApp extends OWebEvent {
      * @param data The request payload.
      * @param freeze Force app view to be frozen.
      */
-    requestPromise(method: string, url: string, data: any, freeze?: boolean): Promise<iComResponse>;
+    requestPromise(method: string, url: string, data: any, freeze?: boolean): Promise<IComResponse>;
     /**
      * Send request.
      *
@@ -106,7 +106,7 @@ export default class OWebApp extends OWebEvent {
      * @param fail Request fail callback.
      * @param freeze Force app view to be frozen.
      */
-    request(method: string, url: string, data: any, success?: (this: OWebCom, response: iComResponse) => void, fail?: (this: OWebCom, response: iComResponse) => void, freeze?: boolean): OWebCom;
+    request(method: string, url: string, data: any, success?: (response: IComResponse, com: OWebCom) => void, fail?: (response: IComResponse, com: OWebCom) => void, freeze?: boolean): OWebCom;
     /**
      * To start the web app.
      */

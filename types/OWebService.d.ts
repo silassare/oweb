@@ -1,7 +1,7 @@
 import OWebApp from './OWebApp';
-import OWebCom, { iComResponse } from './OWebCom';
+import OWebCom, { IComResponse } from './OWebCom';
 import OWebKeyStorage from './OWebKeyStorage';
-export interface iServiceAddResponse<T> extends iComResponse {
+export interface IServiceAddResponse<T> extends IComResponse {
     data: {
         item: T;
         relations?: {
@@ -9,7 +9,7 @@ export interface iServiceAddResponse<T> extends iComResponse {
         };
     };
 }
-export interface iServiceGetResponse<T> extends iComResponse {
+export interface IServiceGetResponse<T> extends IComResponse {
     data: {
         item: T;
         relations?: {
@@ -17,7 +17,7 @@ export interface iServiceGetResponse<T> extends iComResponse {
         };
     };
 }
-export interface iServiceGetAllResponse<T> extends iComResponse {
+export interface IServiceGetAllResponse<T> extends IComResponse {
     data: {
         items: T[];
         max?: number;
@@ -28,7 +28,7 @@ export interface iServiceGetAllResponse<T> extends iComResponse {
         };
     };
 }
-export interface iServiceUpdateResponse<T> extends iComResponse {
+export interface IServiceUpdateResponse<T> extends IComResponse {
     data: {
         item: T;
         relations?: {
@@ -36,22 +36,22 @@ export interface iServiceUpdateResponse<T> extends iComResponse {
         };
     };
 }
-export interface iServiceUpdateAllData extends iComResponse {
+export interface IServiceUpdateAllData extends IComResponse {
     data: {
         affected: number;
     };
 }
-export interface iServiceDeleteResponse<T> extends iComResponse {
+export interface IServiceDeleteResponse<T> extends IComResponse {
     data: {
         item: T;
     };
 }
-export interface iServiceDeleteAllResponse<T> extends iComResponse {
+export interface IServiceDeleteAllResponse<T> extends IComResponse {
     data: {
         affected: number;
     };
 }
-export interface iServiceGetRelationItemsResponse<T> extends iComResponse {
+export interface IServiceGetRelationItemsResponse<T> extends IComResponse {
     data: {
         items: T[];
         max?: number;
@@ -62,7 +62,7 @@ export interface iServiceGetRelationItemsResponse<T> extends iComResponse {
         };
     };
 }
-export interface iServiceGetRelationItemResponse<T> extends iComResponse {
+export interface IServiceGetRelationItemResponse<T> extends IComResponse {
     data: {
         item: T;
         relations?: {
@@ -70,24 +70,24 @@ export interface iServiceGetRelationItemResponse<T> extends iComResponse {
         };
     };
 }
-export declare type tServiceAddSuccess<T> = (response: iServiceAddResponse<T>) => void;
-export declare type tServiceUpdateSuccess<T> = (response: iServiceUpdateResponse<T>) => void;
-export declare type tServiceUpdateAllSuccess<T> = (response: iServiceUpdateAllData) => void;
-export declare type tServiceDeleteSuccess<T> = (response: iServiceDeleteResponse<T>) => void;
-export declare type tServiceDeleteAllSuccess<T> = (response: iServiceDeleteAllResponse<T>) => void;
-export declare type tServiceGetSuccess<T> = (response: iServiceGetResponse<T>, fromCache: boolean) => void;
-export declare type tServiceGetAllSuccess<T> = (response: iServiceGetAllResponse<T>, fromCache: boolean) => void;
-export declare type tServiceGetRelationSuccess<T> = (response: iServiceGetRelationItemResponse<T>, fromCache: boolean) => void;
-export declare type tServiceGetRelationItemsSuccess<T> = (response: iServiceGetRelationItemsResponse<T>, fromCache: boolean) => void;
-export declare type tServiceFail = (response: iComResponse) => void;
-export declare type tFilterCondition = "eq" | "neq" | "lt" | "lte" | "gt" | "gte" | "in" | "not_in" | "is_null" | "is_not_null" | "like" | "not_like";
+export declare type tServiceAddSuccess<T> = (response: IServiceAddResponse<T>) => void;
+export declare type tServiceUpdateSuccess<T> = (response: IServiceUpdateResponse<T>) => void;
+export declare type tServiceUpdateAllSuccess<T> = (response: IServiceUpdateAllData) => void;
+export declare type tServiceDeleteSuccess<T> = (response: IServiceDeleteResponse<T>) => void;
+export declare type tServiceDeleteAllSuccess<T> = (response: IServiceDeleteAllResponse<T>) => void;
+export declare type tServiceGetSuccess<T> = (response: IServiceGetResponse<T>, fromCache: boolean) => void;
+export declare type tServiceGetAllSuccess<T> = (response: IServiceGetAllResponse<T>, fromCache: boolean) => void;
+export declare type tServiceGetRelationSuccess<T> = (response: IServiceGetRelationItemResponse<T>, fromCache: boolean) => void;
+export declare type tServiceGetRelationItemsSuccess<T> = (response: IServiceGetRelationItemsResponse<T>, fromCache: boolean) => void;
+export declare type tServiceFail = (response: IComResponse, com: OWebCom) => void;
+export declare type tFilterCondition = 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'in' | 'not_in' | 'is_null' | 'is_not_null' | 'like' | 'not_like';
 export declare type tFilter = {
     0: tFilterCondition;
     1: string | string[] | number;
-    2?: "or" | "and";
+    2?: 'or' | 'and';
 } | {
-    0: "is_null" | "is_not_null";
-    1?: "or" | "and";
+    0: 'is_null' | 'is_not_null';
+    1?: 'or' | 'and';
 };
 export declare type tFiltersMap = {
     [key: string]: tFilter[];
@@ -102,15 +102,15 @@ export declare type tServiceRequestOptions = {
     page?: number;
 };
 export default class OWebService<T> {
-    protected readonly app_context: OWebApp;
-    private readonly _key_store;
-    private readonly _base_data;
+    protected readonly appContext: OWebApp;
+    private readonly _keyStore;
+    private readonly _baseData;
     /**
-     * @param app_context The app context.
-     * @param service_name The service name.
-     * @param persistent_cache To enable persistence data caching.
+     * @param appContext The app context.
+     * @param serviceName The service name.
+     * @param persistentCache To enable persistence data caching.
      */
-    constructor(app_context: OWebApp, service_name: string, persistent_cache?: boolean);
+    constructor(appContext: OWebApp, serviceName: string, persistentCache?: boolean);
     /**
      * Returns the service name.
      */
@@ -194,9 +194,9 @@ export default class OWebService<T> {
      * @param success
      * @param fail
      * @param freeze
-     * @param load_cache_first
+     * @param loadCacheFirst
      */
-    getRequest(id: string, relations: string | undefined, success: tServiceGetSuccess<T>, fail: tServiceFail, freeze?: boolean, load_cache_first?: boolean): OWebCom;
+    getRequest(id: string, relations: string | undefined, success: tServiceGetSuccess<T>, fail: tServiceFail, freeze?: boolean, loadCacheFirst?: boolean): OWebCom;
     /**
      * Gets all entities.
      *
@@ -204,10 +204,10 @@ export default class OWebService<T> {
      * @param success
      * @param fail
      * @param freeze
-     * @param force_cache
-     * @param load_cache_first
+     * @param forceCache
+     * @param loadCacheFirst
      */
-    getAllRequest(options: tServiceRequestOptions, success: tServiceGetAllSuccess<T>, fail: tServiceFail, freeze?: boolean, force_cache?: boolean, load_cache_first?: boolean): OWebCom;
+    getAllRequest(options: tServiceRequestOptions, success: tServiceGetAllSuccess<T>, fail: tServiceFail, freeze?: boolean, forceCache?: boolean, loadCacheFirst?: boolean): OWebCom;
     /**
      * Gets a single item relation for a given entity id.
      *
@@ -216,10 +216,10 @@ export default class OWebService<T> {
      * @param success
      * @param fail
      * @param freeze
-     * @param force_cache
-     * @param load_cache_first
+     * @param forceCache
+     * @param loadCacheFirst
      */
-    getRelationRequest<R>(id: string, relation: string, success: tServiceGetRelationSuccess<R>, fail: tServiceFail, freeze?: boolean, force_cache?: boolean, load_cache_first?: boolean): OWebCom;
+    getRelationRequest<R>(id: string, relation: string, success: tServiceGetRelationSuccess<R>, fail: tServiceFail, freeze?: boolean, forceCache?: boolean, loadCacheFirst?: boolean): OWebCom;
     /**
      * Gets multiple items relation for a given entity id.
      *
@@ -229,8 +229,8 @@ export default class OWebService<T> {
      * @param success
      * @param fail
      * @param freeze
-     * @param force_cache
-     * @param load_cache_first
+     * @param forceCache
+     * @param loadCacheFirst
      */
-    getRelationItemsRequest<R>(id: string, relation: string, options: tServiceRequestOptions, success: tServiceGetRelationItemsSuccess<R>, fail: tServiceFail, freeze?: boolean, force_cache?: boolean, load_cache_first?: boolean): OWebCom;
+    getRelationItemsRequest<R>(id: string, relation: string, options: tServiceRequestOptions, success: tServiceGetRelationItemsSuccess<R>, fail: tServiceFail, freeze?: boolean, forceCache?: boolean, loadCacheFirst?: boolean): OWebCom;
 }

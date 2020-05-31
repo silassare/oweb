@@ -1,6 +1,6 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-export interface iComResponse {
+export interface IComResponse {
     error: number;
     msg: string;
     data?: any;
@@ -23,7 +23,7 @@ export declare type tComOptions = {
     timeout?: number;
 };
 export default class OWebCom extends OWebEvent {
-    private readonly app_context;
+    private readonly appContext;
     static readonly SELF: string;
     static readonly EVT_COM_REQUEST_SUCCESS: string;
     static readonly EVT_COM_REQUEST_ERROR: string;
@@ -31,11 +31,12 @@ export default class OWebCom extends OWebEvent {
     static readonly EVT_COM_UPLOAD_PROGRESS: string;
     static readonly EVT_COM_FINISH: string;
     private readonly _options;
-    private readonly _original_data;
-    private _modified_data;
+    private readonly _originalData;
+    private _modifiedData;
     private _busy;
     private _request?;
-    constructor(app_context: OWebApp, options: tComOptions);
+    private _aborted;
+    constructor(appContext: OWebApp, options: tComOptions);
     /**
      * Prepare the request before sending.
      *
@@ -55,6 +56,10 @@ export default class OWebCom extends OWebEvent {
      * Send request.
      */
     send(): void;
+    /**
+     * Checks if the current request has been aborted.
+     */
+    isAborted(): boolean;
     /**
      * Try to abort the current request.
      */

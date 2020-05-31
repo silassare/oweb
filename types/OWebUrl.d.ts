@@ -1,12 +1,12 @@
-import OWebApp from "./OWebApp";
+import OWebApp from './OWebApp';
 export declare type tUrlList = {
     [key: string]: string;
 };
 export default class OWebUrl {
-    private readonly _url_list;
-    private readonly _url_local_base;
-    private readonly _url_server_base;
-    constructor(context: OWebApp, url_list: tUrlList);
+    private readonly _urlList;
+    private readonly _urlLocalBase;
+    private readonly _urlServerBase;
+    constructor(context: OWebApp, urlList: tUrlList);
     /**
      * Gets url value with a given url key name.
      *

@@ -1,17 +1,17 @@
-import OWebApp from "./OWebApp";
-import OWebEvent from "./OWebEvent";
+import OWebApp from './OWebApp';
+import OWebEvent from './OWebEvent';
 export declare type tConfigList = {
     [key: string]: any;
 };
 export default class OWebConfigs extends OWebEvent {
-    private readonly app_context;
+    private readonly appContext;
     static readonly SELF: string;
     static readonly EVT_CONFIG_CHANGE: string;
-    private readonly _default_configs;
-    private readonly _user_configs;
-    private readonly _private_configs_map;
-    private readonly _tag_name;
-    constructor(app_context: OWebApp, configs: tConfigList);
+    private readonly _defaultConfigs;
+    private readonly _userConfigs;
+    private readonly _privateConfigsMap;
+    private readonly _tagName;
+    constructor(appContext: OWebApp, configs: tConfigList);
     /**
      * Load config list.
      *
@@ -27,9 +27,9 @@ export default class OWebConfigs extends OWebEvent {
     /**
      * Resets all configs to their default values.
      *
-     * @param confirm_first When true a confirm will request will be sent to the user.
+     * @param confirmFirst When true a confirm will request will be sent to the user.
      */
-    resetAllToDefault(confirm_first?: boolean): void;
+    resetAllToDefault(confirmFirst?: boolean): void;
     /**
      * Gets a config value.
      *

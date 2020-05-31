@@ -87,7 +87,7 @@
 						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="owebformvalidator.html#app_context" class="tsd-kind-icon">app_<wbr>context</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="owebformvalidator.html#appcontext" class="tsd-kind-icon">app<wbr>Context</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="owebformvalidator.html#checkall" class="tsd-kind-icon">check<wbr>All</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="owebformvalidator.html#errormap" class="tsd-kind-icon">error<wbr>Map</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="owebformvalidator.html#excluded" class="tsd-kind-icon">excluded</a></li>
@@ -124,13 +124,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new OWeb<wbr>Form<wbr>Validator<span class="tsd-signature-symbol">(</span>app_context<span class="tsd-signature-symbol">: </span><a href="owebapp.html" class="tsd-signature-type">OWebApp</a>, form<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLFormElement</span>, required<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span>, excluded<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span>, checkAll<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebformvalidator.html" class="tsd-signature-type">OWebFormValidator</a></li>
+						<li class="tsd-signature tsd-kind-icon">new OWeb<wbr>Form<wbr>Validator<span class="tsd-signature-symbol">(</span>appContext<span class="tsd-signature-symbol">: </span><a href="owebapp.html" class="tsd-signature-type">OWebApp</a>, form<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLFormElement</span>, required<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, excluded<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>, checkAll<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebformvalidator.html" class="tsd-signature-type">OWebFormValidator</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L17">src/OWebFormValidator.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L24">src/OWebFormValidator.ts:24</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -138,7 +138,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>app_context: <a href="owebapp.html" class="tsd-signature-type">OWebApp</a></h5>
+									<h5>appContext: <a href="owebapp.html" class="tsd-signature-type">OWebApp</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The app context.</p>
@@ -154,7 +154,7 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> required: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = []</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> required: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The required fields.</p>
@@ -162,7 +162,7 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> excluded: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = []</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> excluded: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The fields to exclude from validation.</p>
@@ -186,12 +186,12 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="app_context" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> app_<wbr>context</h3>
-					<div class="tsd-signature tsd-kind-icon">app_<wbr>context<span class="tsd-signature-symbol">:</span> <a href="owebapp.html" class="tsd-signature-type">OWebApp</a></div>
+					<a name="appcontext" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> app<wbr>Context</h3>
+					<div class="tsd-signature tsd-kind-icon">app<wbr>Context<span class="tsd-signature-symbol">:</span> <a href="owebapp.html" class="tsd-signature-type">OWebApp</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L26">src/OWebFormValidator.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L34">src/OWebFormValidator.ts:34</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -206,7 +206,7 @@
 					<div class="tsd-signature tsd-kind-icon">check<wbr>All<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L26">src/OWebFormValidator.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L38">src/OWebFormValidator.ts:38</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -221,17 +221,17 @@
 					<div class="tsd-signature tsd-kind-icon">error<wbr>Map<span class="tsd-signature-symbol">:</span> <a href="../globals.html#tformerrormap" class="tsd-signature-type">tFormErrorMap</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L17">src/OWebFormValidator.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L24">src/OWebFormValidator.ts:24</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="excluded" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> excluded</h3>
-					<div class="tsd-signature tsd-kind-icon">excluded<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">excluded<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L26">src/OWebFormValidator.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L37">src/OWebFormValidator.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -246,7 +246,7 @@
 					<div class="tsd-signature tsd-kind-icon">form<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">HTMLFormElement</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L26">src/OWebFormValidator.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L35">src/OWebFormValidator.ts:35</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -261,17 +261,17 @@
 					<div class="tsd-signature tsd-kind-icon">form<wbr>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FormData</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L15">src/OWebFormValidator.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L22">src/OWebFormValidator.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="required" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> required</h3>
-					<div class="tsd-signature tsd-kind-icon">required<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">required<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L26">src/OWebFormValidator.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L36">src/OWebFormValidator.ts:36</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -286,7 +286,7 @@
 					<div class="tsd-signature tsd-kind-icon">validators<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L16">src/OWebFormValidator.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L23">src/OWebFormValidator.ts:23</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -311,7 +311,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L225">src/OWebFormValidator.ts:225</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L257">src/OWebFormValidator.ts:257</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -354,7 +354,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L120">src/OWebFormValidator.ts:120</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L136">src/OWebFormValidator.ts:136</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -384,7 +384,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L60">src/OWebFormValidator.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L77">src/OWebFormValidator.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -406,7 +406,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L69">src/OWebFormValidator.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L86">src/OWebFormValidator.ts:86</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -436,7 +436,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L152">src/OWebFormValidator.ts:152</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L181">src/OWebFormValidator.ts:181</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -458,7 +458,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L101">src/OWebFormValidator.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L117">src/OWebFormValidator.ts:117</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -488,7 +488,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L131">src/OWebFormValidator.ts:131</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L147">src/OWebFormValidator.ts:147</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -519,7 +519,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L53">src/OWebFormValidator.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L70">src/OWebFormValidator.ts:70</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -535,13 +535,13 @@
 					<a name="getformdata" class="tsd-anchor"></a>
 					<h3>get<wbr>Form<wbr>Data</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Form<wbr>Data<span class="tsd-signature-symbol">(</span>fields<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">FormData</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Form<wbr>Data<span class="tsd-signature-symbol">(</span>fields<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">FormData</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L78">src/OWebFormValidator.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L95">src/OWebFormValidator.ts:95</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -552,7 +552,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> fields: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = []</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> fields: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The fields name list. When empty all field will be added to the FormData.</p>
 									</div>
@@ -572,7 +572,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L110">src/OWebFormValidator.ts:110</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L126">src/OWebFormValidator.ts:126</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -605,7 +605,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L159">src/OWebFormValidator.ts:159</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L188">src/OWebFormValidator.ts:188</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -627,7 +627,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L239">src/OWebFormValidator.ts:239</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L271">src/OWebFormValidator.ts:271</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -664,7 +664,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/aaeacd2/src/OWebFormValidator.ts#L261">src/OWebFormValidator.ts:261</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebFormValidator.ts#L298">src/OWebFormValidator.ts:298</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -711,7 +711,7 @@
 								<a href="owebformvalidator.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="owebformvalidator.html#app_context" class="tsd-kind-icon">app_<wbr>context</a>
+								<a href="owebformvalidator.html#appcontext" class="tsd-kind-icon">app<wbr>Context</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="owebformvalidator.html#checkall" class="tsd-kind-icon">check<wbr>All</a>

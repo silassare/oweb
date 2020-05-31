@@ -1,14 +1,11 @@
-import OWebApp from "./OWebApp";
-import OWebCustomError from "./OWebCustomError";
+import OWebApp from './OWebApp';
+import OWebFormError from './OWebFormError';
 declare type tFormErrorMap = {
     [key: string]: OWebFormError[];
 };
 export declare type tFormValidator = (value: any, name: string, context: OWebFormValidator) => void;
-export declare class OWebFormError extends OWebCustomError {
-    readonly __oweb_form_error = true;
-}
 export default class OWebFormValidator {
-    private readonly app_context;
+    private readonly appContext;
     private readonly form;
     private readonly required;
     private readonly excluded;
@@ -17,13 +14,13 @@ export default class OWebFormValidator {
     private validatorsMap;
     private errorMap;
     /**
-     * @param app_context The app context.
+     * @param appContext The app context.
      * @param form The form element.
      * @param required The required fields.
      * @param excluded The fields to exclude from validation.
      * @param checkAll When true all fields will be validated.
      */
-    constructor(app_context: OWebApp, form: HTMLFormElement, required?: Array<string>, excluded?: Array<string>, checkAll?: boolean);
+    constructor(appContext: OWebApp, form: HTMLFormElement, required?: string[], excluded?: string[], checkAll?: boolean);
     /**
      * Returns the form element.
      */
@@ -43,7 +40,7 @@ export default class OWebFormValidator {
      *
      * @param fields The fields name list. When empty all field will be added to the FormData.
      */
-    getFormData(fields?: Array<string>): FormData;
+    getFormData(fields?: string[]): FormData;
     /**
      * Gets a given field name value.
      *

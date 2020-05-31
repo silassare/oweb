@@ -1,7 +1,7 @@
-import { iComResponse } from "./OWebCom";
-import OWebEvent from "./OWebEvent";
+import { IComResponse } from './OWebCom';
+import OWebEvent from './OWebEvent';
 export declare type tViewDialog = {
-    type: "info" | "error" | "done";
+    type: 'info' | 'error' | 'done';
     text: string;
     data?: {};
 };
@@ -10,7 +10,7 @@ export default class OWebView extends OWebEvent {
     static readonly EVT_VIEW_FREEZE: string;
     static readonly EVT_VIEW_UNFREEZE: string;
     static readonly EVT_VIEW_DIALOG: string;
-    private _freeze_counter;
+    private _freezeCounter;
     constructor();
     /**
      * Checks if the view is frozen.
@@ -27,9 +27,9 @@ export default class OWebView extends OWebEvent {
     /**
      * Trigger dialog event to the view.
      * @param dialog
-     * @param can_use_alert
+     * @param canUseAlert
      */
-    dialog(dialog: tViewDialog | iComResponse, can_use_alert?: boolean): void;
+    dialog(dialog: tViewDialog | IComResponse, canUseAlert?: boolean): void;
     /**
      * Register freeze event handler.
      *
@@ -47,5 +47,5 @@ export default class OWebView extends OWebEvent {
      *
      * @param handler
      */
-    onDialog(handler: (this: this, dialog: tViewDialog, can_use_alert: boolean) => void): this;
+    onDialog(handler: (this: this, dialog: tViewDialog, canUseAlert: boolean) => void): this;
 }

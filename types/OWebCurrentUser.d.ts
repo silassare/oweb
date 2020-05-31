@@ -1,11 +1,11 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 export default class OWebCurrentUser extends OWebEvent {
-    private readonly app_context;
+    private readonly appContext;
     static readonly SELF: string;
     static readonly EVT_USER_DATA_UPDATE: string;
-    private _key_store;
-    constructor(app_context: OWebApp);
+    private _keyStore;
+    constructor(appContext: OWebApp);
     /**
      * Returns current user data.
      */

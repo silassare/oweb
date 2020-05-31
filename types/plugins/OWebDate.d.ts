@@ -20,7 +20,7 @@
  * ii The minutes 00, 01,..., 59
  * ss The seconds 00, 01,..., 59
  */
-import OWebApp from "../OWebApp";
+import OWebApp from '../OWebApp';
 export declare type tDateValue = Date | number | string;
 export declare type tDateDesc = {
     D: string;
@@ -46,9 +46,9 @@ export declare type tDateDesc = {
     A: string;
 };
 export default class OWebDate {
-    private app_context;
+    private appContext;
     private date;
-    constructor(app_context: OWebApp, date?: tDateValue);
+    constructor(appContext: OWebApp, date?: tDateValue);
     /**
      * Format date with a given lang key.
      *

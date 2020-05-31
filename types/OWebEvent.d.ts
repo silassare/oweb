@@ -1,3 +1,4 @@
+export declare type tEventHandler = (...args: any[]) => void | boolean;
 export default class OWebEvent {
     private _events;
     protected constructor();
@@ -7,14 +8,14 @@ export default class OWebEvent {
      * @param event The event name.
      * @param handler The event handler function.
      */
-    on(event: string, handler: (this: this, ...args: any[]) => void | boolean): this;
+    on(event: string, handler: (this: this, ...args: any[]) => ReturnType<tEventHandler>): this;
     /**
      * Removes event handler.
      *
      * @param event The event name.
      * @param handler The event handler function.
      */
-    off(event: string, handler: Function): this;
+    off(event: string, handler: () => void): this;
     /**
      * Trigger an event.
      *
@@ -23,5 +24,5 @@ export default class OWebEvent {
      * @param cancelable When true the event will stop when a handler returns false.
      * @param context The context in which each handler will be called. Default: this.
      */
-    protected trigger(event: string, data?: Array<any>, cancelable?: boolean, context?: any): boolean;
+    protected trigger(event: string, data?: any[], cancelable?: boolean, context?: any): boolean;
 }

@@ -1,6 +1,6 @@
-import OWebPager, { iPage, iPageRoute, iPageRouteFull } from './OWebPager';
-import { OWebRouteContext } from './OWebRouter';
-export default abstract class OWebPageBase<Component> implements iPage<Component> {
+import OWebPager, { IPage, IPageRoute, IPageRouteFull } from './OWebPager';
+import OWebRouteContext from './OWebRouteContext';
+export default abstract class OWebPageBase<Component> implements IPage<Component> {
     /**
      * The page name getter.
      */
@@ -8,7 +8,7 @@ export default abstract class OWebPageBase<Component> implements iPage<Component
     /**
      * The page routes getter.
      */
-    abstract getRoutes(): iPageRoute[];
+    abstract getRoutes(): IPageRoute[];
     /**
      * The page component getter.
      */
@@ -25,19 +25,19 @@ export default abstract class OWebPageBase<Component> implements iPage<Component
      * @param context The app context.
      * @param route The request page route.
      */
-    requireLogin(context: OWebRouteContext, route: iPageRouteFull): boolean;
+    requireLogin(context: OWebRouteContext, route: IPageRouteFull): boolean;
     /**
      * Called before page open.
      *
      * @param context
      * @param route
      */
-    onOpen(context: OWebRouteContext, route: iPageRouteFull): void;
+    onOpen(context: OWebRouteContext, route: IPageRouteFull): void;
     /**
      * Called before page close.
      *
      * @param oldRoute
      * @param newRoute
      */
-    onClose(oldRoute: iPageRouteFull, newRoute: iPageRouteFull): void;
+    onClose(oldRoute: IPageRouteFull, newRoute: IPageRouteFull): void;
 }

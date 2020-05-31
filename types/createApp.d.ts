@@ -1,6 +1,8 @@
 import OWebService from './OWebService';
 import { GoblEntity } from 'gobl-utils-ts';
-import { OWebApp, tConfigList, tUrlList } from './oweb';
+import OWebApp from './OWebApp';
+import { tConfigList } from './OWebConfigs';
+import { tUrlList } from './OWebUrl';
 export interface IAppStore {
     [key: string]: any;
     services: {

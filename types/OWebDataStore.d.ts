@@ -1,11 +1,11 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 export default class OWebDataStore extends OWebEvent {
-    private readonly _app_context;
+    private readonly _appContext;
     static readonly EVT_DATA_STORE_CLEAR: string;
     private readonly key;
     private data;
-    constructor(_app_context: OWebApp);
+    constructor(_appContext: OWebApp);
     /**
      * Save data to the store.
      *

@@ -1,18 +1,18 @@
-import OWebApp from "./OWebApp";
-import OWebEvent from "./OWebEvent";
+import OWebApp from './OWebApp';
+import OWebEvent from './OWebEvent';
 export default class OWebKeyStorage extends OWebEvent {
-    private readonly app_context;
-    private readonly tag_name;
+    private readonly appContext;
+    private readonly tagName;
     private persistent;
-    private readonly _max_life_time;
+    private readonly _maxLifeTime;
     private _store;
     /**
-     * @param app_context The app context.
-     * @param tag_name The key storage name.
+     * @param appContext The app context.
+     * @param tagName The key storage name.
      * @param persistent True to persists the key storage data.
-     * @param max_life_time The duration in seconds until key data deletion.
+     * @param maxLifeTime The duration in seconds until key data deletion.
      */
-    constructor(app_context: OWebApp, tag_name: string, persistent?: boolean, max_life_time?: number);
+    constructor(appContext: OWebApp, tagName: string, persistent?: boolean, maxLifeTime?: number);
     /**
      * Returns the key storage data.
      */

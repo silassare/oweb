@@ -1,35 +1,36 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-import { OWebRouteContext, tRoutePath, tRoutePathOptions } from './OWebRouter';
-import { tI18n } from "./oweb";
-export interface iPageRoute {
+import OWebRouteContext from './OWebRouteContext';
+import { tRoutePath, tRoutePathOptions } from './OWebRoute';
+import { tI18n } from './OWebI18n';
+export interface IPageRoute {
     slug?: string;
     title: tI18n;
     description?: tI18n;
     path: tRoutePath;
     pathOptions?: tRoutePathOptions;
-    sub?: iPageRoute[];
+    sub?: IPageRoute[];
     showSub?: boolean;
     disabled?: boolean;
     show?(): boolean;
 }
-export interface iPageRouteFull {
+export interface IPageRouteFull {
     slug?: string;
     title: tI18n;
     description?: tI18n;
     path: tRoutePath;
     pathOptions?: tRoutePathOptions;
-    sub?: iPageRouteFull[];
+    sub?: IPageRouteFull[];
     showSub?: boolean;
     disabled?: boolean;
     show(): boolean;
     readonly id: number;
     readonly href: string;
-    readonly parent?: iPageRouteFull;
+    readonly parent?: IPageRouteFull;
     active: boolean;
     activeChild: boolean;
 }
-export interface iPage<Component> {
+export interface IPage<Component> {
     /**
      * The page name getter.
      */
@@ -37,7 +38,7 @@ export interface iPage<Component> {
     /**
      * The page routes getter.
      */
-    getRoutes(): iPageRoute[];
+    getRoutes(): IPageRoute[];
     /**
      * The page component getter.
      */
@@ -54,64 +55,64 @@ export interface iPage<Component> {
      * @param context The app context.
      * @param route The request page route.
      */
-    requireLogin(context: OWebRouteContext, route: iPageRouteFull): boolean;
+    requireLogin(context: OWebRouteContext, route: IPageRouteFull): boolean;
     /**
      * Called before page open.
      *
      * @param context
      * @param route
      */
-    onOpen(context: OWebRouteContext, route: iPageRouteFull): void;
+    onOpen(context: OWebRouteContext, route: IPageRouteFull): void;
     /**
      * Called before page close.
      *
      * @param oldRoute
      * @param newRoute
      */
-    onClose(oldRoute: iPageRouteFull, newRoute: iPageRouteFull): void;
+    onClose(oldRoute: IPageRouteFull, newRoute: IPageRouteFull): void;
 }
 export default class OWebPager<Component> extends OWebEvent {
-    private readonly app_context;
+    private readonly appContext;
     static readonly SELF: string;
     static readonly EVT_PAGE_LOCATION_CHANGE: string;
     private readonly _pages;
-    private _routes_cache;
-    private _routes_flattened;
-    private _active_page;
-    private _active_route?;
+    private _routesCache;
+    private _routesFlattened;
+    private _activePage;
+    private _activeRoute?;
     /**
-     * @param app_context The app context.
+     * @param appContext The app context.
      */
-    constructor(app_context: OWebApp);
+    constructor(appContext: OWebApp);
     /**
      * Returns registered pages routes.
      */
-    getRoutes(): iPageRoute[];
+    getRoutes(): IPageRoute[];
     /**
      * Returns the page with the given name.
      * @param name
      */
-    getPage(name: string): iPage<Component>;
+    getPage(name: string): IPage<Component>;
     /**
      * Returns the active page.
      */
-    getActivePage(): iPage<Component>;
+    getActivePage(): IPage<Component>;
     /**
      * Returns the active page route.
      */
-    getActivePageRoute(): iPageRouteFull;
+    getActivePageRoute(): IPageRouteFull;
     /**
      * Returns all pages list.
      */
     getPageList(): {
-        [x: string]: iPage<Component>;
+        [x: string]: IPage<Component>;
     };
     /**
      * Register a given page.
      *
      * @param page
      */
-    registerPage(page: iPage<Component>): this;
+    registerPage(page: IPage<Component>): this;
     /**
      * Helpers to register page routes.
      *
@@ -137,5 +138,5 @@ export default class OWebPager<Component> extends OWebEvent {
      * @private
      */
     private _setActive;
-    onLocationChange(handler: (route: iPageRouteFull, page: iPage<Component>) => void): this;
+    onLocationChange(handler: (route: IPageRouteFull, page: IPage<Component>) => void): this;
 }

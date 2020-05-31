@@ -1,4 +1,4 @@
-import OWebEvent from "../src/OWebEvent";
+import OWebEvent from './OWebEvent';
 export declare type tI18nDefinition = {
     [key: string]: any;
 };
