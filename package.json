@@ -20,14 +20,14 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"dependencies": {
-		"@types/jquery": "^3.3.31",
-		"gobl-utils-ts": "silassare/gobl-utils-ts",
-		"oweb-tel-input": "silassare/oweb-tel-input"
+		"@types/jquery": "^3.3.38",
+		"gobl-utils-ts": "github:silassare/gobl-utils-ts",
+		"oweb-tel-input": "github:silassare/oweb-tel-input"
 	},
 	"devDependencies": {
 		"tslint": "^6.1.2",
-		"typedoc": "latest",
-		"typescript": "latest"
+		"typedoc": "^0.17.7",
+		"typescript": "^3.9.3"
 	},
 	"repository": {
 		"type": "git",
