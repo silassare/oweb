@@ -1,8 +1,8 @@
-import OWebPager, { iPage, iPageRoute, iPageRouteFull } from './OWebPager';
-import { OWebRouteContext } from './OWebRouter';
+import OWebPager, { IPage, IPageRoute, IPageRouteFull } from './OWebPager';
+import OWebRouteContext from './OWebRouteContext';
 
 export default abstract class OWebPageBase<Component>
-	implements iPage<Component> {
+	implements IPage<Component> {
 	/**
 	 * The page name getter.
 	 */
@@ -11,7 +11,7 @@ export default abstract class OWebPageBase<Component>
 	/**
 	 * The page routes getter.
 	 */
-	abstract getRoutes(): iPageRoute[];
+	abstract getRoutes(): IPageRoute[];
 
 	/**
 	 * The page component getter.
@@ -33,7 +33,7 @@ export default abstract class OWebPageBase<Component>
 	 * @param context The app context.
 	 * @param route The request page route.
 	 */
-	requireLogin(context: OWebRouteContext, route: iPageRouteFull): boolean {
+	requireLogin(context: OWebRouteContext, route: IPageRouteFull): boolean {
 		return false;
 	}
 
@@ -43,7 +43,8 @@ export default abstract class OWebPageBase<Component>
 	 * @param context
 	 * @param route
 	 */
-	onOpen(context: OWebRouteContext, route: iPageRouteFull): void {}
+	// tslint:disable-next-line: no-empty
+	onOpen(context: OWebRouteContext, route: IPageRouteFull): void {}
 
 	/**
 	 * Called before page close.
@@ -51,5 +52,6 @@ export default abstract class OWebPageBase<Component>
 	 * @param oldRoute
 	 * @param newRoute
 	 */
-	onClose(oldRoute: iPageRouteFull, newRoute: iPageRouteFull): void {}
+	// tslint:disable-next-line: no-empty
+	onClose(oldRoute: IPageRouteFull, newRoute: IPageRouteFull): void {}
 }

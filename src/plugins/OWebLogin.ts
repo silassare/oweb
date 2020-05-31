@@ -1,68 +1,64 @@
 import OWebApp from '../OWebApp';
-import { iComResponse } from '../OWebCom';
+import { IComResponse } from '../OWebCom';
 import OWebEvent from '../OWebEvent';
-import Utils from '../utils/Utils';
+import { id } from '../utils/Utils';
 
 export default class OWebLogin extends OWebEvent {
-	static readonly SELF = Utils.id();
-	static readonly EVT_LOGIN_ERROR = Utils.id();
-	static readonly EVT_LOGIN_SUCCESS = Utils.id();
+	static readonly SELF = id();
+	static readonly EVT_LOGIN_ERROR = id();
+	static readonly EVT_LOGIN_SUCCESS = id();
 
-	constructor(private readonly app_context: OWebApp) {
+	constructor(private readonly appContext: OWebApp) {
 		super();
 	}
 
 	loginWithEmail(form: HTMLFormElement) {
-		let m = this,
-			ofv = this.app_context.getFormValidator(form, ['email', 'pass']);
+		const m = this,
+			ofv = this.appContext.getFormValidator(form, ['email', 'pass']);
 
 		if (ofv.validate()) {
-			let data = {
+			m._tryLogin({
 				email: ofv.getField('email'),
 				pass: ofv.getField('pass'),
-			};
-
-			m._tryLogin(data);
+			});
 		}
 	}
 
 	loginWithPhone(form: HTMLFormElement) {
-		let m = this,
-			ofv = this.app_context.getFormValidator(form, ['phone', 'pass']);
+		const m = this,
+			ofv = this.appContext.getFormValidator(form, ['phone', 'pass']);
 
 		if (ofv.validate()) {
-			let data = {
+			m._tryLogin({
 				phone: ofv.getField('phone'),
 				pass: ofv.getField('pass'),
-			};
-
-			m._tryLogin(data);
+			});
 		}
 	}
 
-	onError(handler: (this: this, response: iComResponse) => void): this {
+	onError(handler: (this: this, response: IComResponse) => void): this {
 		return this.on(OWebLogin.EVT_LOGIN_ERROR, handler);
 	}
 
-	onSuccess(handler: (this: this, response: iComResponse) => void): this {
+	onSuccess(handler: (this: this, response: IComResponse) => void): this {
 		return this.on(OWebLogin.EVT_LOGIN_SUCCESS, handler);
 	}
 
 	_tryLogin(data: any) {
-		let m = this,
-			url = this.app_context.url.get('OZ_SERVER_LOGIN_SERVICE');
+		const m = this,
+			url = this.appContext.url.get('OZ_SERVER_LOGIN_SERVICE');
 
-		this.app_context.request(
+		this.appContext.request(
 			'POST',
 			url,
 			data,
-			function(response: iComResponse) {
+			function (response: IComResponse) {
 				m.trigger(OWebLogin.EVT_LOGIN_SUCCESS, [response]);
 			},
-			function(response: any) {
+			function (response: any) {
 				m.trigger(OWebLogin.EVT_LOGIN_ERROR, [response]);
 			},
-			true
+			true,
 		);
 	}
 }

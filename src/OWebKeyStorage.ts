@@ -1,36 +1,41 @@
-import OWebApp from "./OWebApp";
-import OWebEvent from "./OWebEvent";
-import Utils from "./utils/Utils";
+import OWebApp from './OWebApp';
+import OWebEvent from './OWebEvent';
+import { forEach } from './utils/Utils';
 
 type tKeyData = {
-	value: any,
-	expire: number,
+	value: any;
+	expire: number;
 };
 
-let _hasExpired = (data: tKeyData): boolean => {
-	let now    = Date.now(),
-		expire = data["expire"];
-	return expire != -1 && now <= expire;
+const _hasExpired = (data: tKeyData): boolean => {
+	const now = Date.now(),
+		expire = data.expire;
+	return expire !== -1 && now <= expire;
 };
 
 export default class OWebKeyStorage extends OWebEvent {
-	private readonly _max_life_time: number;
+	private readonly _maxLifeTime: number;
 	private _store: { [key: string]: tKeyData };
 
 	/**
-	 * @param app_context The app context.
-	 * @param tag_name The key storage name.
+	 * @param appContext The app context.
+	 * @param tagName The key storage name.
 	 * @param persistent True to persists the key storage data.
-	 * @param max_life_time The duration in seconds until key data deletion.
+	 * @param maxLifeTime The duration in seconds until key data deletion.
 	 */
-	constructor(private readonly app_context: OWebApp, private readonly tag_name: string, private persistent: boolean = true, max_life_time: number = Infinity) {
+	constructor(
+		private readonly appContext: OWebApp,
+		private readonly tagName: string,
+		private persistent: boolean = true,
+		maxLifeTime: number = Infinity,
+	) {
 		super();
 
-		let m               = this;
-		this._store         = app_context.ls.load(this.tag_name) || {};
-		this._max_life_time = max_life_time * 1000;
+		const m = this;
+		this._store = appContext.ls.load(this.tagName) || {};
+		this._maxLifeTime = maxLifeTime * 1000;
 
-		app_context.ls.onClear(function () {
+		appContext.ls.onClear(function () {
 			m._store = {};
 		});
 
@@ -41,12 +46,12 @@ export default class OWebKeyStorage extends OWebEvent {
 	 * Returns the key storage data.
 	 */
 	getStoreData(): {} {
-		let items: any = {};
+		const items: any = {};
 
 		this._clearExpired();
 
-		Utils.forEach(this._store, (data, key) => {
-			items[key] = data["value"];
+		forEach(this._store, (data, key) => {
+			items[key] = data.value;
 		});
 
 		return items;
@@ -61,7 +66,9 @@ export default class OWebKeyStorage extends OWebEvent {
 		let data: tKeyData = this._store[key];
 
 		if (data !== undefined) {
-			data = _hasExpired(data) ? this.removeItem(key) && undefined : data["value"];
+			data = _hasExpired(data)
+				? this.removeItem(key) && undefined
+				: data.value;
 		}
 
 		return data;
@@ -76,8 +83,11 @@ export default class OWebKeyStorage extends OWebEvent {
 
 	setItem(key: string, value: any): this {
 		this._store[key] = {
-			"value" : value,
-			"expire": this._max_life_time === Infinity ? -1 : Date.now() + this._max_life_time
+			value,
+			expire:
+				this._maxLifeTime === Infinity
+					? -1
+					: Date.now() + this._maxLifeTime,
 		};
 
 		return this._save();
@@ -101,7 +111,7 @@ export default class OWebKeyStorage extends OWebEvent {
 	 */
 	private _save(): this {
 		if (this.persistent) {
-			this.app_context.ls.save(this.tag_name, this._store);
+			this.appContext.ls.save(this.tagName, this._store);
 		}
 
 		return this;
@@ -121,8 +131,9 @@ export default class OWebKeyStorage extends OWebEvent {
 	 * @private
 	 */
 	private _clearExpired() {
-		let s = this, modified = false;
-		Utils.forEach(this._store, (data, key) => {
+		const s = this;
+		let modified = false;
+		forEach(this._store, (data, key) => {
 			if (_hasExpired(data)) {
 				modified = true;
 				delete s._store[key];

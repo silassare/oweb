@@ -20,37 +20,38 @@
  * ii The minutes 00, 01,..., 59
  * ss The seconds 00, 01,..., 59
  */
-import OWebApp from "../OWebApp";
+import OWebApp from '../OWebApp';
 
 export type tDateValue = Date | number | string;
 export type tDateDesc = {
-	D: string,
-	l: number,
-	L: string,
-	ll: number,
-	LL: string,
-	d: number,
-	M: string,
-	F: string,
-	m: number,
-	mm: string,
-	Y: number,
-	y: number,
-	h: number,
-	H: number,
-	i: number,
-	ii: string,
-	s: number,
-	ss: string,
-	ms: number,
-	a: string,
-	A: string
+	D: string;
+	l: number;
+	L: string;
+	ll: number;
+	LL: string;
+	d: number;
+	M: string;
+	F: string;
+	m: number;
+	mm: string;
+	Y: number;
+	y: number;
+	h: number;
+	H: number;
+	i: number;
+	ii: string;
+	s: number;
+	ss: string;
+	ms: number;
+	a: string;
+	A: string;
 };
 
 export default class OWebDate {
-
-	constructor(private app_context: OWebApp, private date: tDateValue = new Date()) {
-	}
+	constructor(
+		private appContext: OWebApp,
+		private date: tDateValue = new Date(),
+	) {}
 
 	/**
 	 * Format date with a given lang key.
@@ -58,63 +59,67 @@ export default class OWebDate {
 	 * @param langKey
 	 */
 	format(langKey: string): string {
-		return this.app_context.i18n.toHuman(langKey, this.describe());
+		return this.appContext.i18n.toHuman(langKey, this.describe());
 	}
 
 	/**
 	 * Returns date description object.
 	 */
 	describe(): tDateDesc {
-		let i18n              = this.app_context.i18n,
-			day_names_short   = i18n.toHuman("OW_TIME_DAY_NAMES_SHORT").split(","),
-			day_names_full    = i18n.toHuman("OW_TIME_DAY_NAMES_FULL").split(","),
-			month_names_short = i18n.toHuman("OW_TIME_MONTH_NAMES_SHORT").split(","),
-			month_names_full  = i18n.toHuman("OW_TIME_MONTH_NAMES_FULL").split(","),
-			date              = new Date(this.date),
-			y: number         = (date as any).getYear(),
-			Y: number         = date.getFullYear(),
-			m: number         = date.getMonth(),
-			mm: string        = String(m < 9 ? "0" + (m + 1) : m + 1),
-			d: number         = date.getDate(),
-			l: number         = date.getDay(),
-			ll: number        = l + 1,// l? l : 7,
-			L: string         = day_names_full[l],
-			LL: string        = day_names_full[l],
-			D: string         = day_names_short[l],
-			M: string         = month_names_short[m],
-			F: string         = month_names_full[m],
-			H: number         = date.getHours(),
-			i: number         = date.getMinutes(),
-			ii: string        = String(i < 10 ? "0" + i : i),
-			s: number         = date.getSeconds(),
-			ss: string        = String(s < 10 ? "0" + s : s),
-			ms: number        = date.getMilliseconds(),
-			h: number         = (H === 12) ? 12 : H % 12,
-			a: string         = (H < 12) ? "am" : "pm",
-			A: string         = a.toUpperCase();
+		const i18n = this.appContext.i18n,
+			dayNamesShort = i18n.toHuman('OW_TIME_DAY_NAMES_SHORT').split(','),
+			dayNamesFull = i18n.toHuman('OW_TIME_DAY_NAMES_FULL').split(','),
+			monthNamesShort = i18n
+				.toHuman('OW_TIME_MONTH_NAMES_SHORT')
+				.split(','),
+			monthNamesFull = i18n
+				.toHuman('OW_TIME_MONTH_NAMES_FULL')
+				.split(','),
+			date = new Date(this.date),
+			y: number = (date as any).getYear(),
+			Y: number = date.getFullYear(),
+			m: number = date.getMonth(),
+			mm: string = String(m < 9 ? '0' + (m + 1) : m + 1),
+			d: number = date.getDate(),
+			l: number = date.getDay(),
+			ll: number = l + 1, // l? l : 7,
+			L: string = dayNamesFull[l],
+			LL: string = dayNamesFull[l],
+			D: string = dayNamesShort[l],
+			M: string = monthNamesShort[m],
+			F: string = monthNamesFull[m],
+			H: number = date.getHours(),
+			i: number = date.getMinutes(),
+			ii: string = String(i < 10 ? '0' + i : i),
+			s: number = date.getSeconds(),
+			ss: string = String(s < 10 ? '0' + s : s),
+			ms: number = date.getMilliseconds(),
+			h: number = H === 12 ? 12 : H % 12,
+			a: string = H < 12 ? 'am' : 'pm',
+			A: string = a.toUpperCase();
 
 		return {
-			D : D,
-			l : l,
-			L : L,
-			ll: ll,
-			LL: LL,
-			d : d,
-			M : M,
-			F : F,
-			m : m,
-			mm: mm,
-			Y : Y,
-			y : y,
-			h : h,
-			H : H,
-			i : i,
-			ii: ii,
-			s : s,
-			ss: ss,
-			ms: ms,
-			a : a,
-			A : A
+			D,
+			l,
+			L,
+			ll,
+			LL,
+			d,
+			M,
+			F,
+			m,
+			mm,
+			Y,
+			y,
+			h,
+			H,
+			i,
+			ii,
+			s,
+			ss,
+			ms,
+			a,
+			A,
 		};
 	}
 
@@ -141,4 +146,4 @@ export default class OWebDate {
 	static timestamp(): number {
 		return Number(String(Date.now()).slice(0, -3));
 	}
-};
+}

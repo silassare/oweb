@@ -9,7 +9,6 @@ export default {
 	OZ_ERROR_NOT_FOUND: "Erreur: La ressource recherchée n'est pas retrouvée.",
 	OZ_ERROR_SHOULD_ACCEPT_CGU:
 		"Vous devez accepter les Conditions Générales d'Utilisation.",
-
 	// ---------END NEW
 
 	OZ_IMAGE_NOT_VALID:
@@ -20,7 +19,7 @@ export default {
 	OZ_FILE_TOO_BIG: 'Fichier trop lourd, maximum 100Mb.',
 	OZ_FILE_IS_EMPTY: 'Fichier vide.',
 	OZ_ERROR_INVALID_FORM:
-		"La requête est invalide. Vous n'êtes peut-être pas autorisé à effectuer cette action.",
+		"La requête est invalide. Vous n'etes peut-être pas autorisé à effectuer cette action.",
 
 	OZ_FIELD_PHONE_ALREADY_REGISTERED:
 		'Le {phone} est déjà associé à un autre compte.',
@@ -70,7 +69,7 @@ export default {
 	OZ_ERROR_INTERNAL: 'Erreur iterne...',
 	OZ_ERROR_YOU_MUST_LOGIN: "Vous devez vous connecter d'abord.",
 	OZ_ERROR_NOT_ALLOWED:
-		"Une erreur s'est produite. Vous n'êtes peut-être pas autoriser à effectuer cette action.",
+		"Une erreur s'est produite. Vous n'etes peut-être pas autoriser à effectuer cette action.",
 	OZ_USER_ONLINE: 'Vous êtes connecté.',
 	OZ_USER_LOGOUT: 'Vous vous êtes déconnecté.',
 	OZ_LOGOUT_FAIL: 'La déconnexion a échoué.',

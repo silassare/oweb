@@ -1,25 +1,25 @@
-import OWebApp from "./OWebApp";
-import OWebEvent from "./OWebEvent";
-import Utils from "./utils/Utils";
+import OWebApp from './OWebApp';
+import OWebEvent from './OWebEvent';
+import { forEach, id, isPlainObject } from './utils/Utils';
 
 export type tConfigList = { [key: string]: any };
 
 export default class OWebConfigs extends OWebEvent {
-	static readonly SELF              = Utils.id();
-	static readonly EVT_CONFIG_CHANGE = Utils.id();
+	static readonly SELF = id();
+	static readonly EVT_CONFIG_CHANGE = id();
 
-	private readonly _default_configs: tConfigList     = {};
-	private readonly _user_configs: tConfigList        = {};
-	private readonly _private_configs_map: tConfigList = {};
-	private readonly _tag_name: string                 = "user_configs";
+	private readonly _defaultConfigs: tConfigList = {};
+	private readonly _userConfigs: tConfigList = {};
+	private readonly _privateConfigsMap: tConfigList = {};
+	private readonly _tagName: string = 'user_configs';
 
-	constructor(private readonly app_context: OWebApp, configs: tConfigList) {
+	constructor(private readonly appContext: OWebApp, configs: tConfigList) {
 		super();
 
 		this.loadConfigs(configs);
 		this._loadSavedConfigs();
 
-		console.log("[OWebConfigs] ready!");
+		console.log('[OWebConfigs] ready!');
 	}
 
 	/**
@@ -28,11 +28,11 @@ export default class OWebConfigs extends OWebEvent {
 	 * @param configs
 	 */
 	loadConfigs(configs: tConfigList): this {
-		let s = this;
+		const s = this;
 
-		Utils.forEach(configs, (value: any, cfg: string) => {
-			cfg                  = s._realConfigName(cfg);
-			s._user_configs[cfg] = s._default_configs[cfg] = value;
+		forEach(configs, (value: any, cfg: string) => {
+			cfg = s._realConfigName(cfg);
+			s._userConfigs[cfg] = s._defaultConfigs[cfg] = value;
 		});
 
 		return s;
@@ -44,8 +44,8 @@ export default class OWebConfigs extends OWebEvent {
 	 * @param config
 	 */
 	resetToDefault(config: string): this {
-		if (config in this._default_configs) {
-			this.set(config, this._default_configs[config]);
+		if (config in this._defaultConfigs) {
+			this.set(config, this._defaultConfigs[config]);
 		}
 
 		return this;
@@ -54,16 +54,19 @@ export default class OWebConfigs extends OWebEvent {
 	/**
 	 * Resets all configs to their default values.
 	 *
-	 * @param confirm_first When true a confirm will request will be sent to the user.
+	 * @param confirmFirst When true a confirm will request will be sent to the user.
 	 */
-	resetAllToDefault(confirm_first: boolean = true): void {
-		if (confirm_first && !confirm(this.app_context.i18n.toHuman("OZ_CONFIRM_RESET_CONFIGS"))) {
+	resetAllToDefault(confirmFirst: boolean = true): void {
+		if (
+			confirmFirst &&
+			!confirm(this.appContext.i18n.toHuman('OZ_CONFIRM_RESET_CONFIGS'))
+		) {
 			return;
 		}
 
-		this.app_context.ls.save(this._tag_name, this._default_configs);
+		this.appContext.ls.save(this._tagName, this._defaultConfigs);
 
-		this.app_context.reloadApp();
+		this.appContext.reloadApp();
 	}
 
 	/**
@@ -73,7 +76,7 @@ export default class OWebConfigs extends OWebEvent {
 	 */
 	get(config: string): any {
 		this._warnUndefined(config);
-		return this._user_configs[config];
+		return this._userConfigs[config];
 	}
 
 	/**
@@ -83,16 +86,16 @@ export default class OWebConfigs extends OWebEvent {
 	 * @param value The new value.
 	 */
 	set(config: string, value: any): this {
-		let m = this;
-		if (Utils.isPlainObject(config)) {
-			Utils.forEach(config as {}, (value, key) => {
-				m._set(key, value);
+		const m = this;
+		if (isPlainObject(config)) {
+			forEach(config as {}, (val, key) => {
+				m._set(key, val);
 			});
 		} else {
 			m._set(config, value);
 		}
 
-		this.app_context.ls.save(this._tag_name, this._user_configs);
+		this.appContext.ls.save(this._tagName, this._userConfigs);
 		return this;
 	}
 
@@ -102,16 +105,16 @@ export default class OWebConfigs extends OWebEvent {
 	 * @private
 	 */
 	private _loadSavedConfigs() {
-		let m         = this,
-			saved_cfg = this.app_context.ls.load(this._tag_name) || {};
+		const m = this,
+			savedConfig = this.appContext.ls.load(this._tagName) || {};
 
-		Utils.forEach(m._default_configs, (value, key) => {
-			if (this._isPublic(key) && saved_cfg[key] !== undefined) {
-				m._user_configs[key] = saved_cfg[key];
+		forEach(m._defaultConfigs, (val, key) => {
+			if (this._isPublic(key) && savedConfig[key] !== undefined) {
+				m._userConfigs[key] = savedConfig[key];
 			}
 		});
 
-		this.app_context.ls.save(this._tag_name, m._user_configs);
+		this.appContext.ls.save(this._tagName, m._userConfigs);
 	}
 
 	/**
@@ -122,15 +125,16 @@ export default class OWebConfigs extends OWebEvent {
 	 * @private
 	 */
 	private _set(config: string, value: any): void {
-
 		this._warnUndefined(config);
 
 		if (!this._isPublic(config)) {
-			throw new Error(`[OWebConfigs] can't overwrite config "${config}" permission denied.`);
+			throw new Error(
+				`[OWebConfigs] can't overwrite config "${config}" permission denied.`,
+			);
 		}
 
-		if (config in this._user_configs) {
-			this._user_configs[config] = value;
+		if (config in this._userConfigs) {
+			this._userConfigs[config] = value;
 
 			this.trigger(OWebConfigs.EVT_CONFIG_CHANGE, [config, value, this]);
 		}
@@ -143,9 +147,9 @@ export default class OWebConfigs extends OWebEvent {
 	 * @private
 	 */
 	private _realConfigName(config: string): string {
-		if (config[0] === "!") {
-			config                            = config.substr(1);
-			this._private_configs_map[config] = 1;
+		if (config[0] === '!') {
+			config = config.substr(1);
+			this._privateConfigsMap[config] = 1;
 		}
 
 		return config;
@@ -158,7 +162,7 @@ export default class OWebConfigs extends OWebEvent {
 	 * @private
 	 */
 	private _isPublic(config: string): boolean {
-		return undefined === this._private_configs_map[config];
+		return undefined === this._privateConfigsMap[config];
 	}
 
 	/**
@@ -168,7 +172,7 @@ export default class OWebConfigs extends OWebEvent {
 	 * @private
 	 */
 	private _warnUndefined(config: string) {
-		if (!(config in this._user_configs)) {
+		if (!(config in this._userConfigs)) {
 			console.warn(`[OWebConfigs] config "${config}" is not defined.`);
 		}
 	}

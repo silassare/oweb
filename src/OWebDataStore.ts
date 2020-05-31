@@ -1,10 +1,10 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-import Utils from './utils/Utils';
+import { id } from './utils/Utils';
 
 const ls = window.localStorage,
-	parse = function(data: string | null): any {
-		let value: any = undefined;
+	parse = function (data: string | null): any {
+		let value: any;
 
 		if (data !== null) {
 			try {
@@ -18,13 +18,13 @@ const ls = window.localStorage,
 	};
 
 export default class OWebDataStore extends OWebEvent {
-	static readonly EVT_DATA_STORE_CLEAR = Utils.id();
+	static readonly EVT_DATA_STORE_CLEAR = id();
 	private readonly key: string;
 	private data: any = {};
 
-	constructor(private readonly _app_context: OWebApp) {
+	constructor(private readonly _appContext: OWebApp) {
 		super();
-		this.key = _app_context.getAppName();
+		this.key = _appContext.getAppName();
 		this.data = parse(ls.getItem(this.key)) || {};
 	}
 
@@ -52,11 +52,11 @@ export default class OWebDataStore extends OWebEvent {
 	 */
 	load(key: string | RegExp): any {
 		if (key instanceof RegExp) {
-			let list = Object.keys(this.data),
+			const list = Object.keys(this.data),
 				result: any = {};
 
 			for (let i = 0; i < list.length; i++) {
-				let k = list[i];
+				const k = list[i];
 				if (key.test(k)) {
 					result[k] = this.data[k];
 				}
@@ -79,10 +79,10 @@ export default class OWebDataStore extends OWebEvent {
 	remove(key: string | RegExp): boolean {
 		if (ls) {
 			if (key instanceof RegExp) {
-				let list = Object.keys(this.data);
+				const list = Object.keys(this.data);
 
 				for (let i = 0; i < list.length; i++) {
-					let k = list[i];
+					const k = list[i];
 					if (key.test(k)) {
 						delete this.data[k];
 					}

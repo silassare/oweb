@@ -1,19 +1,19 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 import OWebKeyStorage from './OWebKeyStorage';
-import Utils from './utils/Utils';
+import { id, isPlainObject } from './utils/Utils';
 import { GoblEntity } from 'gobl-utils-ts';
 
 export default class OWebCurrentUser extends OWebEvent {
-	static readonly SELF = Utils.id();
-	static readonly EVT_USER_DATA_UPDATE = Utils.id();
+	static readonly SELF = id();
+	static readonly EVT_USER_DATA_UPDATE = id();
 
-	private _key_store: OWebKeyStorage;
+	private _keyStore: OWebKeyStorage;
 
-	constructor(private readonly app_context: OWebApp) {
+	constructor(private readonly appContext: OWebApp) {
 		super();
 
-		this._key_store = new OWebKeyStorage(app_context, 'current_user');
+		this._keyStore = new OWebKeyStorage(appContext, 'current_user');
 		console.log('[OWebCurrentUser] ready!');
 	}
 
@@ -21,13 +21,14 @@ export default class OWebCurrentUser extends OWebEvent {
 	 * Returns current user data.
 	 */
 	getCurrentUser(): any {
-		let data = this._key_store.getItem('user_data');
-		let user = undefined;
+		const data = this._keyStore.getItem('user_data');
+		let user;
 
 		if (data && data.id && typeof data.getId === 'function') {
 			return data;
 		} else if (
-			Utils.isPlainObject(data) &&
+			isPlainObject(data) &&
+			// tslint:disable-next-line: no-conditional-assignment
 			(user = GoblEntity.toInstance(data, true))
 		) {
 			return user;
@@ -45,7 +46,7 @@ export default class OWebCurrentUser extends OWebEvent {
 	 */
 	setCurrentUser(user: any): this {
 		console.log('[OWebCurrentUser] setting new user ->', user);
-		this._key_store.setItem('user_data', user);
+		this._keyStore.setItem('user_data', user);
 
 		return this._notifyChange();
 	}
@@ -56,7 +57,7 @@ export default class OWebCurrentUser extends OWebEvent {
 	 * @param expire
 	 */
 	setSessionExpire(expire: number): this {
-		this._key_store.setItem('session_expire', expire);
+		this._keyStore.setItem('session_expire', expire);
 		return this;
 	}
 
@@ -64,7 +65,7 @@ export default class OWebCurrentUser extends OWebEvent {
 	 * Returns current user session expire time.
 	 */
 	getSessionExpire(): number {
-		let expire = this._key_store.getItem('session_expire');
+		const expire = this._keyStore.getItem('session_expire');
 		return isNaN(expire) ? 0 : expire;
 	}
 
@@ -72,7 +73,7 @@ export default class OWebCurrentUser extends OWebEvent {
 	 * Clear user data.
 	 */
 	clear(): this {
-		this._key_store.clear();
+		this._keyStore.clear();
 		return this._notifyChange();
 	}
 

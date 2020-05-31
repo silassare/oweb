@@ -1,3 +1,3 @@
 // load all default
-import "./fv";
-import "./lang/index";
+import './fv';
+import './lang/index';

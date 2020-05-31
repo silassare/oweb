@@ -1,7 +1,9 @@
-import Utils from './utils/Utils';
+import { isFunction, isString } from './utils/Utils';
+
+export type tEventHandler = (...args: any[]) => void | boolean;
 
 export default class OWebEvent {
-	private _events: { [key: string]: Array<Function> } = {};
+	private _events: { [key: string]: tEventHandler[] } = {};
 
 	protected constructor() {}
 
@@ -11,12 +13,15 @@ export default class OWebEvent {
 	 * @param event The event name.
 	 * @param handler The event handler function.
 	 */
-	on(event: string, handler: (this: this, ...args: any[]) => void | boolean) {
+	on(
+		event: string,
+		handler: (this: this, ...args: any[]) => ReturnType<tEventHandler>,
+	) {
 		if (!this._events[event]) {
 			this._events[event] = [];
 		}
 
-		if (!Utils.isFunction(handler)) {
+		if (!isFunction(handler)) {
 			throw new TypeError('[OWebEvent] handler should be function.');
 		}
 
@@ -31,24 +36,28 @@ export default class OWebEvent {
 	 * @param event The event name.
 	 * @param handler The event handler function.
 	 */
-	off(event: string, handler: Function) {
+	off(event: string, handler: () => void) {
 		if (arguments.length === 1) {
-			if (Utils.isString(event)) {
+			if (isString(event)) {
 				delete this._events[event];
-			} else if (Utils.isFunction(event)) {
+			} else if (isFunction(event)) {
 				handler = event;
-				for (let ev in this._events) {
-					let handlers = this._events[ev];
-					let i = handlers.length;
-					while (i--) {
-						if (handlers[i] === handler) {
-							handlers.splice(i, 1);
+				for (const ev in this._events) {
+					if (
+						Object.prototype.hasOwnProperty.call(this._events, ev)
+					) {
+						const handlers = this._events[ev];
+						let i = handlers.length;
+						while (i--) {
+							if (handlers[i] === handler) {
+								handlers.splice(i, 1);
+							}
 						}
 					}
 				}
 			}
-		} else if (Utils.isString(event) && Utils.isFunction(handler)) {
-			let handlers = this._events[event] || [];
+		} else if (isString(event) && isFunction(handler)) {
+			const handlers = this._events[event] || [];
 			let i = handlers.length;
 			while (i--) {
 				if (handlers[i] === handler) {
@@ -70,12 +79,12 @@ export default class OWebEvent {
 	 */
 	protected trigger(
 		event: string,
-		data: Array<any> = [],
+		data: any[] = [],
 		cancelable: boolean = false,
-		context: any = this
+		context: any = this,
 	): boolean {
-		let handlers = this._events[event] || [],
-			i = -1,
+		const handlers = this._events[event] || [];
+		let i = -1,
 			canceled = false;
 
 		while (++i < handlers.length) {

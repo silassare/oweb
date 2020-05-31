@@ -1,41 +1,40 @@
-import {iComResponse} from "./OWebCom";
-import OWebEvent from "./OWebEvent";
-import Utils from "./utils/Utils";
+import { IComResponse } from './OWebCom';
+import OWebEvent from './OWebEvent';
+import { id } from './utils/Utils';
 
 export type tViewDialog = {
-	type: "info" | "error" | "done",
-	text: string,
-	data?: {}
+	type: 'info' | 'error' | 'done';
+	text: string;
+	data?: {};
 };
 
 export default class OWebView extends OWebEvent {
+	static readonly SELF = id();
+	static readonly EVT_VIEW_FREEZE = id();
+	static readonly EVT_VIEW_UNFREEZE = id();
+	static readonly EVT_VIEW_DIALOG = id();
 
-	static readonly SELF              = Utils.id();
-	static readonly EVT_VIEW_FREEZE   = Utils.id();
-	static readonly EVT_VIEW_UNFREEZE = Utils.id();
-	static readonly EVT_VIEW_DIALOG   = Utils.id();
-
-	private _freeze_counter: number = 0;
+	private _freezeCounter: number = 0;
 
 	constructor() {
 		super();
-		console.log("[OWebView] ready!");
+		console.log('[OWebView] ready!');
 	}
 
 	/**
 	 * Checks if the view is frozen.
 	 */
 	isFrozen(): boolean {
-		return Boolean(this._freeze_counter);
+		return Boolean(this._freezeCounter);
 	}
 
 	/**
 	 * To freeze the view.
 	 */
 	freeze() {
-		++this._freeze_counter;
+		++this._freezeCounter;
 
-		if (this._freeze_counter === 1) {
+		if (this._freezeCounter === 1) {
 			this.trigger(OWebView.EVT_VIEW_FREEZE);
 		}
 
@@ -47,7 +46,7 @@ export default class OWebView extends OWebEvent {
 	 */
 	unfreeze() {
 		if (this.isFrozen()) {
-			--this._freeze_counter;
+			--this._freezeCounter;
 
 			if (!this.isFrozen()) {
 				this.trigger(OWebView.EVT_VIEW_UNFREEZE);
@@ -60,20 +59,20 @@ export default class OWebView extends OWebEvent {
 	/**
 	 * Trigger dialog event to the view.
 	 * @param dialog
-	 * @param can_use_alert
+	 * @param canUseAlert
 	 */
-	dialog(dialog: tViewDialog | iComResponse, can_use_alert: boolean = false) {
+	dialog(dialog: tViewDialog | IComResponse, canUseAlert: boolean = false) {
 		let d = dialog;
 
-		if ((d as iComResponse).error) {
+		if ((d as IComResponse).error) {
 			d = {
-				"type": (d as iComResponse).error ? "error" : "done",
-				"text": (d as iComResponse).msg,
-				"data": d.data || {}
+				type: (d as IComResponse).error ? 'error' : 'done',
+				text: (d as IComResponse).msg,
+				data: d.data || {},
 			};
 		}
 
-		this.trigger(OWebView.EVT_VIEW_DIALOG, [d, can_use_alert]);
+		this.trigger(OWebView.EVT_VIEW_DIALOG, [d, canUseAlert]);
 	}
 
 	/**
@@ -99,7 +98,13 @@ export default class OWebView extends OWebEvent {
 	 *
 	 * @param handler
 	 */
-	onDialog(handler: (this: this, dialog: tViewDialog, can_use_alert: boolean) => void) {
+	onDialog(
+		handler: (
+			this: this,
+			dialog: tViewDialog,
+			canUseAlert: boolean,
+		) => void,
+	) {
 		return this.on(OWebView.EVT_VIEW_DIALOG, handler);
 	}
 }

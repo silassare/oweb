@@ -1,25 +1,26 @@
-import OWebApp from "./OWebApp";
-import PathResolver from "./utils/PathResolver";
+import OWebApp from './OWebApp';
+import PathResolver from './utils/PathResolver';
 
-let isServerUrl = function (url_key: string): boolean {
-	return /^OZ_SERVER_/.test(url_key);
-}, isLocalUrl   = function (url_key: string): boolean {
-	return /^OW_LOCAL_/.test(url_key);
-};
+const isServerUrl = function (urlKey: string): boolean {
+		return /^OZ_SERVER_/.test(urlKey);
+	},
+	isLocalUrl = function (urlKey: string): boolean {
+		return /^OW_LOCAL_/.test(urlKey);
+	};
 
 export type tUrlList = { [key: string]: string };
 
 export default class OWebUrl {
-	private readonly _url_list: tUrlList;
-	private readonly _url_local_base: string;
-	private readonly _url_server_base: string;
+	private readonly _urlList: tUrlList;
+	private readonly _urlLocalBase: string;
+	private readonly _urlServerBase: string;
 
-	constructor(context: OWebApp, url_list: tUrlList) {
-		this._url_list        = url_list;
-		this._url_local_base  = context.configs.get("OW_APP_LOCAL_BASE_URL");
-		this._url_server_base = context.configs.get("OZ_API_BASE_URL");
+	constructor(context: OWebApp, urlList: tUrlList) {
+		this._urlList = urlList;
+		this._urlLocalBase = context.configs.get('OW_APP_LOCAL_BASE_URL');
+		this._urlServerBase = context.configs.get('OZ_API_BASE_URL');
 
-		console.log("[OWebUrl] ready!");
+		console.log('[OWebUrl] ready!');
 	}
 
 	/**
@@ -28,7 +29,7 @@ export default class OWebUrl {
 	 * @param key The url key name.
 	 */
 	get(key: string): string {
-		let url: string = this._url_list[key];
+		const url: string = this._urlList[key];
 
 		if (!url) {
 			throw new Error(`[OWebUrl] url key "${key}" is not defined.`);
@@ -46,7 +47,7 @@ export default class OWebUrl {
 	 * @param url
 	 */
 	resolveLocal(url: string): string {
-		return PathResolver.resolve(this._url_local_base, url);
+		return PathResolver.resolve(this._urlLocalBase, url);
 	}
 
 	/**
@@ -55,6 +56,6 @@ export default class OWebUrl {
 	 * @param url
 	 */
 	resolveServer(url: string): string {
-		return PathResolver.resolve(this._url_server_base, url);
+		return PathResolver.resolve(this._urlServerBase, url);
 	}
-};
+}
