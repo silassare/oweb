@@ -1,19 +1,19 @@
 import { GoblEntity, GoblSinglePKEntity } from 'gobl-utils-ts';
 import OWebService, {
-	tServiceGetSuccess,
-	tServiceFail,
+	IServiceAddResponse,
+	IServiceDeleteResponse,
+	IServiceUpdateResponse,
 	tServiceAddSuccess,
-	tServiceRequestOptions,
-	tServiceGetAllSuccess,
-	tServiceUpdateSuccess,
 	tServiceDeleteSuccess,
-	iServiceUpdateResponse,
-	iServiceAddResponse,
-	iServiceDeleteResponse,
+	tServiceFail,
+	tServiceGetAllSuccess,
+	tServiceGetSuccess,
+	tServiceRequestOptions,
+	tServiceUpdateSuccess,
 } from './OWebService';
 import OWebApp from './OWebApp';
 import OWebCom from './OWebCom';
-import Utils from './utils/Utils';
+import { escapeRegExp, isPlainObject, noop } from './utils/Utils';
 
 export type tEntitiesOrderByCb<T> = (a: T, b: T) => number;
 
@@ -34,12 +34,12 @@ export default class OWebServiceStore<
 	protected relations: { [key: string]: any } = {};
 
 	constructor(
-		app_context: OWebApp,
+		appContext: OWebApp,
 		private readonly entity: typeof GoblSinglePKEntity,
-		service_name: string,
-		persistent_cache: boolean = false
+		serviceName: string,
+		persistentCache: boolean = false,
 	) {
-		super(app_context, service_name, persistent_cache);
+		super(appContext, serviceName, persistentCache);
 	}
 
 	getItem(
@@ -48,11 +48,9 @@ export default class OWebServiceStore<
 		then?: tServiceGetSuccess<T>,
 		fail?: tServiceFail,
 		freeze: boolean = true,
-		load_cache_first: boolean = false,
-		dialog: boolean = true
+		loadCacheFirst: boolean = false,
 	): OWebCom {
-		let ctx = this,
-			app = this.app_context;
+		const ctx = this;
 		return ctx.getRequest(
 			id,
 			relations,
@@ -60,12 +58,9 @@ export default class OWebServiceStore<
 				ctx.addItemToList(response.data.item, response.data.relations);
 				then && then(response, fromCache);
 			},
-			response => {
-				dialog && app.view.dialog(response);
-				fail && fail(response);
-			},
+			fail || noop,
 			freeze,
-			load_cache_first
+			loadCacheFirst,
 		);
 	}
 
@@ -74,26 +69,21 @@ export default class OWebServiceStore<
 		then?: tServiceGetAllSuccess<T>,
 		fail?: tServiceFail,
 		freeze: boolean = true,
-		force_cache: boolean = true,
-		dialog: boolean = true
+		forceCache: boolean = true,
 	): OWebCom {
-		let ctx = this,
-			app = this.app_context;
+		const ctx = this;
 		return ctx.getAllRequest(
 			options,
 			(response, fromCache) => {
 				ctx.addItemsToList(
 					response.data.items,
-					response.data.relations
+					response.data.relations,
 				);
 				then && then(response, fromCache);
 			},
-			response => {
-				dialog && app.view.dialog(response);
-				fail && fail(response);
-			},
+			fail || noop,
 			freeze,
-			force_cache
+			forceCache,
 		);
 	}
 
@@ -102,21 +92,16 @@ export default class OWebServiceStore<
 		then?: tServiceAddSuccess<T>,
 		fail?: tServiceFail,
 		freeze: boolean = true,
-		dialog: boolean = true
 	): OWebCom {
-		let ctx = this,
-			app = this.app_context;
+		const ctx = this;
 		return ctx.addRequest(
 			data,
-			result => {
+			(result) => {
 				ctx.addCreated(result);
 				then && then(result);
 			},
-			response => {
-				dialog && app.view.dialog(response);
-				fail && fail(response);
-			},
-			freeze
+			fail || noop,
+			freeze,
 		);
 	}
 
@@ -125,31 +110,28 @@ export default class OWebServiceStore<
 		then?: tServiceUpdateSuccess<T>,
 		fail?: tServiceFail,
 		freeze: boolean = true,
-		dialog: boolean = true
 	): OWebCom | false {
-		let ctx = this,
-			app = this.app_context,
+		const ctx = this,
 			id = getId(item);
 
 		if (!item.isSaved()) {
-			let diff = item.toObject(true);
+			const diff = item.toObject(true);
 
 			item.isSaving(true);
 
 			return ctx.updateRequest(
 				id,
 				diff,
-				result => {
+				(result) => {
 					item.isSaving(false);
 					ctx.setSaved(item, result);
 					then && then(result);
 				},
-				response => {
+				(response, com) => {
 					item.isSaving(false);
-					dialog && app.view.dialog(response);
-					fail && fail(response);
+					fail && fail(response, com);
 				},
-				freeze
+				freeze,
 			);
 		}
 
@@ -162,37 +144,34 @@ export default class OWebServiceStore<
 		then?: tServiceDeleteSuccess<T>,
 		fail?: tServiceFail,
 		freeze: boolean = true,
-		dialog: boolean = true
 	): OWebCom {
-		let ctx = this,
-			app = this.app_context,
+		const ctx = this,
 			id = getId(item);
 
 		item.isDeleting(true);
 		return ctx.deleteRequest(
 			id,
-			result => {
+			(result) => {
 				item.isDeleting(false);
 				ctx.setDeleted(result);
 				then && then(result);
 			},
-			response => {
+			(response, com) => {
 				item.isDeleting(false);
-				dialog && app.view.dialog(response);
-				fail && fail(response);
+				fail && fail(response, com);
 			},
-			freeze
+			freeze,
 		);
 	}
 
 	addItemsToList(items: T[] | { [key: string]: T }, relations: any = {}) {
-		let ctx = this;
-		let list: T[] = (Utils.isPlainObject(items)
-			? Object.values(items)
-			: items || []) as T[];
+		const ctx = this,
+			list: T[] = (isPlainObject(items)
+				? Object.values(items)
+				: items || []) as T[];
 
-		list.forEach(item => {
-			let itemId = getId(item);
+		list.forEach((item) => {
+			const itemId = getId(item);
 
 			ctx.safelyAddItem(item);
 
@@ -200,15 +179,15 @@ export default class OWebServiceStore<
 				ctx.relations = _with(ctx.relations, itemId, {});
 			}
 
-			for (let rel in relations) {
+			for (const rel in relations) {
 				if (relations.hasOwnProperty(rel)) {
-					let data = relations[rel];
+					const data = relations[rel];
 
 					if (data[itemId]) {
 						ctx.relations[itemId] = _with(
 							ctx.relations[itemId],
 							rel,
-							data[itemId]
+							data[itemId],
 						);
 					}
 				}
@@ -217,7 +196,7 @@ export default class OWebServiceStore<
 	}
 
 	addItemToList(item: T, relations: any = {}) {
-		let ctx = this,
+		const ctx = this,
 			itemId = getId(item);
 
 		ctx.safelyAddItem(item);
@@ -226,19 +205,19 @@ export default class OWebServiceStore<
 			ctx.relations = _with(ctx.relations, itemId, {});
 		}
 
-		for (let rel in relations) {
+		for (const rel in relations) {
 			if (relations.hasOwnProperty(rel)) {
 				ctx.relations[itemId] = _with(
 					ctx.relations[itemId],
 					rel,
-					relations[rel]
+					relations[rel],
 				);
 			}
 		}
 	}
 
 	private safelyAddItem(item: T) {
-		let key = getId(item),
+		const key = getId(item),
 			cachedItem = this.items[key];
 
 		if (cachedItem) {
@@ -250,36 +229,36 @@ export default class OWebServiceStore<
 		return this;
 	}
 
-	setSaved(target: T, response: iServiceUpdateResponse<T>) {
-		let item = response.data.item;
+	setSaved(target: T, response: IServiceUpdateResponse<T>) {
+		const item = response.data.item;
 
 		target.doHydrate(item.toObject(), true);
 
 		this.safelyAddItem(target);
 	}
 
-	addCreated(response: iServiceAddResponse<T>) {
+	addCreated(response: IServiceAddResponse<T>) {
 		this.safelyAddItem(response.data.item);
 	}
 
-	setDeleted(response: iServiceDeleteResponse<T>) {
-		let item = response.data.item;
+	setDeleted(response: IServiceDeleteResponse<T>) {
+		const item = response.data.item;
 		this.items = _without(this.items, getId(item));
 	}
 
 	itemRelation<Z>(item: T, relation: string): Z | undefined {
-		let id = getId(item);
+		const id = getId(item);
 		return this.relations[id] && this.relations[id][relation];
 	}
 
 	identify(id: string, checkCache: boolean = true): T | undefined {
-		let item = this.items[id],
-			c;
+		const item = this.items[id];
+		let c;
 
 		if (item) return item;
 
 		if (checkCache) {
-			c = <any>GoblEntity.subCache(this.entity.name);
+			c = GoblEntity.subCache(this.entity.name) as any;
 
 			return c && c[id];
 		}
@@ -288,18 +267,18 @@ export default class OWebServiceStore<
 	}
 
 	list(ids: string[] = []) {
-		let list: T[] = [],
+		const list: T[] = [],
 			len = ids.length;
 		if (len) {
 			for (let i = 0; i < len; i++) {
-				let id = ids[i],
+				const id = ids[i],
 					item = this.identify(id);
 				if (item) {
 					list.push(item);
 				}
 			}
 		} else {
-			for (let key in this.items) {
+			for (const key in this.items) {
 				if (Object.prototype.hasOwnProperty.call(this.items, key)) {
 					list.push(this.items[key]);
 				}
@@ -310,9 +289,9 @@ export default class OWebServiceStore<
 	}
 
 	orderBy(orderFn: tEntitiesOrderByCb<T>): T[] {
-		let keys = Object.keys(this.items);
+		const keys = Object.keys(this.items);
 
-		return keys.map(key => this.items[key]).sort(orderFn);
+		return keys.map((key) => this.items[key]).sort(orderFn);
 	}
 
 	orderByValueOf(column: string): T[] {
@@ -324,9 +303,9 @@ export default class OWebServiceStore<
 	select(
 		list: T[] = this.list(),
 		predicate: (value: T, index: number) => boolean,
-		max = Infinity
+		max = Infinity,
 	): T[] {
-		let result: T[] = [],
+		const result: T[] = [],
 			len = list.length;
 
 		for (let i = 0; i < len && result.length < max; i++) {
@@ -341,16 +320,16 @@ export default class OWebServiceStore<
 	search(
 		list: T[] = this.list(),
 		search: string,
-		stringBuilder: (value: T, index: number) => string
+		stringBuilder: (value: T, index: number) => string,
 	): T[] {
 		if (!(search = search.trim()).length) {
 			return list;
 		}
 
-		let reg = new RegExp(Utils.escapeRegExp(search), 'i');
+		const reg = new RegExp(escapeRegExp(search), 'i');
 
 		return list.filter((item: any, index: number) => {
-			let v = stringBuilder(item, index);
+			const v = stringBuilder(item, index);
 			return reg.test(v);
 		});
 	}
