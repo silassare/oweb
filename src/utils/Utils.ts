@@ -312,24 +312,17 @@ export const parseQueryString = function (str: string) {
 };
 
 export const preventDefault = function (e: Event) {
-		if (!e) {
-			if (window.event) e = window.event;
-			else return;
-		}
+	if (!e) {
+		if (window.event) e = window.event;
+		else return;
+	}
 
-		if (e.preventDefault) e.preventDefault();
-		if (e.cancelBubble != null) e.cancelBubble = true;
-		if (e.stopPropagation) e.stopPropagation();
-		if (window.event) e.returnValue = false;
-		// if (e.cancel != null) e.cancel = true;
-	},
-	eventCancel = function (e: Event) {
-		console.warn(
-			'"Utils.eventCancel" is deprecated, use "Utils.preventDefault" instead',
-		);
-
-		preventDefault(e);
-	};
+	if (e.preventDefault) e.preventDefault();
+	if (e.cancelBubble != null) e.cancelBubble = true;
+	if (e.stopPropagation) e.stopPropagation();
+	if (window.event) e.returnValue = false;
+	// if (e.cancel != null) e.cancel = true;
+};
 
 export const isValidAge = (
 	day: number,
@@ -478,3 +471,21 @@ export const safeOpen = function (
 	document.body.removeChild(iframe);
 	return newWin;
 };
+
+const _fn = function (type: 'error' | 'warn' | 'log' | 'info' | 'debug') {
+	return function (...args: any[]) {
+		if ((window as any).__oweb_show_log !== false) {
+			if (console[type]) {
+				console[type](...args);
+			}
+		}
+
+		return undefined;
+	};
+};
+
+export const _debug = _fn('debug'),
+	_log = _fn('log'),
+	_info = _fn('info'),
+	_warn = _fn('warn'),
+	_error = _fn('error');
