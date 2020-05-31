@@ -2,7 +2,7 @@ import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 import OWebFS from './OWebFS';
 import jqXHR = JQuery.jqXHR;
-import { assign, id, isPlainObject } from './utils/Utils';
+import { assign, id, isPlainObject, _warn, _error } from './utils/Utils';
 
 export interface IComResponse {
 	error: number;
@@ -97,7 +97,7 @@ export default class OWebCom extends OWebEvent {
 
 		const appOptions = this.appContext.getRequestDefaultOptions();
 
-		this._options = {
+		const defaultOptions = {
 			method: 'GET',
 			dataType: 'json',
 			data: {},
@@ -105,6 +105,10 @@ export default class OWebCom extends OWebEvent {
 			badNewsShow: false,
 			// increase request timeout for mobile device
 			timeout: appContext.isMobileApp() ? 10000 : undefined,
+		};
+
+		this._options = {
+			...defaultOptions,
 
 			...appOptions,
 
@@ -217,7 +221,7 @@ export default class OWebCom extends OWebEvent {
 				m.appContext.forceLogin();
 			} else if (~fileAliasErrors.indexOf(response.msg)) {
 				// our attempt to minimize file upload failed
-				console.warn(
+				_warn(
 					'[OWebCom] unable to minimize file upload data ->',
 					response,
 					m._options.data,
@@ -249,7 +253,7 @@ export default class OWebCom extends OWebEvent {
 		this._prepare();
 
 		if (this._busy) {
-			console.warn('[OWebCom] instance is busy ->', m);
+			_warn('[OWebCom] instance is busy ->', m);
 			return;
 		}
 
@@ -262,16 +266,10 @@ export default class OWebCom extends OWebEvent {
 				.fail((request: any) => {
 					const networkError = !isPlainObject(request.responseJSON);
 					if (networkError) {
-						console.error(
-							'[OWebCom] request network error ->',
-							request,
-						);
+						_error('[OWebCom] request network error ->', request);
 						m.trigger(OWebCom.EVT_COM_NETWORK_ERROR, [request, m]);
 					} else {
-						console.error(
-							'[OWebCom] request server error ->',
-							request,
-						);
+						_error('[OWebCom] request server error ->', request);
 						m._handleResponse(request.responseJSON);
 					}
 				});

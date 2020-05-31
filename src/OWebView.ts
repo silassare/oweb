@@ -1,6 +1,6 @@
 import { IComResponse } from './OWebCom';
 import OWebEvent from './OWebEvent';
-import { id } from './utils/Utils';
+import { id, _info } from './utils/Utils';
 
 export type tViewDialog = {
 	type: 'info' | 'error' | 'done';
@@ -18,7 +18,7 @@ export default class OWebView extends OWebEvent {
 
 	constructor() {
 		super();
-		console.log('[OWebView] ready!');
+		_info('[OWebView] ready!');
 	}
 
 	/**

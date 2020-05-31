@@ -1,8 +1,8 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 import OWebKeyStorage from './OWebKeyStorage';
-import { id, isPlainObject } from './utils/Utils';
-import { GoblEntity } from 'gobl-utils-ts';
+import { id, isPlainObject, _info, _debug, _error } from './utils/Utils';
+import { GoblEntity, toInstance } from 'gobl-utils-ts';
 
 export default class OWebCurrentUser extends OWebEvent {
 	static readonly SELF = id();
@@ -14,7 +14,7 @@ export default class OWebCurrentUser extends OWebEvent {
 		super();
 
 		this._keyStore = new OWebKeyStorage(appContext, 'current_user');
-		console.log('[OWebCurrentUser] ready!');
+		_info('[OWebCurrentUser] ready!');
 	}
 
 	/**
@@ -29,11 +29,11 @@ export default class OWebCurrentUser extends OWebEvent {
 		} else if (
 			isPlainObject(data) &&
 			// tslint:disable-next-line: no-conditional-assignment
-			(user = GoblEntity.toInstance(data, true))
+			(user = toInstance(data, true))
 		) {
 			return user;
 		} else {
-			console.error('[OWebCurrentUser] invalid user data!', data);
+			_error('[OWebCurrentUser] invalid user data!', data);
 		}
 
 		return undefined;
@@ -45,7 +45,7 @@ export default class OWebCurrentUser extends OWebEvent {
 	 * @param user
 	 */
 	setCurrentUser(user: any): this {
-		console.log('[OWebCurrentUser] setting new user ->', user);
+		_debug('[OWebCurrentUser] setting new user ->', user);
 		this._keyStore.setItem('user_data', user);
 
 		return this._notifyChange();

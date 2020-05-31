@@ -1,4 +1,4 @@
-import { GoblEntity, GoblSinglePKEntity } from 'gobl-utils-ts';
+import { GoblSinglePKEntity, getEntityCache } from 'gobl-utils-ts';
 import OWebService, {
 	IServiceAddResponse,
 	IServiceDeleteResponse,
@@ -13,7 +13,7 @@ import OWebService, {
 } from './OWebService';
 import OWebApp from './OWebApp';
 import OWebCom from './OWebCom';
-import { escapeRegExp, isPlainObject, noop } from './utils/Utils';
+import { escapeRegExp, isPlainObject, noop, _error } from './utils/Utils';
 
 export type tEntitiesOrderByCb<T> = (a: T, b: T) => number;
 
@@ -135,7 +135,7 @@ export default class OWebServiceStore<
 			);
 		}
 
-		console.error('Not modified ->', item);
+		_error('not updated ->', item);
 		return false;
 	}
 
@@ -258,7 +258,7 @@ export default class OWebServiceStore<
 		if (item) return item;
 
 		if (checkCache) {
-			c = GoblEntity.subCache(this.entity.name) as any;
+			c = getEntityCache(this.entity.name) as any;
 
 			return c && c[id];
 		}

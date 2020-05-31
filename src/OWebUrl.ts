@@ -1,5 +1,6 @@
 import OWebApp from './OWebApp';
 import PathResolver from './utils/PathResolver';
+import { _info } from './utils/Utils';
 
 const isServerUrl = function (urlKey: string): boolean {
 		return /^OZ_SERVER_/.test(urlKey);
@@ -20,7 +21,7 @@ export default class OWebUrl {
 		this._urlLocalBase = context.configs.get('OW_APP_LOCAL_BASE_URL');
 		this._urlServerBase = context.configs.get('OZ_API_BASE_URL');
 
-		console.log('[OWebUrl] ready!');
+		_info('[OWebUrl] ready!');
 	}
 
 	/**

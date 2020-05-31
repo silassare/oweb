@@ -1,4 +1,11 @@
-import { preventDefault, safeOpen } from './utils/Utils';
+import {
+	preventDefault,
+	safeOpen,
+	_debug,
+	_info,
+	_warn,
+	_error,
+} from './utils/Utils';
 import OWebRoute, {
 	tRoutePath,
 	tRoutePathOptions,
@@ -104,7 +111,7 @@ export default class OWebRouter {
 		this._hashMode = hashMode;
 		this._notFound = notFound;
 		this._popStateListener = (e: PopStateEvent) => {
-			console.log('[OWebRouter] popstate', e);
+			_debug('[OWebRouter] popstate', e);
 
 			if (e.state) {
 				r.browseTo(e.state.url, e.state.data, false);
@@ -117,7 +124,7 @@ export default class OWebRouter {
 			r._onClick(e);
 		};
 
-		console.log('[OWebRouter] ready!');
+		_info('[OWebRouter] ready!');
 	}
 
 	/**
@@ -135,11 +142,11 @@ export default class OWebRouter {
 		if (!this._initialized) {
 			this._initialized = true;
 			this.register();
-			console.log('[OWebRouter] start routing!');
-			console.log('[OWebRouter] watching routes ->', this._routes);
+			_info('[OWebRouter] start routing!');
+			_debug('[OWebRouter] watching routes', this._routes);
 			firstRun && this.browseTo(target, state, false);
 		} else {
-			console.warn('[OWebRouter] router already started!');
+			_warn('[OWebRouter] router already started!');
 		}
 
 		return this;
@@ -152,9 +159,9 @@ export default class OWebRouter {
 		if (this._initialized) {
 			this._initialized = false;
 			this.unregister();
-			console.log('[OWebRouter] stop routing!');
+			_debug('[OWebRouter] stop routing!');
 		} else {
-			console.warn('[OWebRouter] you should start routing first!');
+			_warn('[OWebRouter] you should start routing first!');
 		}
 
 		return this;
@@ -228,7 +235,7 @@ export default class OWebRouter {
 			};
 		}
 
-		console.log('[OWebRouter] parsed url ->', parsed);
+		_debug('[OWebRouter] parsed url', parsed);
 
 		return parsed;
 	}
@@ -278,7 +285,7 @@ export default class OWebRouter {
 	 */
 	goBack(distance: number = 1): this {
 		if (distance > 0) {
-			console.log('[OWebRouter] going back -> ', distance);
+			_debug('[OWebRouter] going back', distance);
 			const hLen = wHistory.length;
 			if (hLen > 1) {
 				if (hLen >= distance) {
@@ -323,22 +330,19 @@ export default class OWebRouter {
 			return this;
 		}
 
-		console.log('[OWebRouter] browsing to -> ', target.path, {
+		_debug('[OWebRouter] browsing to', target.path, {
 			state,
 			push,
 			target,
 		});
 
 		if (ignoreSameLocation && this._currentTarget.href === target.href) {
-			console.log('[OWebRouter] ignore same location -> ', target.path);
+			_debug('[OWebRouter] ignore same location', target.path);
 			return this;
 		}
 
 		if (_cd && _cd.isActive()) {
-			console.warn(
-				'[OWebRouter] browseTo called while dispatching -> ',
-				_cd,
-			);
+			_warn('[OWebRouter] browseTo called while dispatching', _cd);
 			_cd.cancel();
 		}
 
@@ -358,10 +362,7 @@ export default class OWebRouter {
 		);
 
 		if (!cd.found.length) {
-			console.warn(
-				'[OWebRouter] no route found for path ->',
-				target.path,
-			);
+			_warn('[OWebRouter] no route found for path ->', target.path);
 			if (this._notFound) {
 				this._notFound(target);
 			} else {
@@ -375,7 +376,7 @@ export default class OWebRouter {
 
 		if (cd.id === this._dispatchId && !cd.context.stopped()) {
 			cd.context.save();
-			console.log('[OWebRouter] success ->', target.path);
+			_debug('[OWebRouter] success', target.path);
 		}
 
 		return this;
@@ -397,7 +398,7 @@ export default class OWebRouter {
 
 		wHistory.pushState({ url, data: state }, title, url);
 
-		console.warn('[OWebDispatchContext] history added', state, url);
+		_debug('[OWebDispatchContext] history added', state, url);
 
 		return this;
 	}
@@ -418,7 +419,7 @@ export default class OWebRouter {
 
 		wHistory.replaceState({ url, data: state }, title, url);
 
-		console.warn(
+		_debug(
 			'[OWebDispatchContext] history replaced -> ',
 			wHistory.state,
 			url,
@@ -439,7 +440,7 @@ export default class OWebRouter {
 		state: tRouteStateObject,
 		id: number,
 	): IRouteDispatcher {
-		console.log(`[OWebRouter][dispatcher-${id}] creation.`);
+		_debug(`[OWebRouter][dispatcher-${id}] creation.`);
 
 		const ctx = this,
 			found: OWebRoute[] = [],
@@ -463,12 +464,9 @@ export default class OWebRouter {
 			cancel() {
 				if (active) {
 					active = false;
-					console.warn(
-						`[OWebRouter][dispatcher-${id}] cancel called!`,
-						o,
-					);
+					_debug(`[OWebRouter][dispatcher-${id}] cancel called!`, o);
 				} else {
-					console.error(
+					_error(
 						`[OWebRouter][dispatcher-${id}] cancel called when inactive.`,
 						o,
 					);
@@ -477,7 +475,7 @@ export default class OWebRouter {
 			},
 			dispatch() {
 				if (!active) {
-					console.log(`[OWebRouter][dispatcher-${id}] start ->`, o);
+					_debug(`[OWebRouter][dispatcher-${id}] start`, o);
 
 					let j = -1;
 					active = true;
@@ -488,7 +486,7 @@ export default class OWebRouter {
 
 					active = false;
 				} else {
-					console.warn(`[OWebRouter][dispatcher-${id}] is busy!`, o);
+					_warn(`[OWebRouter][dispatcher-${id}] is busy!`, o);
 				}
 
 				return o;
@@ -638,13 +636,7 @@ export default class OWebRouter {
 
 		preventDefault(e);
 
-		console.log(
-			'[OWebRouter][click] ->',
-			el,
-			orig,
-			targetHref,
-			wHistory.state,
-		);
+		_debug('[OWebRouter][click] ->', el, orig, targetHref, wHistory.state);
 		this.browseTo(orig);
 	}
 }

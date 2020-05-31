@@ -10,7 +10,7 @@ import OWebView from './OWebView';
 import OWebDate from './plugins/OWebDate';
 import OWebI18n from './OWebI18n';
 import OWebPager from './OWebPager';
-import { clone, id, noop } from './utils/Utils';
+import { clone, id, noop, _info } from './utils/Utils';
 
 export default class OWebApp extends OWebEvent {
 	static readonly SELF = id();
@@ -276,7 +276,7 @@ export default class OWebApp extends OWebEvent {
 	 * To start the web app.
 	 */
 	start(): this {
-		console.log('[OWebApp] app started!');
+		_info('[OWebApp] app started!');
 		this.trigger(OWebApp.EVT_APP_READY);
 		return this;
 	}
