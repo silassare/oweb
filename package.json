@@ -1,6 +1,6 @@
 {
 	"name": "oweb",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "O'Web is a framework for web applications that use APIs built with the O'Zone framework.",
 	"main": "dist/oweb.js",
 	"typings": "types/oweb.d.ts",
@@ -17,7 +17,8 @@
 	],
 	"scripts": {
 		"build": "tsc & typedoc",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"lint": "tslint --type-check --fix --project ."
 	},
 	"dependencies": {
 		"@types/jquery": "^3.3.38",
