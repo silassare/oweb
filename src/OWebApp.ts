@@ -1,4 +1,3 @@
-import OWebCom, { IComResponse } from './OWebCom';
 import OWebConfigs, { tConfigList } from './OWebConfigs';
 import OWebCurrentUser from './OWebCurrentUser';
 import OWebDataStore from './OWebDataStore';
@@ -7,10 +6,12 @@ import OWebFormValidator from './OWebFormValidator';
 import OWebRouter, { tRouteStateObject, tRouteTarget } from './OWebRouter';
 import OWebUrl, { tUrlList } from './OWebUrl';
 import OWebView from './OWebView';
-import OWebDate from './plugins/OWebDate';
 import OWebI18n from './OWebI18n';
 import OWebPager from './OWebPager';
-import { clone, id, noop, _info } from './utils/Utils';
+import { clone, id, _info, _debug } from './utils/Utils';
+import { INetRequestOptions } from './OWebNet';
+import OWebXHR from './OWebXHR';
+import { IOZoneApiJSON } from './ozone';
 
 export default class OWebApp extends OWebEvent {
 	static readonly SELF = id();
@@ -185,91 +186,36 @@ export default class OWebApp extends OWebEvent {
 	}
 
 	/**
-	 * Send request and return promise.
+	 * Create net instance.
 	 *
-	 * @param method The request method.
 	 * @param url The request url.
-	 * @param data The request payload.
-	 * @param freeze Force app view to be frozen.
+	 * @param options The request options.
 	 */
-	requestPromise(
-		method: string,
+	net<R extends IOZoneApiJSON<any>>(
 		url: string,
-		data: any,
-		freeze: boolean = false,
-	): Promise<IComResponse> {
-		const m = this;
-		return new Promise<IComResponse>(function (resolve, reject) {
-			m.request(method, url, data, resolve, reject, freeze);
-		});
-	}
-
-	/**
-	 * Send request.
-	 *
-	 * @param method The request method.
-	 * @param url The request url.
-	 * @param data The request payload.
-	 * @param success Request success callback.
-	 * @param fail Request fail callback.
-	 * @param freeze Force app view to be frozen.
-	 */
-	request(
-		method: string,
-		url: string,
-		data: any,
-		success: (response: IComResponse, com: OWebCom) => void = noop,
-		fail: (response: IComResponse, com: OWebCom) => void = noop,
-		freeze: boolean = false,
-	): OWebCom {
-		const app = this;
-
-		if (freeze) {
-			app.view.freeze();
-		}
-
-		const options = {
-			url,
-			method,
-			data,
-			badNewsShow: false,
+		options: Partial<INetRequestOptions<R>>,
+	) {
+		const event = function (type: string) {
+			return function () {
+				_debug('[OWebApp][NET] intercepted ', type, ...arguments);
+			};
 		};
 
-		const com = new OWebCom(this, options);
-		com.on(OWebCom.EVT_COM_REQUEST_SUCCESS, (response: IComResponse) => {
-			if (freeze) {
-				app.view.unfreeze();
-			}
-
-			success(response, com);
+		return new OWebXHR<R>(url, {
+			isGoodNews(response) {
+				return Boolean(response.json && response.json.error === 0);
+			},
+			...options,
 		})
-			.on(OWebCom.EVT_COM_REQUEST_ERROR, (response: IComResponse) => {
-				if (freeze) {
-					app.view.unfreeze();
-				}
-
-				if (response.msg === 'OZ_ERROR_YOU_ARE_NOT_ADMIN') {
-					app.destroyApp();
-				}
-
-				fail(response, com);
-			})
-			.on(OWebCom.EVT_COM_NETWORK_ERROR, () => {
-				const response: IComResponse = {
-					error: 1,
-					msg: 'OZ_ERROR_REQUEST_FAIL',
-					utime: OWebDate.timestamp(),
-					neterror: true,
-				};
-				if (freeze) {
-					app.view.unfreeze();
-				}
-
-				fail(response, com);
-			})
-			.send();
-
-		return com;
+			.onGoodNews(event('onGoodNews'))
+			.onBadNews(event('onBadNews'))
+			.onFinished(event('onFinished'))
+			.onError(event('onError'))
+			.onDownloadProgress(event('onDownloadProgress'))
+			.onUploadProgress(event('onUploadProgress'))
+			.onHttpError(event('onHttpError'))
+			.onHttpSuccess(event('onHttpSuccess'))
+			.onResponse(event('onResponse'));
 	}
 
 	/**
