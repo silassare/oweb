@@ -1,5 +1,6 @@
 import OWebApp from './OWebApp';
-import OWebCom from './OWebCom';
+import OWebNet from './OWebNet';
+import OWebXHR from './OWebXHR';
 import OWebConfigs from './OWebConfigs';
 import OWebCurrentUser from './OWebCurrentUser';
 import OWebCustomError from './OWebCustomError';
@@ -36,7 +37,8 @@ export * from './OWebConfigs';
 
 export * from './OWebUrl';
 
-export * from './OWebCom';
+export * from './OWebNet';
+export * from './OWebXHR';
 
 export * from './OWebFormValidator';
 
@@ -56,10 +58,13 @@ export * from './utils/scriptLoader';
 
 export * from './OWebService';
 
+export * from './ozone';
+
 export {
 	OWebEvent,
 	OWebApp,
-	OWebCom,
+	OWebNet,
+	OWebXHR,
 	OWebConfigs,
 	OWebCurrentUser,
 	OWebFormValidator,
@@ -79,7 +84,6 @@ export {
 	OWebPager,
 	OWebPageBase,
 	// Plugins
-
 	OWebLogin,
 	OWebLogout,
 	OWebPassword,
