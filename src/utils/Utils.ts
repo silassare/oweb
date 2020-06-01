@@ -119,7 +119,7 @@ export const textToLineString = (text: string): string => {
 	const reg = /["'\\\n\r\t\u2028\u2029]/g,
 		toEscapes: object = {
 			'"': '"',
-			"'": "'",
+			'\'': '\'',
 			'\\': '\\',
 			'\n': 'n',
 			'\r': 'r',
