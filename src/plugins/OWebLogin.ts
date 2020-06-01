@@ -1,7 +1,11 @@
 import OWebApp from '../OWebApp';
-import { IComResponse } from '../OWebCom';
 import OWebEvent from '../OWebEvent';
 import { id } from '../utils/Utils';
+import { INetResponse } from '../OWebNet';
+import { GoblSinglePKEntity } from 'gobl-utils-ts';
+import { IOZoneApiJSON } from '../ozone';
+
+export type tLoginResponseData = GoblSinglePKEntity;
 
 export default class OWebLogin extends OWebEvent {
 	static readonly SELF = id();
@@ -12,53 +16,56 @@ export default class OWebLogin extends OWebEvent {
 		super();
 	}
 
-	loginWithEmail(form: HTMLFormElement) {
-		const m = this,
-			ofv = this.appContext.getFormValidator(form, ['email', 'pass']);
-
-		if (ofv.validate()) {
-			m._tryLogin({
-				email: ofv.getField('email'),
-				pass: ofv.getField('pass'),
-			});
-		}
+	loginWithEmail(data: { email: string; pass: string }) {
+		return this._tryLogin({
+			email: data.email,
+			pass: data.pass,
+		});
 	}
 
-	loginWithPhone(form: HTMLFormElement) {
-		const m = this,
-			ofv = this.appContext.getFormValidator(form, ['phone', 'pass']);
-
-		if (ofv.validate()) {
-			m._tryLogin({
-				phone: ofv.getField('phone'),
-				pass: ofv.getField('pass'),
-			});
-		}
+	loginWithPhone(data: { phone: string; pass: string }) {
+		return this._tryLogin({
+			phone: data.phone,
+			pass: data.pass,
+		});
 	}
 
-	onError(handler: (this: this, response: IComResponse) => void): this {
+	onError(
+		handler: (
+			this: this,
+			response: INetResponse<IOZoneApiJSON<any>>,
+		) => void,
+	): this {
 		return this.on(OWebLogin.EVT_LOGIN_ERROR, handler);
 	}
 
-	onSuccess(handler: (this: this, response: IComResponse) => void): this {
+	onSuccess(
+		handler: (
+			this: this,
+			response: INetResponse<IOZoneApiJSON<tLoginResponseData>>,
+		) => void,
+	): this {
 		return this.on(OWebLogin.EVT_LOGIN_SUCCESS, handler);
 	}
 
-	_tryLogin(data: any) {
+	private _tryLogin(data: FormData | object) {
 		const m = this,
-			url = this.appContext.url.get('OZ_SERVER_LOGIN_SERVICE');
+			url = m.appContext.url.get('OZ_SERVER_LOGIN_SERVICE'),
+			net = m.appContext.net<IOZoneApiJSON<tLoginResponseData>>(url, {
+				method: 'POST',
+				body: data,
+				isGoodNews(response) {
+					return Boolean(response.json && response.json.error === 0);
+				},
+			});
 
-		this.appContext.request(
-			'POST',
-			url,
-			data,
-			function (response: IComResponse) {
+		return net
+			.onGoodNews(function (response) {
 				m.trigger(OWebLogin.EVT_LOGIN_SUCCESS, [response]);
-			},
-			function (response: any) {
+			})
+			.onBadNews(function (response) {
 				m.trigger(OWebLogin.EVT_LOGIN_ERROR, [response]);
-			},
-			true,
-		);
+			})
+			.send();
 	}
 }

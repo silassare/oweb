@@ -1,7 +1,8 @@
 import OWebApp from '../OWebApp';
-import { IComResponse } from '../OWebCom';
 import OWebEvent from '../OWebEvent';
 import { id } from '../utils/Utils';
+import { INetResponse } from '../OWebNet';
+import { IOZoneApiJSON } from '../ozone';
 
 export default class OWebSignUp extends OWebEvent {
 	static readonly SELF = id();
@@ -17,98 +18,74 @@ export default class OWebSignUp extends OWebEvent {
 		super();
 	}
 
-	stepStart(form: HTMLFormElement) {
-		const ofv = this.appContext.getFormValidator(form, ['phone']);
-
-		if (ofv.validate()) {
-			const formData = ofv.getFormData(['phone', 'cc2']);
-			formData.set('step', String(OWebSignUp.SIGN_UP_STEP_START));
-			this._sendForm(form, formData, OWebSignUp.SIGN_UP_STEP_VALIDATE);
-		}
+	stepStart(data: { phone: string; cc2: string }) {
+		return this._sendForm(
+			{
+				phone: data.phone,
+				cc2: data.cc2,
+				step: OWebSignUp.SIGN_UP_STEP_START,
+			},
+			OWebSignUp.SIGN_UP_STEP_VALIDATE,
+		);
 	}
 
-	stepValidate(form: HTMLFormElement) {
-		const ofv = this.appContext.getFormValidator(form, ['code']);
-
-		if (ofv.validate()) {
-			const code = ofv.getField('code');
-
-			this._sendForm(
-				form,
-				{
-					step: OWebSignUp.SIGN_UP_STEP_VALIDATE,
-					code,
-				},
-				OWebSignUp.SIGN_UP_STEP_END,
-			);
-		}
+	stepValidate(data: { code: string }) {
+		return this._sendForm(
+			{
+				step: OWebSignUp.SIGN_UP_STEP_VALIDATE,
+				code: data.code,
+			},
+			OWebSignUp.SIGN_UP_STEP_END,
+		);
 	}
 
-	stepEnd(form: HTMLFormElement) {
-		const required = ['uname', 'pass', 'vpass', 'birth_date', 'gender'],
-			excluded = [];
-		let mailInput: HTMLInputElement | null,
-			agreeChk: HTMLInputElement | null,
-			ofv,
-			formData;
-
-		mailInput = form.querySelector('input[name=email]');
-
-		if (mailInput) {
-			if (!mailInput.value.trim().length) {
-				excluded.push('email');
-			} else {
-				required.push('email');
-			}
-		}
-
-		ofv = this.appContext.getFormValidator(form, required, excluded);
-
-		if (ofv.validate()) {
-			agreeChk = form.querySelector(
-				'input[name=oweb_signup_cgu_agree_checkbox]',
-			);
-
-			if (agreeChk && !agreeChk.checked) {
-				const error: IComResponse = {
-					error: 1,
-					msg: 'OZ_ERROR_SHOULD_ACCEPT_CGU',
-					utime: 0,
-				};
-				this.trigger(OWebSignUp.EVT_SIGN_UP_ERROR, [error]);
-				return false;
-			}
-
-			formData = ofv.getFormData(required);
-			formData.set('step', String(OWebSignUp.SIGN_UP_STEP_END));
-
-			this._sendForm(form, formData);
-		}
+	stepEnd(data: {
+		uname: string;
+		pass: string;
+		vpass: string;
+		birth_date: string;
+		gender: string;
+		email?: string;
+	}) {
+		return this._sendForm({
+			step: OWebSignUp.SIGN_UP_STEP_END,
+		});
 	}
 
-	onError(handler: (this: this, response: IComResponse) => void): this {
+	onError(
+		handler: (response: INetResponse<IOZoneApiJSON<any>>) => void,
+	): this {
 		return this.on(OWebSignUp.EVT_SIGN_UP_ERROR, handler);
 	}
 
 	onNextStep(
-		handler: (this: this, response: IComResponse, step: number) => void,
+		handler: (
+			response: INetResponse<IOZoneApiJSON<any>>,
+			step: number,
+		) => void,
 	): this {
 		return this.on(OWebSignUp.EVT_SIGN_UP_NEXT_STEP, handler);
 	}
 
-	onSuccess(handler: (this: this, response: IComResponse) => void): this {
+	onSuccess(
+		handler: (response: INetResponse<IOZoneApiJSON<any>>) => void,
+	): this {
 		return this.on(OWebSignUp.EVT_SIGN_UP_SUCCESS, handler);
 	}
 
-	_sendForm(form: HTMLFormElement, data: any, nextStep?: number) {
+	private _sendForm(data: FormData | object, nextStep?: number) {
 		const m = this,
-			url = this.appContext.url.get('OZ_SERVER_SIGNUP_SERVICE');
+			url = m.appContext.url.get('OZ_SERVER_SIGNUP_SERVICE'),
+			net = m.appContext.net<IOZoneApiJSON<any>>(url, {
+				method: 'POST',
+				body: data,
+				isGoodNews(response) {
+					return Boolean(response.json && response.json.error === 0);
+				},
+			});
 
-		this.appContext.request(
-			'POST',
-			url,
-			data,
-			function (response: any) {
+		return net
+			.onGoodNews(function (response) {
 				if (nextStep) {
 					m.trigger(OWebSignUp.EVT_SIGN_UP_NEXT_STEP, [
 						response,
@@ -117,11 +94,10 @@ export default class OWebSignUp extends OWebEvent {
 				} else {
 					m.trigger(OWebSignUp.EVT_SIGN_UP_SUCCESS, [response]);
 				}
-			},
-			function (response: any) {
+			})
+			.onBadNews(function (response) {
 				m.trigger(OWebSignUp.EVT_SIGN_UP_ERROR, [response]);
-			},
-			true,
-		);
+			})
+			.send();
 	}
 }

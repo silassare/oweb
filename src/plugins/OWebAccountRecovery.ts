@@ -1,7 +1,8 @@
 import OWebApp from '../OWebApp';
-import { IComResponse } from '../OWebCom';
 import OWebEvent from '../OWebEvent';
 import { id } from '../utils/Utils';
+import { INetResponse } from '../OWebNet';
+import { IOZoneApiJSON } from '../ozone';
 
 export default class OWebAccountRecovery extends OWebEvent {
 	static readonly SELF = id();
@@ -17,70 +18,69 @@ export default class OWebAccountRecovery extends OWebEvent {
 		super();
 	}
 
-	stepStart(form: HTMLFormElement) {
-		const ofv = this.appContext.getFormValidator(form, ['phone']);
-		let formData;
-
-		if (ofv.validate()) {
-			formData = ofv.getFormData(['phone', 'cc2']);
-			formData.set('step', String(OWebAccountRecovery.AR_STEP_START));
-			this._sendForm(
-				form,
-				formData,
-				OWebAccountRecovery.AR_STEP_VALIDATE,
-			);
-		}
+	stepStart(data: { phone: string; cc2: string }) {
+		return this._sendForm(
+			{
+				phone: data.phone,
+				cc2: data.cc2,
+				step: OWebAccountRecovery.AR_STEP_START,
+			},
+			OWebAccountRecovery.AR_STEP_VALIDATE,
+		);
 	}
 
-	stepValidate(form: HTMLFormElement) {
-		const ofv = this.appContext.getFormValidator(form, ['code']);
-
-		if (ofv.validate()) {
-			this._sendForm(
-				form,
-				{
-					step: OWebAccountRecovery.AR_STEP_VALIDATE,
-					code: ofv.getField('code'),
-				},
-				OWebAccountRecovery.AR_STEP_END,
-			);
-		}
+	stepValidate(data: { code: string }) {
+		return this._sendForm(
+			{
+				step: OWebAccountRecovery.AR_STEP_VALIDATE,
+				code: data.code,
+			},
+			OWebAccountRecovery.AR_STEP_END,
+		);
 	}
 
-	stepEnd(form: HTMLFormElement) {
-		const required = ['pass', 'vpass'],
-			ofv = this.appContext.getFormValidator(form, required);
-		let formData;
-
-		if (ofv.validate()) {
-			formData = ofv.getFormData(required);
-			formData.set('step', String(OWebAccountRecovery.AR_STEP_END));
-
-			this._sendForm(form, formData);
-		}
+	stepEnd(data: { pass: string; vpass: string }) {
+		return this._sendForm({
+			pass: data.pass,
+			vpass: data.vpass,
+			step: String(OWebAccountRecovery.AR_STEP_END),
+		});
 	}
 
-	onError(handler: (response: IComResponse) => void): this {
+	onError(
+		handler: (response: INetResponse<IOZoneApiJSON<any>>) => void,
+	): this {
 		return this.on(OWebAccountRecovery.EVT_AR_ERROR, handler);
 	}
 
-	onNextStep(handler: (response: IComResponse, step: number) => void): this {
+	onNextStep(
+		handler: (
+			response: INetResponse<IOZoneApiJSON<any>>,
+			step: number,
+		) => void,
+	): this {
 		return this.on(OWebAccountRecovery.EVT_AR_NEXT_STEP, handler);
 	}
 
-	onSuccess(handler: (response: IComResponse) => void): this {
+	onSuccess(
+		handler: (response: INetResponse<IOZoneApiJSON<any>>) => void,
+	): this {
 		return this.on(OWebAccountRecovery.EVT_AR_SUCCESS, handler);
 	}
 
-	_sendForm(form: HTMLFormElement, data: any, nextStep?: number) {
+	private _sendForm(data: FormData | object, nextStep?: number) {
 		const m = this,
-			url = m.appContext.url.get('OZ_SERVER_ACCOUNT_RECOVERY_SERVICE');
+			url = m.appContext.url.get('OZ_SERVER_ACCOUNT_RECOVERY_SERVICE'),
+			net = m.appContext.net<IOZoneApiJSON<any>>(url, {
+				method: 'POST',
+				body: data,
+				isGoodNews(response) {
+					return Boolean(response.json && response.json.error === 0);
+				},
+			});
 
-		m.appContext.request(
-			'POST',
-			url,
-			data,
-			function (response: any) {
+		return net
+			.onGoodNews(function (response) {
 				if (nextStep) {
 					m.trigger(OWebAccountRecovery.EVT_AR_NEXT_STEP, [
 						response,
@@ -89,11 +89,10 @@ export default class OWebAccountRecovery extends OWebEvent {
 				} else {
 					m.trigger(OWebAccountRecovery.EVT_AR_SUCCESS, [response]);
 				}
-			},
-			function (response: any) {
+			})
+			.onBadNews(function (response) {
 				m.trigger(OWebAccountRecovery.EVT_AR_ERROR, [response]);
-			},
-			true,
-		);
+			})
+			.send();
 	}
 }
