@@ -33,7 +33,7 @@ export default class OWebCurrentUser extends OWebEvent {
 		) {
 			return user;
 		} else {
-			_error('[OWebCurrentUser] invalid user data!', data);
+			_error('[OWebCurrentUser] invalid user data.', data);
 		}
 
 		return undefined;
@@ -45,7 +45,7 @@ export default class OWebCurrentUser extends OWebEvent {
 	 * @param user
 	 */
 	setCurrentUser(user: any): this {
-		_debug('[OWebCurrentUser] setting new user ->', user);
+		_debug('[OWebCurrentUser] setting new user', user);
 		this._keyStore.setItem('user_data', user);
 
 		return this._notifyChange();
