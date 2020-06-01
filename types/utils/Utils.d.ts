@@ -17,7 +17,7 @@ export declare const clone: <T>(a: T) => T;
 export declare const stringPlaceholderReplace: (str: string, data: object) => string;
 export declare const textToLineString: (text: string) => string;
 export declare const _setDigitsSep: (x: number, sep: string) => string;
-export declare const numberFormat: (x: string | number, dec?: number, decimalSep?: string, digitsSep?: string) => string;
+export declare const numberFormat: (x: number | string, dec?: number, decimalSep?: string, digitsSep?: string) => string;
 export declare const gt: (x: number, y: number, eq?: boolean) => boolean;
 export declare const lt: (x: number, y: number, eq?: boolean) => boolean;
 export declare const between: (x: number, a: number, b: number, eq?: boolean) => boolean;
@@ -26,7 +26,7 @@ export declare const isInDOM: (element: any, inBody?: boolean) => boolean;
 export declare const buildQueryString: (object: object, prefix: string) => string;
 export declare const shuffle: (a: any[]) => any[];
 export declare const parseQueryString: (str: string) => {};
-export declare const preventDefault: (e: Event) => void, eventCancel: (e: Event) => void;
+export declare const preventDefault: (e: Event) => void;
 export declare const isValidAge: (day: number, month: number, year: number, minAge: number, maxAge: number) => boolean;
 export declare const fileSizeFormat: (size: number, decimalPoint?: string, thousandsSep?: string) => string;
 /**
@@ -44,3 +44,4 @@ export declare const fileSizeFormat: (size: number, decimalPoint?: string, thous
  * @param strWindowFeatures
  */
 export declare const safeOpen: (url?: string, strWindowName?: string, strWindowFeatures?: string) => Window | null;
+export declare const _debug: (...args: any[]) => undefined, _log: (...args: any[]) => undefined, _info: (...args: any[]) => undefined, _warn: (...args: any[]) => undefined, _error: (...args: any[]) => undefined;

@@ -1,5 +1,12 @@
 import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
+import { GoblSinglePKEntity } from 'gobl-utils-ts';
+import { IOZoneApiJSON } from '../ozone';
+export declare type tTNetResponseData = {
+    ok: boolean;
+    _current_user?: GoblSinglePKEntity;
+    _info_sign_up?: any;
+};
 export default class OWebTNet extends OWebEvent {
     private readonly appContext;
     static readonly SELF: string;
@@ -10,5 +17,5 @@ export default class OWebTNet extends OWebEvent {
     static readonly STATE_VERIFIED_USER: string;
     static readonly STATE_SIGN_UP_PROCESS: string;
     constructor(appContext: OWebApp);
-    check(): this;
+    check(): import("../OWebXHR").default<IOZoneApiJSON<tTNetResponseData>>;
 }

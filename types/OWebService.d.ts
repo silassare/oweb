@@ -1,7 +1,11 @@
 import OWebApp from './OWebApp';
-import OWebCom, { IComResponse } from './OWebCom';
-import OWebKeyStorage from './OWebKeyStorage';
-export interface IServiceAddResponse<T> extends IComResponse {
+import { IOZoneApiJSON } from './ozone';
+export interface IServiceAddResponse<T> extends IOZoneApiJSON<any> {
+    data: {
+        item: T;
+    };
+}
+export interface IServiceGetResponse<T> extends IOZoneApiJSON<any> {
     data: {
         item: T;
         relations?: {
@@ -9,15 +13,7 @@ export interface IServiceAddResponse<T> extends IComResponse {
         };
     };
 }
-export interface IServiceGetResponse<T> extends IComResponse {
-    data: {
-        item: T;
-        relations?: {
-            [key: string]: any;
-        };
-    };
-}
-export interface IServiceGetAllResponse<T> extends IComResponse {
+export interface IServiceGetAllResponse<T> extends IOZoneApiJSON<any> {
     data: {
         items: T[];
         max?: number;
@@ -28,30 +24,27 @@ export interface IServiceGetAllResponse<T> extends IComResponse {
         };
     };
 }
-export interface IServiceUpdateResponse<T> extends IComResponse {
-    data: {
-        item: T;
-        relations?: {
-            [key: string]: any;
-        };
-    };
-}
-export interface IServiceUpdateAllData extends IComResponse {
-    data: {
-        affected: number;
-    };
-}
-export interface IServiceDeleteResponse<T> extends IComResponse {
+export interface IServiceUpdateResponse<T> extends IOZoneApiJSON<any> {
     data: {
         item: T;
     };
 }
-export interface IServiceDeleteAllResponse<T> extends IComResponse {
+export interface IServiceUpdateAllResponse extends IOZoneApiJSON<any> {
     data: {
         affected: number;
     };
 }
-export interface IServiceGetRelationItemsResponse<T> extends IComResponse {
+export interface IServiceDeleteResponse<T> extends IOZoneApiJSON<any> {
+    data: {
+        item: T;
+    };
+}
+export interface IServiceDeleteAllResponse extends IOZoneApiJSON<any> {
+    data: {
+        affected: number;
+    };
+}
+export interface IServiceGetRelationItemsResponse<T> extends IOZoneApiJSON<any> {
     data: {
         items: T[];
         max?: number;
@@ -62,7 +55,7 @@ export interface IServiceGetRelationItemsResponse<T> extends IComResponse {
         };
     };
 }
-export interface IServiceGetRelationItemResponse<T> extends IComResponse {
+export interface IServiceGetRelationItemResponse<T> extends IOZoneApiJSON<any> {
     data: {
         item: T;
         relations?: {
@@ -70,16 +63,6 @@ export interface IServiceGetRelationItemResponse<T> extends IComResponse {
         };
     };
 }
-export declare type tServiceAddSuccess<T> = (response: IServiceAddResponse<T>) => void;
-export declare type tServiceUpdateSuccess<T> = (response: IServiceUpdateResponse<T>) => void;
-export declare type tServiceUpdateAllSuccess<T> = (response: IServiceUpdateAllData) => void;
-export declare type tServiceDeleteSuccess<T> = (response: IServiceDeleteResponse<T>) => void;
-export declare type tServiceDeleteAllSuccess<T> = (response: IServiceDeleteAllResponse<T>) => void;
-export declare type tServiceGetSuccess<T> = (response: IServiceGetResponse<T>, fromCache: boolean) => void;
-export declare type tServiceGetAllSuccess<T> = (response: IServiceGetAllResponse<T>, fromCache: boolean) => void;
-export declare type tServiceGetRelationSuccess<T> = (response: IServiceGetRelationItemResponse<T>, fromCache: boolean) => void;
-export declare type tServiceGetRelationItemsSuccess<T> = (response: IServiceGetRelationItemsResponse<T>, fromCache: boolean) => void;
-export declare type tServiceFail = (response: IComResponse, com: OWebCom) => void;
 export declare type tFilterCondition = 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'in' | 'not_in' | 'is_null' | 'is_not_null' | 'like' | 'not_like';
 export declare type tFilter = {
     0: tFilterCondition;
@@ -92,25 +75,24 @@ export declare type tFilter = {
 export declare type tFiltersMap = {
     [key: string]: tFilter[];
 };
-export declare type tServiceRequestOptions = {
+export interface IServiceRequestOptions {
     data?: any;
     filters?: tFiltersMap;
-    relations?: string;
+    relations?: string | string[];
     collection?: string;
     order_by?: string;
     max?: number;
     page?: number;
-};
+}
 export default class OWebService<T> {
     protected readonly appContext: OWebApp;
-    private readonly _keyStore;
     private readonly _baseData;
     /**
      * @param appContext The app context.
-     * @param serviceName The service name.
+     * @param service The service name.
      * @param persistentCache To enable persistence data caching.
      */
-    constructor(appContext: OWebApp, serviceName: string, persistentCache?: boolean);
+    constructor(appContext: OWebApp, service: string);
     /**
      * Returns the service name.
      */
@@ -133,56 +115,37 @@ export default class OWebService<T> {
      */
     getItemRelationURI(id: string, relation: string): string;
     /**
-     * Cache manager getter.
-     */
-    getCacheManager(): OWebKeyStorage;
-    /**
      * Adds an entity.
      *
      * @param formData
-     * @param success
-     * @param fail
-     * @param freeze
      */
-    addRequest(formData: any, success: tServiceAddSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
+    addRequest(formData: FormData | object): import("./OWebXHR").default<IServiceAddResponse<T>>;
     /**
      * Deletes the entity with the given id.
      *
      * @param id The entity id.
-     * @param success
-     * @param fail
-     * @param freeze
      */
-    deleteRequest(id: string, success: tServiceDeleteSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
+    deleteRequest(id: string): import("./OWebXHR").default<IServiceDeleteResponse<T>>;
     /**
      * Updates the entity with the given id.
      *
      * @param id The entity id.
      * @param formData
-     * @param success
-     * @param fail
-     * @param freeze
      */
-    updateRequest(id: string, formData: any, success: tServiceUpdateSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
+    updateRequest(id: string, formData: any): import("./OWebXHR").default<IServiceUpdateResponse<T>>;
     /**
      * Deletes all entities.
      *
      * @param options
-     * @param success
-     * @param fail
-     * @param freeze
      */
-    deleteAllRequest(options: tServiceRequestOptions, success: tServiceDeleteAllSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
+    deleteAllRequest(options: IServiceRequestOptions): import("./OWebXHR").default<IServiceDeleteAllResponse>;
     /**
      * Updates all entities.
      *
      * @param options
      * @param formData
-     * @param success
-     * @param fail
-     * @param freeze
      */
-    updateAllRequest(options: tServiceRequestOptions, formData: any, success: tServiceUpdateAllSuccess<T>, fail: tServiceFail, freeze?: boolean): OWebCom;
+    updateAllRequest(options: IServiceRequestOptions, formData: any): import("./OWebXHR").default<IServiceUpdateAllResponse>;
     /**
      * Gets an entity with the given id.
      *
@@ -191,46 +154,27 @@ export default class OWebService<T> {
      *
      * @param id The entity id.
      * @param relations The relations string.
-     * @param success
-     * @param fail
-     * @param freeze
-     * @param loadCacheFirst
      */
-    getRequest(id: string, relations: string | undefined, success: tServiceGetSuccess<T>, fail: tServiceFail, freeze?: boolean, loadCacheFirst?: boolean): OWebCom;
+    getRequest(id: string, relations?: string): import("./OWebXHR").default<IServiceGetResponse<T>>;
     /**
      * Gets all entities.
      *
      * @param options
-     * @param success
-     * @param fail
-     * @param freeze
-     * @param forceCache
-     * @param loadCacheFirst
      */
-    getAllRequest(options: tServiceRequestOptions, success: tServiceGetAllSuccess<T>, fail: tServiceFail, freeze?: boolean, forceCache?: boolean, loadCacheFirst?: boolean): OWebCom;
+    getAllRequest(options: IServiceRequestOptions): import("./OWebXHR").default<IServiceGetAllResponse<T>>;
     /**
      * Gets a single item relation for a given entity id.
      *
      * @param id The entity id.
      * @param relation The relation name
-     * @param success
-     * @param fail
-     * @param freeze
-     * @param forceCache
-     * @param loadCacheFirst
      */
-    getRelationRequest<R>(id: string, relation: string, success: tServiceGetRelationSuccess<R>, fail: tServiceFail, freeze?: boolean, forceCache?: boolean, loadCacheFirst?: boolean): OWebCom;
+    getRelationRequest<R>(id: string, relation: string): import("./OWebXHR").default<IServiceGetRelationItemResponse<R>>;
     /**
      * Gets multiple items relation for a given entity id.
      *
      * @param id The entity id.
      * @param relation The relation name.
      * @param options
-     * @param success
-     * @param fail
-     * @param freeze
-     * @param forceCache
-     * @param loadCacheFirst
      */
-    getRelationItemsRequest<R>(id: string, relation: string, options: tServiceRequestOptions, success: tServiceGetRelationItemsSuccess<R>, fail: tServiceFail, freeze?: boolean, forceCache?: boolean, loadCacheFirst?: boolean): OWebCom;
+    getRelationItemsRequest<R>(id: string, relation: string, options: IServiceRequestOptions): import("./OWebXHR").default<IServiceGetRelationItemsResponse<R>>;
 }

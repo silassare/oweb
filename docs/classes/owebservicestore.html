@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>OWebServiceStore | oweb</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for oweb">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
@@ -13,7 +13,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -119,7 +119,6 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="owebservicestore.html#deleterequest" class="tsd-kind-icon">delete<wbr>Request</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebservicestore.html#getallitems" class="tsd-kind-icon">get<wbr>All<wbr>Items</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="owebservicestore.html#getallrequest" class="tsd-kind-icon">get<wbr>All<wbr>Request</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="owebservicestore.html#getcachemanager" class="tsd-kind-icon">get<wbr>Cache<wbr>Manager</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebservicestore.html#getitem" class="tsd-kind-icon">get<wbr>Item</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="owebservicestore.html#getitemrelationuri" class="tsd-kind-icon">get<wbr>Item<wbr>RelationURI</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="owebservicestore.html#getitemuri" class="tsd-kind-icon">get<wbr>ItemURI</a></li>
@@ -153,14 +152,14 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new OWeb<wbr>Service<wbr>Store<span class="tsd-signature-symbol">(</span>appContext<span class="tsd-signature-symbol">: </span><a href="owebapp.html" class="tsd-signature-type">OWebApp</a>, entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">GoblSinglePKEntity</span>, serviceName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, persistentCache<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebservicestore.html" class="tsd-signature-type">OWebServiceStore</a></li>
+						<li class="tsd-signature tsd-kind-icon">new OWeb<wbr>Service<wbr>Store<span class="tsd-signature-symbol">(</span>appContext<span class="tsd-signature-symbol">: </span><a href="owebapp.html" class="tsd-signature-type">OWebApp</a>, entity<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">GoblSinglePKEntity</span>, service<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebservicestore.html" class="tsd-signature-type">OWebServiceStore</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L34">src/OWebServiceStore.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L27">src/OWebServiceStore.ts:27</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -172,10 +171,7 @@
 									<h5>entity: <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">GoblSinglePKEntity</span></h5>
 								</li>
 								<li>
-									<h5>serviceName: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> persistentCache: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
+									<h5>service: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="owebservicestore.html" class="tsd-signature-type">OWebServiceStore</a></h4>
@@ -187,12 +183,12 @@
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="appcontext" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> app<wbr>Context</h3>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> app<wbr>Context</h3>
 					<div class="tsd-signature tsd-kind-icon">app<wbr>Context<span class="tsd-signature-symbol">:</span> <a href="owebapp.html" class="tsd-signature-type">OWebApp</a></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#appcontext">appContext</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L170">src/OWebService.ts:170</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L127">src/OWebService.ts:127</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -203,11 +199,11 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="entity" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> entity</h3>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> entity</h3>
 					<div class="tsd-signature tsd-kind-icon">entity<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">GoblSinglePKEntity</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L38">src/OWebServiceStore.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L31">src/OWebServiceStore.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -217,7 +213,7 @@
 					<div class="tsd-signature tsd-kind-icon">items<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L33">src/OWebServiceStore.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L26">src/OWebServiceStore.ts:26</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -235,7 +231,7 @@
 					<div class="tsd-signature tsd-kind-icon">relations<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L34">src/OWebServiceStore.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L27">src/OWebServiceStore.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -260,7 +256,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L240">src/OWebServiceStore.ts:240</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L189">src/OWebServiceStore.ts:189</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -277,13 +273,13 @@
 					<a name="additem" class="tsd-anchor"></a>
 					<h3>add<wbr>Item</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Item<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, then<span class="tsd-signature-symbol">?: </span><a href="../globals.html#tserviceaddsuccess" class="tsd-signature-type">tServiceAddSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">?: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Item<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iserviceaddresponse.html" class="tsd-signature-type">IServiceAddResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L90">src/OWebServiceStore.ts:90</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L65">src/OWebServiceStore.ts:65</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -291,17 +287,8 @@
 								<li>
 									<h5>data: <span class="tsd-signature-type">any</span></h5>
 								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> then: <a href="../globals.html#tserviceaddsuccess" class="tsd-signature-type">tServiceAddSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
-								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iserviceaddresponse.html" class="tsd-signature-type">IServiceAddResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -315,7 +302,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L198">src/OWebServiceStore.ts:198</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L147">src/OWebServiceStore.ts:147</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -341,7 +328,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L167">src/OWebServiceStore.ts:167</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L116">src/OWebServiceStore.ts:116</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -361,14 +348,14 @@
 					<a name="addrequest" class="tsd-anchor"></a>
 					<h3>add<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Request<span class="tsd-signature-symbol">(</span>formData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, success<span class="tsd-signature-symbol">: </span><a href="../globals.html#tserviceaddsuccess" class="tsd-signature-type">tServiceAddSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Request<span class="tsd-signature-symbol">(</span>formData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">FormData</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iserviceaddresponse.html" class="tsd-signature-type">IServiceAddResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#addrequest">addRequest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L235">src/OWebService.ts:235</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L174">src/OWebService.ts:174</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -379,21 +366,12 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>formData: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>success: <a href="../globals.html#tserviceaddsuccess" class="tsd-signature-type">tServiceAddSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5>fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
+									<h5>formData: <span class="tsd-signature-type">FormData</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iserviceaddresponse.html" class="tsd-signature-type">IServiceAddResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -401,14 +379,14 @@
 					<a name="deleteallrequest" class="tsd-anchor"></a>
 					<h3>delete<wbr>All<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">delete<wbr>All<wbr>Request<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicerequestoptions" class="tsd-signature-type">tServiceRequestOptions</a>, success<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicedeleteallsuccess" class="tsd-signature-type">tServiceDeleteAllSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>All<wbr>Request<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/iservicerequestoptions.html" class="tsd-signature-type">IServiceRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicedeleteallresponse.html" class="tsd-signature-type">IServiceDeleteAllResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#deleteallrequest">deleteAllRequest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L325">src/OWebService.ts:325</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L216">src/OWebService.ts:216</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -419,21 +397,12 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <a href="../globals.html#tservicerequestoptions" class="tsd-signature-type">tServiceRequestOptions</a></h5>
-								</li>
-								<li>
-									<h5>success: <a href="../globals.html#tservicedeleteallsuccess" class="tsd-signature-type">tServiceDeleteAllSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5>fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
+									<h5>options: <a href="../interfaces/iservicerequestoptions.html" class="tsd-signature-type">IServiceRequestOptions</a></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicedeleteallresponse.html" class="tsd-signature-type">IServiceDeleteAllResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -441,13 +410,13 @@
 					<a name="deleteitem" class="tsd-anchor"></a>
 					<h3>delete<wbr>Item</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">delete<wbr>Item<span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, then<span class="tsd-signature-symbol">?: </span><a href="../globals.html#tservicedeletesuccess" class="tsd-signature-type">tServiceDeleteSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">?: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Item<span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicedeleteresponse.html" class="tsd-signature-type">IServiceDeleteResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L142">src/OWebServiceStore.ts:142</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L99">src/OWebServiceStore.ts:99</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -455,17 +424,8 @@
 								<li>
 									<h5>item: <span class="tsd-signature-type">T</span></h5>
 								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> then: <a href="../globals.html#tservicedeletesuccess" class="tsd-signature-type">tServiceDeleteSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
-								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicedeleteresponse.html" class="tsd-signature-type">IServiceDeleteResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -473,14 +433,14 @@
 					<a name="deleterequest" class="tsd-anchor"></a>
 					<h3>delete<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">delete<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, success<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicedeletesuccess" class="tsd-signature-type">tServiceDeleteSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicedeleteresponse.html" class="tsd-signature-type">IServiceDeleteResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#deleterequest">deleteRequest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L264">src/OWebService.ts:264</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L188">src/OWebService.ts:188</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -496,19 +456,8 @@
 										<p>The entity id.</p>
 									</div>
 								</li>
-								<li>
-									<h5>success: <a href="../globals.html#tservicedeletesuccess" class="tsd-signature-type">tServiceDeleteSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5>fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicedeleteresponse.html" class="tsd-signature-type">IServiceDeleteResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -516,34 +465,22 @@
 					<a name="getallitems" class="tsd-anchor"></a>
 					<h3>get<wbr>All<wbr>Items</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>All<wbr>Items<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../globals.html#tservicerequestoptions" class="tsd-signature-type">tServiceRequestOptions</a>, then<span class="tsd-signature-symbol">?: </span><a href="../globals.html#tservicegetallsuccess" class="tsd-signature-type">tServiceGetAllSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">?: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, forceCache<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>All<wbr>Items<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/iservicerequestoptions.html" class="tsd-signature-type">IServiceRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicegetallresponse.html" class="tsd-signature-type">IServiceGetAllResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L67">src/OWebServiceStore.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L51">src/OWebServiceStore.ts:51</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <a href="../globals.html#tservicerequestoptions" class="tsd-signature-type">tServiceRequestOptions</a><span class="tsd-signature-symbol"> = {}</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> then: <a href="../globals.html#tservicegetallsuccess" class="tsd-signature-type">tServiceGetAllSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> forceCache: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> options: <a href="../interfaces/iservicerequestoptions.html" class="tsd-signature-type">IServiceRequestOptions</a><span class="tsd-signature-symbol"> = {}</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicegetallresponse.html" class="tsd-signature-type">IServiceGetAllResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -551,14 +488,14 @@
 					<a name="getallrequest" class="tsd-anchor"></a>
 					<h3>get<wbr>All<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>All<wbr>Request<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicerequestoptions" class="tsd-signature-type">tServiceRequestOptions</a>, success<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicegetallsuccess" class="tsd-signature-type">tServiceGetAllSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, forceCache<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, loadCacheFirst<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>All<wbr>Request<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/iservicerequestoptions.html" class="tsd-signature-type">IServiceRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicegetallresponse.html" class="tsd-signature-type">IServiceGetAllResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#getallrequest">getAllRequest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L475">src/OWebService.ts:475</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L298">src/OWebService.ts:298</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -569,50 +506,12 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <a href="../globals.html#tservicerequestoptions" class="tsd-signature-type">tServiceRequestOptions</a></h5>
-								</li>
-								<li>
-									<h5>success: <a href="../globals.html#tservicegetallsuccess" class="tsd-signature-type">tServiceGetAllSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5>fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> forceCache: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> loadCacheFirst: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
+									<h5>options: <a href="../interfaces/iservicerequestoptions.html" class="tsd-signature-type">IServiceRequestOptions</a></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-					<a name="getcachemanager" class="tsd-anchor"></a>
-					<h3>get<wbr>Cache<wbr>Manager</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Cache<wbr>Manager<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebkeystorage.html" class="tsd-signature-type">OWebKeyStorage</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#getcachemanager">getCacheManager</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L223">src/OWebService.ts:223</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Cache manager getter.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <a href="owebkeystorage.html" class="tsd-signature-type">OWebKeyStorage</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicegetallresponse.html" class="tsd-signature-type">IServiceGetAllResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -620,13 +519,13 @@
 					<a name="getitem" class="tsd-anchor"></a>
 					<h3>get<wbr>Item</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Item<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relations<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, then<span class="tsd-signature-symbol">?: </span><a href="../globals.html#tservicegetsuccess" class="tsd-signature-type">tServiceGetSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">?: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, loadCacheFirst<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Item<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relations<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicegetresponse.html" class="tsd-signature-type">IServiceGetResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L45">src/OWebServiceStore.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L37">src/OWebServiceStore.ts:37</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -637,20 +536,8 @@
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> relations: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></h5>
 								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> then: <a href="../globals.html#tservicegetsuccess" class="tsd-signature-type">tServiceGetSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> loadCacheFirst: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
-								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicegetresponse.html" class="tsd-signature-type">IServiceGetResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -665,7 +552,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#getitemrelationuri">getItemRelationURI</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L215">src/OWebService.ts:215</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L164">src/OWebService.ts:164</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -703,7 +590,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#getitemuri">getItemURI</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L204">src/OWebService.ts:204</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L153">src/OWebService.ts:153</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -735,7 +622,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#getname">getName</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L188">src/OWebService.ts:188</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L137">src/OWebService.ts:137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -751,14 +638,14 @@
 					<a name="getrelationitemsrequest" class="tsd-anchor"></a>
 					<h3>get<wbr>Relation<wbr>Items<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Relation<wbr>Items<wbr>Request&lt;R&gt;<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicerequestoptions" class="tsd-signature-type">tServiceRequestOptions</a>, success<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicegetrelationitemssuccess" class="tsd-signature-type">tServiceGetRelationItemsSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, forceCache<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, loadCacheFirst<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Relation<wbr>Items<wbr>Request&lt;R&gt;<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/iservicerequestoptions.html" class="tsd-signature-type">IServiceRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicegetrelationitemsresponse.html" class="tsd-signature-type">IServiceGetRelationItemsResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#getrelationitemsrequest">getRelationItemsRequest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L614">src/OWebService.ts:614</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L352">src/OWebService.ts:352</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -787,27 +674,12 @@
 									</div>
 								</li>
 								<li>
-									<h5>options: <a href="../globals.html#tservicerequestoptions" class="tsd-signature-type">tServiceRequestOptions</a></h5>
-								</li>
-								<li>
-									<h5>success: <a href="../globals.html#tservicegetrelationitemssuccess" class="tsd-signature-type">tServiceGetRelationItemsSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5>fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> forceCache: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> loadCacheFirst: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
+									<h5>options: <a href="../interfaces/iservicerequestoptions.html" class="tsd-signature-type">IServiceRequestOptions</a></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicegetrelationitemsresponse.html" class="tsd-signature-type">IServiceGetRelationItemsResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -815,14 +687,14 @@
 					<a name="getrelationrequest" class="tsd-anchor"></a>
 					<h3>get<wbr>Relation<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Relation<wbr>Request&lt;R&gt;<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, success<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicegetrelationsuccess" class="tsd-signature-type">tServiceGetRelationSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, forceCache<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, loadCacheFirst<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Relation<wbr>Request&lt;R&gt;<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicegetrelationitemresponse.html" class="tsd-signature-type">IServiceGetRelationItemResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#getrelationrequest">getRelationRequest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L556">src/OWebService.ts:556</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L337">src/OWebService.ts:337</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -850,25 +722,8 @@
 										<p>The relation name</p>
 									</div>
 								</li>
-								<li>
-									<h5>success: <a href="../globals.html#tservicegetrelationsuccess" class="tsd-signature-type">tServiceGetRelationSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5>fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> forceCache: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> loadCacheFirst: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicegetrelationitemresponse.html" class="tsd-signature-type">IServiceGetRelationItemResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -876,14 +731,14 @@
 					<a name="getrequest" class="tsd-anchor"></a>
 					<h3>get<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relations<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, success<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicegetsuccess" class="tsd-signature-type">tServiceGetSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, loadCacheFirst<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relations<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicegetresponse.html" class="tsd-signature-type">IServiceGetResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#getrequest">getRequest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L418">src/OWebService.ts:418</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L279">src/OWebService.ts:279</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -907,22 +762,8 @@
 										<p>The relations string.</p>
 									</div>
 								</li>
-								<li>
-									<h5>success: <a href="../globals.html#tservicegetsuccess" class="tsd-signature-type">tServiceGetSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5>fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> loadCacheFirst: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iservicegetresponse.html" class="tsd-signature-type">IServiceGetResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -937,7 +778,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#getserviceuri">getServiceURI</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L195">src/OWebService.ts:195</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L144">src/OWebService.ts:144</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -959,7 +800,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L254">src/OWebServiceStore.ts:254</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L203">src/OWebServiceStore.ts:203</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -985,7 +826,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L249">src/OWebServiceStore.ts:249</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L198">src/OWebServiceStore.ts:198</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1017,7 +858,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L269">src/OWebServiceStore.ts:269</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L218">src/OWebServiceStore.ts:218</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1040,7 +881,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L291">src/OWebServiceStore.ts:291</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L240">src/OWebServiceStore.ts:240</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1063,7 +904,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L297">src/OWebServiceStore.ts:297</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L246">src/OWebServiceStore.ts:246</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1086,7 +927,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L219">src/OWebServiceStore.ts:219</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L168">src/OWebServiceStore.ts:168</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1109,7 +950,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L320">src/OWebServiceStore.ts:320</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L269">src/OWebServiceStore.ts:269</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1159,7 +1000,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L303">src/OWebServiceStore.ts:303</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L252">src/OWebServiceStore.ts:252</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1209,7 +1050,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L244">src/OWebServiceStore.ts:244</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L193">src/OWebServiceStore.ts:193</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1232,7 +1073,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L232">src/OWebServiceStore.ts:232</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L181">src/OWebServiceStore.ts:181</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1258,7 +1099,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L337">src/OWebServiceStore.ts:337</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L286">src/OWebServiceStore.ts:286</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -1269,14 +1110,14 @@
 					<a name="updateallrequest" class="tsd-anchor"></a>
 					<h3>update<wbr>All<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">update<wbr>All<wbr>Request<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicerequestoptions" class="tsd-signature-type">tServiceRequestOptions</a>, formData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, success<span class="tsd-signature-symbol">: </span><a href="../globals.html#tserviceupdateallsuccess" class="tsd-signature-type">tServiceUpdateAllSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">update<wbr>All<wbr>Request<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/iservicerequestoptions.html" class="tsd-signature-type">IServiceRequestOptions</a>, formData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iserviceupdateallresponse.html" class="tsd-signature-type">IServiceUpdateAllResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#updateallrequest">updateAllRequest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L369">src/OWebService.ts:369</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L246">src/OWebService.ts:246</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1287,24 +1128,15 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <a href="../globals.html#tservicerequestoptions" class="tsd-signature-type">tServiceRequestOptions</a></h5>
+									<h5>options: <a href="../interfaces/iservicerequestoptions.html" class="tsd-signature-type">IServiceRequestOptions</a></h5>
 								</li>
 								<li>
 									<h5>formData: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>success: <a href="../globals.html#tserviceupdateallsuccess" class="tsd-signature-type">tServiceUpdateAllSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5>fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iserviceupdateallresponse.html" class="tsd-signature-type">IServiceUpdateAllResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1312,13 +1144,13 @@
 					<a name="updateitem" class="tsd-anchor"></a>
 					<h3>update<wbr>Item</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">update<wbr>Item<span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, then<span class="tsd-signature-symbol">?: </span><a href="../globals.html#tserviceupdatesuccess" class="tsd-signature-type">tServiceUpdateSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">?: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></li>
+						<li class="tsd-signature tsd-kind-icon">update<wbr>Item<span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iserviceupdateresponse.html" class="tsd-signature-type">IServiceUpdateResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebServiceStore.ts#L108">src/OWebServiceStore.ts:108</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebServiceStore.ts#L75">src/OWebServiceStore.ts:75</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1327,16 +1159,10 @@
 									<h5>item: <span class="tsd-signature-type">T</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> then: <a href="../globals.html#tserviceupdatesuccess" class="tsd-signature-type">tServiceUpdateSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = true</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iserviceupdateresponse.html" class="tsd-signature-type">IServiceUpdateResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1344,14 +1170,14 @@
 					<a name="updaterequest" class="tsd-anchor"></a>
 					<h3>update<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">update<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, formData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, success<span class="tsd-signature-symbol">: </span><a href="../globals.html#tserviceupdatesuccess" class="tsd-signature-type">tServiceUpdateSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, fail<span class="tsd-signature-symbol">: </span><a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a>, freeze<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebcom.html" class="tsd-signature-type">OWebCom</a></li>
+						<li class="tsd-signature tsd-kind-icon">update<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, formData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iserviceupdateresponse.html" class="tsd-signature-type">IServiceUpdateResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="owebservice.html">OWebService</a>.<a href="owebservice.html#updaterequest">updateRequest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/2459bc0/src/OWebService.ts#L295">src/OWebService.ts:295</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/5c4d982/src/OWebService.ts#L202">src/OWebService.ts:202</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1369,20 +1195,11 @@
 								</li>
 								<li>
 									<h5>formData: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>success: <a href="../globals.html#tserviceupdatesuccess" class="tsd-signature-type">tServiceUpdateSuccess</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-								</li>
-								<li>
-									<h5>fail: <a href="../globals.html#tservicefail" class="tsd-signature-type">tServiceFail</a></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> freeze: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebcom.html" class="tsd-signature-type">OWebCom</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iserviceupdateresponse.html" class="tsd-signature-type">IServiceUpdateResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1447,9 +1264,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="owebservicestore.html#getallrequest" class="tsd-kind-icon">get<wbr>All<wbr>Request</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="owebservicestore.html#getcachemanager" class="tsd-kind-icon">get<wbr>Cache<wbr>Manager</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="owebservicestore.html#getitem" class="tsd-kind-icon">get<wbr>Item</a>

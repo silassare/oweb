@@ -1,5 +1,5 @@
-import { IComResponse } from './OWebCom';
 import OWebEvent from './OWebEvent';
+import { IOZoneApiJSON } from './ozone';
 export declare type tViewDialog = {
     type: 'info' | 'error' | 'done';
     text: string;
@@ -29,7 +29,7 @@ export default class OWebView extends OWebEvent {
      * @param dialog
      * @param canUseAlert
      */
-    dialog(dialog: tViewDialog | IComResponse, canUseAlert?: boolean): void;
+    dialog(dialog: tViewDialog | IOZoneApiJSON<any>, canUseAlert?: boolean): void;
     /**
      * Register freeze event handler.
      *

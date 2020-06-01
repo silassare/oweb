@@ -1,4 +1,3 @@
-import OWebCom, { IComResponse } from './OWebCom';
 import OWebConfigs, { tConfigList } from './OWebConfigs';
 import OWebCurrentUser from './OWebCurrentUser';
 import OWebDataStore from './OWebDataStore';
@@ -9,6 +8,9 @@ import OWebUrl, { tUrlList } from './OWebUrl';
 import OWebView from './OWebView';
 import OWebI18n from './OWebI18n';
 import OWebPager from './OWebPager';
+import { INetRequestOptions } from './OWebNet';
+import OWebXHR from './OWebXHR';
+import { IOZoneApiJSON } from './ozone';
 export default class OWebApp extends OWebEvent {
     private readonly name;
     static readonly SELF: string;
@@ -88,25 +90,12 @@ export default class OWebApp extends OWebEvent {
      */
     userVerified(): boolean;
     /**
-     * Send request and return promise.
+     * Create net instance.
      *
-     * @param method The request method.
      * @param url The request url.
-     * @param data The request payload.
-     * @param freeze Force app view to be frozen.
+     * @param options The request options.
      */
-    requestPromise(method: string, url: string, data: any, freeze?: boolean): Promise<IComResponse>;
-    /**
-     * Send request.
-     *
-     * @param method The request method.
-     * @param url The request url.
-     * @param data The request payload.
-     * @param success Request success callback.
-     * @param fail Request fail callback.
-     * @param freeze Force app view to be frozen.
-     */
-    request(method: string, url: string, data: any, success?: (response: IComResponse, com: OWebCom) => void, fail?: (response: IComResponse, com: OWebCom) => void, freeze?: boolean): OWebCom;
+    net<R extends IOZoneApiJSON<any>>(url: string, options: Partial<INetRequestOptions<R>>): OWebXHR<R>;
     /**
      * To start the web app.
      */
