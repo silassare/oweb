@@ -1,6 +1,6 @@
-import { IComResponse } from './OWebCom';
 import OWebEvent from './OWebEvent';
 import { id, _info } from './utils/Utils';
+import { IOZoneApiJSON } from './ozone';
 
 export type tViewDialog = {
 	type: 'info' | 'error' | 'done';
@@ -61,13 +61,16 @@ export default class OWebView extends OWebEvent {
 	 * @param dialog
 	 * @param canUseAlert
 	 */
-	dialog(dialog: tViewDialog | IComResponse, canUseAlert: boolean = false) {
+	dialog(
+		dialog: tViewDialog | IOZoneApiJSON<any>,
+		canUseAlert: boolean = false,
+	) {
 		let d = dialog;
 
-		if ((d as IComResponse).error) {
+		if ((d as IOZoneApiJSON<any>).error) {
 			d = {
-				type: (d as IComResponse).error ? 'error' : 'done',
-				text: (d as IComResponse).msg,
+				type: (d as IOZoneApiJSON<any>).error ? 'error' : 'done',
+				text: (d as IOZoneApiJSON<any>).msg,
 				data: d.data || {},
 			};
 		}
