@@ -362,11 +362,13 @@ export default class OWebRouter {
 		);
 
 		if (!cd.found.length) {
-			_warn('[OWebRouter] no route found for path ->', target.path);
+			_warn('[OWebRouter] no route found for path', target.path);
 			if (this._notFound) {
 				this._notFound(target);
 			} else {
-				throw new Error('[OWebRouter] notFound action is not defined!');
+				throw new Error(
+					'[OWebRouter] "notFound" handler is not defined.',
+				);
 			}
 
 			return this;
@@ -419,11 +421,7 @@ export default class OWebRouter {
 
 		wHistory.replaceState({ url, data: state }, title, url);
 
-		_debug(
-			'[OWebDispatchContext] history replaced -> ',
-			wHistory.state,
-			url,
-		);
+		_debug('[OWebDispatchContext] history replaced', wHistory.state, url);
 
 		return this;
 	}
@@ -636,7 +634,13 @@ export default class OWebRouter {
 
 		preventDefault(e);
 
-		_debug('[OWebRouter][click] ->', el, orig, targetHref, wHistory.state);
+		_debug(
+			'[OWebRouter][click] link clicked',
+			el,
+			orig,
+			targetHref,
+			wHistory.state,
+		);
 		this.browseTo(orig);
 	}
 }

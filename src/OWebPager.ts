@@ -247,7 +247,7 @@ export default class OWebPager<Component> extends OWebEvent {
 			route.pathOptions,
 			(routeContext: OWebRouteContext) => {
 				_debug(
-					'[OWebPager] page route match ->',
+					'[OWebPager] page route match',
 					route,
 					page,
 					routeContext,
