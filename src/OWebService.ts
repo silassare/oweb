@@ -1,9 +1,14 @@
 import OWebApp from './OWebApp';
-import OWebCom, { IComResponse } from './OWebCom';
-import OWebKeyStorage from './OWebKeyStorage';
 import { assign, isPlainObject, stringPlaceholderReplace } from './utils/Utils';
+import { IOZoneApiJSON } from './ozone';
 
-export interface IServiceAddResponse<T> extends IComResponse {
+export interface IServiceAddResponse<T> extends IOZoneApiJSON<any> {
+	data: {
+		item: T;
+	};
+}
+
+export interface IServiceGetResponse<T> extends IOZoneApiJSON<any> {
 	data: {
 		item: T;
 		relations?: {
@@ -12,16 +17,7 @@ export interface IServiceAddResponse<T> extends IComResponse {
 	};
 }
 
-export interface IServiceGetResponse<T> extends IComResponse {
-	data: {
-		item: T;
-		relations?: {
-			[key: string]: any;
-		};
-	};
-}
-
-export interface IServiceGetAllResponse<T> extends IComResponse {
+export interface IServiceGetAllResponse<T> extends IOZoneApiJSON<any> {
 	data: {
 		items: T[];
 		max?: number;
@@ -33,34 +29,32 @@ export interface IServiceGetAllResponse<T> extends IComResponse {
 	};
 }
 
-export interface IServiceUpdateResponse<T> extends IComResponse {
-	data: {
-		item: T;
-		relations?: {
-			[key: string]: any;
-		};
-	};
-}
-
-export interface IServiceUpdateAllData extends IComResponse {
-	data: {
-		affected: number;
-	};
-}
-
-export interface IServiceDeleteResponse<T> extends IComResponse {
+export interface IServiceUpdateResponse<T> extends IOZoneApiJSON<any> {
 	data: {
 		item: T;
 	};
 }
 
-export interface IServiceDeleteAllResponse<T> extends IComResponse {
+export interface IServiceUpdateAllResponse extends IOZoneApiJSON<any> {
 	data: {
 		affected: number;
 	};
 }
 
-export interface IServiceGetRelationItemsResponse<T> extends IComResponse {
+export interface IServiceDeleteResponse<T> extends IOZoneApiJSON<any> {
+	data: {
+		item: T;
+	};
+}
+
+export interface IServiceDeleteAllResponse extends IOZoneApiJSON<any> {
+	data: {
+		affected: number;
+	};
+}
+
+export interface IServiceGetRelationItemsResponse<T>
+	extends IOZoneApiJSON<any> {
 	data: {
 		items: T[];
 		max?: number;
@@ -72,7 +66,7 @@ export interface IServiceGetRelationItemsResponse<T> extends IComResponse {
 	};
 }
 
-export interface IServiceGetRelationItemResponse<T> extends IComResponse {
+export interface IServiceGetRelationItemResponse<T> extends IOZoneApiJSON<any> {
 	data: {
 		item: T;
 		relations?: {
@@ -81,37 +75,6 @@ export interface IServiceGetRelationItemResponse<T> extends IComResponse {
 	};
 }
 
-export type tServiceAddSuccess<T> = (response: IServiceAddResponse<T>) => void;
-export type tServiceUpdateSuccess<T> = (
-	response: IServiceUpdateResponse<T>,
-) => void;
-export type tServiceUpdateAllSuccess<T> = (
-	response: IServiceUpdateAllData,
-) => void;
-export type tServiceDeleteSuccess<T> = (
-	response: IServiceDeleteResponse<T>,
-) => void;
-export type tServiceDeleteAllSuccess<T> = (
-	response: IServiceDeleteAllResponse<T>,
-) => void;
-export type tServiceGetSuccess<T> = (
-	response: IServiceGetResponse<T>,
-	fromCache: boolean,
-) => void;
-export type tServiceGetAllSuccess<T> = (
-	response: IServiceGetAllResponse<T>,
-	fromCache: boolean,
-) => void;
-export type tServiceGetRelationSuccess<T> = (
-	response: IServiceGetRelationItemResponse<T>,
-	fromCache: boolean,
-) => void;
-export type tServiceGetRelationItemsSuccess<T> = (
-	response: IServiceGetRelationItemsResponse<T>,
-	fromCache: boolean,
-) => void;
-
-export type tServiceFail = (response: IComResponse, com: OWebCom) => void;
 export type tFilterCondition =
 	| 'eq'
 	| 'neq'
@@ -139,61 +102,47 @@ export type tFilter =
 
 export type tFiltersMap = { [key: string]: tFilter[] };
 
-export type tServiceRequestOptions = {
+export interface IServiceRequestOptions {
 	data?: any;
 	filters?: tFiltersMap;
-	relations?: string;
+	relations?: string | string[];
 	collection?: string;
 	order_by?: string;
 	max?: number;
 	page?: number;
-};
+}
 
-const urIService = ':apiUrl/:serviceName',
-	uriEntity = ':apiUrl/:serviceName/:id',
-	uriEntityRelation = ':apiUrl/:serviceName/:id/:relation',
-	toKey = function (query: any) {
-		const key = JSON.stringify(query).replace(/[^a-z0-9]/gi, '');
-		return key.length ? key : 'no-params';
-	};
+const SERVICE_URL_FORMAT = ':api_url/:serviceName',
+	SERVICE_ENTITY_FORMAT = ':api_url/:service/:id',
+	SERVICE_ENTITY_RELATION_FORMAT = ':api_url/:service/:id/:relation';
 
 export default class OWebService<T> {
-	private readonly _keyStore: OWebKeyStorage;
-	private readonly _baseData: { apiUrl: any; serviceName: string };
+	private readonly _baseData: { api_url: any; service: string };
 
 	/**
 	 * @param appContext The app context.
-	 * @param serviceName The service name.
+	 * @param service The service name.
 	 * @param persistentCache To enable persistence data caching.
 	 */
-	constructor(
-		protected readonly appContext: OWebApp,
-		serviceName: string,
-		persistentCache: boolean = false,
-	) {
-		const apiUrl = appContext.configs
+	constructor(protected readonly appContext: OWebApp, service: string) {
+		const apiBaseUrl = appContext.configs
 			.get('OZ_API_BASE_URL')
 			.replace(/\/$/g, '');
-		this._baseData = { apiUrl, serviceName };
-		this._keyStore = new OWebKeyStorage(
-			appContext,
-			'services:' + serviceName,
-			persistentCache,
-		);
+		this._baseData = { api_url: apiBaseUrl, service };
 	}
 
 	/**
 	 * Returns the service name.
 	 */
 	getName(): string {
-		return this._baseData.serviceName;
+		return this._baseData.service;
 	}
 
 	/**
 	 * Returns the service URI.
 	 */
 	getServiceURI() {
-		return stringPlaceholderReplace(urIService, this._baseData);
+		return stringPlaceholderReplace(SERVICE_URL_FORMAT, this._baseData);
 	}
 
 	/**
@@ -203,7 +152,7 @@ export default class OWebService<T> {
 	 */
 	getItemURI(id: any): string {
 		const data = assign({ id }, this._baseData);
-		return stringPlaceholderReplace(uriEntity, data);
+		return stringPlaceholderReplace(SERVICE_ENTITY_FORMAT, data);
 	}
 
 	/**
@@ -214,73 +163,34 @@ export default class OWebService<T> {
 	 */
 	getItemRelationURI(id: string, relation: string): string {
 		const data = assign({ id, relation }, this._baseData);
-		return stringPlaceholderReplace(uriEntityRelation, data);
-	}
-
-	/**
-	 * Cache manager getter.
-	 */
-	getCacheManager(): OWebKeyStorage {
-		return this._keyStore;
+		return stringPlaceholderReplace(SERVICE_ENTITY_RELATION_FORMAT, data);
 	}
 
 	/**
 	 * Adds an entity.
 	 *
 	 * @param formData
-	 * @param success
-	 * @param fail
-	 * @param freeze
 	 */
-	addRequest(
-		formData: any,
-		success: tServiceAddSuccess<T>,
-		fail: tServiceFail,
-		freeze: boolean = false,
-	): OWebCom {
-		const url = this.getServiceURI(),
-			newOptions: tServiceRequestOptions = formData;
+	addRequest(formData: FormData | object) {
+		const url = this.getServiceURI();
 
-		return this.appContext.request(
-			'POST',
-			url,
-			newOptions,
-			(response: IComResponse) => {
-				success(response as any);
-			},
-			fail,
-			freeze,
-		);
+		return this.appContext.net<IServiceAddResponse<T>>(url, {
+			method: 'POST',
+			body: formData,
+		});
 	}
 
 	/**
 	 * Deletes the entity with the given id.
 	 *
 	 * @param id The entity id.
-	 * @param success
-	 * @param fail
-	 * @param freeze
 	 */
-	deleteRequest(
-		id: string,
-		success: tServiceDeleteSuccess<T>,
-		fail: tServiceFail,
-		freeze: boolean = false,
-	): OWebCom {
-		const m = this,
-			url = this.getItemURI(id);
+	deleteRequest(id: string) {
+		const url = this.getItemURI(id);
 
-		return this.appContext.request(
-			'DELETE',
-			url,
-			null,
-			(response: IComResponse) => {
-				m.getCacheManager().removeItem(id);
-				success(response as any);
-			},
-			fail,
-			freeze,
-		);
+		return this.appContext.net<IServiceDeleteResponse<T>>(url, {
+			method: 'DELETE',
+		});
 	}
 
 	/**
@@ -288,73 +198,43 @@ export default class OWebService<T> {
 	 *
 	 * @param id The entity id.
 	 * @param formData
-	 * @param success
-	 * @param fail
-	 * @param freeze
 	 */
-	updateRequest(
-		id: string,
-		formData: any,
-		success: tServiceUpdateSuccess<T>,
-		fail: tServiceFail,
-		freeze: boolean = false,
-	): OWebCom {
-		const url = this.getItemURI(id),
-			newOptions: tServiceRequestOptions = formData;
+	updateRequest(id: string, formData: any) {
+		const url = this.getItemURI(id);
 
-		return this.appContext.request(
-			'PATCH',
-			url,
-			newOptions,
-			(response: IComResponse) => {
-				success(response as any);
-			},
-			fail,
-			freeze,
-		);
+		return this.appContext.net<IServiceUpdateResponse<T>>(url, {
+			method: 'PATCH',
+			body: formData,
+		});
 	}
 
 	/**
 	 * Deletes all entities.
 	 *
 	 * @param options
-	 * @param success
-	 * @param fail
-	 * @param freeze
 	 */
-	deleteAllRequest(
-		options: tServiceRequestOptions,
-		success: tServiceDeleteAllSuccess<T>,
-		fail: tServiceFail,
-		freeze: boolean = false,
-	): OWebCom {
+	deleteAllRequest(options: IServiceRequestOptions) {
 		const url = this.getServiceURI(),
 			filters = options.filters,
-			newOptions: tServiceRequestOptions = {};
+			_options: IServiceRequestOptions = {};
 
 		if (typeof options.max === 'number') {
 			// will be ignored by O'Zone
-			newOptions.max = options.max;
+			_options.max = options.max;
 		}
 		if (typeof options.page === 'number') {
 			// will be ignored by O'Zone
-			newOptions.page = options.page;
+			_options.page = options.page;
 		}
 
 		if (isPlainObject(filters)) {
-			newOptions.filters = filters;
+			_options.filters = filters;
 		}
 
-		return this.appContext.request(
-			'DELETE',
-			url,
-			newOptions,
-			(response: IComResponse) => {
-				success(response as any);
-			},
-			fail,
-			freeze,
-		);
+		return this.appContext.net<IServiceDeleteAllResponse>(url, {
+			method: 'DELETE',
+			body: _options,
+		});
 	}
 
 	/**
@@ -362,44 +242,29 @@ export default class OWebService<T> {
 	 *
 	 * @param options
 	 * @param formData
-	 * @param success
-	 * @param fail
-	 * @param freeze
 	 */
-	updateAllRequest(
-		options: tServiceRequestOptions,
-		formData: any,
-		success: tServiceUpdateAllSuccess<T>,
-		fail: tServiceFail,
-		freeze: boolean = false,
-	): OWebCom {
+	updateAllRequest(options: IServiceRequestOptions, formData: any) {
 		const url = this.getServiceURI(),
 			filters = options.filters,
-			newOptions: tServiceRequestOptions = formData;
+			_options: IServiceRequestOptions = formData;
 
 		if (typeof options.max === 'number') {
 			// will be ignored by O'Zone
-			newOptions.max = options.max;
+			_options.max = options.max;
 		}
 		if (typeof options.page === 'number') {
 			// will be ignored by O'Zone
-			newOptions.page = options.page;
+			_options.page = options.page;
 		}
 
 		if (isPlainObject(filters)) {
-			newOptions.filters = filters;
+			_options.filters = filters;
 		}
 
-		return this.appContext.request(
-			'PATCH',
-			url,
-			newOptions,
-			(response: IComResponse) => {
-				success(response as any);
-			},
-			fail,
-			freeze,
-		);
+		return this.appContext.net<IServiceUpdateAllResponse>(url, {
+			method: 'PATCH',
+			body: _options,
+		});
 	}
 
 	/**
@@ -410,136 +275,57 @@ export default class OWebService<T> {
 	 *
 	 * @param id The entity id.
 	 * @param relations The relations string.
-	 * @param success
-	 * @param fail
-	 * @param freeze
-	 * @param loadCacheFirst
 	 */
-	getRequest(
-		id: string,
-		relations: string = '',
-		success: tServiceGetSuccess<T>,
-		fail: tServiceFail,
-		freeze: boolean = false,
-		loadCacheFirst: boolean = false,
-	): OWebCom {
-		const m = this,
-			url = this.getItemURI(id),
-			cacheId = id,
+	getRequest(id: string, relations: string = '') {
+		const url = this.getItemURI(id),
 			data: any = {};
-		let _cached;
 
 		if (relations.length) {
 			data.relations = relations;
 		}
 
-		if (loadCacheFirst) {
-			_cached = m.getCacheManager().getItem(cacheId);
-
-			if (_cached) {
-				success(_cached, true);
-				freeze = false;
-			}
-		}
-
-		return this.appContext.request(
-			'GET',
-			url,
-			data,
-			(response: IComResponse) => {
-				m.getCacheManager().setItem(id, response);
-				success(response as any, false);
-			},
-			(response: IComResponse, com: OWebCom) => {
-				// tslint:disable-next-line: no-conditional-assignment
-				if ((_cached = m.getCacheManager().getItem(cacheId))) {
-					success(_cached, true);
-				} else {
-					fail(response, com);
-				}
-			},
-			freeze,
-		);
+		return this.appContext.net<IServiceGetResponse<T>>(url, {
+			method: 'GET',
+			body: data,
+		});
 	}
 
 	/**
 	 * Gets all entities.
 	 *
 	 * @param options
-	 * @param success
-	 * @param fail
-	 * @param freeze
-	 * @param forceCache
-	 * @param loadCacheFirst
 	 */
-	getAllRequest(
-		options: tServiceRequestOptions,
-		success: tServiceGetAllSuccess<T>,
-		fail: tServiceFail,
-		freeze: boolean = false,
-		forceCache: boolean = false,
-		loadCacheFirst: boolean = false,
-	): OWebCom {
-		const m = this,
-			url = this.getServiceURI(),
+	getAllRequest(options: IServiceRequestOptions) {
+		const url = this.getServiceURI(),
 			filters = options.filters,
-			newOptions: tServiceRequestOptions = {};
-		let _cached;
+			_options: IServiceRequestOptions = {};
 
 		if (typeof options.max === 'number') {
-			newOptions.max = options.max;
+			_options.max = options.max;
 		}
 		if (typeof options.page === 'number') {
-			newOptions.page = options.page;
+			_options.page = options.page;
 		}
 
 		if (typeof options.relations === 'string') {
-			newOptions.relations = options.relations;
+			_options.relations = options.relations;
 		}
 		if (typeof options.collection === 'string') {
-			newOptions.collection = options.collection;
+			_options.collection = options.collection;
 		}
 
 		if (typeof options.order_by === 'string') {
-			newOptions.order_by = options.order_by;
+			_options.order_by = options.order_by;
 		}
 
 		if (isPlainObject(filters)) {
-			newOptions.filters = filters;
+			_options.filters = filters;
 		}
 
-		const cacheId = toKey(newOptions);
-
-		if (forceCache && loadCacheFirst) {
-			_cached = m.getCacheManager().getItem(cacheId);
-
-			if (_cached) {
-				success(_cached, true);
-				freeze = false;
-			}
-		}
-
-		return this.appContext.request(
-			'GET',
-			url,
-			newOptions,
-			(response: IComResponse) => {
-				forceCache && m.getCacheManager().setItem(cacheId, response);
-				success(response as any, false);
-			},
-			(response: IComResponse, com: OWebCom) => {
-				if (
-					forceCache &&
-					// tslint:disable-next-line: no-conditional-assignment
-					(_cached = m.getCacheManager().getItem(cacheId))
-				) {
-					success(_cached, true);
-				} else {
-					fail(response, com);
-				}
-			},
-			freeze,
-		);
+		return this.appContext.net<IServiceGetAllResponse<T>>(url, {
+			method: 'GET',
+			body: _options,
+		});
 	}
 
 	/**
@@ -547,56 +333,13 @@ export default class OWebService<T> {
 	 *
 	 * @param id The entity id.
 	 * @param relation The relation name
-	 * @param success
-	 * @param fail
-	 * @param freeze
-	 * @param forceCache
-	 * @param loadCacheFirst
 	 */
-	getRelationRequest<R>(
-		id: string,
-		relation: string,
-		success: tServiceGetRelationSuccess<R>,
-		fail: tServiceFail,
-		freeze: boolean = false,
-		forceCache: boolean = false,
-		loadCacheFirst: boolean = false,
-	): OWebCom {
-		const m = this,
-			url = this.getItemRelationURI(id, relation),
-			cacheId = toKey({ id, relation });
-		let _cached;
+	getRelationRequest<R>(id: string, relation: string) {
+		const url = this.getItemRelationURI(id, relation);
 
-		if (forceCache && loadCacheFirst) {
-			_cached = this.getCacheManager().getItem(cacheId);
-
-			if (_cached) {
-				success(_cached, true);
-				freeze = false;
-			}
-		}
-
-		return this.appContext.request(
-			'GET',
-			url,
-			{},
-			function (response: IComResponse) {
-				forceCache && m.getCacheManager().setItem(cacheId, response);
-				success(response as any, false);
-			},
-			function (response: IComResponse, com: OWebCom) {
-				if (
-					forceCache &&
-					// tslint:disable-next-line: no-conditional-assignment
-					(_cached = m.getCacheManager().getItem(cacheId))
-				) {
-					success(_cached, true);
-				} else {
-					fail(response, com);
-				}
-			},
-			freeze,
-		);
+		return this.appContext.net<IServiceGetRelationItemResponse<R>>(url, {
+			method: 'GET',
+		});
 	}
 
 	/**
@@ -605,73 +348,30 @@ export default class OWebService<T> {
 	 * @param id The entity id.
 	 * @param relation The relation name.
 	 * @param options
-	 * @param success
-	 * @param fail
-	 * @param freeze
-	 * @param forceCache
-	 * @param loadCacheFirst
 	 */
 	getRelationItemsRequest<R>(
 		id: string,
 		relation: string,
-		options: tServiceRequestOptions,
-		success: tServiceGetRelationItemsSuccess<R>,
-		fail: tServiceFail,
-		freeze: boolean = false,
-		forceCache: boolean = false,
-		loadCacheFirst: boolean = false,
-	): OWebCom {
-		const m = this,
-			url = this.getItemRelationURI(id, relation),
+		options: IServiceRequestOptions,
+	) {
+		const url = this.getItemRelationURI(id, relation),
 			filters = options.filters,
-			newOptions: tServiceRequestOptions = {};
+			_options: IServiceRequestOptions = {};
 
 		if (typeof options.max === 'number') {
-			newOptions.max = options.max;
+			_options.max = options.max;
 		}
 		if (typeof options.page === 'number') {
-			newOptions.page = options.page;
+			_options.page = options.page;
 		}
 
 		if (isPlainObject(filters)) {
-			newOptions.filters = filters;
+			_options.filters = filters;
 		}
 
-		const cacheId = toKey(assign({ relation }, newOptions));
-		let _cached;
-
-		if (forceCache && loadCacheFirst) {
-			_cached = this.getCacheManager().getItem(
-				cacheId,
-			) as IServiceGetRelationItemsResponse<R>;
-
-			if (_cached) {
-				success(_cached, true);
-				freeze = false;
-			}
-		}
-
-		return this.appContext.request(
-			'GET',
-			url,
-			newOptions,
-			function (response: IComResponse) {
-				forceCache && m.getCacheManager().setItem(cacheId, response);
-
-				success(response as any, false);
-			},
-			function (response: IComResponse, com: OWebCom) {
-				if (
-					forceCache &&
-					// tslint:disable-next-line: no-conditional-assignment
-					(_cached = m.getCacheManager().getItem(cacheId))
-				) {
-					success(_cached, true);
-				} else {
-					fail(response, com);
-				}
-			},
-			freeze,
-		);
+		return this.appContext.net<IServiceGetRelationItemsResponse<R>>(url, {
+			method: 'GET',
+			body: _options,
+		});
 	}
 }

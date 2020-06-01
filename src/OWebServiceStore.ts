@@ -3,16 +3,9 @@ import OWebService, {
 	IServiceAddResponse,
 	IServiceDeleteResponse,
 	IServiceUpdateResponse,
-	tServiceAddSuccess,
-	tServiceDeleteSuccess,
-	tServiceFail,
-	tServiceGetAllSuccess,
-	tServiceGetSuccess,
-	tServiceRequestOptions,
-	tServiceUpdateSuccess,
+	IServiceRequestOptions,
 } from './OWebService';
 import OWebApp from './OWebApp';
-import OWebCom from './OWebCom';
 import { escapeRegExp, isPlainObject, noop, _error } from './utils/Utils';
 
 export type tEntitiesOrderByCb<T> = (a: T, b: T) => number;
@@ -36,81 +29,50 @@ export default class OWebServiceStore<
 	constructor(
 		appContext: OWebApp,
 		private readonly entity: typeof GoblSinglePKEntity,
-		serviceName: string,
-		persistentCache: boolean = false,
+		service: string,
 	) {
-		super(appContext, serviceName, persistentCache);
+		super(appContext, service);
 	}
 
-	getItem(
-		id: string,
-		relations: string = '',
-		then?: tServiceGetSuccess<T>,
-		fail?: tServiceFail,
-		freeze: boolean = true,
-		loadCacheFirst: boolean = false,
-	): OWebCom {
+	getItem(id: string, relations: string = '') {
 		const ctx = this;
-		return ctx.getRequest(
-			id,
-			relations,
-			(response, fromCache) => {
-				ctx.addItemToList(response.data.item, response.data.relations);
-				then && then(response, fromCache);
-			},
-			fail || noop,
-			freeze,
-			loadCacheFirst,
-		);
-	}
 
-	getAllItems(
-		options: tServiceRequestOptions = {},
-		then?: tServiceGetAllSuccess<T>,
-		fail?: tServiceFail,
-		freeze: boolean = true,
-		forceCache: boolean = true,
-	): OWebCom {
-		const ctx = this;
-		return ctx.getAllRequest(
-			options,
-			(response, fromCache) => {
-				ctx.addItemsToList(
-					response.data.items,
-					response.data.relations,
+		return ctx
+			.getRequest(id, relations)
+			.onGoodNews(function (response) {
+				ctx.addItemToList(
+					response.json!.data.item,
+					response.json!.data.relations,
 				);
-				then && then(response, fromCache);
-			},
-			fail || noop,
-			freeze,
-			forceCache,
-		);
+			})
+			.send();
 	}
 
-	addItem(
-		data: any,
-		then?: tServiceAddSuccess<T>,
-		fail?: tServiceFail,
-		freeze: boolean = true,
-	): OWebCom {
+	getAllItems(options: IServiceRequestOptions = {}) {
 		const ctx = this;
-		return ctx.addRequest(
-			data,
-			(result) => {
-				ctx.addCreated(result);
-				then && then(result);
-			},
-			fail || noop,
-			freeze,
-		);
+
+		return ctx
+			.getAllRequest(options)
+			.onGoodNews(function (response) {
+				ctx.addItemsToList(
+					response.json!.data.items,
+					response.json!.data.relations,
+				);
+			})
+			.send();
 	}
 
-	updateItem(
-		item: T,
-		then?: tServiceUpdateSuccess<T>,
-		fail?: tServiceFail,
-		freeze: boolean = true,
-	): OWebCom | false {
+	addItem(data: any) {
+		const ctx = this;
+		return ctx
+			.addRequest(data)
+			.onGoodNews(function (response) {
+				ctx.addCreated(response.json!);
+			})
+			.send();
+	}
+
+	updateItem(item: T, freeze: boolean = true) {
 		const ctx = this,
 			id = getId(item);
 
@@ -119,49 +81,36 @@ export default class OWebServiceStore<
 
 			item.isSaving(true);
 
-			return ctx.updateRequest(
-				id,
-				diff,
-				(result) => {
+			return ctx
+				.updateRequest(id, diff)
+				.onGoodNews(function (response) {
+					ctx.setSaved(item, response.json!);
+				})
+				.onFinished(function () {
 					item.isSaving(false);
-					ctx.setSaved(item, result);
-					then && then(result);
-				},
-				(response, com) => {
-					item.isSaving(false);
-					fail && fail(response, com);
-				},
-				freeze,
-			);
+				})
+				.send();
 		}
 
-		_error('not updated ->', item);
+		_error('not updated', item);
 		return false;
 	}
 
-	deleteItem(
-		item: T,
-		then?: tServiceDeleteSuccess<T>,
-		fail?: tServiceFail,
-		freeze: boolean = true,
-	): OWebCom {
+	deleteItem(item: T) {
 		const ctx = this,
 			id = getId(item);
 
 		item.isDeleting(true);
-		return ctx.deleteRequest(
-			id,
-			(result) => {
+
+		return ctx
+			.deleteRequest(id)
+			.onGoodNews(function (response) {
+				ctx.setDeleted(response.json!);
+			})
+			.onFinished(function () {
 				item.isDeleting(false);
-				ctx.setDeleted(result);
-				then && then(result);
-			},
-			(response, com) => {
-				item.isDeleting(false);
-				fail && fail(response, com);
-			},
-			freeze,
-		);
+			})
+			.send();
 	}
 
 	addItemsToList(items: T[] | { [key: string]: T }, relations: any = {}) {
