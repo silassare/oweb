@@ -1,7 +1,8 @@
 /**
- * D The day of the week in three letters
- * l (L lowercase) The entire day of the week 0 to 6
- * ll (LL lowercase) The entire day of the week 1 to 7
+ * D The day of the week short name
+ * L  The day of the week full name
+ * l The day of the week 0 to 6
+ * ll The day of the week 1 to 7
  * d The day of the month
  * M The name of the month in three or four letters
  * F The full name of the month
@@ -9,25 +10,24 @@
  * mm The number of the month 01 to 12
  * Y The year in four digits
  * y The year in two digits
- * h Time from 0 to 12
- * H Time from 0 to 23
+ * h The hour using 0 to 12
+ * H The hour using 0 to 23
  * i The minutes 0 to 59
  * s The seconds 0 to 59
  * a am / pm Display
  * A AM / PM display
  *
- * // OWebDate
  * ii The minutes 00, 01,..., 59
  * ss The seconds 00, 01,..., 59
+ * hh The hour 01,..., 12
  */
 import OWebApp from '../OWebApp';
 export declare type tDateValue = Date | number | string;
 export declare type tDateDesc = {
     D: string;
-    l: number;
     L: string;
+    l: number;
     ll: number;
-    LL: string;
     d: number;
     M: string;
     F: string;
@@ -36,6 +36,7 @@ export declare type tDateDesc = {
     Y: number;
     y: number;
     h: number;
+    hh: string;
     H: number;
     i: number;
     ii: string;
@@ -52,9 +53,9 @@ export default class OWebDate {
     /**
      * Format date with a given lang key.
      *
-     * @param langKey
+     * @param format
      */
-    format(langKey: string): string;
+    format(format: string): string;
     /**
      * Returns date description object.
      */
