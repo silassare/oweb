@@ -30,6 +30,7 @@ export default class OWebRouter {
     private readonly _popStateListener;
     private readonly _linkClickListener;
     private _dispatchId;
+    private _notFoundLoopCount;
     private _currentDispatcher?;
     private _forceReplace;
     /**
