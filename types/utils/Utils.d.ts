@@ -44,4 +44,10 @@ export declare const fileSizeFormat: (size: number, decimalPoint?: string, thous
  * @param strWindowFeatures
  */
 export declare const safeOpen: (url?: string, strWindowName?: string, strWindowFeatures?: string) => Window | null;
-export declare const _debug: (...args: any[]) => undefined, _log: (...args: any[]) => undefined, _info: (...args: any[]) => undefined, _warn: (...args: any[]) => undefined, _error: (...args: any[]) => undefined;
+export declare const logger: {
+    readonly debug: (...data: any[]) => void;
+    readonly log: (...data: any[]) => void;
+    readonly info: (...data: any[]) => void;
+    readonly error: (...data: any[]) => void;
+    readonly warn: (...data: any[]) => void;
+};
