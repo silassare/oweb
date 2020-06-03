@@ -1,6 +1,7 @@
 import { GoblSinglePKEntity } from 'gobl-utils-ts';
-import OWebService, { IServiceAddResponse, IServiceDeleteResponse, IServiceUpdateResponse, IServiceRequestOptions } from './OWebService';
+import { IOZoneApiAddResponse, IOZoneApiDeleteResponse, IOZoneApiUpdateResponse, IOZoneApiRequestOptions } from './ozone';
 import OWebApp from './OWebApp';
+import OWebService from './OWebService';
 export declare type tEntitiesOrderByCb<T> = (a: T, b: T) => number;
 export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWebService<T> {
     private readonly entity;
@@ -11,19 +12,19 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
         [key: string]: any;
     };
     constructor(appContext: OWebApp, entity: typeof GoblSinglePKEntity, service: string);
-    getItem(id: string, relations?: string): import("./OWebXHR").default<import("./OWebService").IServiceGetResponse<T>>;
-    getAllItems(options?: IServiceRequestOptions): import("./OWebXHR").default<import("./OWebService").IServiceGetAllResponse<T>>;
-    addItem(data: any): import("./OWebXHR").default<IServiceAddResponse<T>>;
-    updateItem(item: T, freeze?: boolean): false | import("./OWebXHR").default<IServiceUpdateResponse<T>>;
-    deleteItem(item: T): import("./OWebXHR").default<IServiceDeleteResponse<T>>;
+    getItem(id: string, relations?: string): import("./OWebXHR").default<import("./ozone").IOZoneApiGetResponse<T>>;
+    getAllItems(options?: IOZoneApiRequestOptions): import("./OWebXHR").default<import("./ozone").IOZoneApiGetAllResponse<T>>;
+    addItem(data: any): import("./OWebXHR").default<IOZoneApiAddResponse<T>>;
+    updateItem(item: T, freeze?: boolean): false | import("./OWebXHR").default<IOZoneApiUpdateResponse<T>>;
+    deleteItem(item: T): import("./OWebXHR").default<IOZoneApiDeleteResponse<T>>;
     addItemsToList(items: T[] | {
         [key: string]: T;
     }, relations?: any): void;
     addItemToList(item: T, relations?: any): void;
     private safelyAddItem;
-    setSaved(target: T, response: IServiceUpdateResponse<T>): void;
-    addCreated(response: IServiceAddResponse<T>): void;
-    setDeleted(response: IServiceDeleteResponse<T>): void;
+    setSaved(target: T, response: IOZoneApiUpdateResponse<T>): void;
+    addCreated(response: IOZoneApiAddResponse<T>): void;
+    setDeleted(response: IOZoneApiDeleteResponse<T>): void;
     itemRelation<Z>(item: T, relation: string): Z | undefined;
     identify(id: string, checkCache?: boolean): T | undefined;
     list(ids?: string[]): T[];
