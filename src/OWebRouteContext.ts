@@ -1,10 +1,10 @@
 import OWebRoute, { tRouteTokensMap } from './OWebRoute';
 import OWebRouter, {
-	tRouteTarget,
-	tRouteStateObject,
 	tRouteStateItem,
+	tRouteStateObject,
+	tRouteTarget,
 } from './OWebRouter';
-import { logger } from './utils/Utils';
+import { logger } from './utils';
 
 export default class OWebRouteContext {
 	private _tokens: tRouteTokensMap;

@@ -1,7 +1,7 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 import OWebRouter from './OWebRouter';
-import { id, logger } from './utils/Utils';
+import { id, logger } from './utils';
 import OWebRouteContext from './OWebRouteContext';
 import { tRoutePath, tRoutePathOptions } from './OWebRoute';
 import { tI18n } from './OWebI18n';

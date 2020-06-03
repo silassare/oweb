@@ -1,6 +1,6 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-import { forEach } from './utils/Utils';
+import { forEach } from './utils';
 
 type tKeyData = {
 	value: any;

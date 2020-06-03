@@ -1,29 +1,29 @@
 import OWebApp from './OWebApp';
-import { assign, isPlainObject, stringPlaceholderReplace } from './utils/Utils';
+import { assign, isPlainObject, stringPlaceholderReplace } from './utils';
 import {
 	IOZoneApiAddResponse,
-	IOZoneApiDeleteResponse,
-	IOZoneApiUpdateResponse,
 	IOZoneApiDeleteAllResponse,
-	IOZoneApiUpdateAllResponse,
-	IOZoneApiGetResponse,
+	IOZoneApiDeleteResponse,
 	IOZoneApiGetAllResponse,
 	IOZoneApiGetRelationItemResponse,
 	IOZoneApiGetRelationItemsResponse,
+	IOZoneApiGetResponse,
 	IOZoneApiRequestOptions,
+	IOZoneApiUpdateAllResponse,
+	IOZoneApiUpdateResponse,
+	ozNet,
 } from './ozone';
 
 const SERVICE_URL_FORMAT = ':api_url/:serviceName',
 	SERVICE_ENTITY_FORMAT = ':api_url/:service/:id',
 	SERVICE_ENTITY_RELATION_FORMAT = ':api_url/:service/:id/:relation';
 
-export default class OWebService<T> {
+export default class OWebService<Entity> {
 	private readonly _baseData: { api_url: any; service: string };
 
 	/**
 	 * @param appContext The app context.
 	 * @param service The service name.
-	 * @param persistentCache To enable persistence data caching.
 	 */
 	constructor(protected readonly appContext: OWebApp, service: string) {
 		const apiBaseUrl = appContext.configs
@@ -75,7 +75,7 @@ export default class OWebService<T> {
 	addRequest(formData: FormData | object) {
 		const url = this.getServiceURI();
 
-		return this.appContext.net<IOZoneApiAddResponse<T>>(url, {
+		return ozNet<IOZoneApiAddResponse<Entity>>(url, {
 			method: 'POST',
 			body: formData,
 		});
@@ -89,7 +89,7 @@ export default class OWebService<T> {
 	deleteRequest(id: string) {
 		const url = this.getItemURI(id);
 
-		return this.appContext.net<IOZoneApiDeleteResponse<T>>(url, {
+		return ozNet<IOZoneApiDeleteResponse<Entity>>(url, {
 			method: 'DELETE',
 		});
 	}
@@ -103,7 +103,7 @@ export default class OWebService<T> {
 	updateRequest(id: string, formData: any) {
 		const url = this.getItemURI(id);
 
-		return this.appContext.net<IOZoneApiUpdateResponse<T>>(url, {
+		return ozNet<IOZoneApiUpdateResponse<Entity>>(url, {
 			method: 'PATCH',
 			body: formData,
 		});
@@ -132,7 +132,7 @@ export default class OWebService<T> {
 			_options.filters = filters;
 		}
 
-		return this.appContext.net<IOZoneApiDeleteAllResponse>(url, {
+		return ozNet<IOZoneApiDeleteAllResponse>(url, {
 			method: 'DELETE',
 			body: _options,
 		});
@@ -162,7 +162,7 @@ export default class OWebService<T> {
 			_options.filters = filters;
 		}
 
-		return this.appContext.net<IOZoneApiUpdateAllResponse>(url, {
+		return ozNet<IOZoneApiUpdateAllResponse>(url, {
 			method: 'PATCH',
 			body: _options,
 		});
@@ -185,7 +185,7 @@ export default class OWebService<T> {
 			data.relations = relations;
 		}
 
-		return this.appContext.net<IOZoneApiGetResponse<T>>(url, {
+		return ozNet<IOZoneApiGetResponse<Entity>>(url, {
 			method: 'GET',
 			body: data,
 		});
@@ -223,7 +223,7 @@ export default class OWebService<T> {
 			_options.filters = filters;
 		}
 
-		return this.appContext.net<IOZoneApiGetAllResponse<T>>(url, {
+		return ozNet<IOZoneApiGetAllResponse<Entity>>(url, {
 			method: 'GET',
 			body: _options,
 		});
@@ -238,7 +238,7 @@ export default class OWebService<T> {
 	getRelationRequest<R>(id: string, relation: string) {
 		const url = this.getItemRelationURI(id, relation);
 
-		return this.appContext.net<IOZoneApiGetRelationItemResponse<R>>(url, {
+		return ozNet<IOZoneApiGetRelationItemResponse<R>>(url, {
 			method: 'GET',
 		});
 	}
@@ -270,7 +270,7 @@ export default class OWebService<T> {
 			_options.filters = filters;
 		}
 
-		return this.appContext.net<IOZoneApiGetRelationItemsResponse<R>>(url, {
+		return ozNet<IOZoneApiGetRelationItemsResponse<R>>(url, {
 			method: 'GET',
 			body: _options,
 		});

@@ -7,7 +7,7 @@ const PathResolver = {
 	/**
 	 * Resolve a given path to the the given root.
 	 *
-	 * @param root_
+	 * @param root
 	 * @param path
 	 */
 	resolve(root: string, path: string): string {

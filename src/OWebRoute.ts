@@ -1,4 +1,4 @@
-import { escapeRegExp, isArray, isPlainObject, isString } from './utils/Utils';
+import { escapeRegExp, isArray, isPlainObject, isString } from './utils';
 import OWebRouteContext from './OWebRouteContext';
 
 export type tRoutePath = string | RegExp;

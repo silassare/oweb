@@ -1,9 +1,9 @@
 import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
-import { id } from '../utils/Utils';
+import { id } from '../utils';
 import { INetResponse } from '../OWebNet';
 import { GoblSinglePKEntity } from 'gobl-utils-ts';
-import { IOZoneApiJSON } from '../ozone';
+import { IOZoneApiJSON, ozNet } from '../ozone';
 
 export type tLoginResponseData = GoblSinglePKEntity;
 
@@ -51,7 +51,7 @@ export default class OWebLogin extends OWebEvent {
 	private _tryLogin(data: FormData | object) {
 		const m = this,
 			url = m.appContext.url.get('OZ_SERVER_LOGIN_SERVICE'),
-			net = m.appContext.net<IOZoneApiJSON<tLoginResponseData>>(url, {
+			net = ozNet<IOZoneApiJSON<tLoginResponseData>>(url, {
 				method: 'POST',
 				body: data,
 				isGoodNews(response) {

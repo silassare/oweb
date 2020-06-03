@@ -28,10 +28,13 @@ import OWebSignUp from './plugins/OWebSignUp';
 import OWebTNet from './plugins/OWebTNet';
 import PathResolver from './utils/PathResolver';
 import scriptLoader from './utils/scriptLoader';
-export * from './utils/Utils';
 import OWebPageBase from './OWebPageBase';
 import { createApp } from './createApp';
 import OWebTelInput from 'oweb-tel-input';
+// side-effect import
+import './default/index';
+
+export * from './utils';
 
 export * from './OWebConfigs';
 
@@ -97,6 +100,3 @@ export {
 	scriptLoader,
 	createApp,
 };
-
-// side-effect import
-import './default/index';

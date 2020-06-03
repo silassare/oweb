@@ -1,6 +1,6 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-import { id, logger } from './utils/Utils';
+import { id, logger } from './utils';
 
 const ls = window.localStorage,
 	parse = function (data: string | null): any {

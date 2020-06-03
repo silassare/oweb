@@ -5,9 +5,9 @@ import {
 	isFunction,
 	isNotEmpty,
 	isString,
-	toArray,
 	logger,
-} from './utils/Utils';
+	toArray,
+} from './utils';
 import OWebFormError from './OWebFormError';
 
 type tFormErrorMap = { [key: string]: OWebFormError[] };
@@ -224,7 +224,7 @@ export default class OWebFormValidator {
 					}
 				}
 			} catch (e) {
-				if (e.$owebFormError) {
+				if (e._owebFormError) {
 					if (!this.errorMap[name]) {
 						this.errorMap[name] = [];
 					}

@@ -1,8 +1,8 @@
 import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
-import { id } from '../utils/Utils';
+import { id } from '../utils';
 import { INetResponse } from '../OWebNet';
-import { IOZoneApiJSON } from '../ozone';
+import { IOZoneApiJSON, ozNet } from '../ozone';
 
 export default class OWebSignUp extends OWebEvent {
 	static readonly SELF = id();
@@ -76,7 +76,7 @@ export default class OWebSignUp extends OWebEvent {
 	private _sendForm(data: FormData | object, nextStep?: number) {
 		const m = this,
 			url = m.appContext.url.get('OZ_SERVER_SIGNUP_SERVICE'),
-			net = m.appContext.net<IOZoneApiJSON<any>>(url, {
+			net = ozNet<IOZoneApiJSON<any>>(url, {
 				method: 'POST',
 				body: data,
 				isGoodNews(response) {

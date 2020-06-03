@@ -1,4 +1,4 @@
-import { tI18nDefinition } from '../../OWebI18n';
+import {tI18nDefinition} from '../../OWebI18n';
 
 export default {
 	OZ_ERROR_REQUEST_FAIL: 'Error: The request failed.',

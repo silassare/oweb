@@ -1,8 +1,8 @@
 import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
-import { id } from '../utils/Utils';
+import { id } from '../utils';
 import { GoblSinglePKEntity } from 'gobl-utils-ts';
-import { IOZoneApiJSON } from '../ozone';
+import { IOZoneApiJSON, ozNet } from '../ozone';
 
 export type tTNetResponseData = {
 	ok: boolean;
@@ -27,7 +27,7 @@ export default class OWebTNet extends OWebEvent {
 	check() {
 		const m = this,
 			url = m.appContext.url.get('OZ_SERVER_TNET_SERVICE'),
-			net = m.appContext.net<IOZoneApiJSON<tTNetResponseData>>(url, {
+			net = ozNet<IOZoneApiJSON<tTNetResponseData>>(url, {
 				method: 'GET',
 				isGoodNews(response) {
 					return Boolean(response.json && response.json.error === 0);

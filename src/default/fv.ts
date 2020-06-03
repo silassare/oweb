@@ -1,7 +1,7 @@
 import OWebFormValidator from '../OWebFormValidator';
 import OWebDate from '../plugins/OWebDate';
 import OWebInput from 'oweb-tel-input';
-import { isValidAge } from '../utils/Utils';
+import { isValidAge } from '../utils';
 
 OWebFormValidator.addFieldValidators({
 	code: (value: any, name: string, fv: OWebFormValidator) => {

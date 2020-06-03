@@ -1,5 +1,5 @@
 import OWebEvent from './OWebEvent';
-import { id, logger } from './utils/Utils';
+import { id, logger } from './utils';
 import { IOZoneApiJSON } from './ozone';
 
 export type tViewDialog = {

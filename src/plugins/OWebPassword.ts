@@ -1,8 +1,8 @@
 import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
-import { id } from '../utils/Utils';
+import { id } from '../utils';
 import { INetResponse } from '../OWebNet';
-import { IOZoneApiJSON } from '../ozone';
+import { IOZoneApiJSON, ozNet } from '../ozone';
 
 export default class OWebPassword extends OWebEvent {
 	static readonly SELF = id();
@@ -34,7 +34,7 @@ export default class OWebPassword extends OWebEvent {
 	private _sendForm(data: FormData | object) {
 		const m = this,
 			url = m.appContext.url.get('OZ_SERVER_PASSWORD_SERVICE'),
-			net = m.appContext.net<IOZoneApiJSON<any>>(url, {
+			net = ozNet<IOZoneApiJSON<any>>(url, {
 				method: 'POST',
 				body: data,
 				isGoodNews(response) {

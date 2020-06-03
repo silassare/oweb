@@ -1,5 +1,5 @@
 import OWebEvent from './OWebEvent';
-import { id } from './utils/Utils';
+import { id } from './utils';
 
 export type tNetRequestBody =
 	| undefined

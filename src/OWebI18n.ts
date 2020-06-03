@@ -1,5 +1,5 @@
 import OWebEvent from './OWebEvent';
-import { assign, isPlainObject, isString } from './utils/Utils';
+import { assign, isPlainObject, isString } from './utils';
 
 export type tI18nDefinition = { [key: string]: any };
 export type tI18nData = { [key: string]: any };

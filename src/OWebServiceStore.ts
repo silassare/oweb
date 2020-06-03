@@ -1,15 +1,13 @@
-import { GoblSinglePKEntity, getEntityCache } from 'gobl-utils-ts';
+import { getEntityCache, GoblSinglePKEntity } from 'gobl-utils-ts';
 import {
 	IOZoneApiAddResponse,
 	IOZoneApiDeleteResponse,
-	IOZoneApiUpdateResponse,
 	IOZoneApiRequestOptions,
+	IOZoneApiUpdateResponse,
 } from './ozone';
 import OWebApp from './OWebApp';
-import { escapeRegExp, isPlainObject, logger } from './utils/Utils';
+import { escapeRegExp, isPlainObject, logger } from './utils';
 import OWebService from './OWebService';
-
-export type tEntitiesOrderByCb<T> = (a: T, b: T) => number;
 
 const getId = (item: GoblSinglePKEntity) => item.singlePKValue();
 
@@ -38,8 +36,7 @@ export default class OWebServiceStore<
 	getItem(id: string, relations: string = '') {
 		const ctx = this;
 
-		return ctx
-			.getRequest(id, relations)
+		return this.getRequest(id, relations)
 			.onGoodNews(function (response) {
 				ctx.addItemToList(
 					response.json!.data.item,
@@ -239,10 +236,10 @@ export default class OWebServiceStore<
 		return list;
 	}
 
-	orderBy(orderFn: tEntitiesOrderByCb<T>): T[] {
+	orderBy(order: (a: T, b: T) => number): T[] {
 		const keys = Object.keys(this.items);
 
-		return keys.map((key) => this.items[key]).sort(orderFn);
+		return keys.map((key) => this.items[key]).sort(order);
 	}
 
 	orderByValueOf(column: string): T[] {

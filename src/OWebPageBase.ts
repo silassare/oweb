@@ -1,4 +1,4 @@
-import OWebPager, { IPage, IPageRoute, IPageRouteFull } from './OWebPager';
+import OWebPager, {IPage, IPageRoute, IPageRouteFull} from './OWebPager';
 import OWebRouteContext from './OWebRouteContext';
 
 export default abstract class OWebPageBase<Component>

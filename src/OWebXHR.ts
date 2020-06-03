@@ -1,10 +1,10 @@
 import OWebNet, {
 	INetError,
-	INetResponse,
 	INetRequestOptions,
+	INetResponse,
 	tNetRequestBody,
 } from './OWebNet';
-import { forEach, logger } from './utils/Utils';
+import { forEach } from './utils';
 
 const setOrIgnoreIfExists = function (
 	target: any,

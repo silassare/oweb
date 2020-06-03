@@ -1,6 +1,6 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-import { forEach, id, isPlainObject, logger } from './utils/Utils';
+import { forEach, id, isPlainObject, logger } from './utils';
 
 export type tConfigList = { [key: string]: any };
 

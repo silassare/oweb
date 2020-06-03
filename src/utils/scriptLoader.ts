@@ -1,4 +1,4 @@
-import { callback, logger } from './Utils';
+import { callback, logger } from '.';
 
 const document = window.document,
 	isOldIE = /MSIE\s([5-9]\.0)/.test(navigator.userAgent);

@@ -1,5 +1,5 @@
 import OWebI18n from '../../OWebI18n';
-import { forEach } from '../../utils/Utils';
+import { forEach } from '../../utils';
 import en from './en';
 import fr from './fr';
 

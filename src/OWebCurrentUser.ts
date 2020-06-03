@@ -1,7 +1,7 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 import OWebKeyStorage from './OWebKeyStorage';
-import { id, isPlainObject, logger } from './utils/Utils';
+import { id, isPlainObject, logger } from './utils';
 import { toInstance } from 'gobl-utils-ts';
 
 export default class OWebCurrentUser extends OWebEvent {

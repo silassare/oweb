@@ -1,3 +1,7 @@
+import { INetRequestOptions } from '../OWebNet';
+import { logger } from '../utils';
+import OWebXHR from '../OWebXHR';
+
 export interface IOZoneApiJSON<R> {
 	error: number;
 	msg: string;
@@ -106,3 +110,36 @@ export interface IOZoneApiRequestOptions {
 	max?: number;
 	page?: number;
 }
+
+/**
+ * Create net instance.
+ *
+ * @param url The request url.
+ * @param options The request options.
+ */
+export const ozNet = function <R extends IOZoneApiJSON<any>>(
+	url: string,
+	options: Partial<INetRequestOptions<R>>,
+) {
+	const event = function (type: string) {
+		return function () {
+			logger.debug('[OZone][NET] intercepted', type, ...arguments);
+		};
+	};
+
+	return new OWebXHR<R>(url, {
+		isGoodNews(response) {
+			return Boolean(response.json && response.json.error);
+		},
+		...options,
+	})
+		.onGoodNews(event('onGoodNews'))
+		.onBadNews(event('onBadNews'))
+		.onFinished(event('onFinished'))
+		.onError(event('onError'))
+		.onDownloadProgress(event('onDownloadProgress'))
+		.onUploadProgress(event('onUploadProgress'))
+		.onHttpError(event('onHttpError'))
+		.onHttpSuccess(event('onHttpSuccess'))
+		.onResponse(event('onResponse'));
+};

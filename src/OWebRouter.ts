@@ -1,8 +1,8 @@
-import { preventDefault, safeOpen, logger } from './utils/Utils';
+import { logger, preventDefault, safeOpen } from './utils';
 import OWebRoute, {
+	tRouteAction,
 	tRoutePath,
 	tRoutePathOptions,
-	tRouteAction,
 } from './OWebRoute';
 import OWebRouteContext from './OWebRouteContext';
 

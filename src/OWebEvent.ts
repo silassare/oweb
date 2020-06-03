@@ -1,4 +1,4 @@
-import { isFunction, isString } from './utils/Utils';
+import { isFunction, isString } from './utils';
 
 export type tEventHandler = (...args: any[]) => void | boolean;
 
