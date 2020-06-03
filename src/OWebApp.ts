@@ -8,10 +8,7 @@ import OWebUrl, { tUrlList } from './OWebUrl';
 import OWebView from './OWebView';
 import OWebI18n from './OWebI18n';
 import OWebPager from './OWebPager';
-import { clone, id, logger } from './utils/Utils';
-import { INetRequestOptions } from './OWebNet';
-import OWebXHR from './OWebXHR';
-import { IOZoneApiJSON } from './ozone';
+import { clone, id, logger } from './utils';
 
 export default class OWebApp extends OWebEvent {
 	static readonly SELF = id();
@@ -183,39 +180,6 @@ export default class OWebApp extends OWebEvent {
 	 */
 	userVerified(): boolean {
 		return Boolean(this.user.getCurrentUser() && this.sessionActive());
-	}
-
-	/**
-	 * Create net instance.
-	 *
-	 * @param url The request url.
-	 * @param options The request options.
-	 */
-	net<R extends IOZoneApiJSON<any>>(
-		url: string,
-		options: Partial<INetRequestOptions<R>>,
-	) {
-		const event = function (type: string) {
-			return function () {
-				logger.debug('[OWebApp][NET] intercepted ', type, ...arguments);
-			};
-		};
-
-		return new OWebXHR<R>(url, {
-			isGoodNews(response) {
-				return Boolean(response.json && response.json.error === 0);
-			},
-			...options,
-		})
-			.onGoodNews(event('onGoodNews'))
-			.onBadNews(event('onBadNews'))
-			.onFinished(event('onFinished'))
-			.onError(event('onError'))
-			.onDownloadProgress(event('onDownloadProgress'))
-			.onUploadProgress(event('onUploadProgress'))
-			.onHttpError(event('onHttpError'))
-			.onHttpSuccess(event('onHttpSuccess'))
-			.onResponse(event('onResponse'));
 	}
 
 	/**
