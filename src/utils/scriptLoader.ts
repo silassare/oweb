@@ -1,4 +1,4 @@
-import { callback, _error } from './Utils';
+import { callback, logger } from './Utils';
 
 const document = window.document,
 	isOldIE = /MSIE\s([5-9]\.0)/.test(navigator.userAgent);
@@ -63,7 +63,7 @@ const noCache = function (url: string): string {
 		u.searchParams.set('no_cache', _random());
 		url = u.href;
 	} catch (e) {
-		_error('unable to disable caching on file', url, e);
+		logger.error('unable to disable caching on file', url, e);
 	}
 
 	return url;

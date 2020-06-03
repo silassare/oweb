@@ -4,7 +4,7 @@ import OWebRouter, {
 	tRouteStateObject,
 	tRouteStateItem,
 } from './OWebRouter';
-import { _debug, _warn, _error } from './utils/Utils';
+import { logger } from './utils/Utils';
 
 export default class OWebRouteContext {
 	private _tokens: tRouteTokensMap;
@@ -95,13 +95,13 @@ export default class OWebRouteContext {
 	 */
 	stop(): this {
 		if (!this._stopped) {
-			_debug('[OWebDispatchContext] route context will stop.');
+			logger.debug('[OWebDispatchContext] route context will stop.');
 			this.save(); // save before stop
 			this._stopped = true;
 			this._router.getCurrentDispatcher()!.cancel();
-			_debug('[OWebDispatchContext] route context was stopped!');
+			logger.debug('[OWebDispatchContext] route context was stopped!');
 		} else {
-			_warn('[OWebDispatchContext] route context already stopped!');
+			logger.warn('[OWebDispatchContext] route context already stopped!');
 		}
 		return this;
 	}
@@ -111,10 +111,10 @@ export default class OWebRouteContext {
 	 */
 	save(): this {
 		if (!this.stopped()) {
-			_debug('[OWebDispatchContext] saving state...');
+			logger.debug('[OWebDispatchContext] saving state...');
 			this._router.replaceHistory(this._target.href, this._state);
 		} else {
-			_error(
+			logger.error(
 				'[OWebDispatchContext] you should not try to save when stopped.',
 			);
 		}

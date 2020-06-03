@@ -1,6 +1,6 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-import { forEach, id, isPlainObject, _warn, _info } from './utils/Utils';
+import { forEach, id, isPlainObject, logger } from './utils/Utils';
 
 export type tConfigList = { [key: string]: any };
 
@@ -19,7 +19,7 @@ export default class OWebConfigs extends OWebEvent {
 		this.loadConfigs(configs);
 		this._loadSavedConfigs();
 
-		_info('[OWebConfigs] ready!');
+		logger.info('[OWebConfigs] ready!');
 	}
 
 	/**
@@ -173,7 +173,7 @@ export default class OWebConfigs extends OWebEvent {
 	 */
 	private _warnUndefined(config: string) {
 		if (!(config in this._userConfigs)) {
-			_warn(`[OWebConfigs] config "${config}" is not defined.`);
+			logger.warn(`[OWebConfigs] config "${config}" is not defined.`);
 		}
 	}
 }

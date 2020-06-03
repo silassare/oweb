@@ -1,7 +1,7 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 import OWebRouter from './OWebRouter';
-import { id, _debug, _info } from './utils/Utils';
+import { id, logger } from './utils/Utils';
 import OWebRouteContext from './OWebRouteContext';
 import { tRoutePath, tRoutePathOptions } from './OWebRoute';
 import { tI18n } from './OWebI18n';
@@ -119,7 +119,7 @@ export default class OWebPager<Component> extends OWebEvent {
 	 */
 	constructor(private readonly appContext: OWebApp) {
 		super();
-		_info('[OWebPager] ready!');
+		logger.info('[OWebPager] ready!');
 	}
 
 	/**
@@ -246,7 +246,7 @@ export default class OWebPager<Component> extends OWebEvent {
 			route.path,
 			route.pathOptions,
 			(routeContext: OWebRouteContext) => {
-				_debug(
+				logger.debug(
 					'[OWebPager] page route match',
 					route,
 					page,
@@ -312,7 +312,7 @@ export default class OWebPager<Component> extends OWebEvent {
 			samePage: oldPage === page,
 		};
 
-		_debug('[OWebPager] location info', info);
+		logger.debug('[OWebPager] location info', info);
 
 		this.trigger(OWebPager.EVT_PAGE_LOCATION_CHANGE, [route, page]);
 

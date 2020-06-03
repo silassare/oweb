@@ -1,8 +1,8 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 import OWebKeyStorage from './OWebKeyStorage';
-import { id, isPlainObject, _info, _debug, _error } from './utils/Utils';
-import { GoblEntity, toInstance } from 'gobl-utils-ts';
+import { id, isPlainObject, logger } from './utils/Utils';
+import { toInstance } from 'gobl-utils-ts';
 
 export default class OWebCurrentUser extends OWebEvent {
 	static readonly SELF = id();
@@ -14,7 +14,7 @@ export default class OWebCurrentUser extends OWebEvent {
 		super();
 
 		this._keyStore = new OWebKeyStorage(appContext, 'current_user');
-		_info('[OWebCurrentUser] ready!');
+		logger.info('[OWebCurrentUser] ready!');
 	}
 
 	/**
@@ -33,7 +33,7 @@ export default class OWebCurrentUser extends OWebEvent {
 		) {
 			return user;
 		} else {
-			_error('[OWebCurrentUser] invalid user data.', data);
+			logger.error('[OWebCurrentUser] invalid user data.', data);
 		}
 
 		return undefined;
@@ -45,7 +45,7 @@ export default class OWebCurrentUser extends OWebEvent {
 	 * @param user
 	 */
 	setCurrentUser(user: any): this {
-		_debug('[OWebCurrentUser] setting new user', user);
+		logger.debug('[OWebCurrentUser] setting new user', user);
 		this._keyStore.setItem('user_data', user);
 
 		return this._notifyChange();

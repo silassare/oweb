@@ -1,5 +1,5 @@
 import OWebEvent from './OWebEvent';
-import { id, _info } from './utils/Utils';
+import { id, logger } from './utils/Utils';
 import { IOZoneApiJSON } from './ozone';
 
 export type tViewDialog = {
@@ -18,7 +18,7 @@ export default class OWebView extends OWebEvent {
 
 	constructor() {
 		super();
-		_info('[OWebView] ready!');
+		logger.info('[OWebView] ready!');
 	}
 
 	/**

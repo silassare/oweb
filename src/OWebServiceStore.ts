@@ -6,7 +6,7 @@ import OWebService, {
 	IServiceRequestOptions,
 } from './OWebService';
 import OWebApp from './OWebApp';
-import { escapeRegExp, isPlainObject, noop, _error } from './utils/Utils';
+import { escapeRegExp, isPlainObject, logger } from './utils/Utils';
 
 export type tEntitiesOrderByCb<T> = (a: T, b: T) => number;
 
@@ -92,7 +92,8 @@ export default class OWebServiceStore<
 				.send();
 		}
 
-		_error('not updated', item);
+		logger.error('not updated', item);
+
 		return false;
 	}
 

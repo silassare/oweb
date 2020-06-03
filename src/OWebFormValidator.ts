@@ -6,7 +6,7 @@ import {
 	isNotEmpty,
 	isString,
 	toArray,
-	_warn,
+	logger,
 } from './utils/Utils';
 import OWebFormError from './OWebFormError';
 
@@ -213,7 +213,7 @@ export default class OWebFormValidator {
 						if (isFunction(fn)) {
 							fn(value, name, context);
 						} else {
-							_warn(
+							logger.warn(
 								`[OWebFormValidator] validator '${validatorName}' is not defined, field '${name}' is then considered as safe.`,
 							);
 						}
@@ -283,7 +283,7 @@ export default class OWebFormValidator {
 		}
 
 		if (name in validator) {
-			_warn(
+			logger.warn(
 				`[OWebFormValidator] field "${name}" validator will be overwritten.`,
 			);
 		}

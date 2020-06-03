@@ -4,7 +4,7 @@ import OWebNet, {
 	INetRequestOptions,
 	tNetRequestBody,
 } from './OWebNet';
-import { forEach, _debug } from './utils/Utils';
+import { forEach, logger } from './utils/Utils';
 
 const setOrIgnoreIfExists = function (
 	target: any,

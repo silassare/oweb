@@ -8,7 +8,7 @@ import OWebUrl, { tUrlList } from './OWebUrl';
 import OWebView from './OWebView';
 import OWebI18n from './OWebI18n';
 import OWebPager from './OWebPager';
-import { clone, id, _info, _debug } from './utils/Utils';
+import { clone, id, logger } from './utils/Utils';
 import { INetRequestOptions } from './OWebNet';
 import OWebXHR from './OWebXHR';
 import { IOZoneApiJSON } from './ozone';
@@ -197,7 +197,7 @@ export default class OWebApp extends OWebEvent {
 	) {
 		const event = function (type: string) {
 			return function () {
-				_debug('[OWebApp][NET] intercepted ', type, ...arguments);
+				logger.debug('[OWebApp][NET] intercepted ', type, ...arguments);
 			};
 		};
 
@@ -222,7 +222,7 @@ export default class OWebApp extends OWebEvent {
 	 * To start the web app.
 	 */
 	start(): this {
-		_info('[OWebApp] app started!');
+		logger.info('[OWebApp] app started!');
 		this.trigger(OWebApp.EVT_APP_READY);
 		return this;
 	}

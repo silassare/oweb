@@ -1,6 +1,6 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-import { id, _error } from './utils/Utils';
+import { id, logger } from './utils/Utils';
 
 const ls = window.localStorage,
 	parse = function (data: string | null): any {
@@ -10,7 +10,7 @@ const ls = window.localStorage,
 			try {
 				value = JSON.parse(data);
 			} catch (e) {
-				_error(e);
+				logger.error(e);
 			}
 		}
 
@@ -132,7 +132,7 @@ export default class OWebDataStore extends OWebEvent {
 				ls.setItem(this.key, JSON.stringify(this.data));
 				return true;
 			} catch (e) {
-				_error(e);
+				logger.error(e);
 			}
 		}
 
