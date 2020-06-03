@@ -119,7 +119,8 @@ export const textToLineString = (text: string): string => {
 	const reg = /["'\\\n\r\t\u2028\u2029]/g,
 		toEscapes: object = {
 			'"': '"',
-			'\'': '\'',
+			// tslint:disable-next-line: quotemark
+			"'": "'",
 			'\\': '\\',
 			'\n': 'n',
 			'\r': 'r',
@@ -472,20 +473,30 @@ export const safeOpen = function (
 	return newWin;
 };
 
-const _fn = function (type: 'error' | 'warn' | 'log' | 'info' | 'debug') {
-	return function (...args: any[]) {
-		if ((window as any).__oweb_show_log !== false) {
-			if (console[type]) {
-				console[type](...args);
-			}
-		}
-
-		return undefined;
-	};
+const _fn = function (
+	type: 'error' | 'warn' | 'log' | 'info' | 'debug' | 'trace',
+) {
+	if ((window as any).__oweb_show_log === true) {
+		return console[type];
+	} else {
+		return noop;
+	}
 };
 
-export const _debug = _fn('debug'),
-	_log = _fn('log'),
-	_info = _fn('info'),
-	_warn = _fn('warn'),
-	_error = _fn('error');
+export const logger = {
+	get debug() {
+		return _fn('debug');
+	},
+	get log() {
+		return _fn('debug');
+	},
+	get info() {
+		return _fn('debug');
+	},
+	get error() {
+		return _fn('debug');
+	},
+	get warn() {
+		return _fn('debug');
+	},
+};
