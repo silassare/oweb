@@ -1,3 +1,5 @@
+import { INetRequestOptions } from '../OWebNet';
+import OWebXHR from '../OWebXHR';
 export interface IOZoneApiJSON<R> {
     error: number;
     msg: string;
@@ -81,3 +83,10 @@ export interface IOZoneApiRequestOptions {
     max?: number;
     page?: number;
 }
+/**
+ * Create net instance.
+ *
+ * @param url The request url.
+ * @param options The request options.
+ */
+export declare const ozNet: <R extends IOZoneApiJSON<any>>(url: string, options: Partial<INetRequestOptions<R>>) => OWebXHR<R>;

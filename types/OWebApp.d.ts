@@ -8,9 +8,6 @@ import OWebUrl, { tUrlList } from './OWebUrl';
 import OWebView from './OWebView';
 import OWebI18n from './OWebI18n';
 import OWebPager from './OWebPager';
-import { INetRequestOptions } from './OWebNet';
-import OWebXHR from './OWebXHR';
-import { IOZoneApiJSON } from './ozone';
 export default class OWebApp extends OWebEvent {
     private readonly name;
     static readonly SELF: string;
@@ -89,13 +86,6 @@ export default class OWebApp extends OWebEvent {
      * Checks if the current user has been authenticated.
      */
     userVerified(): boolean;
-    /**
-     * Create net instance.
-     *
-     * @param url The request url.
-     * @param options The request options.
-     */
-    net<R extends IOZoneApiJSON<any>>(url: string, options: Partial<INetRequestOptions<R>>): OWebXHR<R>;
     /**
      * To start the web app.
      */

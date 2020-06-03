@@ -1,12 +1,11 @@
 import OWebApp from './OWebApp';
-import { IOZoneApiAddResponse, IOZoneApiDeleteResponse, IOZoneApiUpdateResponse, IOZoneApiDeleteAllResponse, IOZoneApiUpdateAllResponse, IOZoneApiGetResponse, IOZoneApiGetAllResponse, IOZoneApiGetRelationItemResponse, IOZoneApiGetRelationItemsResponse, IOZoneApiRequestOptions } from './ozone';
-export default class OWebService<T> {
+import { IOZoneApiAddResponse, IOZoneApiDeleteAllResponse, IOZoneApiDeleteResponse, IOZoneApiGetAllResponse, IOZoneApiGetRelationItemResponse, IOZoneApiGetRelationItemsResponse, IOZoneApiGetResponse, IOZoneApiRequestOptions, IOZoneApiUpdateAllResponse, IOZoneApiUpdateResponse } from './ozone';
+export default class OWebService<Entity> {
     protected readonly appContext: OWebApp;
     private readonly _baseData;
     /**
      * @param appContext The app context.
      * @param service The service name.
-     * @param persistentCache To enable persistence data caching.
      */
     constructor(appContext: OWebApp, service: string);
     /**
@@ -35,20 +34,20 @@ export default class OWebService<T> {
      *
      * @param formData
      */
-    addRequest(formData: FormData | object): import("./OWebXHR").default<IOZoneApiAddResponse<T>>;
+    addRequest(formData: FormData | object): import("./OWebXHR").default<IOZoneApiAddResponse<Entity>>;
     /**
      * Deletes the entity with the given id.
      *
      * @param id The entity id.
      */
-    deleteRequest(id: string): import("./OWebXHR").default<IOZoneApiDeleteResponse<T>>;
+    deleteRequest(id: string): import("./OWebXHR").default<IOZoneApiDeleteResponse<Entity>>;
     /**
      * Updates the entity with the given id.
      *
      * @param id The entity id.
      * @param formData
      */
-    updateRequest(id: string, formData: any): import("./OWebXHR").default<IOZoneApiUpdateResponse<T>>;
+    updateRequest(id: string, formData: any): import("./OWebXHR").default<IOZoneApiUpdateResponse<Entity>>;
     /**
      * Deletes all entities.
      *
@@ -71,13 +70,13 @@ export default class OWebService<T> {
      * @param id The entity id.
      * @param relations The relations string.
      */
-    getRequest(id: string, relations?: string): import("./OWebXHR").default<IOZoneApiGetResponse<T>>;
+    getRequest(id: string, relations?: string): import("./OWebXHR").default<IOZoneApiGetResponse<Entity>>;
     /**
      * Gets all entities.
      *
      * @param options
      */
-    getAllRequest(options: IOZoneApiRequestOptions): import("./OWebXHR").default<IOZoneApiGetAllResponse<T>>;
+    getAllRequest(options: IOZoneApiRequestOptions): import("./OWebXHR").default<IOZoneApiGetAllResponse<Entity>>;
     /**
      * Gets a single item relation for a given entity id.
      *

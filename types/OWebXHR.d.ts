@@ -1,4 +1,4 @@
-import OWebNet, { INetResponse, INetRequestOptions } from './OWebNet';
+import OWebNet, { INetRequestOptions, INetResponse } from './OWebNet';
 export default class OWebXHR<T> extends OWebNet<T> {
     private _abort?;
     private _sent;

@@ -1,4 +1,4 @@
-import OWebRoute, { tRoutePath, tRoutePathOptions, tRouteAction } from './OWebRoute';
+import OWebRoute, { tRouteAction, tRoutePath, tRoutePathOptions } from './OWebRoute';
 import OWebRouteContext from './OWebRouteContext';
 export declare type tRouteTarget = {
     parsed: string;

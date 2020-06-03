@@ -1,8 +1,7 @@
 import { GoblSinglePKEntity } from 'gobl-utils-ts';
-import { IOZoneApiAddResponse, IOZoneApiDeleteResponse, IOZoneApiUpdateResponse, IOZoneApiRequestOptions } from './ozone';
+import { IOZoneApiAddResponse, IOZoneApiDeleteResponse, IOZoneApiRequestOptions, IOZoneApiUpdateResponse } from './ozone';
 import OWebApp from './OWebApp';
 import OWebService from './OWebService';
-export declare type tEntitiesOrderByCb<T> = (a: T, b: T) => number;
 export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWebService<T> {
     private readonly entity;
     protected items: {
@@ -28,7 +27,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
     itemRelation<Z>(item: T, relation: string): Z | undefined;
     identify(id: string, checkCache?: boolean): T | undefined;
     list(ids?: string[]): T[];
-    orderBy(orderFn: tEntitiesOrderByCb<T>): T[];
+    orderBy(order: (a: T, b: T) => number): T[];
     orderByValueOf(column: string): T[];
     select(list: T[] | undefined, predicate: (value: T, index: number) => boolean, max?: number): T[];
     search(list: T[] | undefined, search: string, stringBuilder: (value: T, index: number) => string): T[];

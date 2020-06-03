@@ -1,5 +1,5 @@
 import OWebRoute from './OWebRoute';
-import OWebRouter, { tRouteTarget, tRouteStateObject, tRouteStateItem } from './OWebRouter';
+import OWebRouter, { tRouteStateItem, tRouteStateObject, tRouteTarget } from './OWebRouter';
 export default class OWebRouteContext {
     private _tokens;
     private _stopped;
