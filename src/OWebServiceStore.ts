@@ -1,12 +1,13 @@
 import { GoblSinglePKEntity, getEntityCache } from 'gobl-utils-ts';
-import OWebService, {
-	IServiceAddResponse,
-	IServiceDeleteResponse,
-	IServiceUpdateResponse,
-	IServiceRequestOptions,
-} from './OWebService';
+import {
+	IOZoneApiAddResponse,
+	IOZoneApiDeleteResponse,
+	IOZoneApiUpdateResponse,
+	IOZoneApiRequestOptions,
+} from './ozone';
 import OWebApp from './OWebApp';
 import { escapeRegExp, isPlainObject, logger } from './utils/Utils';
+import OWebService from './OWebService';
 
 export type tEntitiesOrderByCb<T> = (a: T, b: T) => number;
 
@@ -48,7 +49,7 @@ export default class OWebServiceStore<
 			.send();
 	}
 
-	getAllItems(options: IServiceRequestOptions = {}) {
+	getAllItems(options: IOZoneApiRequestOptions = {}) {
 		const ctx = this;
 
 		return ctx
@@ -179,7 +180,7 @@ export default class OWebServiceStore<
 		return this;
 	}
 
-	setSaved(target: T, response: IServiceUpdateResponse<T>) {
+	setSaved(target: T, response: IOZoneApiUpdateResponse<T>) {
 		const item = response.data.item;
 
 		target.doHydrate(item.toObject(), true);
@@ -187,11 +188,11 @@ export default class OWebServiceStore<
 		this.safelyAddItem(target);
 	}
 
-	addCreated(response: IServiceAddResponse<T>) {
+	addCreated(response: IOZoneApiAddResponse<T>) {
 		this.safelyAddItem(response.data.item);
 	}
 
-	setDeleted(response: IServiceDeleteResponse<T>) {
+	setDeleted(response: IOZoneApiDeleteResponse<T>) {
 		const item = response.data.item;
 		this.items = _without(this.items, getId(item));
 	}

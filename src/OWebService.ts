@@ -1,116 +1,17 @@
 import OWebApp from './OWebApp';
 import { assign, isPlainObject, stringPlaceholderReplace } from './utils/Utils';
-import { IOZoneApiJSON } from './ozone';
-
-export interface IServiceAddResponse<T> extends IOZoneApiJSON<any> {
-	data: {
-		item: T;
-	};
-}
-
-export interface IServiceGetResponse<T> extends IOZoneApiJSON<any> {
-	data: {
-		item: T;
-		relations?: {
-			[key: string]: any;
-		};
-	};
-}
-
-export interface IServiceGetAllResponse<T> extends IOZoneApiJSON<any> {
-	data: {
-		items: T[];
-		max?: number;
-		page?: number;
-		total?: number;
-		relations?: {
-			[key: string]: any;
-		};
-	};
-}
-
-export interface IServiceUpdateResponse<T> extends IOZoneApiJSON<any> {
-	data: {
-		item: T;
-	};
-}
-
-export interface IServiceUpdateAllResponse extends IOZoneApiJSON<any> {
-	data: {
-		affected: number;
-	};
-}
-
-export interface IServiceDeleteResponse<T> extends IOZoneApiJSON<any> {
-	data: {
-		item: T;
-	};
-}
-
-export interface IServiceDeleteAllResponse extends IOZoneApiJSON<any> {
-	data: {
-		affected: number;
-	};
-}
-
-export interface IServiceGetRelationItemsResponse<T>
-	extends IOZoneApiJSON<any> {
-	data: {
-		items: T[];
-		max?: number;
-		page?: number;
-		total?: number;
-		relations: {
-			[key: string]: any;
-		};
-	};
-}
-
-export interface IServiceGetRelationItemResponse<T> extends IOZoneApiJSON<any> {
-	data: {
-		item: T;
-		relations?: {
-			[key: string]: any;
-		};
-	};
-}
-
-export type tFilterCondition =
-	| 'eq'
-	| 'neq'
-	| 'lt'
-	| 'lte'
-	| 'gt'
-	| 'gte'
-	| 'in'
-	| 'not_in'
-	| 'is_null'
-	| 'is_not_null'
-	| 'like'
-	| 'not_like';
-
-export type tFilter =
-	| {
-			0: tFilterCondition;
-			1: string | string[] | number;
-			2?: 'or' | 'and';
-	  }
-	| {
-			0: 'is_null' | 'is_not_null';
-			1?: 'or' | 'and';
-	  };
-
-export type tFiltersMap = { [key: string]: tFilter[] };
-
-export interface IServiceRequestOptions {
-	data?: any;
-	filters?: tFiltersMap;
-	relations?: string | string[];
-	collection?: string;
-	order_by?: string;
-	max?: number;
-	page?: number;
-}
+import {
+	IOZoneApiAddResponse,
+	IOZoneApiDeleteResponse,
+	IOZoneApiUpdateResponse,
+	IOZoneApiDeleteAllResponse,
+	IOZoneApiUpdateAllResponse,
+	IOZoneApiGetResponse,
+	IOZoneApiGetAllResponse,
+	IOZoneApiGetRelationItemResponse,
+	IOZoneApiGetRelationItemsResponse,
+	IOZoneApiRequestOptions,
+} from './ozone';
 
 const SERVICE_URL_FORMAT = ':api_url/:serviceName',
 	SERVICE_ENTITY_FORMAT = ':api_url/:service/:id',
@@ -174,7 +75,7 @@ export default class OWebService<T> {
 	addRequest(formData: FormData | object) {
 		const url = this.getServiceURI();
 
-		return this.appContext.net<IServiceAddResponse<T>>(url, {
+		return this.appContext.net<IOZoneApiAddResponse<T>>(url, {
 			method: 'POST',
 			body: formData,
 		});
@@ -188,7 +89,7 @@ export default class OWebService<T> {
 	deleteRequest(id: string) {
 		const url = this.getItemURI(id);
 
-		return this.appContext.net<IServiceDeleteResponse<T>>(url, {
+		return this.appContext.net<IOZoneApiDeleteResponse<T>>(url, {
 			method: 'DELETE',
 		});
 	}
@@ -202,7 +103,7 @@ export default class OWebService<T> {
 	updateRequest(id: string, formData: any) {
 		const url = this.getItemURI(id);
 
-		return this.appContext.net<IServiceUpdateResponse<T>>(url, {
+		return this.appContext.net<IOZoneApiUpdateResponse<T>>(url, {
 			method: 'PATCH',
 			body: formData,
 		});
@@ -213,10 +114,10 @@ export default class OWebService<T> {
 	 *
 	 * @param options
 	 */
-	deleteAllRequest(options: IServiceRequestOptions) {
+	deleteAllRequest(options: IOZoneApiRequestOptions) {
 		const url = this.getServiceURI(),
 			filters = options.filters,
-			_options: IServiceRequestOptions = {};
+			_options: IOZoneApiRequestOptions = {};
 
 		if (typeof options.max === 'number') {
 			// will be ignored by O'Zone
@@ -231,7 +132,7 @@ export default class OWebService<T> {
 			_options.filters = filters;
 		}
 
-		return this.appContext.net<IServiceDeleteAllResponse>(url, {
+		return this.appContext.net<IOZoneApiDeleteAllResponse>(url, {
 			method: 'DELETE',
 			body: _options,
 		});
@@ -243,10 +144,10 @@ export default class OWebService<T> {
 	 * @param options
 	 * @param formData
 	 */
-	updateAllRequest(options: IServiceRequestOptions, formData: any) {
+	updateAllRequest(options: IOZoneApiRequestOptions, formData: any) {
 		const url = this.getServiceURI(),
 			filters = options.filters,
-			_options: IServiceRequestOptions = formData;
+			_options: IOZoneApiRequestOptions = formData;
 
 		if (typeof options.max === 'number') {
 			// will be ignored by O'Zone
@@ -261,7 +162,7 @@ export default class OWebService<T> {
 			_options.filters = filters;
 		}
 
-		return this.appContext.net<IServiceUpdateAllResponse>(url, {
+		return this.appContext.net<IOZoneApiUpdateAllResponse>(url, {
 			method: 'PATCH',
 			body: _options,
 		});
@@ -284,7 +185,7 @@ export default class OWebService<T> {
 			data.relations = relations;
 		}
 
-		return this.appContext.net<IServiceGetResponse<T>>(url, {
+		return this.appContext.net<IOZoneApiGetResponse<T>>(url, {
 			method: 'GET',
 			body: data,
 		});
@@ -295,10 +196,10 @@ export default class OWebService<T> {
 	 *
 	 * @param options
 	 */
-	getAllRequest(options: IServiceRequestOptions) {
+	getAllRequest(options: IOZoneApiRequestOptions) {
 		const url = this.getServiceURI(),
 			filters = options.filters,
-			_options: IServiceRequestOptions = {};
+			_options: IOZoneApiRequestOptions = {};
 
 		if (typeof options.max === 'number') {
 			_options.max = options.max;
@@ -322,7 +223,7 @@ export default class OWebService<T> {
 			_options.filters = filters;
 		}
 
-		return this.appContext.net<IServiceGetAllResponse<T>>(url, {
+		return this.appContext.net<IOZoneApiGetAllResponse<T>>(url, {
 			method: 'GET',
 			body: _options,
 		});
@@ -337,7 +238,7 @@ export default class OWebService<T> {
 	getRelationRequest<R>(id: string, relation: string) {
 		const url = this.getItemRelationURI(id, relation);
 
-		return this.appContext.net<IServiceGetRelationItemResponse<R>>(url, {
+		return this.appContext.net<IOZoneApiGetRelationItemResponse<R>>(url, {
 			method: 'GET',
 		});
 	}
@@ -352,11 +253,11 @@ export default class OWebService<T> {
 	getRelationItemsRequest<R>(
 		id: string,
 		relation: string,
-		options: IServiceRequestOptions,
+		options: IOZoneApiRequestOptions,
 	) {
 		const url = this.getItemRelationURI(id, relation),
 			filters = options.filters,
-			_options: IServiceRequestOptions = {};
+			_options: IOZoneApiRequestOptions = {};
 
 		if (typeof options.max === 'number') {
 			_options.max = options.max;
@@ -369,7 +270,7 @@ export default class OWebService<T> {
 			_options.filters = filters;
 		}
 
-		return this.appContext.net<IServiceGetRelationItemsResponse<R>>(url, {
+		return this.appContext.net<IOZoneApiGetRelationItemsResponse<R>>(url, {
 			method: 'GET',
 			body: _options,
 		});
