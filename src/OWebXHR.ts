@@ -83,13 +83,7 @@ export default class OWebXHR<T> extends OWebNet<T> {
 			'application/json, text/plain, */*',
 		);
 
-		forEach(opt.headers, function (value, header) {
-			xhr.setRequestHeader(header, value);
-		});
-
 		xhr.withCredentials = opt.withCredentials;
-
-		xhr.open(opt.method.toUpperCase(), this.url, true);
 
 		xhr.onreadystatechange = function () {
 			if (!xhr || xhr.readyState !== 4) {
@@ -170,6 +164,12 @@ export default class OWebXHR<T> extends OWebNet<T> {
 		this._abort = () => {
 			xhr && xhr.abort();
 		};
+
+		xhr.open(opt.method.toUpperCase(), this.url, true);
+
+		forEach(opt.headers, function (value, header) {
+			xhr.setRequestHeader(header, value);
+		});
 
 		xhr.send(body);
 
