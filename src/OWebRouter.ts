@@ -84,6 +84,7 @@ export default class OWebRouter {
 	private readonly _popStateListener: (e: PopStateEvent) => void;
 	private readonly _linkClickListener: (e: MouseEvent | TouchEvent) => void;
 	private _dispatchId = 0;
+	private _notFoundLoopCount = 0;
 	private _currentDispatcher?: IRouteDispatcher;
 	private _forceReplace: boolean = false;
 
@@ -357,7 +358,14 @@ export default class OWebRouter {
 		if (!cd.found.length) {
 			logger.warn('[OWebRouter] no route found for path', target.path);
 			if (this._notFound) {
-				this._notFound(target);
+				if (!this._notFoundLoopCount) {
+					this._notFoundLoopCount++;
+					this._notFound(target);
+				} else {
+					throw new Error(
+						'[OWebRouter] "notFound" handler is redirecting to another missing route. This may cause infinite loop.',
+					);
+				}
 			} else {
 				throw new Error(
 					'[OWebRouter] "notFound" handler is not defined.',
@@ -366,6 +374,8 @@ export default class OWebRouter {
 
 			return this;
 		}
+
+		this._notFoundLoopCount = 0;
 
 		cd.dispatch();
 
