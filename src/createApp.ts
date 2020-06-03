@@ -18,11 +18,11 @@ export class App<S extends IAppStore> extends OWebApp {
 		name: string,
 		configs: tConfigList,
 		urls: tUrlList,
-		storeFn: (app: App<S>) => S,
+		storeBundler: (app: App<S>) => S,
 	) {
 		super(name, configs, urls);
 
-		this.store = storeFn(this);
+		this.store = storeBundler(this);
 	}
 
 	/**
@@ -37,7 +37,7 @@ export const createApp = function <S extends IAppStore>(
 	name: string,
 	configs: tConfigList,
 	urls: tUrlList,
-	storeFn: (app: App<S>) => S,
+	storeBundler: (app: App<S>) => S,
 ) {
-	return new App(name, configs, urls, storeFn);
+	return new App(name, configs, urls, storeBundler);
 };
