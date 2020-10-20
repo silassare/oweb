@@ -1,6 +1,6 @@
 {
 	"name": "oweb",
-	"version": "2.0.6",
+	"version": "2.0.7",
 	"description": "O'Web is a framework for web applications that use APIs built with the O'Zone framework.",
 	"main": "dist/oweb.js",
 	"typings": "types/oweb.d.ts",
@@ -16,16 +16,17 @@
 		"types"
 	],
 	"scripts": {
-		"build": "tsc & typedoc",
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"lint": "tslint --type-check --fix --project ."
+		"build": "tsc && typedoc",
+		"lint": "eslint --fix ./src",
+		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"dependencies": {
-		"gobl-utils-ts": "github:silassare/gobl-utils-ts",
-		"oweb-tel-input": "github:silassare/oweb-tel-input"
+		"gobl-utils-ts": "github:silassare/gobl-utils-ts"
 	},
 	"devDependencies": {
-		"tslint": "^6.1.2",
+		"@typescript-eslint/eslint-plugin": "^2.33.0",
+		"@typescript-eslint/parser": "^2.33.0",
+		"eslint": "^7.10.0",
 		"typedoc": "^0.17.7",
 		"typescript": "^3.9.3"
 	},
