@@ -71,6 +71,18 @@
 				<p>[+] Still in development</p>
 				<p>[+] Active testing</p>
 				<p>[-] Ready</p>
+				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+					<h3>Installation</h3>
+				</a>
+				<pre><code>npm <span class="hljs-keyword">install</span> <span class="hljs-comment">--save silassare/oweb</span></code></pre>
+				<a href="#build" id="build" style="color: inherit; text-decoration: none;">
+					<h3>Build</h3>
+				</a>
+				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> build</span></code></pre>
+				<a href="#lints-and-fixes-files" id="lints-and-fixes-files" style="color: inherit; text-decoration: none;">
+					<h3>Lints and fixes files</h3>
+				</a>
+				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> lint</span></code></pre>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -83,29 +95,23 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="classes/app.html" class="tsd-kind-icon">App</a>
-					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/owebaccountrecovery.html" class="tsd-kind-icon">OWeb<wbr>Account<wbr>Recovery</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/owebapp.html" class="tsd-kind-icon">OWeb<wbr>App</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/owebconfigs.html" class="tsd-kind-icon">OWeb<wbr>Configs</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/owebcurrentuser.html" class="tsd-kind-icon">OWeb<wbr>Current<wbr>User</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="classes/owebcustomerror.html" class="tsd-kind-icon">OWeb<wbr>Custom<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/owebdatastore.html" class="tsd-kind-icon">OWeb<wbr>Data<wbr>Store</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/owebdate.html" class="tsd-kind-icon">OWeb<wbr>Date</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/oweberror.html" class="tsd-kind-icon">OWeb<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/owebevent.html" class="tsd-kind-icon">OWeb<wbr>Event</a>
@@ -125,7 +131,7 @@
 					<li class=" tsd-kind-class">
 						<a href="classes/owebkeystorage.html" class="tsd-kind-icon">OWeb<wbr>Key<wbr>Storage</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/oweblogin.html" class="tsd-kind-icon">OWeb<wbr>Login</a>
 					</li>
 					<li class=" tsd-kind-class">
@@ -133,9 +139,6 @@
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/owebnet.html" class="tsd-kind-icon">OWeb<wbr>Net</a>
-					</li>
-					<li class=" tsd-kind-class tsd-has-type-parameter">
-						<a href="classes/owebpagebase.html" class="tsd-kind-icon">OWeb<wbr>Page<wbr>Base</a>
 					</li>
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/owebpager.html" class="tsd-kind-icon">OWeb<wbr>Pager</a>
@@ -161,11 +164,14 @@
 					<li class=" tsd-kind-class">
 						<a href="classes/owebsignup.html" class="tsd-kind-icon">OWeb<wbr>Sign<wbr>Up</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/owebtnet.html" class="tsd-kind-icon">OWebTNet</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/oweburl.html" class="tsd-kind-icon">OWeb<wbr>Url</a>
+					</li>
+					<li class=" tsd-kind-class tsd-has-type-parameter">
+						<a href="classes/owebuser.html" class="tsd-kind-icon">OWeb<wbr>User</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/owebview.html" class="tsd-kind-icon">OWeb<wbr>View</a>
@@ -173,167 +179,176 @@
 					<li class=" tsd-kind-class tsd-has-type-parameter">
 						<a href="classes/owebxhr.html" class="tsd-kind-icon">OWebXHR</a>
 					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/iappstore.html" class="tsd-kind-icon">IApp<wbr>Store</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/ineterror.html" class="tsd-kind-icon">INet<wbr>Error</a>
+					<li class=" tsd-kind-class">
+						<a href="classes/ozone.html" class="tsd-kind-icon">OZone</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/inetrequestoptions.html" class="tsd-kind-icon">INet<wbr>Request<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/inetresponse.html" class="tsd-kind-icon">INet<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/iozoneapiaddresponse.html" class="tsd-kind-icon">IOZone<wbr>Api<wbr>Add<wbr>Response</a>
+						<a href="interfaces/oapijson.html" class="tsd-kind-icon">OApiJSON</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/iozoneapideleteallresponse.html" class="tsd-kind-icon">IOZone<wbr>Api<wbr>Delete<wbr>All<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/iozoneapideleteresponse.html" class="tsd-kind-icon">IOZone<wbr>Api<wbr>Delete<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/iozoneapigetallresponse.html" class="tsd-kind-icon">IOZone<wbr>Api<wbr>Get<wbr>All<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/iozoneapigetrelationitemresponse.html" class="tsd-kind-icon">IOZone<wbr>Api<wbr>Get<wbr>Relation<wbr>Item<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/iozoneapigetrelationitemsresponse.html" class="tsd-kind-icon">IOZone<wbr>Api<wbr>Get<wbr>Relation<wbr>Items<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/iozoneapigetresponse.html" class="tsd-kind-icon">IOZone<wbr>Api<wbr>Get<wbr>Response</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/iozoneapijson.html" class="tsd-kind-icon">IOZone<wbr>ApiJSON</a>
+						<a href="interfaces/oapirequestoptions.html" class="tsd-kind-icon">OApi<wbr>Request<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/iozoneapirequestoptions.html" class="tsd-kind-icon">IOZone<wbr>Api<wbr>Request<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface">
-						<a href="interfaces/iozoneapiupdateallresponse.html" class="tsd-kind-icon">IOZone<wbr>Api<wbr>Update<wbr>All<wbr>Response</a>
+						<a href="interfaces/oappconfigs.html" class="tsd-kind-icon">OApp<wbr>Configs</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/iozoneapiupdateresponse.html" class="tsd-kind-icon">IOZone<wbr>Api<wbr>Update<wbr>Response</a>
+						<a href="interfaces/oappoptions.html" class="tsd-kind-icon">OApp<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/oneterror.html" class="tsd-kind-icon">ONet<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/ipage.html" class="tsd-kind-icon">IPage</a>
+						<a href="interfaces/onetrequestoptions.html" class="tsd-kind-icon">ONet<wbr>Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="interfaces/onetresponse.html" class="tsd-kind-icon">ONet<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/ipageroute.html" class="tsd-kind-icon">IPage<wbr>Route</a>
+						<a href="interfaces/opage.html" class="tsd-kind-icon">OPage</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/ipageroutefull.html" class="tsd-kind-icon">IPage<wbr>Route<wbr>Full</a>
+						<a href="interfaces/opageroute.html" class="tsd-kind-icon">OPage<wbr>Route</a>
 					</li>
 					<li class=" tsd-kind-interface">
-						<a href="interfaces/iroutedispatcher.html" class="tsd-kind-icon">IRoute<wbr>Dispatcher</a>
+						<a href="interfaces/opageroutefull.html" class="tsd-kind-icon">OPage<wbr>Route<wbr>Full</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/oroutedispatcher.html" class="tsd-kind-icon">ORoute<wbr>Dispatcher</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ostore.html" class="tsd-kind-icon">OStore</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ourllist.html" class="tsd-kind-icon">OUrl<wbr>List</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/ouserconfigs.html" class="tsd-kind-icon">OUser<wbr>Configs</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#oapiaddjson" class="tsd-kind-icon">OApi<wbr>AddJSON</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#_troutestateitem" class="tsd-kind-icon">_t<wbr>Route<wbr>State<wbr>Item</a>
+						<a href="globals.html#oapideletealljson" class="tsd-kind-icon">OApi<wbr>Delete<wbr>AllJSON</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#oapideletejson" class="tsd-kind-icon">OApi<wbr>DeleteJSON</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tbatchcb" class="tsd-kind-icon">t<wbr>Batch<wbr>Cb</a>
+						<a href="globals.html#oapifilter" class="tsd-kind-icon">OApi<wbr>Filter</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tconfiglist" class="tsd-kind-icon">t<wbr>Config<wbr>List</a>
+						<a href="globals.html#oapifiltercondition" class="tsd-kind-icon">OApi<wbr>Filter<wbr>Condition</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tdatedesc" class="tsd-kind-icon">t<wbr>Date<wbr>Desc</a>
+						<a href="globals.html#oapifiltersmap" class="tsd-kind-icon">OApi<wbr>Filters<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#oapigetalljson" class="tsd-kind-icon">OApi<wbr>Get<wbr>AllJSON</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#oapigetjson" class="tsd-kind-icon">OApi<wbr>GetJSON</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#oapigetrelationitemjson" class="tsd-kind-icon">OApi<wbr>Get<wbr>Relation<wbr>ItemJSON</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#oapigetrelationitemsjson" class="tsd-kind-icon">OApi<wbr>Get<wbr>Relation<wbr>ItemsJSON</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tdatevalue" class="tsd-kind-icon">t<wbr>Date<wbr>Value</a>
+						<a href="globals.html#oapiupdatealljson" class="tsd-kind-icon">OApi<wbr>Update<wbr>AllJSON</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#oapiupdatejson" class="tsd-kind-icon">OApi<wbr>UpdateJSON</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#teventhandler" class="tsd-kind-icon">t<wbr>Event<wbr>Handler</a>
+						<a href="globals.html#obatchcb" class="tsd-kind-icon">OBatch<wbr>Cb</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tfilealiasinfo" class="tsd-kind-icon">t<wbr>File<wbr>Alias<wbr>Info</a>
+						<a href="globals.html#odatedesc" class="tsd-kind-icon">ODate<wbr>Desc</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tfilequality" class="tsd-kind-icon">t<wbr>File<wbr>Quality</a>
+						<a href="globals.html#odatevalue" class="tsd-kind-icon">ODate<wbr>Value</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tformerrormap" class="tsd-kind-icon">t<wbr>Form<wbr>Error<wbr>Map</a>
+						<a href="globals.html#oeventhandler" class="tsd-kind-icon">OEvent<wbr>Handler</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tformvalidator" class="tsd-kind-icon">t<wbr>Form<wbr>Validator</a>
+						<a href="globals.html#ofilealiasinfo" class="tsd-kind-icon">OFile<wbr>Alias<wbr>Info</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#ti18n" class="tsd-kind-icon">t<wbr>I18n</a>
+						<a href="globals.html#ofilequality" class="tsd-kind-icon">OFile<wbr>Quality</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#ti18ndata" class="tsd-kind-icon">t<wbr>I18n<wbr>Data</a>
+						<a href="globals.html#oformerrormap" class="tsd-kind-icon">OForm<wbr>Error<wbr>Map</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#ti18ndefinition" class="tsd-kind-icon">t<wbr>I18n<wbr>Definition</a>
+						<a href="globals.html#oformvalidator" class="tsd-kind-icon">OForm<wbr>Validator</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#ti18noptions" class="tsd-kind-icon">t<wbr>I18n<wbr>Options</a>
+						<a href="globals.html#oi18n" class="tsd-kind-icon">OI18n</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#ti18npluralize" class="tsd-kind-icon">t<wbr>I18n<wbr>Pluralize</a>
+						<a href="globals.html#oi18ndata" class="tsd-kind-icon">OI18n<wbr>Data</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tkeydata" class="tsd-kind-icon">t<wbr>Key<wbr>Data</a>
+						<a href="globals.html#oi18ndefinition" class="tsd-kind-icon">OI18n<wbr>Definition</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tloginresponsedata" class="tsd-kind-icon">t<wbr>Login<wbr>Response<wbr>Data</a>
+						<a href="globals.html#oi18noptions" class="tsd-kind-icon">OI18n<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tnetrequestbody" class="tsd-kind-icon">t<wbr>Net<wbr>Request<wbr>Body</a>
+						<a href="globals.html#oi18npluralize" class="tsd-kind-icon">OI18n<wbr>Pluralize</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tnetrequestmethod" class="tsd-kind-icon">t<wbr>Net<wbr>Request<wbr>Method</a>
+						<a href="globals.html#ojsonserializable" class="tsd-kind-icon">OJSONSerializable</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tozoneapifilter" class="tsd-kind-icon">tOZone<wbr>Api<wbr>Filter</a>
+						<a href="globals.html#okeydata" class="tsd-kind-icon">OKey<wbr>Data</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tozoneapifiltercondition" class="tsd-kind-icon">tOZone<wbr>Api<wbr>Filter<wbr>Condition</a>
+						<a href="globals.html#onetrequestbody" class="tsd-kind-icon">ONet<wbr>Request<wbr>Body</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tozoneapifiltersmap" class="tsd-kind-icon">tOZone<wbr>Api<wbr>Filters<wbr>Map</a>
+						<a href="globals.html#onetrequestmethod" class="tsd-kind-icon">ONet<wbr>Request<wbr>Method</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#trouteaction" class="tsd-kind-icon">t<wbr>Route<wbr>Action</a>
+						<a href="globals.html#onetrequestparams" class="tsd-kind-icon">ONet<wbr>Request<wbr>Params</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#trouteinfo" class="tsd-kind-icon">t<wbr>Route<wbr>Info</a>
+						<a href="globals.html#orouteaction" class="tsd-kind-icon">ORoute<wbr>Action</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#troutepath" class="tsd-kind-icon">t<wbr>Route<wbr>Path</a>
+						<a href="globals.html#orouteinfo" class="tsd-kind-icon">ORoute<wbr>Info</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#troutepathoptions" class="tsd-kind-icon">t<wbr>Route<wbr>Path<wbr>Options</a>
+						<a href="globals.html#oroutepath" class="tsd-kind-icon">ORoute<wbr>Path</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#troutestateitem" class="tsd-kind-icon">t<wbr>Route<wbr>State<wbr>Item</a>
+						<a href="globals.html#oroutepathoptions" class="tsd-kind-icon">ORoute<wbr>Path<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#troutestateobject" class="tsd-kind-icon">t<wbr>Route<wbr>State<wbr>Object</a>
+						<a href="globals.html#oroutestateitem" class="tsd-kind-icon">ORoute<wbr>State<wbr>Item</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#troutetarget" class="tsd-kind-icon">t<wbr>Route<wbr>Target</a>
+						<a href="globals.html#oroutestateobject" class="tsd-kind-icon">ORoute<wbr>State<wbr>Object</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#troutetokensmap" class="tsd-kind-icon">t<wbr>Route<wbr>Tokens<wbr>Map</a>
+						<a href="globals.html#oroutetarget" class="tsd-kind-icon">ORoute<wbr>Target</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tscriptfile" class="tsd-kind-icon">t<wbr>Script<wbr>File</a>
+						<a href="globals.html#oroutetokensmap" class="tsd-kind-icon">ORoute<wbr>Tokens<wbr>Map</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#ttnetresponsedata" class="tsd-kind-icon">tTNet<wbr>Response<wbr>Data</a>
+						<a href="globals.html#oscriptfile" class="tsd-kind-icon">OScript<wbr>File</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#ttryloadcb" class="tsd-kind-icon">t<wbr>Try<wbr>Load<wbr>Cb</a>
+						<a href="globals.html#oscriptloadcb" class="tsd-kind-icon">OScript<wbr>Load<wbr>Cb</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="globals.html#otnetresponsedata" class="tsd-kind-icon">OTNet<wbr>Response<wbr>Data</a>
 					</li>
 					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#turllist" class="tsd-kind-icon">t<wbr>Url<wbr>List</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="globals.html#tviewdialog" class="tsd-kind-icon">t<wbr>View<wbr>Dialog</a>
+						<a href="globals.html#oviewdialog" class="tsd-kind-icon">OView<wbr>Dialog</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#format_reg" class="tsd-kind-icon">FORMAT_<wbr>REG</a>
@@ -357,10 +372,16 @@
 						<a href="globals.html#_tmp" class="tsd-kind-icon">_tmp</a>
 					</li>
 					<li class=" tsd-kind-variable">
+						<a href="globals.html#apicache" class="tsd-kind-icon">api<wbr>Cache</a>
+					</li>
+					<li class=" tsd-kind-variable">
 						<a href="globals.html#assign" class="tsd-kind-icon">assign</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#document" class="tsd-kind-icon">document</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#eventhandlermessage" class="tsd-kind-icon">event<wbr>Handler<wbr>Message</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#formvalidators" class="tsd-kind-icon">form<wbr>Validators</a>
@@ -381,6 +402,9 @@
 						<a href="globals.html#linkclickevent" class="tsd-kind-icon">link<wbr>Click<wbr>Event</a>
 					</li>
 					<li class=" tsd-kind-variable">
+						<a href="globals.html#logger" class="tsd-kind-icon">logger</a>
+					</li>
+					<li class=" tsd-kind-variable">
 						<a href="globals.html#ls" class="tsd-kind-icon">ls</a>
 					</li>
 					<li class=" tsd-kind-variable">
@@ -399,9 +423,6 @@
 						<a href="globals.html#wloc" class="tsd-kind-icon">w<wbr>Loc</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#_fn" class="tsd-kind-icon">_fn</a>
-					</li>
-					<li class=" tsd-kind-function">
 						<a href="globals.html#_hasexpired" class="tsd-kind-icon">_has<wbr>Expired</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -417,22 +438,25 @@
 						<a href="globals.html#_without" class="tsd-kind-icon">_without</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#batchload" class="tsd-kind-icon">batch<wbr>Load</a>
-					</li>
-					<li class=" tsd-kind-function">
 						<a href="globals.html#between" class="tsd-kind-icon">between</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#buildquerystring" class="tsd-kind-icon">build<wbr>Query<wbr>String</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#buildurl" class="tsd-kind-icon">buildURL</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#callback" class="tsd-kind-icon">callback</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#cleanrequestoptions" class="tsd-kind-icon">clean<wbr>Request<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter">
 						<a href="globals.html#clone" class="tsd-kind-icon">clone</a>
 					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="globals.html#createapp" class="tsd-kind-icon">create<wbr>App</a>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#encode" class="tsd-kind-icon">encode</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#escaperegexp" class="tsd-kind-icon">escape<wbr>Reg<wbr>Exp</a>
@@ -442,6 +466,9 @@
 					</li>
 					<li class=" tsd-kind-function tsd-has-type-parameter">
 						<a href="globals.html#foreach" class="tsd-kind-icon">for<wbr>Each</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getapiforhost" class="tsd-kind-icon">get<wbr>Api<wbr>For<wbr>Host</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#getid" class="tsd-kind-icon">get<wbr>Id</a>
@@ -486,6 +513,12 @@
 						<a href="globals.html#leadingslash" class="tsd-kind-icon">leading<wbr>Slash</a>
 					</li>
 					<li class=" tsd-kind-function">
+						<a href="globals.html#loadscript" class="tsd-kind-icon">load<wbr>Script</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#loadscriptbatch" class="tsd-kind-icon">load<wbr>Script<wbr>Batch</a>
+					</li>
+					<li class=" tsd-kind-function">
 						<a href="globals.html#lt" class="tsd-kind-icon">lt</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -496,9 +529,6 @@
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#numberformat" class="tsd-kind-icon">number<wbr>Format</a>
-					</li>
-					<li class=" tsd-kind-function tsd-has-type-parameter">
-						<a href="globals.html#oznet" class="tsd-kind-icon">oz<wbr>Net</a>
 					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#parse" class="tsd-kind-icon">parse</a>
@@ -540,9 +570,6 @@
 						<a href="globals.html#translate" class="tsd-kind-icon">translate</a>
 					</li>
 					<li class=" tsd-kind-function">
-						<a href="globals.html#tryload" class="tsd-kind-icon">try<wbr>Load</a>
-					</li>
-					<li class=" tsd-kind-function">
 						<a href="globals.html#which" class="tsd-kind-icon">which</a>
 					</li>
 					<li class=" tsd-kind-function">
@@ -550,9 +577,6 @@
 					</li>
 					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#pathresolver" class="tsd-kind-icon">Path<wbr>Resolver</a>
-					</li>
-					<li class=" tsd-kind-object-literal">
-						<a href="globals.html#logger" class="tsd-kind-icon">logger</a>
 					</li>
 					<li class=" tsd-kind-object-literal">
 						<a href="globals.html#tokentypesregmap" class="tsd-kind-icon">token<wbr>Types<wbr>Reg<wbr>Map</a>
@@ -600,6 +624,5 @@
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>

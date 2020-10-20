@@ -1,0 +1,8 @@
+import OWebError from './OWebError';
+export default class OWebFormError extends OWebError {
+    constructor() {
+        super(...arguments);
+        this.isFormError = true;
+    }
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT1dlYkZvcm1FcnJvci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3NyYy9PV2ViRm9ybUVycm9yLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sU0FBUyxNQUFNLGFBQWEsQ0FBQztBQUVwQyxNQUFNLENBQUMsT0FBTyxPQUFPLGFBQWMsU0FBUSxTQUFTO0lBQXBEOztRQUNVLGdCQUFXLEdBQUcsSUFBSSxDQUFDO0lBQzdCLENBQUM7Q0FBQSIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBPV2ViRXJyb3IgZnJvbSAnLi9PV2ViRXJyb3InO1xuXG5leHBvcnQgZGVmYXVsdCBjbGFzcyBPV2ViRm9ybUVycm9yIGV4dGVuZHMgT1dlYkVycm9yIHtcblx0cmVhZG9ubHkgaXNGb3JtRXJyb3IgPSB0cnVlO1xufVxuIl19

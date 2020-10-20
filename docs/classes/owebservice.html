@@ -100,8 +100,8 @@
 						<section class="tsd-index-section tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="owebservice.html#_basedata" class="tsd-kind-icon">_base<wbr>Data</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="owebservice.html#appcontext" class="tsd-kind-icon">app<wbr>Context</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="owebservice.html#_appcontext" class="tsd-kind-icon">_app<wbr>Context</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="owebservice.html#service" class="tsd-kind-icon">service</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -111,13 +111,10 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebservice.html#deleteallrequest" class="tsd-kind-icon">delete<wbr>All<wbr>Request</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebservice.html#deleterequest" class="tsd-kind-icon">delete<wbr>Request</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebservice.html#getallrequest" class="tsd-kind-icon">get<wbr>All<wbr>Request</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebservice.html#getitemrelationuri" class="tsd-kind-icon">get<wbr>Item<wbr>RelationURI</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebservice.html#getitemuri" class="tsd-kind-icon">get<wbr>ItemURI</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebservice.html#getname" class="tsd-kind-icon">get<wbr>Name</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="owebservice.html#getrelationitemsrequest" class="tsd-kind-icon">get<wbr>Relation<wbr>Items<wbr>Request</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="owebservice.html#getrelationrequest" class="tsd-kind-icon">get<wbr>Relation<wbr>Request</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebservice.html#getrequest" class="tsd-kind-icon">get<wbr>Request</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebservice.html#getserviceuri" class="tsd-kind-icon">get<wbr>ServiceURI</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebservice.html#updateallrequest" class="tsd-kind-icon">update<wbr>All<wbr>Request</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="owebservice.html#updaterequest" class="tsd-kind-icon">update<wbr>Request</a></li>
 							</ul>
@@ -131,21 +128,24 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new OWeb<wbr>Service<span class="tsd-signature-symbol">(</span>appContext<span class="tsd-signature-symbol">: </span><a href="owebapp.html" class="tsd-signature-type">OWebApp</a>, service<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebservice.html" class="tsd-signature-type">OWebService</a></li>
+						<li class="tsd-signature tsd-kind-icon">new OWeb<wbr>Service<span class="tsd-signature-symbol">(</span>_appContext<span class="tsd-signature-symbol">: </span><a href="owebapp.html" class="tsd-signature-type">OWebApp</a>, service<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebservice.html" class="tsd-signature-type">OWebService</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L22">src/OWebService.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L16">src/OWebService.ts:16</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>OWebService constructor.</p>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>appContext: <a href="owebapp.html" class="tsd-signature-type">OWebApp</a></h5>
+									<h5>_appContext: <a href="owebapp.html" class="tsd-signature-type">OWebApp</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
 											<p>The app context.</p>
@@ -168,39 +168,33 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_basedata" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> _base<wbr>Data</h3>
-					<div class="tsd-signature tsd-kind-icon">_base<wbr>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>api_url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>service<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L22">src/OWebService.ts:22</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter">
-								<h5>api_<wbr>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></h5>
-							</li>
-							<li class="tsd-parameter">
-								<h5>service<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
-							</li>
-						</ul>
-					</div>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="appcontext" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> app<wbr>Context</h3>
-					<div class="tsd-signature tsd-kind-icon">app<wbr>Context<span class="tsd-signature-symbol">:</span> <a href="owebapp.html" class="tsd-signature-type">OWebApp</a></div>
+					<a name="_appcontext" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> _app<wbr>Context</h3>
+					<div class="tsd-signature tsd-kind-icon">_app<wbr>Context<span class="tsd-signature-symbol">:</span> <a href="owebapp.html" class="tsd-signature-type">OWebApp</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L28">src/OWebService.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L24">src/OWebService.ts:24</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The app context.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="service" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> service</h3>
+					<div class="tsd-signature tsd-kind-icon">service<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L24">src/OWebService.ts:24</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The service name.</p>
 						</div>
 					</div>
 				</section>
@@ -211,13 +205,13 @@
 					<a name="addrequest" class="tsd-anchor"></a>
 					<h3>add<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Request<span class="tsd-signature-symbol">(</span>formData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">FormData</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapiaddresponse.html" class="tsd-signature-type">IOZoneApiAddResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Entity</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Request<span class="tsd-signature-symbol">(</span>formData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">FormData</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L75">src/OWebService.ts:75</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L38">src/OWebService.ts:38</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -233,7 +227,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapiaddresponse.html" class="tsd-signature-type">IOZoneApiAddResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Entity</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -241,13 +235,13 @@
 					<a name="deleteallrequest" class="tsd-anchor"></a>
 					<h3>delete<wbr>All<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">delete<wbr>All<wbr>Request<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/iozoneapirequestoptions.html" class="tsd-signature-type">IOZoneApiRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapideleteallresponse.html" class="tsd-signature-type">IOZoneApiDeleteAllResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>All<wbr>Request<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/oapirequestoptions.html" class="tsd-signature-type">OApiRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>affected<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L117">src/OWebService.ts:117</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L83">src/OWebService.ts:83</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -258,12 +252,12 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <a href="../interfaces/iozoneapirequestoptions.html" class="tsd-signature-type">IOZoneApiRequestOptions</a></h5>
+									<h5>options: <a href="../interfaces/oapirequestoptions.html" class="tsd-signature-type">OApiRequestOptions</a></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapideleteallresponse.html" class="tsd-signature-type">IOZoneApiDeleteAllResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>affected<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -271,13 +265,13 @@
 					<a name="deleterequest" class="tsd-anchor"></a>
 					<h3>delete<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">delete<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapideleteresponse.html" class="tsd-signature-type">IOZoneApiDeleteResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Entity</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">delete<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L89">src/OWebService.ts:89</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L53">src/OWebService.ts:53</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -294,7 +288,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapideleteresponse.html" class="tsd-signature-type">IOZoneApiDeleteResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Entity</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -302,13 +296,13 @@
 					<a name="getallrequest" class="tsd-anchor"></a>
 					<h3>get<wbr>All<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>All<wbr>Request<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/iozoneapirequestoptions.html" class="tsd-signature-type">IOZoneApiRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapigetallresponse.html" class="tsd-signature-type">IOZoneApiGetAllResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Entity</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>All<wbr>Request<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/oapirequestoptions.html" class="tsd-signature-type">OApiRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>max<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>page<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>relations<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>total<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L199">src/OWebService.ts:199</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L137">src/OWebService.ts:137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -319,80 +313,12 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <a href="../interfaces/iozoneapirequestoptions.html" class="tsd-signature-type">IOZoneApiRequestOptions</a></h5>
+									<h5>options: <a href="../interfaces/oapirequestoptions.html" class="tsd-signature-type">OApiRequestOptions</a></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapigetallresponse.html" class="tsd-signature-type">IOZoneApiGetAllResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Entity</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getitemrelationuri" class="tsd-anchor"></a>
-					<h3>get<wbr>Item<wbr>RelationURI</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Item<wbr>RelationURI<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L65">src/OWebService.ts:65</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns entity relation URI.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>id: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The entity id.</p>
-									</div>
-								</li>
-								<li>
-									<h5>relation: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The relation name.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getitemuri" class="tsd-anchor"></a>
-					<h3>get<wbr>ItemURI</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>ItemURI<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L54">src/OWebService.ts:54</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns entity URI.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>id: <span class="tsd-signature-type">any</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The entity id.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>max<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>page<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>relations<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>total<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -406,7 +332,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L38">src/OWebService.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L29">src/OWebService.ts:29</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -422,13 +348,13 @@
 					<a name="getrelationitemsrequest" class="tsd-anchor"></a>
 					<h3>get<wbr>Relation<wbr>Items<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Relation<wbr>Items<wbr>Request&lt;R&gt;<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/iozoneapirequestoptions.html" class="tsd-signature-type">IOZoneApiRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapigetrelationitemsresponse.html" class="tsd-signature-type">IOZoneApiGetRelationItemsResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Relation<wbr>Items<wbr>Request&lt;R&gt;<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/oapirequestoptions.html" class="tsd-signature-type">OApiRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>max<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>page<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>relations<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>total<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L253">src/OWebService.ts:253</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L169">src/OWebService.ts:169</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -457,12 +383,12 @@
 									</div>
 								</li>
 								<li>
-									<h5>options: <a href="../interfaces/iozoneapirequestoptions.html" class="tsd-signature-type">IOZoneApiRequestOptions</a></h5>
+									<h5>options: <a href="../interfaces/oapirequestoptions.html" class="tsd-signature-type">OApiRequestOptions</a></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapigetrelationitemsresponse.html" class="tsd-signature-type">IOZoneApiGetRelationItemsResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>items<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>max<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>page<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>relations<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>total<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -470,13 +396,13 @@
 					<a name="getrelationrequest" class="tsd-anchor"></a>
 					<h3>get<wbr>Relation<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Relation<wbr>Request&lt;R&gt;<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapigetrelationitemresponse.html" class="tsd-signature-type">IOZoneApiGetRelationItemResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Relation<wbr>Request&lt;R&gt;<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relation<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">; </span>relations<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L238">src/OWebService.ts:238</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L153">src/OWebService.ts:153</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -505,7 +431,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapigetrelationitemresponse.html" class="tsd-signature-type">IOZoneApiGetRelationItemResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">; </span>relations<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -513,13 +439,13 @@
 					<a name="getrequest" class="tsd-anchor"></a>
 					<h3>get<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relations<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapigetresponse.html" class="tsd-signature-type">IOZoneApiGetResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Entity</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, relations<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">; </span>relations<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L180">src/OWebService.ts:180</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L117">src/OWebService.ts:117</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -544,29 +470,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapigetresponse.html" class="tsd-signature-type">IOZoneApiGetResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Entity</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getserviceuri" class="tsd-anchor"></a>
-					<h3>get<wbr>ServiceURI</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>ServiceURI<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L45">src/OWebService.ts:45</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns the service URI.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">; </span>relations<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -574,13 +478,13 @@
 					<a name="updateallrequest" class="tsd-anchor"></a>
 					<h3>update<wbr>All<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">update<wbr>All<wbr>Request<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/iozoneapirequestoptions.html" class="tsd-signature-type">IOZoneApiRequestOptions</a>, formData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapiupdateallresponse.html" class="tsd-signature-type">IOZoneApiUpdateAllResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">update<wbr>All<wbr>Request<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/oapirequestoptions.html" class="tsd-signature-type">OApiRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>affected<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L147">src/OWebService.ts:147</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L98">src/OWebService.ts:98</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -591,15 +495,12 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <a href="../interfaces/iozoneapirequestoptions.html" class="tsd-signature-type">IOZoneApiRequestOptions</a></h5>
-								</li>
-								<li>
-									<h5>formData: <span class="tsd-signature-type">any</span></h5>
+									<h5>options: <a href="../interfaces/oapirequestoptions.html" class="tsd-signature-type">OApiRequestOptions</a></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapiupdateallresponse.html" class="tsd-signature-type">IOZoneApiUpdateAllResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>affected<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -607,13 +508,13 @@
 					<a name="updaterequest" class="tsd-anchor"></a>
 					<h3>update<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">update<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, formData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapiupdateresponse.html" class="tsd-signature-type">IOZoneApiUpdateResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Entity</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">update<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, formData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/silassare/oweb/blob/d0c6e6b/src/OWebService.ts#L103">src/OWebService.ts:103</a></li>
+									<li>Defined in <a href="https://github.com/silassare/oweb/blob/fce8952/src/OWebService.ts#L68">src/OWebService.ts:68</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -635,7 +536,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/iozoneapiupdateresponse.html" class="tsd-signature-type">IOZoneApiUpdateResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Entity</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="owebxhr.html" class="tsd-signature-type">OWebXHR</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/oapijson.html" class="tsd-signature-type">OApiJSON</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -659,11 +560,11 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="owebservice.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="owebservice.html#_basedata" class="tsd-kind-icon">_base<wbr>Data</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="owebservice.html#_appcontext" class="tsd-kind-icon">_app<wbr>Context</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="owebservice.html#appcontext" class="tsd-kind-icon">app<wbr>Context</a>
+								<a href="owebservice.html#service" class="tsd-kind-icon">service</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="owebservice.html#addrequest" class="tsd-kind-icon">add<wbr>Request</a>
@@ -678,12 +579,6 @@
 								<a href="owebservice.html#getallrequest" class="tsd-kind-icon">get<wbr>All<wbr>Request</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="owebservice.html#getitemrelationuri" class="tsd-kind-icon">get<wbr>Item<wbr>RelationURI</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="owebservice.html#getitemuri" class="tsd-kind-icon">get<wbr>ItemURI</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="owebservice.html#getname" class="tsd-kind-icon">get<wbr>Name</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
@@ -694,9 +589,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="owebservice.html#getrequest" class="tsd-kind-icon">get<wbr>Request</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="owebservice.html#getserviceuri" class="tsd-kind-icon">get<wbr>ServiceURI</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="owebservice.html#updateallrequest" class="tsd-kind-icon">update<wbr>All<wbr>Request</a>
@@ -751,6 +643,5 @@
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>
