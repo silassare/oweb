@@ -1,7 +1,7 @@
 /**
  * OWeb custom error class.
  */
-export default class OWebCustomError extends Error {
+export default class OWebError extends Error {
 	readonly data: any;
 
 	constructor(message: any, data: any = {}) {
