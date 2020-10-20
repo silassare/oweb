@@ -1,7 +1,8 @@
 import OWebEvent from './OWebEvent';
-import { id } from './utils';
+import {id} from './utils';
+import {OViewDialog} from './OWebView';
 
-export type tNetRequestBody =
+export type ONetRequestBody =
 	| undefined
 	| string
 	| object
@@ -10,7 +11,9 @@ export type tNetRequestBody =
 	| File
 	| Blob;
 
-export type tNetRequestMethod =
+export type ONetRequestParams = undefined | object | URLSearchParams;
+
+export type ONetRequestMethod =
 	| 'get'
 	| 'GET'
 	| 'delete'
@@ -26,55 +29,72 @@ export type tNetRequestMethod =
 	| 'patch'
 	| 'PATCH';
 
-export interface INetResponse<T> {
+export interface ONetResponse<T extends any> {
 	raw: any;
-	json: null | T;
+	json: T;
 	status: number;
 	statusText: string;
+	isGoodNews: boolean;
+	isSuccessStatus: boolean;
 }
 
-export interface INetError {
-	type: 'network' | 'abort' | 'timeout' | 'unknown';
-	event: ProgressEvent;
+export interface ONetError extends OViewDialog {
+	type: 'error';
+	errType: 'bad_news' | 'http' | 'network' | 'abort' | 'timeout' | 'unknown';
 }
 
-export interface INetRequestOptions<T> {
-	method: tNetRequestMethod;
-	body?: tNetRequestBody;
+export interface ONetRequestOptions<T extends any> {
+	method: ONetRequestMethod;
+	body?: ONetRequestBody;
+	params?: ONetRequestParams;
 	timeout: number;
 	withCredentials: boolean;
 	responseType: XMLHttpRequestResponseType;
 	headers: { [key: string]: string };
 	isSuccessStatus: (status: number) => boolean;
-	isGoodNews: (response: INetResponse<T>) => boolean;
+	isGoodNews: (json: null | T) => boolean;
+	serverErrorInfo: (response: ONetResponse<T>) => { text: string; data?: {} };
 }
 
-export default abstract class OWebNet<T> extends OWebEvent {
-	static readonly SELF = id();
-	static readonly EVT_ERROR = id(); // on error: abort, timeout, network
-	static readonly EVT_RESPONSE = id(); // request sent and the server responded.
-	static readonly EVT_HTTP_SUCCESS = id(); // request sent and http response status code is in success range
-	static readonly EVT_HTTP_ERROR = id(); // request sent and http response status code is in error range
-	static readonly EVT_FINISHED = id(); // request finished
-	static readonly EVT_GOOD_NEWS = id(); // the response is a good news [depends on provided options]
-	static readonly EVT_BAD_NEWS = id(); // the response is a bad news [depends on provided options]
-	static readonly EVT_UPLOAD_PROGRESS = id(); // on upload progress
+const eventHandlerMessage = '[OWebNet] Register event handler before calling send.';
+
+export default abstract class OWebNet<T extends any = null> extends OWebEvent {
+	static readonly SELF                  = id();
+	static readonly EVT_ERROR             = id(); // on error: abort, timeout, network
+	static readonly EVT_RESPONSE          = id(); // request sent and the server responded.
+	static readonly EVT_HTTP_SUCCESS      = id(); // request sent and http response status code is in success range
+	static readonly EVT_HTTP_ERROR        = id(); // request sent and http response status code is not in success range
+	static readonly EVT_FINISH            = id(); // request finished
+	static readonly EVT_GOOD_NEWS         = id(); // the response is a good news [depends on provided options]
+	static readonly EVT_BAD_NEWS          = id(); // the response is a bad news [depends on provided options]
+	static readonly EVT_FAIL              = id(); // the request failed: there is a general error, an http status error or a bad news
+	static readonly EVT_UPLOAD_PROGRESS   = id(); // on upload progress
 	static readonly EVT_DOWNLOAD_PROGRESS = id(); // on download progress
 
-	constructor(
+	/**
+	 * OWebNet constructor.
+	 *
+	 * @param url
+	 * @param options
+	 * @protected
+	 */
+	protected constructor(
 		protected url: string,
-		protected options: INetRequestOptions<T>,
+		protected options: ONetRequestOptions<T>,
 	) {
 		super();
 	}
 
 	/**
-	 * Called on error: abort, timeout, network
+	 * Assertion that throws error when request is already sent.
 	 *
-	 * @param handler
+	 * @param message
+	 * @private
 	 */
-	onError(handler: (this: this, error: INetError) => void): this {
-		return this.on(OWebNet.EVT_ERROR, handler);
+	protected assertNotSent(message: string) {
+		if (this.isSent()) {
+			throw Error(message);
+		}
 	}
 
 	/**
@@ -82,7 +102,8 @@ export default abstract class OWebNet<T> extends OWebEvent {
 	 *
 	 * @param handler
 	 */
-	onResponse(handler: (this: this, response: INetResponse<T>) => void): this {
+	onResponse(handler: (this: this, response: ONetResponse<T>) => void): this {
+		this.assertNotSent(eventHandlerMessage);
 		return this.on(OWebNet.EVT_RESPONSE, handler);
 	}
 
@@ -92,20 +113,10 @@ export default abstract class OWebNet<T> extends OWebEvent {
 	 * @param handler
 	 */
 	onHttpSuccess(
-		handler: (this: this, response: INetResponse<T>) => void,
+		handler: (this: this, response: ONetResponse<T>) => void,
 	): this {
+		this.assertNotSent(eventHandlerMessage);
 		return this.on(OWebNet.EVT_HTTP_SUCCESS, handler);
-	}
-
-	/**
-	 * Called when request sent and http response status code is in error range.
-	 *
-	 * @param handler
-	 */
-	onHttpError(
-		handler: (this: this, response: INetResponse<T>) => void,
-	): this {
-		return this.on(OWebNet.EVT_HTTP_ERROR, handler);
 	}
 
 	/**
@@ -113,8 +124,9 @@ export default abstract class OWebNet<T> extends OWebEvent {
 	 *
 	 * @param handler
 	 */
-	onFinished(handler: (this: this) => void): this {
-		return this.on(OWebNet.EVT_FINISHED, handler);
+	onFinish(handler: (this: this) => void): this {
+		this.assertNotSent(eventHandlerMessage);
+		return this.on(OWebNet.EVT_FINISH, handler);
 	}
 
 	/**
@@ -122,7 +134,8 @@ export default abstract class OWebNet<T> extends OWebEvent {
 	 *
 	 * @param handler
 	 */
-	onGoodNews(handler: (this: this, response: INetResponse<T>) => void): this {
+	onGoodNews(handler: (this: this, response: ONetResponse<T>) => void): this {
+		this.assertNotSent(eventHandlerMessage);
 		return this.on(OWebNet.EVT_GOOD_NEWS, handler);
 	}
 
@@ -131,8 +144,41 @@ export default abstract class OWebNet<T> extends OWebEvent {
 	 *
 	 * @param handler
 	 */
-	onBadNews(handler: (this: this, response: INetResponse<T>) => void): this {
+	onBadNews(handler: (this: this, response: ONetResponse<any>) => void): this {
+		this.assertNotSent(eventHandlerMessage);
 		return this.on(OWebNet.EVT_BAD_NEWS, handler);
+	}
+
+	/**
+	 * Called on error: abort, timeout, network
+	 *
+	 * @param handler
+	 */
+	onError(handler: (this: this, error: ONetError) => void): this {
+		this.assertNotSent(eventHandlerMessage);
+		return this.on(OWebNet.EVT_ERROR, handler);
+	}
+
+	/**
+	 * Called when request sent and http response status code is in error range.
+	 *
+	 * @param handler
+	 */
+	onHttpError(
+		handler: (this: this, response: ONetResponse<T>) => void,
+	): this {
+		this.assertNotSent(eventHandlerMessage);
+		return this.on(OWebNet.EVT_HTTP_ERROR, handler);
+	}
+
+	/**
+	 * Called when there is a general error, an http status error or a bad news.
+	 *
+	 * @param handler
+	 */
+	onFail(handler: (this: this, raison: ONetError) => void): this {
+		this.assertNotSent(eventHandlerMessage);
+		return this.on(OWebNet.EVT_FAIL, handler);
 	}
 
 	/**
@@ -145,6 +191,7 @@ export default abstract class OWebNet<T> extends OWebEvent {
 	onUploadProgress(
 		handler: (this: this, progress: ProgressEvent) => void,
 	): this {
+		this.assertNotSent(eventHandlerMessage);
 		return this.on(OWebNet.EVT_UPLOAD_PROGRESS, handler);
 	}
 
@@ -156,18 +203,19 @@ export default abstract class OWebNet<T> extends OWebEvent {
 	onDownloadProgress(
 		handler: (this: this, progress: ProgressEvent) => void,
 	): this {
+		this.assertNotSent(eventHandlerMessage);
 		return this.on(OWebNet.EVT_DOWNLOAD_PROGRESS, handler);
 	}
 
 	/**
-	 * Returns promise from this request.
+	 * Checks if the request is already sent.
 	 */
-	abstract promise(): Promise<INetResponse<T>>;
+	abstract isSent(): boolean;
 
 	/**
 	 * Send the request and return a promise.
 	 */
-	abstract send(): this;
+	abstract send(): Promise<ONetResponse<T>>;
 
 	/**
 	 * Abort the request

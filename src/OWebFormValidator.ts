@@ -10,29 +10,29 @@ import {
 } from './utils';
 import OWebFormError from './OWebFormError';
 
-type tFormErrorMap = { [key: string]: OWebFormError[] };
-export type tFormValidator = (
+type OFormErrorMap = { [key: string]: OWebFormError[] };
+export type OFormValidator = (
 	value: any,
 	name: string,
 	context: OWebFormValidator,
 ) => void;
 
-const formValidators: { [key: string]: tFormValidator } = {};
+const formValidators: { [key: string]: OFormValidator } = {};
 
 export default class OWebFormValidator {
 	private readonly formData: FormData;
 	private validatorsMap: { [key: string]: string } = {};
-	private errorMap: tFormErrorMap = {};
+	private errorMap: OFormErrorMap = {};
 
 	/**
-	 * @param appContext The app context.
+	 * @param _appContext The app context.
 	 * @param form The form element.
 	 * @param required The required fields.
 	 * @param excluded The fields to exclude from validation.
 	 * @param checkAll When true all fields will be validated.
 	 */
 	constructor(
-		private readonly appContext: OWebApp,
+		private readonly _appContext: OWebApp,
 		private readonly form: HTMLFormElement,
 		private readonly required: string[] = [],
 		private readonly excluded: string[] = [],
@@ -76,7 +76,7 @@ export default class OWebFormValidator {
 	 * Returns the app context.
 	 */
 	getAppContext(): OWebApp {
-		return this.appContext;
+		return this._appContext;
 	}
 
 	/**
@@ -98,7 +98,7 @@ export default class OWebFormValidator {
 			const formData = new FormData();
 			for (let i = 0; i < fields.length; i++) {
 				const field = fields[i];
-				const values = this.getAllFields(field); // for checkboxes and others
+				const values = this.getFieldValues(field); // for checkboxes and others
 				values.forEach((value: any) => {
 					formData.append(field, value);
 				});
@@ -134,7 +134,7 @@ export default class OWebFormValidator {
 	 *
 	 * @param name
 	 */
-	getAllFields(name: string): any {
+	getFieldValues(name: string): any {
 		return this.formData.getAll(name);
 	}
 
@@ -154,18 +154,15 @@ export default class OWebFormValidator {
 			let label, placeholder, title;
 			if (
 				id &&
-				// tslint:disable-next-line: no-conditional-assignment
 				(label = this.form.querySelector(`label[for='${id}']`))
 			) {
 				description = label.textContent;
 			} else if (
-				// tslint:disable-next-line: no-conditional-assignment
 				(placeholder = field.getAttribute('placeholder')) &&
 				placeholder.trim().length
 			) {
 				description = placeholder;
 			} else if (
-				// tslint:disable-next-line: no-conditional-assignment
 				(title = field.getAttribute('title')) &&
 				title.trim().length
 			) {
@@ -179,7 +176,7 @@ export default class OWebFormValidator {
 	/**
 	 * Returns error map.
 	 */
-	getErrors(): tFormErrorMap {
+	getErrors(): OFormErrorMap {
 		return this.errorMap;
 	}
 
@@ -201,7 +198,6 @@ export default class OWebFormValidator {
 			}
 		});
 
-		// tslint:disable-next-line: no-conditional-assignment
 		while ((name = fieldNames[++c])) {
 			try {
 				if (context.excluded.indexOf(name) < 0) {
@@ -224,7 +220,7 @@ export default class OWebFormValidator {
 					}
 				}
 			} catch (e) {
-				if (e._owebFormError) {
+				if (e.isFormError) {
 					if (!this.errorMap[name]) {
 						this.errorMap[name] = [];
 					}
@@ -269,7 +265,7 @@ export default class OWebFormValidator {
 	 * @param name The validator name.
 	 * @param validator The validator function.
 	 */
-	static addFieldValidator(name: string, validator: tFormValidator): void {
+	static addFieldValidator(name: string, validator: OFormValidator): void {
 		if (!isString(name)) {
 			throw new TypeError(
 				'[OWebFormValidator] field name should be a valid string.',
@@ -296,8 +292,8 @@ export default class OWebFormValidator {
 	 *
 	 * @param map The map of fields validators.
 	 */
-	static addFieldValidators(map: { [key: string]: tFormValidator }): void {
-		forEach(map, (fn: tFormValidator, key: string) => {
+	static addFieldValidators(map: { [key: string]: OFormValidator }): void {
+		forEach(map, (fn: OFormValidator, key: string) => {
 			OWebFormValidator.addFieldValidator(key, fn);
 		});
 	}

@@ -1,8 +1,7 @@
-import { INetRequestOptions } from '../OWebNet';
-import { logger } from '../utils';
-import OWebXHR from '../OWebXHR';
+import OZone from './OZone';
+import {isEmpty, isPlainObject} from '../utils';
 
-export interface IOZoneApiJSON<R> {
+export interface OApiJSON<R> {
 	error: number;
 	msg: string;
 	data: R;
@@ -11,21 +10,18 @@ export interface IOZoneApiJSON<R> {
 	stoken?: string; // session token
 }
 
-export interface IOZoneApiAddResponse<T>
-	extends IOZoneApiJSON<{
+export type OApiAddJSON<T> = OApiJSON<{
 		item: T;
-	}> {}
+	}>
 
-export interface IOZoneApiGetResponse<T>
-	extends IOZoneApiJSON<{
+export type OApiGetJSON<T> = OApiJSON<{
 		item: T;
 		relations?: {
 			[key: string]: any;
 		};
-	}> {}
+	}>
 
-export interface IOZoneApiGetAllResponse<T>
-	extends IOZoneApiJSON<{
+export type OApiGetAllJSON<T> = OApiJSON<{
 		items: T[];
 		max?: number;
 		page?: number;
@@ -33,30 +29,25 @@ export interface IOZoneApiGetAllResponse<T>
 		relations?: {
 			[key: string]: any;
 		};
-	}> {}
+	}>
 
-export interface IOZoneApiUpdateResponse<T>
-	extends IOZoneApiJSON<{
+export type OApiUpdateJSON<T> = OApiJSON<{
 		item: T;
-	}> {}
+	}>
 
-export interface IOZoneApiUpdateAllResponse
-	extends IOZoneApiJSON<{
+export type OApiUpdateAllJSON = OApiJSON<{
 		affected: number;
-	}> {}
+	}>
 
-export interface IOZoneApiDeleteResponse<T>
-	extends IOZoneApiJSON<{
+export type OApiDeleteJSON<T> = OApiJSON<{
 		item: T;
-	}> {}
+	}>
 
-export interface IOZoneApiDeleteAllResponse
-	extends IOZoneApiJSON<{
+export type OApiDeleteAllJSON = OApiJSON<{
 		affected: number;
-	}> {}
+	}>
 
-export interface IOZoneApiGetRelationItemsResponse<T>
-	extends IOZoneApiJSON<{
+export type OApiGetRelationItemsJSON<T> = OApiJSON<{
 		items: T[];
 		max?: number;
 		page?: number;
@@ -64,17 +55,16 @@ export interface IOZoneApiGetRelationItemsResponse<T>
 		relations: {
 			[key: string]: any;
 		};
-	}> {}
+	}>
 
-export interface IOZoneApiGetRelationItemResponse<T>
-	extends IOZoneApiJSON<{
+export type OApiGetRelationItemJSON<T> = OApiJSON<{
 		item: T;
 		relations?: {
 			[key: string]: any;
 		};
-	}> {}
+	}>
 
-export type tOZoneApiFilterCondition =
+export type OApiFilterCondition =
 	| 'eq'
 	| 'neq'
 	| 'lt'
@@ -88,22 +78,22 @@ export type tOZoneApiFilterCondition =
 	| 'like'
 	| 'not_like';
 
-export type tOZoneApiFilter =
+export type OApiFilter =
 	| {
-			0: tOZoneApiFilterCondition;
-			1: string | string[] | number;
-			2?: 'or' | 'and';
-	  }
+	0: Exclude<OApiFilterCondition, 'is_null' | 'is_not_null'>;
+	1: string | number | (string | number)[];
+	2?: 'or' | 'and';
+}
 	| {
-			0: 'is_null' | 'is_not_null';
-			1?: 'or' | 'and';
-	  };
+	0: 'is_null' | 'is_not_null';
+	1?: 'or' | 'and';
+};
 
-export type tOZoneApiFiltersMap = { [key: string]: tOZoneApiFilter[] };
+export type OApiFiltersMap = { [key: string]:  number | string | OApiFilter[] };
 
-export interface IOZoneApiRequestOptions {
+export interface OApiRequestOptions {
 	data?: any;
-	filters?: tOZoneApiFiltersMap;
+	filters?: OApiFiltersMap;
 	relations?: string | string[];
 	collection?: string;
 	order_by?: string;
@@ -111,35 +101,31 @@ export interface IOZoneApiRequestOptions {
 	page?: number;
 }
 
-/**
- * Create net instance.
- *
- * @param url The request url.
- * @param options The request options.
- */
-export const ozNet = function <R extends IOZoneApiJSON<any>>(
-	url: string,
-	options: Partial<INetRequestOptions<R>>,
-) {
-	const event = function (type: string) {
-		return function () {
-			logger.debug('[OZone][NET] intercepted', type, ...arguments);
-		};
-	};
+export function cleanRequestOptions(options: OApiRequestOptions): OApiRequestOptions {
+	const _options: OApiRequestOptions = {};
+	if (typeof options.max === 'number') {
+		_options.max = options.max;
+	}
+	if (typeof options.page === 'number') {
+		_options.page = options.page;
+	}
 
-	return new OWebXHR<R>(url, {
-		isGoodNews(response) {
-			return Boolean(response.json && response.json.error);
-		},
-		...options,
-	})
-		.onGoodNews(event('onGoodNews'))
-		.onBadNews(event('onBadNews'))
-		.onFinished(event('onFinished'))
-		.onError(event('onError'))
-		.onDownloadProgress(event('onDownloadProgress'))
-		.onUploadProgress(event('onUploadProgress'))
-		.onHttpError(event('onHttpError'))
-		.onHttpSuccess(event('onHttpSuccess'))
-		.onResponse(event('onResponse'));
-};
+	if (typeof options.relations === 'string') {
+		_options.relations = options.relations;
+	}
+	if (typeof options.collection === 'string') {
+		_options.collection = options.collection;
+	}
+
+	if (typeof options.order_by === 'string') {
+		_options['order_by'] = options.order_by;
+	}
+
+	if (isPlainObject(options.filters) && !isEmpty(options.filters)) {
+		_options.filters = options.filters;
+	}
+
+	return _options;
+}
+
+export default OZone;

@@ -23,8 +23,8 @@
  */
 import OWebApp from '../OWebApp';
 
-export type tDateValue = Date | number | string;
-export type tDateDesc = {
+export type ODateValue = Date | number | string;
+export type ODateDesc = {
 	D: string;
 	L: string;
 	l: number;
@@ -52,8 +52,8 @@ const FORMAT_REG = /ms|ss|ii|hh|mm|ll|A|a|s|i|H|h|y|Y|m|F|M|d|l|L|D/g;
 
 export default class OWebDate {
 	constructor(
-		private appContext: OWebApp,
-		private date: tDateValue = new Date(),
+		private _appContext: OWebApp,
+		private date: ODateValue = new Date(),
 	) {}
 
 	/**
@@ -71,8 +71,8 @@ export default class OWebDate {
 	/**
 	 * Returns date description object.
 	 */
-	describe(): tDateDesc {
-		const i18n = this.appContext.i18n,
+	describe(): ODateDesc {
+		const i18n = this._appContext.i18n,
 			dayNamesShort = i18n.toHuman('OW_TIME_DAY_NAMES_SHORT').split(','),
 			dayNamesFull = i18n.toHuman('OW_TIME_DAY_NAMES_FULL').split(','),
 			monthNamesShort = i18n
@@ -85,7 +85,7 @@ export default class OWebDate {
 			y: number = (date as any).getYear(),
 			Y: number = date.getFullYear(),
 			m: number = date.getMonth(),
-			mm: string = String(m < 9 ? '0' + (m + 1) : m + 1),
+			mm = String(m < 9 ? '0' + (m + 1) : m + 1),
 			d: number = date.getDate(),
 			l: number = date.getDay(),
 			ll: number = l + 1, // l? l : 7,
@@ -95,11 +95,11 @@ export default class OWebDate {
 			F: string = monthNamesFull[m],
 			H: number = date.getHours(),
 			h: number = H === 12 ? 12 : H % 12,
-			hh: string = String(m <= 9 ? '0' + m : m),
+			hh = String(m <= 9 ? '0' + m : m),
 			i: number = date.getMinutes(),
-			ii: string = String(i < 10 ? '0' + i : i),
+			ii = String(i < 10 ? '0' + i : i),
 			s: number = date.getSeconds(),
-			ss: string = String(s < 10 ? '0' + s : s),
+			ss = String(s < 10 ? '0' + s : s),
 			ms: number = date.getMilliseconds(),
 			a: string = H < 12 ? 'am' : 'pm',
 			A: string = a.toUpperCase();
@@ -134,7 +134,7 @@ export default class OWebDate {
 	 *
 	 * @param date
 	 */
-	setDate(date: tDateValue): this {
+	setDate(date: ODateValue): this {
 		this.date = new Date(date);
 		return this;
 	}
@@ -142,7 +142,7 @@ export default class OWebDate {
 	/**
 	 * Date getter.
 	 */
-	getDate(): tDateValue {
+	getDate(): ODateValue {
 		return this.date;
 	}
 

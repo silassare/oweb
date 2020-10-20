@@ -1,15 +1,18 @@
-/**
- * OWeb custom error class.
- */
 export default class OWebError extends Error {
 	readonly data: any;
 
+	/**
+	 * OWebError constructor.
+	 *
+	 * @param message
+	 * @param data
+	 */
 	constructor(message: any, data: any = {}) {
 		super(message);
 		this.data = data;
 
-		if (arguments[0] instanceof Error) {
-			const e = arguments[0];
+		if (message instanceof Error) {
+			const e = message;
 			this.message = e.message;
 			this.stack = e.stack;
 		} else {

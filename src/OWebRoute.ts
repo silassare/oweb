@@ -1,36 +1,35 @@
-import { escapeRegExp, isArray, isPlainObject, isString } from './utils';
+import {escapeRegExp, isArray, isPlainObject, isString} from './utils';
 import OWebRouteContext from './OWebRouteContext';
 
-export type tRoutePath = string | RegExp;
-export type tRoutePathOptions = {
+const tokenTypesRegMap = {
+		  'num'              : /\d+/.source,
+		  'alpha'            : /[a-zA-Z]+/.source,
+		  'alpha-fullUrl'    : /[a-z]+/.source,
+		  'alpha-l'          : /[A-Z]+/.source,
+		  'alpha-num'        : /[a-zA-Z0-9]+/.source,
+		  'alpha-num-l'      : /[a-z0-9]+/.source,
+		  'alpha-num-fullUrl': /[A-Z0-9]+/.source,
+		  'any'              : /[^/]+/.source,
+	  },
+	  tokenReg         = /:([a-z][a-z0-9_]*)/i,
+	  stringReg        = function (str: string) {
+		  return new RegExp(escapeRegExp(str));
+	  },
+	  wrapReg          = (str: string, capture = false) => capture ? '(' + str + ')' : '(?:' + str + ')';
+
+export type ORoutePath = string | RegExp;
+export type ORoutePathOptions = {
 	[key: string]: RegExp | keyof typeof tokenTypesRegMap;
 };
-export type tRouteTokensMap = { [key: string]: string };
-export type tRouteAction = (ctx: OWebRouteContext) => void;
-export type tRouteInfo = { reg: RegExp | null; tokens: string[] };
-
-const tokenTypesRegMap = {
-		'num': /\d+/.source,
-		'alpha': /[a-zA-Z]+/.source,
-		'alpha-fullUrl': /[a-z]+/.source,
-		'alpha-l': /[A-Z]+/.source,
-		'alpha-num': /[a-zA-Z0-9]+/.source,
-		'alpha-num-l': /[a-z0-9]+/.source,
-		'alpha-num-fullUrl': /[A-Z0-9]+/.source,
-		'any': /[^/]+/.source,
-	},
-	tokenReg = /:([a-z][a-z0-9_]*)/i,
-	stringReg = function (str: string) {
-		return new RegExp(escapeRegExp(str));
-	},
-	wrapReg = (str: string, capture: boolean = false) =>
-		capture ? '(' + str + ')' : '(?:' + str + ')';
+export type ORouteTokensMap = { [key: string]: string };
+export type ORouteAction = (ctx: OWebRouteContext) => void;
+export type ORouteInfo = { reg: RegExp | null; tokens: string[] };
 
 export default class OWebRoute {
 	private readonly path: string;
 	private readonly reg: RegExp | null;
 	private tokens: string[];
-	private readonly action: tRouteAction;
+	private readonly action: ORouteAction;
 
 	/**
 	 * OWebRoute Constructor.
@@ -41,20 +40,20 @@ export default class OWebRoute {
 	 */
 	constructor(
 		path: string | RegExp,
-		options: tRoutePathOptions | string[],
-		action: tRouteAction,
+		options: ORoutePathOptions | string[],
+		action: ORouteAction,
 	) {
 		if (path instanceof RegExp) {
-			this.path = path.toString();
-			this.reg = path;
+			this.path   = path.toString();
+			this.reg    = path;
 			this.tokens = isArray(options) ? options : [];
 		} else if (isString(path) && path.length) {
-			options = (isPlainObject(options)
-				? options
-				: {}) as tRoutePathOptions;
-			const p = OWebRoute.parseDynamicPath(path, options);
-			this.path = path;
-			this.reg = p.reg;
+			options     = (isPlainObject(options)
+						   ? options
+						   : {}) as ORoutePathOptions;
+			const p     = OWebRoute.parseDynamicPath(path, options);
+			this.path   = path;
+			this.reg    = p.reg;
 			this.tokens = p.tokens;
 		} else {
 			throw new TypeError(
@@ -81,7 +80,7 @@ export default class OWebRoute {
 	/**
 	 * Gets route action.
 	 */
-	getAction(): tRouteAction {
+	getAction(): ORouteAction {
 		return this.action;
 	}
 
@@ -99,7 +98,7 @@ export default class OWebRoute {
 	 *
 	 * @param pathname
 	 */
-	parse(pathname: string): tRouteTokensMap {
+	parse(pathname: string): ORouteTokensMap {
 		if (this.isDynamic()) {
 			const founds: any = String(pathname).match(this.reg as RegExp);
 
@@ -139,19 +138,18 @@ export default class OWebRoute {
 	 */
 	static parseDynamicPath(
 		path: string,
-		options: tRoutePathOptions,
-	): tRouteInfo {
+		options: ORoutePathOptions,
+	): ORouteInfo {
 		const tokens: string[] = [];
-		let reg: string = '',
-			_path: string = path,
+		let reg                = '',
+			_path: string      = path,
 			match: RegExpExecArray | null;
 
-		// tslint:disable-next-line: no-conditional-assignment
 		while ((match = tokenReg.exec(_path)) != null) {
-			const found: any = match[0],
-				token: any = match[1],
-				rule: any = options[token] || 'any',
-				head: string = _path.slice(0, match.index);
+			const found: any   = match[0],
+				  token: any   = match[1],
+				  rule: any    = options[token] || 'any',
+				  head: string = _path.slice(0, match.index);
 
 			if (head.length) {
 				reg += wrapReg(stringReg(head).source);

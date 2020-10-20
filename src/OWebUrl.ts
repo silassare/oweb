@@ -9,14 +9,12 @@ const isServerUrl = function (urlKey: string): boolean {
 		return /^OW_LOCAL_/.test(urlKey);
 	};
 
-export type tUrlList = { [key: string]: string };
-
-export default class OWebUrl {
-	private readonly _urlList: tUrlList;
+export default class OWebUrl<T extends { [key: string]: string } = any> {
+	private readonly _urlList: T;
 	private readonly _urlLocalBase: string;
 	private readonly _urlServerBase: string;
 
-	constructor(context: OWebApp, urlList: tUrlList) {
+	constructor(context: OWebApp, urlList: T) {
 		this._urlList = urlList;
 		this._urlLocalBase = context.configs.get('OW_APP_LOCAL_BASE_URL');
 		this._urlServerBase = context.configs.get('OZ_API_BASE_URL');

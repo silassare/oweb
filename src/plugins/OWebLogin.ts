@@ -1,70 +1,61 @@
 import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
-import { id } from '../utils';
-import { INetResponse } from '../OWebNet';
-import { GoblSinglePKEntity } from 'gobl-utils-ts';
-import { IOZoneApiJSON, ozNet } from '../ozone';
+import {id} from '../utils';
+import {ONetError, ONetResponse} from '../OWebNet';
+import {OApiJSON} from '../ozone';
 
-export type tLoginResponseData = GoblSinglePKEntity;
-
-export default class OWebLogin extends OWebEvent {
-	static readonly SELF = id();
-	static readonly EVT_LOGIN_ERROR = id();
+export default class OWebLogin<User> extends OWebEvent {
+	static readonly SELF              = id();
+	static readonly EVT_LOGIN_FAIL    = id();
 	static readonly EVT_LOGIN_SUCCESS = id();
 
-	constructor(private readonly appContext: OWebApp) {
+	constructor(private readonly _appContext: OWebApp) {
 		super();
 	}
 
 	loginWithEmail(data: { email: string; pass: string }) {
 		return this._tryLogin({
 			email: data.email,
-			pass: data.pass,
+			pass : data.pass,
 		});
 	}
 
 	loginWithPhone(data: { phone: string; pass: string }) {
 		return this._tryLogin({
 			phone: data.phone,
-			pass: data.pass,
+			pass : data.pass,
 		});
 	}
 
-	onError(
-		handler: (
-			this: this,
-			response: INetResponse<IOZoneApiJSON<any>>,
-		) => void,
+	onLoginFail(
+		handler: (this: this, err: ONetError) => void,
 	): this {
-		return this.on(OWebLogin.EVT_LOGIN_ERROR, handler);
+		return this.on(OWebLogin.EVT_LOGIN_FAIL, handler);
 	}
 
-	onSuccess(
+	onLoginSuccess(
 		handler: (
 			this: this,
-			response: INetResponse<IOZoneApiJSON<tLoginResponseData>>,
+			response: ONetResponse<OApiJSON<User>>,
 		) => void,
 	): this {
 		return this.on(OWebLogin.EVT_LOGIN_SUCCESS, handler);
 	}
 
 	private _tryLogin(data: FormData | object) {
-		const m = this,
-			url = m.appContext.url.get('OZ_SERVER_LOGIN_SERVICE'),
-			net = ozNet<IOZoneApiJSON<tLoginResponseData>>(url, {
-				method: 'POST',
-				body: data,
-				isGoodNews(response) {
-					return Boolean(response.json && response.json.error === 0);
-				},
-			});
+		const m   = this,
+			  url = m._appContext.url.get('OZ_SERVER_LOGIN_SERVICE'),
+			  net = m._appContext.oz.request<OApiJSON<User>>(url, {
+				  method: 'POST',
+				  body  : data,
+			  });
 
 		return net
 			.onGoodNews(function (response) {
 				m.trigger(OWebLogin.EVT_LOGIN_SUCCESS, [response]);
 			})
-			.onBadNews(function (response) {
-				m.trigger(OWebLogin.EVT_LOGIN_ERROR, [response]);
+			.onFail(function (err) {
+				m.trigger(OWebLogin.EVT_LOGIN_FAIL, [err]);
 			})
 			.send();
 	}

@@ -1,5 +1,5 @@
-export type tFileQuality = 0 | 1 | 2 | 3;
-export type tFileAliasInfo = {
+export type OFileQuality = 0 | 1 | 2 | 3;
+export type OFileAliasInfo = {
 	file_id: string;
 	file_key: string;
 };
@@ -29,14 +29,14 @@ export default class OWebFS {
 	 *
 	 * @param info
 	 */
-	static createFileAlias(info: tFileAliasInfo): File {
+	static createFileAlias(info: OFileAliasInfo): File {
 		const fileName = info.file_id + '.ofa',
-			content = JSON.stringify({
-				file_id: info.file_id,
-				file_key: info.file_key,
-			}),
-			b = new Blob([content], { type: OWebFS.OFA_MIME_TYPE });
+			  content  = JSON.stringify({
+				  'file_id' : info.file_id,
+				  'file_key': info.file_key,
+			  }),
+			  b        = new Blob([content], {type: OWebFS.OFA_MIME_TYPE});
 
-		return new File([b], fileName, { type: b.type });
+		return new File([b], fileName, {type: b.type});
 	}
 }

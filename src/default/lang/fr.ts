@@ -1,8 +1,12 @@
-import { tI18nDefinition } from '../../OWebI18n';
+import { OI18nDefinition } from '../../OWebI18n';
 
 export default {
 	// ---------START NEW
-	OZ_ERROR_REQUEST_FAIL: 'Erreur: la requête a échoué.',
+	OZ_ERROR_REQUEST_FAIL: 'Erreur: La requête a échoué.',
+
+	OW_ERROR_REQUEST_TIMED_OUT: 'Erreur: La requête prends trop de temps à se terminer.',
+	OW_ERROR_REQUEST_ABORTED: 'Erreur: La requête a été annulée.',
+
 	OZ_ERROR_NETWORK: 'Erreur: problèmes de connexion internet.',
 	OZ_ERROR_SERVER: 'Erreur: echec de récupération des informations.',
 	OZ_ERROR_YOU_ARE_NOT_ADMIN: 'Erreur: Vous n\'etes pas un administrateur.',
@@ -86,4 +90,4 @@ export default {
 		'janv.,f\xe9vr.,mars,avr.,mai,juin,juil.,ao\xfbt,sept.,oct.,nov.,d\xe9c.',
 	OW_TIME_MONTH_NAMES_FULL:
 		'janvier,f\xe9vrier,mars,avril,mai,juin,juillet,ao\xfbt,septembre,octobre,novembre,d\xe9cembre',
-} as tI18nDefinition;
+} as OI18nDefinition;

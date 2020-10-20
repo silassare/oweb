@@ -1,79 +1,76 @@
 import OWebNet, {
-	INetError,
-	INetRequestOptions,
-	INetResponse,
-	tNetRequestBody,
+	ONetError,
+	ONetRequestOptions,
+	ONetResponse,
+	ONetRequestBody,
 } from './OWebNet';
-import { forEach } from './utils';
+import {buildURL, forEach, isPlainObject} from './utils';
 
 const setOrIgnoreIfExists = function (
 	target: any,
 	key: string,
 	value: any,
-	caseSensitive: boolean = false,
+	caseSensitive = false,
 ) {
 	if (!target[key] && (!caseSensitive || !target[key.toUpperCase()])) {
 		target[key] = value;
 	}
 };
 
-export default class OWebXHR<T> extends OWebNet<T> {
+export default class OWebXHR<T extends any> extends OWebNet<T> {
 	private _abort?: () => void;
-	private _sent: boolean = false;
+	private _sent = false;
 
-	constructor(url: string, options: Partial<INetRequestOptions<T>>) {
+	/**
+	 * OWebXHR constructor.
+	 *
+	 * @param url
+	 * @param options
+	 */
+	constructor(url: string, options: Partial<ONetRequestOptions<T>>) {
 		super(url, {
-			method: 'get',
-			timeout: 0,
+			method         : 'get',
+			timeout        : 0,
 			withCredentials: false,
-			responseType: 'json',
-			headers: {},
+			responseType   : 'json',
+			headers        : {},
 			isSuccessStatus: (status: number) => status >= 200 && status < 300,
-			isGoodNews: (response: INetResponse<T>) => {
+			isGoodNews     : () => {
 				return true;
+			},
+			serverErrorInfo: () => {
+				return {text: 'OZ_ERROR_SERVER'};
 			},
 			...options,
 		});
 	}
 
-	private _assertNotSent() {
-		if (this._sent) {
-			throw Error('[OWebXHR] request is already sent.');
-		}
+	/**
+	 * @inheritDoc
+	 */
+	isSent(): boolean {
+		return this._sent;
 	}
 
-	promise(): Promise<INetResponse<T>> {
-		this._assertNotSent();
-
-		const x = this;
-
-		return new Promise<INetResponse<T>>(function (
-			resolve: (response: INetResponse<T>) => void,
-			reject: (error: INetError) => void,
-		) {
-			x.onResponse((response) => resolve(response))
-				.onError((err) => reject(err))
-				.send();
-		});
-	}
-
+	/**
+	 * @inheritDoc
+	 */
 	send() {
-		this._assertNotSent();
+		this.assertNotSent('[OWebXHR] request is already sent.');
 
-		this._sent = true;
-
-		let x = this,
-			xhr = new XMLHttpRequest();
-		const opt = x.options,
-			always = () => {
-				x.trigger(OWebNet.EVT_FINISHED);
-				xhr = x = null as any;
-			},
-			onerror = (err: INetError) => {
-				x.trigger(OWebNet.EVT_ERROR, [err]);
-				always();
-			},
-			body = this.requestBody(opt.body);
+		let x         = this,
+			xhr       = new XMLHttpRequest();
+		const opt     = x.options,
+			  always  = () => {
+				  x.trigger(OWebNet.EVT_FINISH);
+				  xhr = x = null as any;
+			  },
+			  onerror = (err: ONetError) => {
+				  x.trigger(OWebNet.EVT_ERROR, [err]);
+				  x.trigger(OWebNet.EVT_FAIL, [err]);
+				  always();
+			  },
+			  body    = this.requestBody(opt.body);
 
 		xhr.timeout = opt.timeout;
 
@@ -102,37 +99,54 @@ export default class OWebXHR<T> extends OWebNet<T> {
 			}
 
 			const responseRaw =
-				xhr[
-					(xhr.responseType || 'text') === 'text'
-						? 'responseText'
-						: 'response'
-				];
-			const response: INetResponse<T> = {
-				raw: responseRaw,
-				json: null as any,
-				status: xhr.status,
-				statusText: xhr.statusText,
-			};
+					  xhr[
+						  (xhr.responseType || 'text') === 'text'
+						  ? 'responseText'
+						  : 'response'
+						  ];
+
+			let json = null as any;
 
 			if (typeof responseRaw === 'string') {
 				try {
-					response.json = JSON.parse(responseRaw);
-					// tslint:disable-next-line: no-empty
+					json = JSON.parse(responseRaw);
+					// eslint-disable-next-line no-empty
 				} catch (e) {}
 			}
 
+			const response: ONetResponse<T> = {
+				isSuccessStatus: opt.isSuccessStatus(xhr.status),
+				isGoodNews     : opt.isGoodNews(json),
+				raw            : responseRaw,
+				json,
+				status         : xhr.status,
+				statusText     : xhr.statusText,
+			};
+
 			x.trigger(OWebNet.EVT_RESPONSE, [response]);
 
-			if (opt.isSuccessStatus(xhr.status)) {
+			if (response.isSuccessStatus) {
 				x.trigger(OWebNet.EVT_HTTP_SUCCESS, [response]);
 
-				if (opt.isGoodNews(response)) {
+				if (response.isGoodNews) {
 					x.trigger(OWebNet.EVT_GOOD_NEWS, [response]);
 				} else {
 					x.trigger(OWebNet.EVT_BAD_NEWS, [response]);
+					const err: ONetError = {
+						type: 'error',
+						errType: 'bad_news',
+						... x.options.serverErrorInfo(response)
+					};
+					x.trigger(OWebNet.EVT_FAIL, [err]);
 				}
 			} else {
 				x.trigger(OWebNet.EVT_HTTP_ERROR, [response]);
+				const err: ONetError = {
+					type: 'error',
+					errType: 'http',
+					... x.options.serverErrorInfo(response)
+				};
+				x.trigger(OWebNet.EVT_FAIL, [err]);
 			}
 
 			always();
@@ -149,53 +163,74 @@ export default class OWebXHR<T> extends OWebNet<T> {
 		});
 
 		xhr.onabort = function (event) {
-			onerror({ type: 'abort', event });
+			onerror({
+				type   : 'error',
+				errType: 'abort',
+				text   : 'OW_ERROR_REQUEST_ABORTED',
+				data   : {event},
+			});
 		};
 
 		xhr.ontimeout = function (event) {
-			onerror({ type: 'timeout', event });
+			onerror({
+				type   : 'error',
+				errType: 'timeout',
+				text   : 'OW_ERROR_REQUEST_TIMED_OUT',
+				data   : {event},
+			});
 		};
 
 		xhr.onerror = function (event) {
 			// handle non-HTTP error (e.g. network down)
-			onerror({ type: 'network', event });
+			onerror({
+				type   : 'error',
+				errType: 'network',
+				text   : 'OZ_ERROR_NETWORK',
+				data   : {event},
+			});
 		};
 
 		this._abort = () => {
 			xhr && xhr.abort();
 		};
 
-		xhr.open(opt.method.toUpperCase(), this.url, true);
+		const url = this.options.params ? buildURL(this.url, this.options.params) : this.url;
+
+		xhr.open(opt.method.toUpperCase(), url, true);
 
 		forEach(opt.headers, function (value, header) {
 			xhr.setRequestHeader(header, value);
 		});
 
-		xhr.send(body);
+		return new Promise<ONetResponse<T>>(function (
+			resolve: (response: ONetResponse<T>) => void,
+			reject: (error: ONetError) => void,
+		) {
+			x.onGoodNews((response) => resolve(response))
+			 .onFail((err) => reject(err));
 
-		return this;
+			x._sent = true;
+			xhr.send(body);
+		});
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	abort() {
 		this._abort && this._abort();
 		return this;
 	}
 
-	private requestBody(body: tNetRequestBody): any {
-		let type;
-		// tslint:disable-next-line: no-conditional-assignment
-		if (body === null || (type = typeof body) === 'undefined') {
+	/**
+	 * Builds the request body.
+	 *
+	 * @param body
+	 * @private
+	 */
+	private requestBody(body: ONetRequestBody): any {
+		if (body === null || typeof body === 'undefined') {
 			return null;
-		}
-
-		if (type === 'object') {
-			setOrIgnoreIfExists(
-				this.options.headers,
-				'Content-Type',
-				'application/json;charset=utf-8',
-			);
-
-			return JSON.stringify(body);
 		}
 
 		if (body instanceof URLSearchParams) {
@@ -206,6 +241,16 @@ export default class OWebXHR<T> extends OWebNet<T> {
 			);
 
 			return body.toString();
+		}
+
+		if (isPlainObject(body)) {
+			setOrIgnoreIfExists(
+				this.options.headers,
+				'Content-Type',
+				'application/json;charset=utf-8',
+			);
+
+			return JSON.stringify(body);
 		}
 
 		return body;

@@ -1,20 +1,20 @@
 import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
-import { id } from '../utils';
-import { INetResponse } from '../OWebNet';
-import { IOZoneApiJSON, ozNet } from '../ozone';
+import {id} from '../utils';
+import {ONetError, ONetResponse} from '../OWebNet';
+import {OApiJSON} from '../ozone';
 
 export default class OWebAccountRecovery extends OWebEvent {
-	static readonly SELF = id();
+	static readonly SELF             = id();
 	static readonly EVT_AR_NEXT_STEP = id();
-	static readonly EVT_AR_SUCCESS = id();
-	static readonly EVT_AR_ERROR = id();
+	static readonly EVT_AR_SUCCESS   = id();
+	static readonly EVT_AR_FAIL      = id();
 
-	static readonly AR_STEP_START = 1;
+	static readonly AR_STEP_START    = 1;
 	static readonly AR_STEP_VALIDATE = 2;
-	static readonly AR_STEP_END = 3;
+	static readonly AR_STEP_END      = 3;
 
-	constructor(private readonly appContext: OWebApp) {
+	constructor(private readonly _appContext: OWebApp) {
 		super();
 	}
 
@@ -22,8 +22,8 @@ export default class OWebAccountRecovery extends OWebEvent {
 		return this._sendForm(
 			{
 				phone: data.phone,
-				cc2: data.cc2,
-				step: OWebAccountRecovery.AR_STEP_START,
+				cc2  : data.cc2,
+				step : OWebAccountRecovery.AR_STEP_START,
 			},
 			OWebAccountRecovery.AR_STEP_VALIDATE,
 		);
@@ -41,43 +41,43 @@ export default class OWebAccountRecovery extends OWebEvent {
 
 	stepEnd(data: { pass: string; vpass: string }) {
 		return this._sendForm({
-			pass: data.pass,
+			pass : data.pass,
 			vpass: data.vpass,
-			step: String(OWebAccountRecovery.AR_STEP_END),
+			step : String(OWebAccountRecovery.AR_STEP_END),
 		});
 	}
 
-	onError(
-		handler: (response: INetResponse<IOZoneApiJSON<any>>) => void,
+	onRecoverySuccess(
+		handler: (
+			this: this,
+			response: ONetResponse<OApiJSON<any>>) => void,
 	): this {
-		return this.on(OWebAccountRecovery.EVT_AR_ERROR, handler);
+		return this.on(OWebAccountRecovery.EVT_AR_SUCCESS, handler);
+	}
+
+	onRecoveryFail(
+		handler: (this: this, err: ONetError) => void,
+	): this {
+		return this.on(OWebAccountRecovery.EVT_AR_FAIL, handler);
 	}
 
 	onNextStep(
 		handler: (
-			response: INetResponse<IOZoneApiJSON<any>>,
+			this: this,
+			response: ONetResponse<OApiJSON<any>>,
 			step: number,
 		) => void,
 	): this {
 		return this.on(OWebAccountRecovery.EVT_AR_NEXT_STEP, handler);
 	}
 
-	onSuccess(
-		handler: (response: INetResponse<IOZoneApiJSON<any>>) => void,
-	): this {
-		return this.on(OWebAccountRecovery.EVT_AR_SUCCESS, handler);
-	}
-
 	private _sendForm(data: FormData | object, nextStep?: number) {
-		const m = this,
-			url = m.appContext.url.get('OZ_SERVER_ACCOUNT_RECOVERY_SERVICE'),
-			net = ozNet<IOZoneApiJSON<any>>(url, {
-				method: 'POST',
-				body: data,
-				isGoodNews(response) {
-					return Boolean(response.json && response.json.error === 0);
-				},
-			});
+		const m   = this,
+			  url = m._appContext.url.get('OZ_SERVER_ACCOUNT_RECOVERY_SERVICE'),
+			  net = m._appContext.oz.request<OApiJSON<any>>(url, {
+				  method: 'POST',
+				  body  : data,
+			  });
 
 		return net
 			.onGoodNews(function (response) {
@@ -90,8 +90,8 @@ export default class OWebAccountRecovery extends OWebEvent {
 					m.trigger(OWebAccountRecovery.EVT_AR_SUCCESS, [response]);
 				}
 			})
-			.onBadNews(function (response) {
-				m.trigger(OWebAccountRecovery.EVT_AR_ERROR, [response]);
+			.onFail(function (err) {
+				m.trigger(OWebAccountRecovery.EVT_AR_FAIL, [err]);
 			})
 			.send();
 	}

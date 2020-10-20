@@ -1,101 +1,164 @@
-import OWebConfigs, { tConfigList } from './OWebConfigs';
-import OWebCurrentUser from './OWebCurrentUser';
-import OWebDataStore from './OWebDataStore';
+import OWebConfigs from './OWebConfigs';
+import OWebDataStore, {OJSONSerializable} from './OWebDataStore';
 import OWebEvent from './OWebEvent';
 import OWebFormValidator from './OWebFormValidator';
-import OWebRouter, { tRouteStateObject, tRouteTarget } from './OWebRouter';
-import OWebUrl, { tUrlList } from './OWebUrl';
+import OWebRouter, {ORouteStateObject, ORouteTarget} from './OWebRouter';
+import OWebUrl from './OWebUrl';
 import OWebView from './OWebView';
 import OWebI18n from './OWebI18n';
-import OWebPager from './OWebPager';
-import { clone, id, logger } from './utils';
+import {id, logger} from './utils';
+import OZone from './ozone';
+import OWebPager, {OPage} from './OWebPager';
+import OWebUser from './OWebUser';
 
-export default class OWebApp extends OWebEvent {
-	static readonly SELF = id();
-	static readonly EVT_APP_READY = id();
-	static readonly EVT_NOT_FOUND = id();
-	static readonly EVT_SHOW_HOME = id();
-	static readonly EVT_SHOW_LOGIN = id();
+export interface OUrlList {
+	[key: string]: string;
+
+	OZ_SERVER_GET_FILE_URI: string;
+	OZ_SERVER_TNET_SERVICE: string;
+	OZ_SERVER_LOGIN_SERVICE: string;
+	OZ_SERVER_LOGOUT_SERVICE: string;
+	OZ_SERVER_SIGNUP_SERVICE: string;
+	OZ_SERVER_ACCOUNT_RECOVERY_SERVICE: string;
+	OZ_SERVER_PASSWORD_SERVICE: string;
+	OZ_SERVER_CAPTCHA_SERVICE: string;
+	OZ_SERVER_UPLOAD_SERVICE: string;
+}
+
+export interface OAppConfigs {
+	[key: string]: OJSONSerializable;
+
+	OW_APP_NAME: string;
+	OW_APP_VERSION: string;
+	OW_APP_LOCAL_BASE_URL: string;
+	OW_APP_ROUTER_HASH_MODE: boolean;
+	OW_APP_ALLOWED_COUNTRIES: string[];
+	OW_APP_LOGO_SRC: string;
+	OW_APP_ANDROID_ID: string;
+	OW_APP_UPDATER_SCRIPT_SRC: string;
+
+	OZ_API_KEY: string;
+	OZ_API_KEY_HEADER_NAME: string;
+	OZ_API_ALLOW_REAL_METHOD_HEADER: boolean;
+	OZ_API_REAL_METHOD_HEADER_NAME: string;
+	OZ_API_BASE_URL: string;
+
+	OZ_CODE_REG: string;
+	OZ_USER_NAME_MIN_LENGTH: number;
+	OZ_USER_NAME_MAX_LENGTH: number;
+	OZ_PASS_MIN_LENGTH: number;
+	OZ_PASS_MAX_LENGTH: number;
+	OZ_USER_MIN_AGE: number;
+	OZ_USER_MAX_AGE: number;
+	OZ_PPIC_MIN_SIZE: number;
+	OZ_USER_ALLOWED_GENDERS: string[];
+}
+
+export interface OUserConfigs {
+	[key: string]: OJSONSerializable;
+
+	OW_APP_DEFAULT_LANG: string;
+	OW_APP_COUNTRY: string;
+}
+
+export interface OStore {
+	[key: string]: any;
+
+	services: {
+		[name: string]: any;
+	};
+}
+
+export interface OAppOptions<Store extends OStore, Page extends OPage> {
+	name: string;
+	appConfigs: OAppConfigs;
+	userConfigs: OUserConfigs;
+	urls: OUrlList;
+	user: (this: OWebApp<Store, Page, OAppOptions<Store, Page>>) => OWebUser<any>;
+	store: (this: OWebApp<Store, Page, OAppOptions<Store, Page>>) => Store;
+	pager: (this: OWebApp<Store, Page, OAppOptions<Store, Page>>) => OWebPager<Page>;
+}
+
+export default class OWebApp<Store extends OStore = any, Page extends OPage = any, Options extends OAppOptions<Store, Page> = any> extends OWebEvent {
+	static readonly SELF                       = id();
+	static readonly EVT_APP_READY              = id();
+	static readonly EVT_NOT_FOUND              = id();
+	static readonly EVT_SHOW_HOME              = id();
+	static readonly EVT_SHOW_LOGIN             = id();
 	static readonly EVT_SHOW_REGISTRATION_PAGE = id();
 
-	private readonly _requestDefaultOptions: any = {
-		headers: {},
-	};
-
 	readonly view: OWebView;
-	readonly pager: OWebPager<any>;
 	readonly ls: OWebDataStore;
 	readonly router: OWebRouter;
-	readonly user: OWebCurrentUser;
-	readonly configs: OWebConfigs;
+	readonly user: OWebUser<any>;
+	readonly configs: OWebConfigs<OAppConfigs, OUserConfigs>;
 	readonly url: OWebUrl;
 	readonly i18n: OWebI18n;
+	readonly oz: OZone;
+
+	private readonly _store: Store;
+	private readonly _pager: OWebPager<Page>;
 
 	/**
 	 * OWebApp constructor.
 	 *
-	 * @param name The app name.
-	 * @param configs The app config.
-	 * @param urls The app url list.
+	 * @param options
 	 */
 	protected constructor(
-		private readonly name: string,
-		configs: tConfigList,
-		urls: tUrlList,
+		private readonly options: Options,
 	) {
 		super();
 
-		this.ls = new OWebDataStore(this);
-		this.configs = new OWebConfigs(this, configs);
-		this.url = new OWebUrl(this, urls);
-		this.user = new OWebCurrentUser(this);
-		this.view = new OWebView();
-		this.pager = new OWebPager(this);
-		this.i18n = new OWebI18n();
+		this.ls      = new OWebDataStore(this);
+		this.configs = new OWebConfigs(this, options.appConfigs, options.userConfigs);
+		this.url     = new OWebUrl(this, options.urls);
+		this.view    = new OWebView();
+		this.i18n    = new OWebI18n();
+		this.user    = options.user.call(this);
+		this._store  = options.store.call(this);
+		this._pager  = options.pager.call(this);
 
-		const ctx = this,
-			baseUrl = this.configs.get('OW_APP_LOCAL_BASE_URL'),
-			hashMode = false !== this.configs.get('OW_APP_ROUTER_HASH_MODE');
+		const ctx      = this,
+			  baseUrl  = this.configs.get('OW_APP_LOCAL_BASE_URL'),
+			  hashMode = this.configs.get('OW_APP_ROUTER_HASH_MODE');
 
 		this.router = new OWebRouter(baseUrl, hashMode, function (
-			target: tRouteTarget,
+			target: ORouteTarget,
 		) {
 			ctx.trigger(OWebApp.EVT_NOT_FOUND, [target]);
 		});
 
 		this.i18n.setDefaultLang(this.configs.get('OW_APP_DEFAULT_LANG'));
 
-		const apiKeyHeader = this.configs.get('OZ_API_KEY_HEADER_NAME');
-		this._requestDefaultOptions.headers = {
-			[apiKeyHeader]: this.configs.get('OZ_API_KEY'),
-		};
+		this.oz = OZone.instantiate(this);
 	}
 
 	/**
-	 * Get request default options
+	 * Store getter.
 	 */
-	getRequestDefaultOptions() {
-		return clone(this._requestDefaultOptions);
+	get store(): ReturnType<Options['store']> {
+		return this._store as any;
 	}
 
 	/**
-	 * Set session token
+	 * Pager instance getter.
 	 */
-	setSessionToken(token: string) {
-		const headerName = this.configs.get('OZ_SESSION_TOKEN_HEADER_NAME');
+	get pager(): ReturnType<Options['pager']> {
+		return this._pager as any;
+	}
 
-		if (headerName && token) {
-			this._requestDefaultOptions.headers[headerName] = token;
-		}
-
-		return this;
+	/**
+	 * Store services shortcut.
+	 */
+	get services(): ReturnType<Options['store']>['services'] {
+		return this.store.services;
 	}
 
 	/**
 	 * App name getter.
 	 */
 	getAppName(): string {
-		return this.name;
+		return this.options.name;
 	}
 
 	/**
@@ -117,7 +180,7 @@ export default class OWebApp extends OWebEvent {
 		form: HTMLFormElement,
 		required: string[] = [],
 		excluded: string[] = [],
-		checkAll: boolean = false,
+		checkAll           = false,
 	) {
 		return new OWebFormValidator(this, form, required, excluded, checkAll);
 	}
@@ -166,23 +229,6 @@ export default class OWebApp extends OWebEvent {
 	}
 
 	/**
-	 * Checks if user session is active.
-	 */
-	sessionActive(): boolean {
-		const now = new Date().getTime(); // milliseconds
-		const hour = 60 * 60; // seconds
-		const expire = this.user.getSessionExpire() - hour; // seconds
-		return expire * 1000 > now;
-	}
-
-	/**
-	 * Checks if the current user has been authenticated.
-	 */
-	userVerified(): boolean {
-		return Boolean(this.user.getCurrentUser() && this.sessionActive());
-	}
-
-	/**
 	 * To start the web app.
 	 */
 	start(): this {
@@ -194,21 +240,21 @@ export default class OWebApp extends OWebEvent {
 	/**
 	 * Called when app should show the home page.
 	 */
-	showHomePage(options: tRouteStateObject = {}) {
+	showHomePage(options: ORouteStateObject = {}) {
 		this.trigger(OWebApp.EVT_SHOW_HOME, [options]);
 	}
 
 	/**
 	 * Called when app should show the login page.
 	 */
-	showLoginPage(options: tRouteStateObject = {}) {
+	showLoginPage(options: ORouteStateObject = {}) {
 		this.trigger(OWebApp.EVT_SHOW_LOGIN, [options]);
 	}
 
 	/**
 	 * Called when app should show the registration page.
 	 */
-	showRegistrationPage(options: tRouteStateObject = {}) {
+	showRegistrationPage(options: ORouteStateObject = {}) {
 		this.trigger(OWebApp.EVT_SHOW_LOGIN, [options]);
 	}
 
@@ -227,7 +273,7 @@ export default class OWebApp extends OWebEvent {
 	 * @param handler
 	 */
 	onShowHomePage(
-		handler: (this: this, options: tRouteStateObject) => void | boolean,
+		handler: (this: this, options: ORouteStateObject) => void | boolean,
 	) {
 		return this.on(OWebApp.EVT_SHOW_HOME, handler);
 	}
@@ -238,7 +284,7 @@ export default class OWebApp extends OWebEvent {
 	 * @param handler
 	 */
 	onShowLoginPage(
-		handler: (this: this, options: tRouteStateObject) => void | boolean,
+		handler: (this: this, options: ORouteStateObject) => void | boolean,
 	) {
 		return this.on(OWebApp.EVT_SHOW_LOGIN, handler);
 	}
@@ -249,7 +295,7 @@ export default class OWebApp extends OWebEvent {
 	 * @param handler
 	 */
 	onShowRegistrationPage(
-		handler: (this: this, options: tRouteStateObject) => void | boolean,
+		handler: (this: this, options: ORouteStateObject) => void | boolean,
 	) {
 		return this.on(OWebApp.EVT_SHOW_REGISTRATION_PAGE, handler);
 	}
@@ -260,8 +306,20 @@ export default class OWebApp extends OWebEvent {
 	 * @param handler
 	 */
 	onPageNotFound(
-		handler: (this: this, target: tRouteTarget) => void | boolean,
+		handler: (this: this, target: ORouteTarget) => void | boolean,
 	) {
 		return this.on(OWebApp.EVT_NOT_FOUND, handler);
 	}
+
+	/**
+	 * Creates new app instance.
+	 *
+	 * @param options
+	 */
+	static create<Options extends OAppOptions<OStore, OPage> = any>(
+		options: Options,
+	) {
+		return new OWebApp(options);
+	}
+
 }

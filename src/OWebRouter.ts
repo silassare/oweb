@@ -1,29 +1,28 @@
-import { logger, preventDefault, safeOpen } from './utils';
+import {logger, preventDefault, safeOpen} from './utils';
 import OWebRoute, {
-	tRouteAction,
-	tRoutePath,
-	tRoutePathOptions,
+	ORouteAction,
+	ORoutePath,
+	ORoutePathOptions,
 } from './OWebRoute';
 import OWebRouteContext from './OWebRouteContext';
 
-export type tRouteTarget = {
+export type ORouteTarget = {
 	parsed: string;
 	href: string;
 	path: string;
 	fullPath: string;
 };
-type _tRouteStateItem =
-	| string
+export type ORouteStateItem = | string
 	| number
 	| boolean
 	| null
 	| undefined
 	| Date
-	| tRouteStateObject;
-export type tRouteStateItem = _tRouteStateItem | _tRouteStateItem[];
-export type tRouteStateObject = { [key: string]: tRouteStateItem };
+	| ORouteStateObject
+	| ORouteStateItem[];
+export type ORouteStateObject = { [key: string]: ORouteStateItem };
 
-export interface IRouteDispatcher {
+export interface ORouteDispatcher {
 	readonly id: number;
 	readonly context: OWebRouteContext;
 	readonly found: OWebRoute[];
@@ -35,58 +34,58 @@ export interface IRouteDispatcher {
 	cancel(): this;
 }
 
-const wLoc = window.location,
-	wDoc = window.document,
-	wHistory = window.history,
-	linkClickEvent = wDoc.ontouchstart ? 'touchstart' : 'click',
-	hashTagStr = '#!';
+const wLoc           = window.location,
+	  wDoc           = window.document,
+	  wHistory       = window.history,
+	  linkClickEvent = wDoc.ontouchstart ? 'touchstart' : 'click',
+	  hashTagStr     = '#!';
 
-const which = function (e: any) {
-		e = e || window.event;
-		return null == e.which ? e.button : e.which;
-	},
-	samePath = function (url: URL) {
-		return url.pathname === wLoc.pathname && url.search === wLoc.search;
-	},
-	sameOrigin = function (href: string) {
-		if (!href) return false;
-		const url = new URL(href.toString(), wLoc.toString());
+const which        = function (e: any): number {
+		  e = e || window.event;
+		  return null == e.which ? e.button : e.which;
+	  },
+	  samePath     = function (url: URL) {
+		  return url.pathname === wLoc.pathname && url.search === wLoc.search;
+	  },
+	  sameOrigin   = function (href: string) {
+		  if (!href) return false;
+		  const url = new URL(href.toString(), wLoc.toString());
 
-		return (
-			wLoc.protocol === url.protocol &&
-			wLoc.hostname === url.hostname &&
-			wLoc.port === url.port
-		);
-	},
-	leadingSlash = (path: string): string => {
-		if (!path.length || path === '/') {
-			return '/';
-		}
+		  return (
+			  wLoc.protocol === url.protocol &&
+			  wLoc.hostname === url.hostname &&
+			  wLoc.port === url.port
+		  );
+	  },
+	  leadingSlash = (path: string): string => {
+		  if (!path.length || path === '/') {
+			  return '/';
+		  }
 
-		return path[0] !== '/' ? '/' + path : path;
-	};
+		  return path[0] !== '/' ? '/' + path : path;
+	  };
 
 export default class OWebRouter {
 	private readonly _baseUrl: string;
 	private readonly _hashMode: boolean;
-	private _currentTarget: tRouteTarget = {
-		parsed: '',
-		href: '',
-		path: '',
+	private _currentTarget: ORouteTarget                    = {
+		parsed  : '',
+		href    : '',
+		path    : '',
 		fullPath: '',
 	};
-	private _routes: OWebRoute[] = [];
-	private _initialized: boolean = false;
-	private _listening: boolean = false;
+	private _routes: OWebRoute[]                            = [];
+	private _initialized                           = false;
+	private _listening                             = false;
 	private readonly _notFound:
-		| undefined
-		| ((target: tRouteTarget) => void) = undefined;
+						 | undefined
+						 | ((target: ORouteTarget) => void) = undefined;
 	private readonly _popStateListener: (e: PopStateEvent) => void;
 	private readonly _linkClickListener: (e: MouseEvent | TouchEvent) => void;
-	private _dispatchId = 0;
-	private _notFoundLoopCount = 0;
-	private _currentDispatcher?: IRouteDispatcher;
-	private _forceReplace: boolean = false;
+	private _dispatchId                                     = 0;
+	private _notFoundLoopCount                              = 0;
+	private _currentDispatcher?: ORouteDispatcher;
+	private _forceReplace                          = false;
 
 	/**
 	 * OWebRouter constructor.
@@ -97,13 +96,13 @@ export default class OWebRouter {
 	 */
 	constructor(
 		baseUrl: string,
-		hashMode: boolean = true,
-		notFound: (target: tRouteTarget) => void,
+		hashMode = true,
+		notFound: (target: ORouteTarget) => void,
 	) {
-		const r = this;
-		this._baseUrl = baseUrl;
-		this._hashMode = hashMode;
-		this._notFound = notFound;
+		const r                = this;
+		this._baseUrl          = baseUrl;
+		this._hashMode         = hashMode;
+		this._notFound         = notFound;
 		this._popStateListener = (e: PopStateEvent) => {
 			logger.debug('[OWebRouter] popstate', e);
 
@@ -129,9 +128,9 @@ export default class OWebRouter {
 	 * @param state initial state
 	 */
 	start(
-		firstRun: boolean = true,
-		target: string = wLoc.href,
-		state?: tRouteStateObject,
+		firstRun = true,
+		target: string    = wLoc.href,
+		state?: ORouteStateObject,
 	): this {
 		if (!this._initialized) {
 			this._initialized = true;
@@ -172,14 +171,14 @@ export default class OWebRouter {
 	/**
 	 * Returns the current route target.
 	 */
-	getCurrentTarget(): tRouteTarget {
+	getCurrentTarget(): ORouteTarget {
 		return this._currentTarget;
 	}
 
 	/**
 	 * Returns the current route event dispatcher.
 	 */
-	getCurrentDispatcher(): IRouteDispatcher | undefined {
+	getCurrentDispatcher(): ORouteDispatcher | undefined {
 		return this._currentDispatcher;
 	}
 
@@ -199,16 +198,16 @@ export default class OWebRouter {
 	 *
 	 * @param url the url to parse
 	 */
-	parseURL(url: string | URL): tRouteTarget {
+	parseURL(url: string | URL): ORouteTarget {
 		const baseUrl = new URL(this._baseUrl),
-			fullUrl = new URL(url.toString(), baseUrl);
-		let parsed: tRouteTarget;
+			  fullUrl = new URL(url.toString(), baseUrl);
+		let parsed: ORouteTarget;
 
 		if (this._hashMode) {
 			parsed = {
-				parsed: url.toString(),
-				href: fullUrl.href,
-				path: fullUrl.hash.replace(hashTagStr, ''),
+				parsed  : url.toString(),
+				href    : fullUrl.href,
+				path    : fullUrl.hash.replace(hashTagStr, ''),
 				fullPath: fullUrl.hash,
 			};
 		} else {
@@ -220,9 +219,9 @@ export default class OWebRouter {
 			}
 
 			parsed = {
-				parsed: url.toString(),
-				href: fullUrl.href,
-				path: leadingSlash(pathname),
+				parsed  : url.toString(),
+				href    : fullUrl.href,
+				path    : leadingSlash(pathname),
 				fullPath: leadingSlash(
 					pathname + fullUrl.search + (fullUrl.hash || ''),
 				),
@@ -264,11 +263,23 @@ export default class OWebRouter {
 	 * @param action the action to run
 	 */
 	on(
-		path: tRoutePath,
-		rules: tRoutePathOptions = {},
-		action: tRouteAction,
+		path: ORoutePath,
+		rules: ORoutePathOptions = {},
+		action: ORouteAction,
 	): this {
 		this._routes.push(new OWebRoute(path, rules, action));
+		return this;
+	}
+
+	/**
+	 * Add a route.
+	 *
+	 * @param route
+	 */
+	addRoute(
+		route: OWebRoute,
+	): this {
+		this._routes.push(route);
 		return this;
 	}
 
@@ -277,7 +288,7 @@ export default class OWebRouter {
 	 *
 	 * @param distance the distance in history
 	 */
-	goBack(distance: number = 1): this {
+	goBack(distance = 1): this {
 		if (distance > 0) {
 			logger.debug('[OWebRouter] going back', distance);
 			const hLen = wHistory.length;
@@ -310,14 +321,14 @@ export default class OWebRouter {
 	 */
 	browseTo(
 		url: string,
-		state: tRouteStateObject = {},
-		push: boolean = true,
-		ignoreSameLocation: boolean = false,
+		state: ORouteStateObject    = {},
+		push               = true,
+		ignoreSameLocation = false,
 	): this {
 		const targetUrl = this.pathToURL(url),
-			target = this.parseURL(targetUrl.href),
-			_cd = this._currentDispatcher;
-		let cd: IRouteDispatcher;
+			  target    = this.parseURL(targetUrl.href),
+			  _cd       = this._currentDispatcher;
+		let cd: ORouteDispatcher;
 
 		if (!sameOrigin(target.href)) {
 			window.open(url);
@@ -396,12 +407,12 @@ export default class OWebRouter {
 	 */
 	addHistory(
 		url: string,
-		state: tRouteStateObject,
-		title: string = '',
+		state: ORouteStateObject,
+		title = '',
 	): this {
 		title = title && title.length ? title : wDoc.title;
 
-		wHistory.pushState({ url, data: state }, title, url);
+		wHistory.pushState({url, data: state}, title, url);
 
 		logger.debug('[OWebDispatchContext] history added', state, url);
 
@@ -417,12 +428,12 @@ export default class OWebRouter {
 	 */
 	replaceHistory(
 		url: string,
-		state: tRouteStateObject,
-		title: string = '',
+		state: ORouteStateObject,
+		title = '',
 	): this {
 		title = title && title.length ? title : wDoc.title;
 
-		wHistory.replaceState({ url, data: state }, title, url);
+		wHistory.replaceState({url, data: state}, title, url);
 
 		logger.debug(
 			'[OWebDispatchContext] history replaced',
@@ -441,17 +452,16 @@ export default class OWebRouter {
 	 * @param id the dispatcher id
 	 */
 	private createDispatcher(
-		target: tRouteTarget,
-		state: tRouteStateObject,
+		target: ORouteTarget,
+		state: ORouteStateObject,
 		id: number,
-	): IRouteDispatcher {
+	): ORouteDispatcher {
 		logger.debug(`[OWebRouter][dispatcher-${id}] creation.`);
 
-		const ctx = this,
-			found: OWebRoute[] = [],
-			routeContext = new OWebRouteContext(this, target, state);
-		let active = false,
-			o: IRouteDispatcher;
+		const ctx                = this,
+			  found: OWebRoute[] = [],
+			  routeContext       = new OWebRouteContext(this, target, state);
+		let active               = false;
 
 		for (let i = 0; i < ctx._routes.length; i++) {
 			const route = ctx._routes[i];
@@ -461,8 +471,8 @@ export default class OWebRouter {
 			}
 		}
 
-		o = {
-			context: routeContext,
+		const o: ORouteDispatcher = {
+			context : routeContext,
 			id,
 			found,
 			isActive: () => active,
@@ -485,7 +495,7 @@ export default class OWebRouter {
 				if (!active) {
 					logger.debug(`[OWebRouter][dispatcher-${id}] start`, o);
 
-					let j = -1;
+					let j  = -1;
 					active = true;
 
 					while (active && ++j < found.length) {
@@ -558,9 +568,9 @@ export default class OWebRouter {
 		// ensure link
 		// use shadow dom when available if not, fall back to composedPath() for browsers that only have shady
 		let el: HTMLElement | null = e.target as HTMLElement;
-		const eventPath =
-			(e as any).path ||
-			((e as any).composedPath ? (e as any).composedPath() : null);
+		const eventPath            =
+				  (e as any).path ||
+				  ((e as any).composedPath ? (e as any).composedPath() : null);
 
 		if (eventPath) {
 			for (let i = 0; i < eventPath.length; i++) {
@@ -581,8 +591,8 @@ export default class OWebRouter {
 		// we check if link is inside an svg
 		// in this case, both href and target are always inside an object
 		const svg =
-			typeof (el as any).href === 'object' &&
-			(el as any).href.constructor.name === 'SVGAnimatedString';
+				  typeof (el as any).href === 'object' &&
+				  (el as any).href.constructor.name === 'SVGAnimatedString';
 
 		// Ignore if tag has
 		// 1. "download" attribute

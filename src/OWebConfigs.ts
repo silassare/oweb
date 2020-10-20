@@ -3,10 +3,10 @@ import OWebEvent from './OWebEvent';
 import {clone, forEach, id, logger} from './utils';
 import {OJSONSerializable} from './OWebDataStore';
 
-export default class OConfigs<P extends {
-	[key: string]: OJSONSerializable
+export default class OWebConfigs<P extends {
+	[key: string]: OJSONSerializable;
 }, U extends {
-	[key: string]: OJSONSerializable
+	[key: string]: OJSONSerializable;
 }, B = U & P> extends OWebEvent {
 	static readonly SELF              = id();
 	static readonly EVT_CONFIG_CHANGE = id();
@@ -47,7 +47,7 @@ export default class OConfigs<P extends {
 	 *
 	 * @param confirmFirst When true a confirm will request will be sent to the user.
 	 */
-	resetAllToDefault(confirmFirst: boolean = true): this {
+	resetAllToDefault(confirmFirst = true): this {
 		if (
 			!confirmFirst ||
 			confirm(this._appContext.i18n.toHuman('OZ_CONFIRM_RESET_USER_CONFIGS'))
@@ -105,7 +105,7 @@ export default class OConfigs<P extends {
 
 		this._appContext.ls.set(this._tagName, this._usersConfigs);
 
-		this.trigger(OConfigs.EVT_CONFIG_CHANGE, [config, this.get(config as any), this]);
+		this.trigger(OWebConfigs.EVT_CONFIG_CHANGE, [config, this.get(config as any), this]);
 
 		return this;
 	}

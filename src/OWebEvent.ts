@@ -1,11 +1,9 @@
 import { isFunction, isString } from './utils';
 
-export type tEventHandler = (...args: any[]) => void | boolean;
+export type OEventHandler = (...args: any[]) => void | boolean;
 
 export default class OWebEvent {
-	private _events: { [key: string]: tEventHandler[] } = {};
-
-	protected constructor() {}
+	private _events: { [key: string]: OEventHandler[] } = {};
 
 	/**
 	 * Register event handler.
@@ -15,7 +13,7 @@ export default class OWebEvent {
 	 */
 	on(
 		event: string,
-		handler: (this: this, ...args: any[]) => ReturnType<tEventHandler>,
+		handler: (this: this, ...args: any[]) => ReturnType<OEventHandler>,
 	) {
 		if (!this._events[event]) {
 			this._events[event] = [];
@@ -80,7 +78,7 @@ export default class OWebEvent {
 	protected trigger(
 		event: string,
 		data: any[] = [],
-		cancelable: boolean = false,
+		cancelable = false,
 		context: any = this,
 	): boolean {
 		const handlers = this._events[event] || [];

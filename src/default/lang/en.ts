@@ -1,8 +1,12 @@
-import {tI18nDefinition} from '../../OWebI18n';
+import {OI18nDefinition} from '../../OWebI18n';
 
 export default {
 	OZ_ERROR_REQUEST_FAIL: 'Error: The request failed.',
-	OZ_ERROR_NETWORK: 'Error: internet connection problems.',
+
+	OW_ERROR_REQUEST_TIMED_OUT: 'Error: Request is taking too long to complete.',
+	OW_ERROR_REQUEST_ABORTED: 'Error: The request was aborted.',
+
+	OZ_ERROR_NETWORK: 'Error: Internet connection problems.',
 	OZ_ERROR_SERVER: 'Error: Failed to retrieve information.',
 	OZ_ERROR_YOU_ARE_NOT_ADMIN: 'Error: You are not an administrator.',
 	OZ_ERROR_NOT_FOUND: 'Error: Resource not found.',
@@ -64,7 +68,7 @@ export default {
 	OZ_LOGOUT_FAIL: 'The disconnect failed.',
 	OZ_FILE_UPLOAD_FAIL: 'Failed to send file (s)',
 	OZ_FILE_ALIAS_UNKNOWN: 'Unknown alias file.',
-	OZ_FILE_ALIAS_PARSE_ERROR: 'Alias ​​file, analysis error.',
+	OZ_FILE_ALIAS_PARSE_ERROR: 'Alias file, parse error.',
 	OZ_FILE_ALIAS_NOT_FOUND:
 		'The alias file or the targeted file can not be found ...',
 
@@ -75,4 +79,4 @@ export default {
 		'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec',
 	OW_TIME_MONTH_NAMES_FULL:
 		'January,February,March,April,May,June,July,August,September,October,November,December',
-} as tI18nDefinition;
+} as OI18nDefinition;

@@ -1,5 +1,5 @@
-import OWebCustomError from './OWebCustomError';
+import OWebError from './OWebError';
 
-export default class OWebFormError extends OWebCustomError {
-	readonly _owebFormError = true;
+export default class OWebFormError extends OWebError {
+	readonly isFormError = true;
 }

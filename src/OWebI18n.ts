@@ -1,25 +1,25 @@
 import OWebEvent from './OWebEvent';
 import { assign, isPlainObject, isString } from './utils';
 
-export type tI18nDefinition = { [key: string]: any };
-export type tI18nData = { [key: string]: any };
-export type tI18nOptions = {
+export type OI18nDefinition = { [key: string]: any };
+export type OI18nData = { [key: string]: any };
+export type OI18nOptions = {
 	text?: string;
 	placeholder?: string;
 	title?: string;
 	lang?: string;
-	data?: tI18nData;
-	pluralize?: tI18nPluralize;
+	data?: OI18nData;
+	pluralize?: OI18nPluralize;
 };
-export type tI18n = tI18nOptions | string;
+export type OI18n = OI18nOptions | string;
 
-export type tI18nPluralize =
+export type OI18nPluralize =
 	| number
-	| ((data: tI18nData, parts: string[]) => number);
+	| ((data: OI18nData, parts: string[]) => number);
 
-const LANG_OBJECT: { [key: string]: tI18nDefinition } = {};
+const LANG_OBJECT: { [key: string]: OI18nDefinition } = {};
 // {name} | {@message} | {@app.name} | {@fr:message} | {@fr:app.name}
-const TOKEN_REG = /{\s*(@)?(?:([a-z-]{2,})\:)?((?:[a-z_][a-z0-9_]*)(?:\.[a-z_][a-z0-9_]*)*)\s*}/gi;
+const TOKEN_REG = /{\s*(@)?(?:([a-z-]{2,}):)?((?:[a-z_][a-z0-9_]*)(?:\.[a-z_][a-z0-9_]*)*)\s*}/gi;
 
 /**
  * ```js
@@ -77,8 +77,8 @@ const getKey = function (key: string, langData: any) {
 const _tmp = new Map(),
 	translate = function (
 		key: string,
-		data: tI18nData,
-		pluralize: tI18nPluralize = 0,
+		data: OI18nData,
+		pluralize: OI18nPluralize = 0,
 		lang: string,
 	): string {
 		const id = `${lang}:${key}`;
@@ -90,7 +90,6 @@ const _tmp = new Map(),
 			fn = _tmp.get(id);
 		} else if (
 			LANG_OBJECT[lang] &&
-			// tslint:disable-next-line: no-conditional-assignment
 			(format = getKey(key, LANG_OBJECT[lang]))
 		) {
 			_tmp.set(id, (fn = parse(format)));
@@ -115,7 +114,7 @@ const _tmp = new Map(),
 	};
 
 export default class OWebI18n extends OWebEvent {
-	defaultLangCode: string = 'en';
+	defaultLangCode = 'en';
 
 	/**
 	 * Sets default i18n lang code.
@@ -143,13 +142,13 @@ export default class OWebI18n extends OWebEvent {
 	 * @param lang The i18n lang code to use.
 	 */
 	toHuman(
-		key: tI18n,
-		data: tI18nData = {},
-		pluralize: tI18nPluralize = 0,
+		key: OI18n,
+		data: OI18nData = {},
+		pluralize: OI18nPluralize = 0,
 		lang: string = this.defaultLangCode,
 	): string {
 		if (typeof key !== 'string') {
-			const opt: tI18nOptions = key as any;
+			const opt: OI18nOptions = key as any;
 			return translate(
 				opt.text || '',
 				opt.data || data,
@@ -167,7 +166,7 @@ export default class OWebI18n extends OWebEvent {
 	 * @param el
 	 * @param options
 	 */
-	el(el: HTMLElement, options: tI18n) {
+	el(el: HTMLElement, options: OI18n) {
 		if (typeof options === 'string') {
 			options = { text: options };
 		}
@@ -210,7 +209,7 @@ export default class OWebI18n extends OWebEvent {
 	 * @param lang The i18n lang code
 	 * @param data The i18n lang data.
 	 */
-	static loadLangData(lang: string, data: tI18nDefinition) {
+	static loadLangData(lang: string, data: OI18nDefinition) {
 		if (!isString(lang)) {
 			throw new TypeError(
 				'[OWebI18n] your lang name should be a valid string.',

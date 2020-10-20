@@ -1,122 +1,148 @@
-import { getEntityCache, GoblSinglePKEntity } from 'gobl-utils-ts';
+import {getEntityCache, GoblSinglePKEntity} from 'gobl-utils-ts';
 import {
-	IOZoneApiAddResponse,
-	IOZoneApiDeleteResponse,
-	IOZoneApiRequestOptions,
-	IOZoneApiUpdateResponse,
+	OApiAddJSON,
+	OApiDeleteJSON,
+	OApiUpdateJSON,
+	OApiRequestOptions,
 } from './ozone';
 import OWebApp from './OWebApp';
-import { escapeRegExp, isPlainObject, logger } from './utils';
+import {escapeRegExp, isPlainObject} from './utils';
 import OWebService from './OWebService';
 
 const getId = (item: GoblSinglePKEntity) => item.singlePKValue();
 
-const _with = (target: any, key: string | number, item: any) => {
-		return { ...target, [key]: item };
-	},
-	_without = (target: any, key: string | number) => {
-		delete target[key];
-		return { ...target };
-	};
+const _with    = (target: any, key: string | number, item: any) => {
+		  return {...target, [key]: item};
+	  },
+	  _without = (target: any, key: string | number) => {
+		  delete target[key];
+		  return {...target};
+	  };
 
-export default class OWebServiceStore<
-	T extends GoblSinglePKEntity
-> extends OWebService<T> {
-	protected items: { [key: string]: T } = {};
+export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWebService<T> {
+	protected items: { [key: string]: T }       = {};
 	protected relations: { [key: string]: any } = {};
 
+	/**
+	 * OWebServiceStore constructor.
+	 *
+	 * @param _appContext
+	 * @param entity
+	 * @param service
+	 */
 	constructor(
-		appContext: OWebApp,
+		_appContext: OWebApp,
 		private readonly entity: typeof GoblSinglePKEntity,
 		service: string,
 	) {
-		super(appContext, service);
+		super(_appContext, service);
 	}
 
-	getItem(id: string, relations: string = '') {
+	/**
+	 * Creates request to get an item by id.
+	 *
+	 * @param id The item id.
+	 * @param relations The relations to retrieve.
+	 */
+	getItemRequest(id: string, relations = '') {
 		const ctx = this;
 
 		return this.getRequest(id, relations)
-			.onGoodNews(function (response) {
-				ctx.addItemToList(
-					response.json!.data.item,
-					response.json!.data.relations,
-				);
-			})
-			.send();
+				   .onGoodNews(function (response) {
+					   ctx.addItemToList(
+						   response.json.data.item,
+						   response.json.data.relations,
+					   );
+				   });
 	}
 
-	getAllItems(options: IOZoneApiRequestOptions = {}) {
+	/**
+	 * Creates request to get items list.
+	 *
+	 * @param options
+	 */
+	getItemsListRequest(options: OApiRequestOptions = {}) {
 		const ctx = this;
 
 		return ctx
 			.getAllRequest(options)
 			.onGoodNews(function (response) {
 				ctx.addItemsToList(
-					response.json!.data.items,
-					response.json!.data.relations,
+					response.json.data.items,
+					response.json.data.relations,
 				);
-			})
-			.send();
+			});
 	}
 
-	addItem(data: any) {
+	/**
+	 * Creates request to add new item.
+	 *
+	 * @param data
+	 */
+	addItemRequest(data: any) {
 		const ctx = this;
 		return ctx
 			.addRequest(data)
 			.onGoodNews(function (response) {
-				ctx.addCreated(response.json!);
+				ctx.addCreated(response.json);
+			});
+	}
+
+	/**
+	 * Creates update request for a given item.
+	 *
+	 * @param item
+	 */
+	updateItemRequest(item: T) {
+		const ctx  = this,
+			  id   = getId(item),
+			  diff = item.toObject(true);
+
+		item.isSaving(true);
+
+		return ctx
+			.updateRequest(id, diff)
+			.onGoodNews(function (response) {
+				ctx.setSaved(item, response.json);
 			})
-			.send();
+			.onFinish(function () {
+				item.isSaving(false);
+			});
+
 	}
 
-	updateItem(item: T, freeze: boolean = true) {
+	/**
+	 * Creates a delete request for a given item.
+	 *
+	 * @param item
+	 */
+	deleteItemRequest(item: T) {
 		const ctx = this,
-			id = getId(item);
-
-		if (!item.isSaved()) {
-			const diff = item.toObject(true);
-
-			item.isSaving(true);
-
-			return ctx
-				.updateRequest(id, diff)
-				.onGoodNews(function (response) {
-					ctx.setSaved(item, response.json!);
-				})
-				.onFinished(function () {
-					item.isSaving(false);
-				})
-				.send();
-		}
-
-		logger.error('not updated', item);
-
-		return false;
-	}
-
-	deleteItem(item: T) {
-		const ctx = this,
-			id = getId(item);
+			  id  = getId(item);
 
 		item.isDeleting(true);
 
 		return ctx
 			.deleteRequest(id)
 			.onGoodNews(function (response) {
-				ctx.setDeleted(response.json!);
+				ctx.setDeleted(response.json);
 			})
-			.onFinished(function () {
+			.onFinish(function () {
 				item.isDeleting(false);
-			})
-			.send();
+			});
 	}
 
+	/**
+	 * Adds a list of items to this store list.
+	 *
+	 * @param items
+	 * @param relations
+	 */
 	addItemsToList(items: T[] | { [key: string]: T }, relations: any = {}) {
-		const ctx = this,
-			list: T[] = (isPlainObject(items)
-				? Object.values(items)
-				: items || []) as T[];
+		const ctx       = this,
+			  list: T[] = (isPlainObject(items)
+						   ? Object.values(items)
+						   : items || []) as T[];
 
 		list.forEach((item) => {
 			const itemId = getId(item);
@@ -128,7 +154,7 @@ export default class OWebServiceStore<
 			}
 
 			for (const rel in relations) {
-				if (relations.hasOwnProperty(rel)) {
+				if (Object.prototype.hasOwnProperty.call(relations, rel)) {
 					const data = relations[rel];
 
 					if (data[itemId]) {
@@ -143,9 +169,15 @@ export default class OWebServiceStore<
 		});
 	}
 
+	/**
+	 * Adds a given item and its relations to this store.
+	 *
+	 * @param item
+	 * @param relations
+	 */
 	addItemToList(item: T, relations: any = {}) {
-		const ctx = this,
-			itemId = getId(item);
+		const ctx    = this,
+			  itemId = getId(item);
 
 		ctx.safelyAddItem(item);
 
@@ -154,7 +186,7 @@ export default class OWebServiceStore<
 		}
 
 		for (const rel in relations) {
-			if (relations.hasOwnProperty(rel)) {
+			if (Object.prototype.hasOwnProperty.call(relations, rel)) {
 				ctx.relations[itemId] = _with(
 					ctx.relations[itemId],
 					rel,
@@ -164,9 +196,15 @@ export default class OWebServiceStore<
 		}
 	}
 
+	/**
+	 * Safely add item to this store.
+	 *
+	 * @param item
+	 * @private
+	 */
 	private safelyAddItem(item: T) {
-		const key = getId(item),
-			cachedItem = this.items[key];
+		const key        = getId(item),
+			  cachedItem = this.items[key];
 
 		if (cachedItem) {
 			cachedItem.doHydrate(item.toObject(), true);
@@ -177,29 +215,59 @@ export default class OWebServiceStore<
 		return this;
 	}
 
-	setSaved(target: T, response: IOZoneApiUpdateResponse<T>) {
+	/**
+	 * Modify successfully saved item state and data.
+	 *
+	 * @param target
+	 * @param response
+	 * @private
+	 */
+	private setSaved(target: T, response: OApiUpdateJSON<T>) {
 		const item = response.data.item;
 
 		target.doHydrate(item.toObject(), true);
 
-		this.safelyAddItem(target);
+		return this.safelyAddItem(target);
 	}
 
-	addCreated(response: IOZoneApiAddResponse<T>) {
-		this.safelyAddItem(response.data.item);
+	/**
+	 * Adds a newly created item to this store.
+	 *
+	 * @param response
+	 */
+	private addCreated(response: OApiAddJSON<T>) {
+		return this.safelyAddItem(response.data.item);
 	}
 
-	setDeleted(response: IOZoneApiDeleteResponse<T>) {
+	/**
+	 * Removes a given item from this store when deleted.
+	 *
+	 * @param response
+	 */
+	private setDeleted(response: OApiDeleteJSON<T>) {
 		const item = response.data.item;
 		this.items = _without(this.items, getId(item));
+		return this;
 	}
 
+	/**
+	 * Gets a given item relations.
+	 *
+	 * @param item
+	 * @param relation
+	 */
 	itemRelation<Z>(item: T, relation: string): Z | undefined {
 		const id = getId(item);
 		return this.relations[id] && this.relations[id][relation];
 	}
 
-	identify(id: string, checkCache: boolean = true): T | undefined {
+	/**
+	 * Identify a given item in this store by its id.
+	 *
+	 * @param id
+	 * @param checkCache
+	 */
+	identify(id: string, checkCache = true): T | undefined {
 		const item = this.items[id];
 		let c;
 
@@ -214,13 +282,18 @@ export default class OWebServiceStore<
 		return undefined;
 	}
 
+	/**
+	 * Gets this store items list.
+	 *
+	 * @param ids
+	 */
 	list(ids: string[] = []) {
 		const list: T[] = [],
-			len = ids.length;
+			  len       = ids.length;
 		if (len) {
 			for (let i = 0; i < len; i++) {
-				const id = ids[i],
-					item = this.identify(id);
+				const id   = ids[i],
+					  item = this.identify(id);
 				if (item) {
 					list.push(item);
 				}
@@ -236,25 +309,42 @@ export default class OWebServiceStore<
 		return list;
 	}
 
+	/**
+	 * Order items.
+	 *
+	 * @param order
+	 */
 	orderBy(order: (a: T, b: T) => number): T[] {
 		const keys = Object.keys(this.items);
 
 		return keys.map((key) => this.items[key]).sort(order);
 	}
 
+	/**
+	 * Order items by value of a given column.
+	 *
+	 * @param column
+	 */
 	orderByValueOf(column: string): T[] {
 		return this.orderBy((a: any, b: any) => {
 			return a[column] - b[column];
 		});
 	}
 
-	select(
+	/**
+	 * Filter items in this store or in a given list.
+	 *
+	 * @param list
+	 * @param predicate
+	 * @param max
+	 */
+	filter(
 		list: T[] = this.list(),
 		predicate: (value: T, index: number) => boolean,
-		max = Infinity,
+		max       = Infinity,
 	): T[] {
 		const result: T[] = [],
-			len = list.length;
+			  len         = list.length;
 
 		for (let i = 0; i < len && result.length < max; i++) {
 			if (predicate(list[i], i)) {
@@ -265,6 +355,30 @@ export default class OWebServiceStore<
 		return result;
 	}
 
+	/**
+	 * Select some items in this store.
+	 *
+	 * @alias filter
+	 *
+	 * @param list
+	 * @param predicate
+	 * @param max
+	 */
+	select(
+		list: T[] = this.list(),
+		predicate: (value: T, index: number) => boolean,
+		max       = Infinity,
+	): T[] {
+		return this.filter(list, predicate, max);
+	}
+
+	/**
+	 * Search items in this store or in a given items list.
+	 *
+	 * @param list
+	 * @param search
+	 * @param stringBuilder
+	 */
 	search(
 		list: T[] = this.list(),
 		search: string,
@@ -282,6 +396,9 @@ export default class OWebServiceStore<
 		});
 	}
 
+	/**
+	 * Count items in this store.
+	 */
 	totalCount(): number {
 		return Object.keys(this.items).length;
 	}

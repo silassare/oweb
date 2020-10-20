@@ -1,8 +1,9 @@
 import OWebEvent from './OWebEvent';
 import { id, logger } from './utils';
-import { IOZoneApiJSON } from './ozone';
+import { OApiJSON } from './ozone';
+import {ONetError} from './OWebNet';
 
-export type tViewDialog = {
+export type OViewDialog = {
 	type: 'info' | 'error' | 'done';
 	text: string;
 	data?: {};
@@ -14,7 +15,7 @@ export default class OWebView extends OWebEvent {
 	static readonly EVT_VIEW_UNFREEZE = id();
 	static readonly EVT_VIEW_DIALOG = id();
 
-	private _freezeCounter: number = 0;
+	private _freezeCounter = 0;
 
 	constructor() {
 		super();
@@ -62,15 +63,15 @@ export default class OWebView extends OWebEvent {
 	 * @param canUseAlert
 	 */
 	dialog(
-		dialog: tViewDialog | IOZoneApiJSON<any>,
-		canUseAlert: boolean = false,
+		dialog: OViewDialog | OApiJSON<any> | ONetError,
+		canUseAlert = false,
 	) {
 		let d = dialog;
 
-		if ((d as IOZoneApiJSON<any>).error) {
+		if ((d as OApiJSON<any>).error) {
 			d = {
-				type: (d as IOZoneApiJSON<any>).error ? 'error' : 'done',
-				text: (d as IOZoneApiJSON<any>).msg,
+				type: (d as OApiJSON<any>).error ? 'error' : 'done',
+				text: (d as OApiJSON<any>).msg,
 				data: d.data || {},
 			};
 		}
@@ -104,7 +105,7 @@ export default class OWebView extends OWebEvent {
 	onDialog(
 		handler: (
 			this: this,
-			dialog: tViewDialog,
+			dialog: OViewDialog,
 			canUseAlert: boolean,
 		) => void,
 	) {

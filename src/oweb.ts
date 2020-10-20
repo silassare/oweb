@@ -2,8 +2,8 @@ import OWebApp from './OWebApp';
 import OWebNet from './OWebNet';
 import OWebXHR from './OWebXHR';
 import OWebConfigs from './OWebConfigs';
-import OWebCurrentUser from './OWebCurrentUser';
-import OWebCustomError from './OWebCustomError';
+import OWebError from './OWebError';
+import OWebUser from './OWebUser';
 import OWebFormError from './OWebFormError';
 import OWebDataStore from './OWebDataStore';
 import OWebEvent from './OWebEvent';
@@ -26,16 +26,13 @@ import OWebPassword from './plugins/OWebPassword';
 import OWebAccountRecovery from './plugins/OWebAccountRecovery';
 import OWebSignUp from './plugins/OWebSignUp';
 import OWebTNet from './plugins/OWebTNet';
-import PathResolver from './utils/PathResolver';
-import scriptLoader from './utils/scriptLoader';
-import OWebPageBase from './OWebPageBase';
-import { createApp } from './createApp';
-import OWebTelInput from 'oweb-tel-input';
+
 // side-effect import
 import './default/index';
 
 export * from './utils';
 
+export * from './OWebApp';
 export * from './OWebConfigs';
 
 export * from './OWebUrl';
@@ -69,9 +66,9 @@ export {
 	OWebNet,
 	OWebXHR,
 	OWebConfigs,
-	OWebCurrentUser,
+	OWebUser,
 	OWebFormValidator,
-	OWebCustomError,
+	OWebError,
 	OWebFormError,
 	OWebDataStore,
 	OWebFS,
@@ -85,7 +82,6 @@ export {
 	OWebService,
 	OWebServiceStore,
 	OWebPager,
-	OWebPageBase,
 	// Plugins
 	OWebLogin,
 	OWebLogout,
@@ -94,9 +90,4 @@ export {
 	OWebSignUp,
 	OWebDate,
 	OWebTNet,
-	OWebTelInput,
-	// Utilities
-	PathResolver,
-	scriptLoader,
-	createApp,
 };

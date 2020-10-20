@@ -1,16 +1,16 @@
-import OWebRoute, { tRouteTokensMap } from './OWebRoute';
+import OWebRoute, { ORouteTokensMap } from './OWebRoute';
 import OWebRouter, {
-	tRouteStateItem,
-	tRouteStateObject,
-	tRouteTarget,
+	ORouteStateItem,
+	ORouteStateObject,
+	ORouteTarget,
 } from './OWebRouter';
 import { logger } from './utils';
 
 export default class OWebRouteContext {
-	private _tokens: tRouteTokensMap;
-	private _stopped: boolean = false;
-	private readonly _target: tRouteTarget;
-	private readonly _state: tRouteStateObject;
+	private _tokens: ORouteTokensMap;
+	private _stopped = false;
+	private readonly _target: ORouteTarget;
+	private readonly _state: ORouteStateObject;
 	private readonly _router: OWebRouter;
 
 	/**
@@ -22,8 +22,8 @@ export default class OWebRouteContext {
 	 */
 	constructor(
 		router: OWebRouter,
-		target: tRouteTarget,
-		state: tRouteStateObject,
+		target: ORouteTarget,
+		state: ORouteStateObject,
 	) {
 		this._target = target;
 		this._tokens = {};
@@ -59,7 +59,7 @@ export default class OWebRouteContext {
 	 *
 	 * @param key the state key
 	 */
-	getStateItem(key: string): tRouteStateItem {
+	getStateItem(key: string): ORouteStateItem {
 		return this._state[key];
 	}
 
@@ -69,7 +69,7 @@ export default class OWebRouteContext {
 	 * @param key the state key
 	 * @param value  the state value
 	 */
-	setStateItem(key: string, value: tRouteStateItem): this {
+	setStateItem(key: string, value: ORouteStateItem): this {
 		this._state[key] = value;
 		return this.save();
 	}
@@ -98,7 +98,8 @@ export default class OWebRouteContext {
 			logger.debug('[OWebDispatchContext] route context will stop.');
 			this.save(); // save before stop
 			this._stopped = true;
-			this._router.getCurrentDispatcher()!.cancel();
+			const cd = this._router.getCurrentDispatcher();
+			cd && cd.cancel();
 			logger.debug('[OWebDispatchContext] route context was stopped!');
 		} else {
 			logger.warn('[OWebDispatchContext] route context already stopped!');

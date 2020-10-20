@@ -1,41 +1,43 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-import { id, logger } from './utils';
+import {id, logger} from './utils';
 
-const ls = window.localStorage,
-	parse = function (data: string | null): any {
-		let value: any;
+export type OJSONSerializable = string | number | boolean | Date | { [key: string]: OJSONSerializable } | OJSONSerializable[];
 
-		if (data !== null) {
-			try {
-				value = JSON.parse(data);
-			} catch (e) {
-				logger.error(e);
-			}
-		}
+const ls    = window.localStorage,
+	  parse = function (data: string | null): any {
+		  let value: any;
 
-		return value;
-	};
+		  if (data !== null) {
+			  try {
+				  value = JSON.parse(data);
+			  } catch (e) {
+				  logger.error(e);
+			  }
+		  }
+
+		  return value;
+	  };
 
 export default class OWebDataStore extends OWebEvent {
-	static readonly EVT_DATA_STORE_CLEAR = id();
-	private readonly key: string;
-	private data: any = {};
+	static readonly EVT_DATA_STORE_CLEARED               = id();
+	private readonly _key: string;
+	private _data: { [key: string]: OJSONSerializable } = {};
 
 	constructor(private readonly _appContext: OWebApp) {
 		super();
-		this.key = _appContext.getAppName();
-		this.data = parse(ls.getItem(this.key)) || {};
+		this._key  = _appContext.getAppName();
+		this._data = parse(ls.getItem(this._key)) || {};
 	}
 
 	/**
-	 * Save data to the store.
+	 * Sets key/value pair in the store.
 	 *
 	 * @param key The data key name.
 	 * @param value The data value.
 	 */
-	save(key: string, value: any): boolean {
-		this.data[key] = value;
+	set(key: string, value: OJSONSerializable): boolean {
+		this._data[key] = value;
 
 		this._persist();
 
@@ -43,28 +45,28 @@ export default class OWebDataStore extends OWebEvent {
 	}
 
 	/**
-	 * Load data with the given key.
+	 * Gets data with the given key.
 	 *
 	 * When the key is a regexp all data with a key name that match the given
 	 * regexp will be returned in an object.
 	 *
 	 * @param key The data key name.
 	 */
-	load(key: string | RegExp): any {
+	get(key: string | RegExp): any {
 		if (key instanceof RegExp) {
-			const list = Object.keys(this.data),
-				result: any = {};
+			const list        = Object.keys(this._data),
+				  result: any = {};
 
 			for (let i = 0; i < list.length; i++) {
 				const k = list[i];
 				if (key.test(k)) {
-					result[k] = this.data[k];
+					result[k] = this._data[k];
 				}
 			}
 
 			return result;
 		} else {
-			return this.data[key];
+			return this._data[key];
 		}
 	}
 
@@ -79,16 +81,16 @@ export default class OWebDataStore extends OWebEvent {
 	remove(key: string | RegExp): boolean {
 		if (ls) {
 			if (key instanceof RegExp) {
-				const list = Object.keys(this.data);
+				const list = Object.keys(this._data);
 
 				for (let i = 0; i < list.length; i++) {
 					const k = list[i];
 					if (key.test(k)) {
-						delete this.data[k];
+						delete this._data[k];
 					}
 				}
 			} else {
-				delete this.data[key];
+				delete this._data[key];
 			}
 
 			this._persist();
@@ -103,11 +105,11 @@ export default class OWebDataStore extends OWebEvent {
 	 * Clear the data store.
 	 */
 	clear(): boolean {
-		this.data = {};
+		this._data = {};
 
 		this._persist();
 
-		this.trigger(OWebDataStore.EVT_DATA_STORE_CLEAR);
+		this.trigger(OWebDataStore.EVT_DATA_STORE_CLEARED);
 
 		return true;
 	}
@@ -118,7 +120,7 @@ export default class OWebDataStore extends OWebEvent {
 	 * @param cb
 	 */
 	onClear(cb: (this: this) => void) {
-		return this.on(OWebDataStore.EVT_DATA_STORE_CLEAR, cb);
+		return this.on(OWebDataStore.EVT_DATA_STORE_CLEARED, cb);
 	}
 
 	/**
@@ -129,7 +131,7 @@ export default class OWebDataStore extends OWebEvent {
 	private _persist(): boolean {
 		if (ls) {
 			try {
-				ls.setItem(this.key, JSON.stringify(this.data));
+				ls.setItem(this._key, JSON.stringify(this._data));
 				return true;
 			} catch (e) {
 				logger.error(e);

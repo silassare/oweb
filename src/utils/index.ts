@@ -4,17 +4,17 @@ export const id = (function () {
 	return (): string => 'id-' + _naturalId++;
 })();
 
-// tslint:disable-next-line: no-empty
-export const noop = () => {};
+export const noop = () => void 0;
 
 // ==========TYPE CHECKERS====================================
-export const isArray = Array.isArray;
-export const isPlainObject = (a: any): boolean =>
+export const isArray       = Array.isArray;
+export const isPlainObject = (a: any): a is {} =>
 	Object.prototype.toString.call(a) === '[object Object]';
-export const isString = (a: any): a is string => typeof a === 'string';
-export const isFunction = (a: any): a is (...args: any[]) => any =>
+export const isString      = (a: any): a is string => typeof a === 'string';
+export const isFunction    = (a: any): a is (...args: any[]) => any =>
 	typeof a === 'function';
-export const isEmpty = function (a: any): boolean {
+
+export function isEmpty(a: any): boolean {
 	if (isArray(a)) {
 		return !a.length;
 	}
@@ -31,22 +31,23 @@ export const isEmpty = function (a: any): boolean {
 	}
 
 	return !a;
-};
+}
 
-export const isNotEmpty = (a: any): boolean => !isEmpty(a);
-export const toArray = (a: any): any[] => [].concat.apply([], a);
+export const isNotEmpty   = (a: any): boolean => !isEmpty(a);
+export const toArray      = (a: any): any[] => [...a];
 export const escapeRegExp = (str: string) =>
-	str.replace(/([.+*?=^!:${}()[\]|\/])/g, '\\$1');
+	str.replace(/([.+*?=^!:${}()[\]|\\/])/g, '\\$1');
+
 // ==========HELPERS====================================
-export const callback = function (fn: any, args?: any[], ctx?: any): any {
+export function callback(fn: any, args?: any[], ctx?: any): any {
 	if (typeof fn === 'function') {
 		return fn.apply(ctx, args);
 	}
 
 	return null;
-};
+}
 
-export const forEach = function <T>(
+export function forEach<T>(
 	obj: { [key: string]: T } | T[],
 	fn: (value: T, key: any) => void,
 ) {
@@ -54,41 +55,41 @@ export const forEach = function <T>(
 		const value: T = (obj as any)[key];
 		fn(value, key);
 	});
-};
+}
 
 export const assign =
-	(Object as any).assign ||
-	function (target: object, source: object) {
-		const to = target;
-		let from, symbols;
+				 (Object as any).assign ||
+				 function _assign(...args: object[]) {
+					 const to = args[0];
+					 let from, symbols;
 
-		for (let s = 1; s < arguments.length; s++) {
-			from = Object(arguments[s]);
+					 for (let s = 1; s < args.length; s++) {
+						 from = Object(args[s]);
 
-			for (const key in from) {
-				if (Object.prototype.hasOwnProperty.call(from, key)) {
-					(to as any)[key] = from[key];
-				}
-			}
+						 for (const key in from) {
+							 if (Object.prototype.hasOwnProperty.call(from, key)) {
+								 (to as any)[key] = from[key];
+							 }
+						 }
 
-			if ('getOwnPropertySymbols' in Object) {
-				symbols = (Object as any).getOwnPropertySymbols(from);
-				for (let i = 0; i < symbols.length; i++) {
-					if (from.propertyIsEnumerable(symbols[i])) {
-						(to as any)[symbols[i]] = from[symbols[i]];
-					}
-				}
-			}
-		}
+						 if ('getOwnPropertySymbols' in Object) {
+							 symbols = (Object as any).getOwnPropertySymbols(from);
+							 for (let i = 0; i < symbols.length; i++) {
+								 if (Object.prototype.propertyIsEnumerable.call(from, symbols[i])) {
+									 (to as any)[symbols[i]] = from[symbols[i]];
+								 }
+							 }
+						 }
+					 }
 
-		return to;
-	};
+					 return to;
+				 };
 
-export const clone = function <T>(a: T): T {
+export function clone<T>(a: T): T {
 	return JSON.parse(JSON.stringify(a));
-};
+}
 
-export const stringPlaceholderReplace = function (
+export function stringPlaceholderReplace(
 	str: string,
 	data: object,
 ): string {
@@ -98,13 +99,13 @@ export const stringPlaceholderReplace = function (
 
 		if (keys.length) {
 			const m = keys.join('|');
-			reg = new RegExp(':(' + m + ')', 'g');
+			reg     = new RegExp(':(' + m + ')', 'g');
 
-			return str.replace(reg, function () {
-				const replacement = (data as any)[arguments[1]];
+			return str.replace(reg, function (...args) {
+				const replacement = (data as any)[args[1]];
 
 				if (replacement === undefined) {
-					return arguments[0];
+					return args[0];
 				}
 
 				return replacement;
@@ -113,39 +114,38 @@ export const stringPlaceholderReplace = function (
 	}
 
 	return str;
-};
+}
 
-export const textToLineString = (text: string): string => {
-	const reg = /["'\\\n\r\t\u2028\u2029]/g,
-		toEscapes: object = {
-			'"': '"',
-			// tslint:disable-next-line: quotemark
-			"'": "'",
-			'\\': '\\',
-			'\n': 'n',
-			'\r': 'r',
-			'\t': 't',
-			'\u2028': '2028',
-			'\u2029': '2029',
-		};
+export function textToLineString(text: string): string {
+	const reg               = /["'\\\n\r\t\u2028\u2029]/g,
+		  toEscapes: object = {
+			  '"'     : '"',
+			  '\''    : '\'',
+			  '\\'    : '\\',
+			  '\n'    : 'n',
+			  '\r'    : 'r',
+			  '\t'    : 't',
+			  '\u2028': '2028',
+			  '\u2029': '2029',
+		  };
 
 	return text.replace(reg, (match) => '\\' + (toEscapes as any)[match]);
-};
+}
 
 // ==========MATH====================================
 
-export const _setDigitsSep = function (x: number, sep: string): string {
-	const s = String(x),
-		ans = [],
-		j = s.indexOf('.'),
-		start = j !== -1 ? j : s.length,
-		end = j !== -1 ? s.slice(start + 1) : [];
-	let count = 0,
-		i = start;
+export function _setDigitsSep(x: number, sep: string): string {
+	const s     = String(x),
+		  ans   = [],
+		  j     = s.indexOf('.'),
+		  start = j !== -1 ? j : s.length,
+		  end   = j !== -1 ? s.slice(start + 1) : [];
+	let count   = 0,
+		i       = start;
 
 	for (; i >= 0; i--) {
 		if (count === 3) {
-			count = 0;
+			count  = 0;
 			ans[i] = i !== 0 ? sep + s[i] : s[i];
 		} else {
 			ans[i] = s[i];
@@ -154,68 +154,68 @@ export const _setDigitsSep = function (x: number, sep: string): string {
 	}
 
 	return ans.concat(end).join('');
-};
+}
 
-export const numberFormat = function (
+export function numberFormat(
 	x: number | string,
-	dec: number = 2,
-	decimalSep: string = '.',
-	digitsSep: string = ' ',
+	dec        = 2,
+	decimalSep = '.',
+	digitsSep  = ' ',
 ): string {
 	if (!x) {
 		return '';
 	}
 
-	let ans = parseFloat(String(x)),
-		decimalPos;
+	let ans = parseFloat(String(x));
 
 	if (dec >= 0) {
 		const decimalPow = Math.pow(10, dec);
-		ans = Math.floor(ans * decimalPow) / decimalPow;
+		ans              = Math.floor(ans * decimalPow) / decimalPow;
 	}
 
 	const n = _setDigitsSep(ans, digitsSep);
 	const a = n.split('');
 
-	decimalPos = a.lastIndexOf('.');
+	const decimalPos = a.lastIndexOf('.');
 	if (decimalPos >= 0 && decimalSep !== '.') {
 		a[decimalPos] = decimalSep;
 	}
 
 	return a.join('');
-};
+}
 
-export const gt = function (
+export function gt(
 	x: number,
 	y: number,
-	eq: boolean = false,
+	eq = false,
 ): boolean {
 	return eq ? x >= y : x > y;
-};
-export const lt = function (
+}
+
+export function lt(
 	x: number,
 	y: number,
-	eq: boolean = false,
+	eq = false,
 ): boolean {
 	return eq ? x <= y : x < y;
-};
+}
 
-export const between = function (
+export function between(
 	x: number,
 	a: number,
 	b: number,
-	eq: boolean = false,
+	eq = false,
 ): boolean {
 	return eq ? x >= a && x <= b : x > a && x < b;
-};
+}
 
-export const isRange = function (a: any, b: any): boolean {
+export function isRange(a: any, b: any): boolean {
 	return typeof a === 'number' && typeof b === 'number' && a < b;
-};
+}
 
-export const isInDOM = function (
+export function isInDOM(
 	element: any,
-	inBody: boolean = false,
+	inBody = false,
 ): boolean {
 	let _ = element,
 		last;
@@ -229,79 +229,31 @@ export const isInDOM = function (
 	}
 
 	return inBody ? last === document.body : last === document;
-};
+}
 
-export const buildQueryString = function (
-	object: object,
-	prefix: string,
-): string {
-	const duplicates = {},
-		str = [];
-
-	for (const prop in object) {
-		if (!Object.prototype.hasOwnProperty.call(object, prop)) {
-			continue;
-		}
-
-		const key = prefix ? prefix + '[' + prop + ']' : prop,
-			value = (object as any)[prop];
-		let pair;
-		if (value !== undefined) {
-			if (value === null) {
-				pair = encodeURIComponent(key);
-			} else if (isPlainObject(value)) {
-				pair = buildQueryString(value, key);
-			} else if (isArray(value)) {
-				pair = value
-					.reduce(function (memo, item) {
-						if (!(duplicates as any)[key])
-							(duplicates as any)[key] = {};
-						if (!(duplicates as any)[key][item]) {
-							(duplicates as any)[key][item] = true;
-							return memo.concat(
-								encodeURIComponent(key) +
-									'=' +
-									encodeURIComponent(item),
-							);
-						}
-						return memo;
-					}, [])
-					.join('&');
-			} else {
-				pair =
-					encodeURIComponent(key) + '=' + encodeURIComponent(value);
-			}
-
-			str.push(pair);
-		}
-	}
-
-	return str.join('&');
-};
-
-export const shuffle = (a: any[]): any[] => {
+export function shuffle(a: any[]): any[] {
 	let j, x, i;
 
 	for (i = a.length - 1; i > 0; i--) {
-		j = Math.floor(Math.random() * (i + 1));
-		x = a[i];
+		j    = Math.floor(Math.random() * (i + 1));
+		x    = a[i];
 		a[i] = a[j];
 		a[j] = x;
 	}
 
 	return a;
-};
+}
 
-export const parseQueryString = function (str: string) {
+export function parseQueryString(str: string) {
 	if (str.charAt(0) === '?') str = str.substring(1);
 	if (!str.length) return {};
 
-	const pairs = str.split('&'),
-		params = {};
+	const pairs  = str.split('&'),
+		  params = {};
 	for (let i = 0, len = pairs.length; i < len; i++) {
-		const pair = pairs[i].split('='),
-			key = decodeURIComponent(pair[0]),
-			value = pair.length === 2 ? decodeURIComponent(pair[1]) : null;
+		const pair  = pairs[i].split('='),
+			  key   = decodeURIComponent(pair[0]),
+			  value = pair.length === 2 ? decodeURIComponent(pair[1]) : null;
 		if ((params as any)[key] != null) {
 			if (!isArray((params as any)[key])) {
 				(params as any)[key] = [(params as any)[key]];
@@ -310,9 +262,9 @@ export const parseQueryString = function (str: string) {
 		} else (params as any)[key] = value;
 	}
 	return params;
-};
+}
 
-export const preventDefault = function (e: Event) {
+export function preventDefault(e: Event) {
 	if (!e) {
 		if (window.event) e = window.event;
 		else return;
@@ -323,31 +275,31 @@ export const preventDefault = function (e: Event) {
 	if (e.stopPropagation) e.stopPropagation();
 	if (window.event) e.returnValue = false;
 	// if (e.cancel != null) e.cancel = true;
-};
+}
 
-export const isValidAge = (
+export function isValidAge(
 	day: number,
 	month: number,
 	year: number,
 	minAge: number,
 	maxAge: number,
-): boolean => {
+): boolean {
 	// depending on the year, calculate the number of days in the month
 	const februaryDays = year % 4 === 0 ? 29 : 28,
-		daysInMonth = [
-			31,
-			februaryDays,
-			31,
-			30,
-			31,
-			30,
-			31,
-			31,
-			30,
-			31,
-			30,
-			31,
-		];
+		  daysInMonth  = [
+			  31,
+			  februaryDays,
+			  31,
+			  30,
+			  31,
+			  30,
+			  31,
+			  31,
+			  30,
+			  31,
+			  30,
+			  31,
+		  ];
 
 	// first, check the incoming month and year are valid.
 	if (!month || !day || !year) {
@@ -367,7 +319,7 @@ export const isValidAge = (
 	if (minAge !== undefined || maxAge !== undefined) {
 		// we get current year
 		const currentYear = new Date().getFullYear(),
-			age = currentYear - year;
+			  age         = currentYear - year;
 
 		if (age < 0) {
 			return false;
@@ -381,17 +333,17 @@ export const isValidAge = (
 	}
 
 	return true;
-};
+}
 
-export const fileSizeFormat = function (
+export function fileSizeFormat(
 	size: number /* in bytes */,
-	decimalPoint: string = '.',
-	thousandsSep: string = ' ',
+	decimalPoint = '.',
+	thousandsSep = ' ',
 ) {
 	const units = ['byte', 'Kb', 'Mb', 'Gb', 'Tb'],
-		iMax = units.length;
-	let i = 0,
-		result = 0;
+		  iMax  = units.length;
+	let i       = 0,
+		result  = 0;
 
 	size = parseFloat(String(size));
 
@@ -402,13 +354,13 @@ export const fileSizeFormat = function (
 	}
 
 	const parts = String(result).split('.'),
-		head =
-			parseInt(parts[0]) === result
-				? result
-				: numberFormat(result, 2, decimalPoint, thousandsSep);
+		  head  =
+			  parseInt(parts[0]) === result
+			  ? result
+			  : numberFormat(result, 2, decimalPoint, thousandsSep);
 
 	return head + ' ' + units[i === 0 ? 0 : i - 1];
-};
+}
 
 /**
  * Opens the provided url by injecting a hidden iframe that calls
@@ -424,10 +376,10 @@ export const fileSizeFormat = function (
  * @param strWindowName
  * @param strWindowFeatures
  */
-export const safeOpen = function (
-	url: string = '',
-	strWindowName: string = '',
-	strWindowFeatures: string = '',
+export function safeOpen(
+	url               = '',
+	strWindowName     = '',
+	strWindowFeatures = '',
 ) {
 	if (window.navigator.userAgent.indexOf('MSIE') !== -1) {
 		// IE before 11
@@ -442,15 +394,13 @@ export const safeOpen = function (
 		return child;
 	}
 
-	let iframe, iframeDoc, script, openArgs, newWin;
-
-	iframe = document.createElement('iframe') as HTMLIFrameElement;
+	const iframe               = document.createElement('iframe') as HTMLIFrameElement;
 	iframe.style.display = 'none';
 	document.body.appendChild(iframe);
-	iframeDoc = (iframe.contentDocument ||
-		(iframe.contentWindow as any).document) as Document;
+	const iframeDoc = (iframe.contentDocument ||
+				 (iframe.contentWindow as any).document) as Document;
 
-	openArgs = '"' + url + '"';
+	let openArgs = '"' + url + '"';
 	if (strWindowName) {
 		openArgs += ', "' + strWindowName + '"';
 	}
@@ -458,7 +408,7 @@ export const safeOpen = function (
 		openArgs += ', "' + strWindowFeatures + '"';
 	}
 
-	script = iframeDoc.createElement('script');
+	const script      = iframeDoc.createElement('script');
 	script.type = 'text/javascript';
 	script.text =
 		'window.parent = null; window.top = null;' +
@@ -467,36 +417,146 @@ export const safeOpen = function (
 		');' +
 		'if (child) { child.opener = null }';
 	iframeDoc.body.appendChild(script);
-	newWin = (iframe.contentWindow as any).child as Window;
+	const newWin = (iframe.contentWindow as any).child as Window;
 
 	document.body.removeChild(iframe);
 	return newWin;
-};
+}
 
-const _fn = function (
-	type: 'error' | 'warn' | 'log' | 'info' | 'debug' | 'trace',
-) {
-	if ((window as any).__oweb_show_log === true) {
-		return console[type];
-	} else {
-		return noop;
+export const logger: Console & { on: () => void; off: () => void } = (function _logger() {
+	let _showLog = true;
+	const _fn    = function (
+		type: keyof Console,
+	) {
+		return _showLog ? console[type] : noop;
+	};
+
+	return {
+
+		off() {
+			_showLog = false;
+		},
+		on() {
+			_showLog = true;
+		},
+
+		get memory() {return _fn('memory');},
+		get assert() {return _fn('assert');},
+		get clear() {return _fn('clear');},
+		get count() {return _fn('count');},
+		get countReset() {return _fn('countReset');},
+		get debug() {return _fn('debug');},
+		get dir() {return _fn('dir');},
+		get dirxml() {return _fn('dirxml');},
+		get error() {return _fn('error');},
+		get exception() {return _fn('exception');},
+		get group() {return _fn('group');},
+		get groupCollapsed() {return _fn('groupCollapsed');},
+		get groupEnd() {return _fn('groupEnd');},
+		get info() {return _fn('info');},
+		get log() {return _fn('log');},
+		get table() {return _fn('table');},
+		get time() {return _fn('time');},
+		get timeEnd() {return _fn('timeEnd');},
+		get timeLog() {return _fn('timeLog');},
+		get timeStamp() {return _fn('timeStamp');},
+		get trace() {return _fn('trace');},
+		get warn() {return _fn('warn');},
+	};
+})();
+
+export function encode(val: string) {
+	return encodeURIComponent(val)
+		.replace(/%24/g, '$')
+		.replace(/%20/g, '+')
+		.replace(/%3A/gi, ':')
+		.replace(/%2C/gi, ',')
+		.replace(/%5B/gi, '[')
+		.replace(/%5D/gi, ']');
+}
+
+/**
+ * Build query string from object. Recursively!
+ * @param params
+ * @param prefix
+ */
+export function buildQueryString(
+	params: object | URLSearchParams,
+	prefix?: string,
+): string {
+
+	if (params instanceof URLSearchParams) {
+		return params.toString();
 	}
-};
 
-export const logger = {
-	get debug() {
-		return _fn('debug');
-	},
-	get log() {
-		return _fn('debug');
-	},
-	get info() {
-		return _fn('debug');
-	},
-	get error() {
-		return _fn('debug');
-	},
-	get warn() {
-		return _fn('debug');
-	},
-};
+	const duplicates = {},
+		  str        = [];
+
+	for (const prop in params) {
+		if (!Object.prototype.hasOwnProperty.call(params, prop)) {
+			continue;
+		}
+
+		const key   = prefix ? prefix + '[' + prop + ']' : prop,
+			  value = (params as any)[prop];
+		let pair;
+		if (value !== undefined) {
+			if (value === null) {
+				pair = encode(key);
+			} else if (isPlainObject(value)) {
+				pair = buildQueryString(value, key);
+			} else if (isArray(value)) {
+				pair = value
+					.reduce(function (acc, item, index) {
+						if (!(duplicates as any)[key]) {
+							(duplicates as any)[key] = {};
+						}
+						if (!(duplicates as any)[key][item]) {
+							(duplicates as any)[key][item] = true;
+							return acc.concat(
+								buildQueryString({[key + '[' + index + ']']: item}),
+							);
+						}
+						return acc;
+					}, [])
+					.join('&');
+			} else {// scalar type
+				pair =
+					encode(key) + '=' + encode(value);
+			}
+
+			str.push(pair || key);
+		}
+	}
+
+	return str.join('&');
+}
+
+/**
+ * Build a URL with a given params
+ *
+ * @param url
+ * @param params
+ */
+export function buildURL(url: string, params: object | URLSearchParams) {
+	if (!params) {
+		return url;
+	}
+
+	const serializedParams = buildQueryString(params);
+
+	if (serializedParams) {
+		const hashIndex = url.indexOf('#');
+		if (hashIndex !== -1) {
+			url = url.slice(0, hashIndex);
+		}
+
+		url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+	}
+
+	return url;
+}
+
+export * from './scriptLoader';
+
+export {default as PathResolver} from './PathResolver';

@@ -1,20 +1,20 @@
 import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
-import { id } from '../utils';
-import { INetResponse } from '../OWebNet';
-import { IOZoneApiJSON, ozNet } from '../ozone';
+import {id} from '../utils';
+import {ONetError, ONetResponse} from '../OWebNet';
+import {OApiJSON} from '../ozone';
 
 export default class OWebSignUp extends OWebEvent {
-	static readonly SELF = id();
+	static readonly SELF                  = id();
 	static readonly EVT_SIGN_UP_NEXT_STEP = id();
-	static readonly EVT_SIGN_UP_SUCCESS = id();
-	static readonly EVT_SIGN_UP_ERROR = id();
+	static readonly EVT_SIGN_UP_SUCCESS   = id();
+	static readonly EVT_SIGN_UP_FAIL      = id();
 
-	static readonly SIGN_UP_STEP_START = 1;
+	static readonly SIGN_UP_STEP_START    = 1;
 	static readonly SIGN_UP_STEP_VALIDATE = 2;
-	static readonly SIGN_UP_STEP_END = 3;
+	static readonly SIGN_UP_STEP_END      = 3;
 
-	constructor(private readonly appContext: OWebApp) {
+	constructor(private readonly _appContext: OWebApp) {
 		super();
 	}
 
@@ -22,8 +22,8 @@ export default class OWebSignUp extends OWebEvent {
 		return this._sendForm(
 			{
 				phone: data.phone,
-				cc2: data.cc2,
-				step: OWebSignUp.SIGN_UP_STEP_START,
+				cc2  : data.cc2,
+				step : OWebSignUp.SIGN_UP_STEP_START,
 			},
 			OWebSignUp.SIGN_UP_STEP_VALIDATE,
 		);
@@ -47,42 +47,47 @@ export default class OWebSignUp extends OWebEvent {
 		gender: string;
 		email?: string;
 	}) {
-		return this._sendForm({
+		const form = {
 			step: OWebSignUp.SIGN_UP_STEP_END,
-		});
-	}
+			...data,
+		};
 
-	onError(
-		handler: (response: INetResponse<IOZoneApiJSON<any>>) => void,
-	): this {
-		return this.on(OWebSignUp.EVT_SIGN_UP_ERROR, handler);
+		if (!form.email) {
+			delete form.email;
+		}
+
+		return this._sendForm(form);
 	}
 
 	onNextStep(
 		handler: (
-			response: INetResponse<IOZoneApiJSON<any>>,
+			this: this,
+			response: ONetResponse<OApiJSON<any>>,
 			step: number,
 		) => void,
 	): this {
 		return this.on(OWebSignUp.EVT_SIGN_UP_NEXT_STEP, handler);
 	}
 
-	onSuccess(
-		handler: (response: INetResponse<IOZoneApiJSON<any>>) => void,
+	onSignUpFail(
+		handler: (this: this, err: ONetError) => void,
+	): this {
+		return this.on(OWebSignUp.EVT_SIGN_UP_FAIL, handler);
+	}
+
+	onSignUpSuccess(
+		handler: (this: this, response: ONetResponse<OApiJSON<any>>) => void,
 	): this {
 		return this.on(OWebSignUp.EVT_SIGN_UP_SUCCESS, handler);
 	}
 
 	private _sendForm(data: FormData | object, nextStep?: number) {
-		const m = this,
-			url = m.appContext.url.get('OZ_SERVER_SIGNUP_SERVICE'),
-			net = ozNet<IOZoneApiJSON<any>>(url, {
-				method: 'POST',
-				body: data,
-				isGoodNews(response) {
-					return Boolean(response.json && response.json.error === 0);
-				},
-			});
+		const m   = this,
+			  url = m._appContext.url.get('OZ_SERVER_SIGNUP_SERVICE'),
+			  net = m._appContext.oz.request<OApiJSON<any>>(url, {
+				  method: 'POST',
+				  body  : data,
+			  });
 
 		return net
 			.onGoodNews(function (response) {
@@ -95,8 +100,8 @@ export default class OWebSignUp extends OWebEvent {
 					m.trigger(OWebSignUp.EVT_SIGN_UP_SUCCESS, [response]);
 				}
 			})
-			.onBadNews(function (response) {
-				m.trigger(OWebSignUp.EVT_SIGN_UP_ERROR, [response]);
+			.onFail(function (err) {
+				m.trigger(OWebSignUp.EVT_SIGN_UP_FAIL, [err]);
 			})
 			.send();
 	}

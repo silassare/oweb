@@ -1,70 +1,33 @@
 import OWebApp from './OWebApp';
-import { assign, isPlainObject, stringPlaceholderReplace } from './utils';
 import {
-	IOZoneApiAddResponse,
-	IOZoneApiDeleteAllResponse,
-	IOZoneApiDeleteResponse,
-	IOZoneApiGetAllResponse,
-	IOZoneApiGetRelationItemResponse,
-	IOZoneApiGetRelationItemsResponse,
-	IOZoneApiGetResponse,
-	IOZoneApiRequestOptions,
-	IOZoneApiUpdateAllResponse,
-	IOZoneApiUpdateResponse,
-	ozNet,
+	OApiAddJSON,
+	OApiDeleteAllJSON,
+	OApiDeleteJSON,
+	OApiGetAllJSON,
+	OApiGetRelationItemJSON,
+	OApiGetRelationItemsJSON,
+	OApiGetJSON,
+	OApiRequestOptions,
+	OApiUpdateAllJSON,
+	OApiUpdateJSON,
+	cleanRequestOptions,
 } from './ozone';
 
-const SERVICE_URL_FORMAT = ':api_url/:serviceName',
-	SERVICE_ENTITY_FORMAT = ':api_url/:service/:id',
-	SERVICE_ENTITY_RELATION_FORMAT = ':api_url/:service/:id/:relation';
-
 export default class OWebService<Entity> {
-	private readonly _baseData: { api_url: any; service: string };
 
 	/**
-	 * @param appContext The app context.
+	 * OWebService constructor.
+	 *
+	 * @param _appContext The app context.
 	 * @param service The service name.
 	 */
-	constructor(protected readonly appContext: OWebApp, service: string) {
-		const apiBaseUrl = appContext.configs
-			.get('OZ_API_BASE_URL')
-			.replace(/\/$/g, '');
-		this._baseData = { api_url: apiBaseUrl, service };
-	}
+	constructor(protected readonly _appContext: OWebApp, protected service: string) {}
 
 	/**
 	 * Returns the service name.
 	 */
 	getName(): string {
-		return this._baseData.service;
-	}
-
-	/**
-	 * Returns the service URI.
-	 */
-	getServiceURI() {
-		return stringPlaceholderReplace(SERVICE_URL_FORMAT, this._baseData);
-	}
-
-	/**
-	 * Returns entity URI.
-	 *
-	 * @param id The entity id.
-	 */
-	getItemURI(id: any): string {
-		const data = assign({ id }, this._baseData);
-		return stringPlaceholderReplace(SERVICE_ENTITY_FORMAT, data);
-	}
-
-	/**
-	 * Returns entity relation URI.
-	 *
-	 * @param id The entity id.
-	 * @param relation The relation name.
-	 */
-	getItemRelationURI(id: string, relation: string): string {
-		const data = assign({ id, relation }, this._baseData);
-		return stringPlaceholderReplace(SERVICE_ENTITY_RELATION_FORMAT, data);
+		return this.service;
 	}
 
 	/**
@@ -73,11 +36,12 @@ export default class OWebService<Entity> {
 	 * @param formData
 	 */
 	addRequest(formData: FormData | object) {
-		const url = this.getServiceURI();
+		const oz  = this._appContext.oz,
+			  url = oz.getServiceURI(this.service);
 
-		return ozNet<IOZoneApiAddResponse<Entity>>(url, {
+		return oz.request<OApiAddJSON<Entity>>(url, {
 			method: 'POST',
-			body: formData,
+			body  : formData,
 		});
 	}
 
@@ -87,9 +51,10 @@ export default class OWebService<Entity> {
 	 * @param id The entity id.
 	 */
 	deleteRequest(id: string) {
-		const url = this.getItemURI(id);
+		const oz  = this._appContext.oz,
+			  url = oz.getItemURI(this.service, id);
 
-		return ozNet<IOZoneApiDeleteResponse<Entity>>(url, {
+		return oz.request<OApiDeleteJSON<Entity>>(url, {
 			method: 'DELETE',
 		});
 	}
@@ -101,11 +66,12 @@ export default class OWebService<Entity> {
 	 * @param formData
 	 */
 	updateRequest(id: string, formData: any) {
-		const url = this.getItemURI(id);
+		const oz  = this._appContext.oz,
+			  url = oz.getItemURI(this.service, id);
 
-		return ozNet<IOZoneApiUpdateResponse<Entity>>(url, {
+		return oz.request<OApiUpdateJSON<Entity>>(url, {
 			method: 'PATCH',
-			body: formData,
+			body  : formData,
 		});
 	}
 
@@ -114,27 +80,13 @@ export default class OWebService<Entity> {
 	 *
 	 * @param options
 	 */
-	deleteAllRequest(options: IOZoneApiRequestOptions) {
-		const url = this.getServiceURI(),
-			filters = options.filters,
-			_options: IOZoneApiRequestOptions = {};
+	deleteAllRequest(options: OApiRequestOptions) {
+		const oz  = this._appContext.oz,
+			  url = oz.getServiceURI(this.service);
 
-		if (typeof options.max === 'number') {
-			// will be ignored by O'Zone
-			_options.max = options.max;
-		}
-		if (typeof options.page === 'number') {
-			// will be ignored by O'Zone
-			_options.page = options.page;
-		}
-
-		if (isPlainObject(filters)) {
-			_options.filters = filters;
-		}
-
-		return ozNet<IOZoneApiDeleteAllResponse>(url, {
+		return oz.request<OApiDeleteAllJSON>(url, {
 			method: 'DELETE',
-			body: _options,
+			params: cleanRequestOptions(options),
 		});
 	}
 
@@ -142,29 +94,14 @@ export default class OWebService<Entity> {
 	 * Updates all entities.
 	 *
 	 * @param options
-	 * @param formData
 	 */
-	updateAllRequest(options: IOZoneApiRequestOptions, formData: any) {
-		const url = this.getServiceURI(),
-			filters = options.filters,
-			_options: IOZoneApiRequestOptions = formData;
+	updateAllRequest(options: OApiRequestOptions) {
+		const oz  = this._appContext.oz,
+			  url = oz.getServiceURI(this.service);
 
-		if (typeof options.max === 'number') {
-			// will be ignored by O'Zone
-			_options.max = options.max;
-		}
-		if (typeof options.page === 'number') {
-			// will be ignored by O'Zone
-			_options.page = options.page;
-		}
-
-		if (isPlainObject(filters)) {
-			_options.filters = filters;
-		}
-
-		return ozNet<IOZoneApiUpdateAllResponse>(url, {
+		return oz.request<OApiUpdateAllJSON>(url, {
 			method: 'PATCH',
-			body: _options,
+			body  : cleanRequestOptions(options),
 		});
 	}
 
@@ -177,17 +114,18 @@ export default class OWebService<Entity> {
 	 * @param id The entity id.
 	 * @param relations The relations string.
 	 */
-	getRequest(id: string, relations: string = '') {
-		const url = this.getItemURI(id),
-			data: any = {};
+	getRequest(id: string, relations = '') {
+		const oz                          = this._appContext.oz,
+			  url                         = oz.getItemURI(this.service, id),
+			  options: OApiRequestOptions = {};
 
 		if (relations.length) {
-			data.relations = relations;
+			options.relations = relations;
 		}
 
-		return ozNet<IOZoneApiGetResponse<Entity>>(url, {
+		return oz.request<OApiGetJSON<Entity>>(url, {
 			method: 'GET',
-			body: data,
+			params: cleanRequestOptions(options),
 		});
 	}
 
@@ -196,36 +134,13 @@ export default class OWebService<Entity> {
 	 *
 	 * @param options
 	 */
-	getAllRequest(options: IOZoneApiRequestOptions) {
-		const url = this.getServiceURI(),
-			filters = options.filters,
-			_options: IOZoneApiRequestOptions = {};
+	getAllRequest(options: OApiRequestOptions) {
+		const oz  = this._appContext.oz,
+			  url = oz.getServiceURI(this.service);
 
-		if (typeof options.max === 'number') {
-			_options.max = options.max;
-		}
-		if (typeof options.page === 'number') {
-			_options.page = options.page;
-		}
-
-		if (typeof options.relations === 'string') {
-			_options.relations = options.relations;
-		}
-		if (typeof options.collection === 'string') {
-			_options.collection = options.collection;
-		}
-
-		if (typeof options.order_by === 'string') {
-			_options.order_by = options.order_by;
-		}
-
-		if (isPlainObject(filters)) {
-			_options.filters = filters;
-		}
-
-		return ozNet<IOZoneApiGetAllResponse<Entity>>(url, {
+		return oz.request<OApiGetAllJSON<Entity>>(url, {
 			method: 'GET',
-			body: _options,
+			params: cleanRequestOptions(options),
 		});
 	}
 
@@ -236,9 +151,10 @@ export default class OWebService<Entity> {
 	 * @param relation The relation name
 	 */
 	getRelationRequest<R>(id: string, relation: string) {
-		const url = this.getItemRelationURI(id, relation);
+		const oz  = this._appContext.oz,
+			  url = oz.getItemRelationURI(this.service, id, relation);
 
-		return ozNet<IOZoneApiGetRelationItemResponse<R>>(url, {
+		return oz.request<OApiGetRelationItemJSON<R>>(url, {
 			method: 'GET',
 		});
 	}
@@ -253,26 +169,14 @@ export default class OWebService<Entity> {
 	getRelationItemsRequest<R>(
 		id: string,
 		relation: string,
-		options: IOZoneApiRequestOptions,
+		options: OApiRequestOptions,
 	) {
-		const url = this.getItemRelationURI(id, relation),
-			filters = options.filters,
-			_options: IOZoneApiRequestOptions = {};
+		const oz  = this._appContext.oz,
+			  url = oz.getItemRelationURI(this.service, id, relation);
 
-		if (typeof options.max === 'number') {
-			_options.max = options.max;
-		}
-		if (typeof options.page === 'number') {
-			_options.page = options.page;
-		}
-
-		if (isPlainObject(filters)) {
-			_options.filters = filters;
-		}
-
-		return ozNet<IOZoneApiGetRelationItemsResponse<R>>(url, {
+		return oz.request<OApiGetRelationItemsJSON<R>>(url, {
 			method: 'GET',
-			body: _options,
+			params: cleanRequestOptions(options),
 		});
 	}
 }
