@@ -1,26 +1,34 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-import {clone, forEach, id, logger} from './utils';
-import {OJSONSerializable} from './OWebDataStore';
+import { clone, forEach, id, logger } from './utils';
+import { OJSONValue } from './OWebDataStore';
 
-export default class OWebConfigs<P extends {
-	[key: string]: OJSONSerializable;
-}, U extends {
-	[key: string]: OJSONSerializable;
-}, B = U & P> extends OWebEvent {
-	static readonly SELF              = id();
+export default class OWebConfigs<
+	P extends {
+		[key: string]: OJSONValue;
+	},
+	U extends {
+		[key: string]: OJSONValue;
+	},
+	B = U & P
+> extends OWebEvent {
+	static readonly SELF = id();
 	static readonly EVT_CONFIG_CHANGE = id();
 
-	private readonly _tagName: string       = 'user_configs';
+	private readonly _tagName: string = 'user_configs';
 	private readonly _defaultUserConfigs: U = {} as any;
-	private readonly _appConfigs: P            = {} as any;
-	private _usersConfigs: U                = {} as any;
+	private readonly _appConfigs: P = {} as any;
+	private _usersConfigs: U = {} as any;
 
-	constructor(private readonly _appContext: OWebApp, appConfigs: P, userConfigs: U) {
+	constructor(
+		private readonly _appContext: OWebApp,
+		appConfigs: P,
+		userConfigs: U
+	) {
 		super();
 
 		this._defaultUserConfigs = clone(userConfigs);
-		this._appConfigs            = clone(appConfigs);
+		this._appConfigs = clone(appConfigs);
 
 		this._loadSavedConfigs();
 
@@ -34,7 +42,6 @@ export default class OWebConfigs<P extends {
 	 */
 	resetToDefault<T extends keyof U>(config: T): this {
 		if (config in this._defaultUserConfigs) {
-
 			delete this._usersConfigs[config];
 			this._appContext.ls.set(this._tagName, this._usersConfigs);
 		}
@@ -50,7 +57,9 @@ export default class OWebConfigs<P extends {
 	resetAllToDefault(confirmFirst = true): this {
 		if (
 			!confirmFirst ||
-			confirm(this._appContext.i18n.toHuman('OZ_CONFIRM_RESET_USER_CONFIGS'))
+			confirm(
+				this._appContext.i18n.toHuman('OZ_CONFIRM_RESET_USER_CONFIGS')
+			)
 		) {
 			this._usersConfigs = {} as any;
 
@@ -66,7 +75,6 @@ export default class OWebConfigs<P extends {
 	 * @param config
 	 */
 	get<T extends keyof B>(config: T): B[T] {
-
 		this._assertDefined(config);
 
 		let val;
@@ -93,7 +101,7 @@ export default class OWebConfigs<P extends {
 
 		if (this._isAppConfig(config as string)) {
 			throw new Error(
-				`[OWebConfigs] can't overwrite app config "${config}".`,
+				`[OWebConfigs] can't overwrite app config "${config}".`
 			);
 		}
 
@@ -105,7 +113,11 @@ export default class OWebConfigs<P extends {
 
 		this._appContext.ls.set(this._tagName, this._usersConfigs);
 
-		this.trigger(OWebConfigs.EVT_CONFIG_CHANGE, [config, this.get(config as any), this]);
+		this.trigger(OWebConfigs.EVT_CONFIG_CHANGE, [
+			config,
+			this.get(config as any),
+			this,
+		]);
 
 		return this;
 	}
@@ -116,8 +128,8 @@ export default class OWebConfigs<P extends {
 	 * @private
 	 */
 	private _loadSavedConfigs() {
-		const m           = this,
-			  savedConfig = this._appContext.ls.get(this._tagName) || {};
+		const m = this,
+			savedConfig = this._appContext.ls.get(this._tagName) || {};
 
 		forEach(m._defaultUserConfigs as any, (val, key) => {
 			if (savedConfig[key] !== undefined) {
@@ -145,7 +157,9 @@ export default class OWebConfigs<P extends {
 	 * @private
 	 */
 	private _assertDefined(config: any) {
-		if (!(config in this._defaultUserConfigs || config in this._appConfigs)) {
+		if (
+			!(config in this._defaultUserConfigs || config in this._appConfigs)
+		) {
 			throw new Error(`[OWebConfigs] config "${config}" is not defined.`);
 		}
 	}

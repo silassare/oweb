@@ -1,7 +1,7 @@
-import {logger, stringPlaceholderReplace} from '../utils';
+import {stringPlaceholderReplace} from '../utils';
 import {ONetRequestOptions} from '../OWebNet';
 import OWebXHR from '../OWebXHR';
-import {OApiJSON, OWebApp} from '../oweb';
+import {OApiResponse, OWebApp} from '../oweb';
 
 const SERVICE_URL_FORMAT             = ':host/:service',
 	  SERVICE_ENTITY_FORMAT          = ':host/:service/:id',
@@ -11,7 +11,7 @@ const apiCache: {
 	[apiHost: string]: OZone;
 } = {};
 
-export const getApiForHost = function (url: string): OZone | undefined {
+export const getApiForHost = function getApiForHost(url: string): OZone | undefined {
 	for (const apiHost in apiCache) {
 		if (url.startsWith(apiHost)) {
 			return apiCache[apiHost];
@@ -53,19 +53,12 @@ export default class OZone {
 	 * @param url The request url
 	 * @param options The request options
 	 */
-	request<R extends OApiJSON<any>>(
+	request<Response extends OApiResponse<any>>(
 		url: string,
-		options: Partial<ONetRequestOptions<R>>,
-	): OWebXHR<R> {
-		logger.debug('[OZone][NET] new request', url, options);
-
+		options: Partial<ONetRequestOptions<Response>> = {}
+	): OWebXHR<Response> {
 		const _this = this,
-			  api   = getApiForHost(url),
-			  event = function (type: string) {
-				  return function (): void {
-					  logger.debug('[OZone][NET] event %s', type, url, options);
-				  };
-			  };
+			  api   = getApiForHost(url);
 
 		if (api) {
 			if (!options.headers) {
@@ -95,35 +88,22 @@ export default class OZone {
 					return Boolean(json && json.error === 0);
 				};
 			}
-			if (!options.serverErrorInfo) {
-				options.serverErrorInfo = (response) => {
-					const json = response.json as any as OApiJSON<any>;
+			if (!options.errorResponseToDialog) {
+				options.errorResponseToDialog = (response) => {
+					const json = response.json as any as OApiResponse<any>;
 					return {text: json.msg, data: json.data};
 				};
 			}
 		}
 
-		const o = new OWebXHR<R>(url, {
-			withCredentials: true,
-			...options,
-		});
+		const o = this._appContext.request<Response>(url, options);
 
-		o.onFinish(event('onFinished'))
-		 .onError(event('onError'))
-		 .onFail(event('onFailed'))
-		 .onHttpError(event('onHttpError'))
-		 .onHttpSuccess(event('onHttpSuccess'))
-		 .onGoodNews(event('onGoodNews'))
-		 .onBadNews(event('onBadNews'))
-		 .onDownloadProgress(event('onDownloadProgress'))
-		 .onUploadProgress(event('onUploadProgress'))
-		 .onResponse(event('onResponse'))
-		 .onResponse(function (response) {
+		o.onResponse(function responseHandler(response) {
 			 const {json} = response;
-			 if (json.stime) {
+			 if (json && json.stime) {
 				 _this._appContext.user.setSessionExpire(json.stime);
 			 }
-			 if (json.stoken) {
+			 if (json && json.stoken) {
 				 _this._appContext.user.setSessionToken(json.stoken);
 			 }
 		 });

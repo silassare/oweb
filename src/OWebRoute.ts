@@ -12,16 +12,14 @@ const tokenTypesRegMap = {
 		  'any'              : /[^/]+/.source,
 	  },
 	  tokenReg         = /:([a-z][a-z0-9_]*)/i,
-	  stringReg        = function (str: string) {
-		  return new RegExp(escapeRegExp(str));
-	  },
+	  stringReg        = (str: string) => new RegExp(escapeRegExp(str)),
 	  wrapReg          = (str: string, capture = false) => capture ? '(' + str + ')' : '(?:' + str + ')';
 
 export type ORoutePath = string | RegExp;
 export type ORoutePathOptions = {
 	[key: string]: RegExp | keyof typeof tokenTypesRegMap;
 };
-export type ORouteTokensMap = { [key: string]: string };
+export type ORouteTokens = Record<string, string>;
 export type ORouteAction = (ctx: OWebRouteContext) => void;
 export type ORouteInfo = { reg: RegExp | null; tokens: string[] };
 
@@ -41,7 +39,7 @@ export default class OWebRoute {
 	constructor(
 		path: string | RegExp,
 		options: ORoutePathOptions | string[],
-		action: ORouteAction,
+		action: ORouteAction
 	) {
 		if (path instanceof RegExp) {
 			this.path   = path.toString();
@@ -57,13 +55,13 @@ export default class OWebRoute {
 			this.tokens = p.tokens;
 		} else {
 			throw new TypeError(
-				'[OWebRoute] invalid route path, string or RegExp required.',
+				'[OWebRoute] invalid route path, string or RegExp required.'
 			);
 		}
 
 		if ('function' !== typeof action) {
 			throw new TypeError(
-				`[OWebRoute] invalid action type, got "${typeof action}" instead of "function".`,
+				`[OWebRoute] invalid action type, got "${typeof action}" instead of "function".`
 			);
 		}
 
@@ -73,7 +71,7 @@ export default class OWebRoute {
 	/**
 	 * Returns true if this route is dynamic false otherwise.
 	 */
-	isDynamic() {
+	isDynamic():boolean {
 		return this.reg != null;
 	}
 
@@ -98,7 +96,7 @@ export default class OWebRoute {
 	 *
 	 * @param pathname
 	 */
-	parse(pathname: string): ORouteTokensMap {
+	parse(pathname: string): ORouteTokens {
 		if (this.isDynamic()) {
 			const founds: any = String(pathname).match(this.reg as RegExp);
 
@@ -108,7 +106,7 @@ export default class OWebRoute {
 						acc[key] = founds[index + 1];
 						return acc;
 					},
-					{},
+					{}
 				);
 			}
 		}
@@ -138,7 +136,7 @@ export default class OWebRoute {
 	 */
 	static parseDynamicPath(
 		path: string,
-		options: ORoutePathOptions,
+		options: ORoutePathOptions
 	): ORouteInfo {
 		const tokens: string[] = [];
 		let reg                = '',
@@ -161,7 +159,7 @@ export default class OWebRoute {
 				reg += wrapReg(rule.source, true);
 			} else {
 				throw new Error(
-					`Invalid rule for token ':${token}' in path '${path}'`,
+					`Invalid rule for token ':${token}' in path '${path}'`
 				);
 			}
 

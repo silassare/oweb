@@ -2,9 +2,10 @@ import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
 import {id} from '../utils';
 import {ONetError, ONetResponse} from '../OWebNet';
-import {OApiJSON} from '../ozone';
+import {OApiResponse} from '../ozone';
+import {OFormData} from '../OWebFormValidator';
 
-export default class OWebPassword extends OWebEvent {
+export default class OWebPassword<Result> extends OWebEvent {
 	static readonly SELF                  = id();
 	static readonly EVT_PASS_EDIT_SUCCESS = id();
 	static readonly EVT_PASS_EDIT_FAIL    = id();
@@ -13,7 +14,7 @@ export default class OWebPassword extends OWebEvent {
 		super();
 	}
 
-	editPass(data: { cpass: string; pass: string; vpass: string }) {
+	editPass(data: { cpass: string; pass: string; vpass: string }): Promise<ONetResponse<OApiResponse<Result>>> {
 		return this._sendForm({
 			action: 'edit',
 			cpass : data.cpass,
@@ -22,7 +23,7 @@ export default class OWebPassword extends OWebEvent {
 		});
 	}
 
-	editPassAdmin(data: { uid: string; pass: string; vpass: string }) {
+	editPassAdmin(data: { uid: string; pass: string; vpass: string }): Promise<ONetResponse<OApiResponse<Result>>> {
 		return this._sendForm({
 			action: 'edit',
 			uid   : data.uid,
@@ -31,26 +32,26 @@ export default class OWebPassword extends OWebEvent {
 		});
 	}
 
-	private _sendForm(data: FormData | object) {
+	private _sendForm(data: OFormData) {
 		const m   = this,
 			  url = m._appContext.url.get('OZ_SERVER_PASSWORD_SERVICE'),
-			  net = m._appContext.oz.request<OApiJSON<any>>(url, {
+			  net = m._appContext.oz.request<OApiResponse<Result>>(url, {
 				  method: 'POST',
 				  body  : data,
 			  });
 
 		return net
-			.onGoodNews(function (response) {
+			.onGoodNews(function goodNewsHandler(response) {
 				m.trigger(OWebPassword.EVT_PASS_EDIT_SUCCESS, [response]);
 			})
-			.onFail(function (err) {
+			.onFail(function failHandler(err) {
 				m.trigger(OWebPassword.EVT_PASS_EDIT_FAIL, [err]);
 			})
 			.send();
 	}
 
 	onEditFail(
-		handler: (this: this, err: ONetError) => void,
+		handler: (this: this, err: ONetError) => void
 	): this {
 		return this.on(OWebPassword.EVT_PASS_EDIT_FAIL, handler);
 	}
@@ -58,8 +59,8 @@ export default class OWebPassword extends OWebEvent {
 	onEditSuccess(
 		handler: (
 			this: this,
-			response: ONetResponse<OApiJSON<any>>,
-		) => void,
+			response: ONetResponse<OApiResponse<Result>>,
+		) => void
 	): this {
 		return this.on(OWebPassword.EVT_PASS_EDIT_SUCCESS, handler);
 	}

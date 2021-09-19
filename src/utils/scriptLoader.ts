@@ -34,8 +34,8 @@ export function loadScript(
 	src: string,
 	then?: OScriptLoadCb,
 	fail?: OScriptLoadCb,
-	disableCache = false,
-) {
+	disableCache = false
+): void {
 	if (!document.querySelector(`script[load-path='${src}']`)) {
 		if (disableCache) {
 			src = noCache(src);
@@ -45,10 +45,10 @@ export function loadScript(
 		script.src     = src;
 		script.async   = false;
 		script.type    = 'text/javascript';
-		script.onload  = function () {
+		script.onload  = function onLoad() {
 			callback(then, [src]);
 		};
-		script.onerror = function () {
+		script.onerror = function onError() {
 			script.parentNode && script.parentNode.removeChild(script);
 			callback(fail, [src]);
 		};
@@ -69,7 +69,7 @@ export function loadScript(
 export function loadScriptBatch(
 	list: OScriptFile[],
 	then?: OBatchCb,
-	disableCache = false,
+	disableCache = false
 ): void {
 	const total            = list.length;
 	const failed: string[] = [];
@@ -100,7 +100,7 @@ export function loadScriptBatch(
 			(_src) => {
 				updateCount(false, _src);
 			},
-			disableCache,
+			disableCache
 		);
 	}
 }

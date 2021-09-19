@@ -2,10 +2,10 @@ import OWebApp from './OWebApp';
 import PathResolver from './utils/PathResolver';
 import { logger } from './utils';
 
-const isServerUrl = function (urlKey: string): boolean {
+const isServerUrl = function isServerUrl(urlKey: string): boolean {
 		return /^OZ_SERVER_/.test(urlKey);
 	},
-	isLocalUrl = function (urlKey: string): boolean {
+	isLocalUrl = function isLocalUrl(urlKey: string): boolean {
 		return /^OW_LOCAL_/.test(urlKey);
 	};
 

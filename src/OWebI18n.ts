@@ -5,13 +5,20 @@ export type OI18nDefinition = { [key: string]: any };
 export type OI18nData = { [key: string]: any };
 export type OI18nOptions = {
 	text?: string;
+	lang?: string;
+	data?: OI18nData;
+	pluralize?: OI18nPluralize;
+};
+export type OI18n = OI18nOptions | string;
+
+export type OI18nElement = string | {
+	text?: string;
 	placeholder?: string;
 	title?: string;
 	lang?: string;
 	data?: OI18nData;
 	pluralize?: OI18nPluralize;
 };
-export type OI18n = OI18nOptions | string;
 
 export type OI18nPluralize =
 	| number
@@ -19,7 +26,7 @@ export type OI18nPluralize =
 
 const LANG_OBJECT: { [key: string]: OI18nDefinition } = {};
 // {name} | {@message} | {@app.name} | {@fr:message} | {@fr:app.name}
-const TOKEN_REG = /{\s*(@)?(?:([a-z-]{2,}):)?((?:[a-z_][a-z0-9_]*)(?:\.[a-z_][a-z0-9_]*)*)\s*}/gi;
+const TOKEN_REG = /{\s*(@)?(?:([a-z-]{2,}):)?([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)*)\s*}/gi;
 
 /**
  * ```js
@@ -37,10 +44,10 @@ const TOKEN_REG = /{\s*(@)?(?:([a-z-]{2,}):)?((?:[a-z_][a-z0-9_]*)(?:\.[a-z_][a-
  * };
  * ```
  */
-const parse = function (str: string) {
+const parse = function parser(str: string) {
 	const out = str
 		.replace(/([\r\n"'])/g, '\\$1')
-		.replace(TOKEN_REG, function (found, isSub, lang, path) {
+		.replace(TOKEN_REG, function stringChunkReplacer(found, isSub, lang, path) {
 			let l, x;
 			if (isSub) {
 				l = lang ? '"' + lang + '"' : 'l';
@@ -56,10 +63,10 @@ const parse = function (str: string) {
 		'_',
 		'd',
 		'l',
-		`return ["${out}"];`.replace(/\s?~\s?/g, '","'),
+		`return ["${out}"];`.replace(/\s?~\s?/g, '","')
 	);
 };
-const getKey = function (key: string, langData: any) {
+const getKey = function getKey(key: string, langData: any) {
 	const parts = (key || '').split('.');
 	let message = langData;
 
@@ -75,11 +82,11 @@ const getKey = function (key: string, langData: any) {
 };
 
 const _tmp = new Map(),
-	translate = function (
+	translate = function translate(
 		key: string,
 		data: OI18nData,
 		pluralize: OI18nPluralize = 0,
-		lang: string,
+		lang: string
 	): string {
 		const id = `${lang}:${key}`;
 		let message = key,
@@ -121,10 +128,10 @@ export default class OWebI18n extends OWebEvent {
 	 *
 	 * @param lang The i18n lang code.
 	 */
-	setDefaultLang(lang: string) {
+	setDefaultLang(lang: string):this {
 		if (!LANG_OBJECT[lang]) {
 			throw new Error(
-				`[OWebLang] can't set default language, undefined language data for: ${lang}.`,
+				`[OWebLang] can't set default language, undefined language data for: ${lang}.`
 			);
 		}
 
@@ -145,7 +152,7 @@ export default class OWebI18n extends OWebEvent {
 		key: OI18n,
 		data: OI18nData = {},
 		pluralize: OI18nPluralize = 0,
-		lang: string = this.defaultLangCode,
+		lang: string = this.defaultLangCode
 	): string {
 		if (typeof key !== 'string') {
 			const opt: OI18nOptions = key as any;
@@ -153,7 +160,7 @@ export default class OWebI18n extends OWebEvent {
 				opt.text || '',
 				opt.data || data,
 				opt.pluralize || pluralize,
-				opt.lang || lang,
+				opt.lang || lang
 			);
 		}
 
@@ -166,7 +173,7 @@ export default class OWebI18n extends OWebEvent {
 	 * @param el
 	 * @param options
 	 */
-	el(el: HTMLElement, options: OI18n) {
+	el(el: HTMLElement, options: OI18nElement):void {
 		if (typeof options === 'string') {
 			options = { text: options };
 		}
@@ -209,21 +216,19 @@ export default class OWebI18n extends OWebEvent {
 	 * @param lang The i18n lang code
 	 * @param data The i18n lang data.
 	 */
-	static loadLangData(lang: string, data: OI18nDefinition) {
+	static loadLangData(lang: string, data: OI18nDefinition):void {
 		if (!isString(lang)) {
 			throw new TypeError(
-				'[OWebI18n] your lang name should be a valid string.',
+				'[OWebI18n] your lang name should be a valid string.'
 			);
 		}
 
 		if (!isPlainObject(data)) {
 			throw new TypeError(
-				'[OWebI18n] your lang data should be a valid plain object.',
+				'[OWebI18n] your lang data should be a valid plain object.'
 			);
 		}
 
 		LANG_OBJECT[lang] = assign(LANG_OBJECT[lang] || {}, data);
-
-		return this;
 	}
 }

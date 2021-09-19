@@ -2,9 +2,9 @@ import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
 import { id } from '../utils';
 import {ONetError, ONetResponse} from '../OWebNet';
-import { OApiJSON } from '../ozone';
+import { OApiResponse } from '../ozone';
 
-export default class OWebLogout extends OWebEvent {
+export default class OWebLogout<Result> extends OWebEvent {
 	static readonly SELF               = id();
 	static readonly EVT_LOGOUT_FAIL    = id();
 	static readonly EVT_LOGOUT_SUCCESS = id();
@@ -14,7 +14,7 @@ export default class OWebLogout extends OWebEvent {
 	}
 
 	onLogoutFail(
-		handler: (this: this, err: ONetError) => void,
+		handler: (this: this, err: ONetError) => void
 	): this {
 		return this.on(OWebLogout.EVT_LOGOUT_FAIL, handler);
 	}
@@ -22,24 +22,24 @@ export default class OWebLogout extends OWebEvent {
 	onLogoutSuccess(
 		handler: (
 			this: this,
-			response: ONetResponse<OApiJSON<any>>,
-		) => void,
+			response: ONetResponse<OApiResponse<Result>>,
+		) => void
 	): this {
 		return this.on(OWebLogout.EVT_LOGOUT_SUCCESS, handler);
 	}
 
-	logout() {
+	logout(): Promise<ONetResponse<OApiResponse<Result>>> {
 		const m = this,
 			url = m._appContext.url.get('OZ_SERVER_LOGOUT_SERVICE'),
-			net = m._appContext.oz.request<OApiJSON<any>>(url, {
+			net = m._appContext.oz.request<OApiResponse<any>>(url, {
 				method: 'POST',
 			});
 
 		return net
-			.onGoodNews(function (response) {
+			.onGoodNews(function goodNewsHandler(response) {
 				m.trigger(OWebLogout.EVT_LOGOUT_SUCCESS, [response]);
 			})
-			.onFail(function (err) {
+			.onFail(function failHandler(err) {
 				m.trigger(OWebLogout.EVT_LOGOUT_FAIL, [err]);
 			})
 			.send();

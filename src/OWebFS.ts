@@ -4,6 +4,11 @@ export type OFileAliasInfo = {
 	file_key: string;
 };
 
+export type OFileMarked = (Blob | File) & {
+	oz_mark_file_id?:string,
+	oz_mark_file_key?:string,
+};
+
 export default class OWebFS {
 	static readonly OFA_MIME_TYPE = 'text/x-ozone-file-alias';
 
@@ -12,7 +17,7 @@ export default class OWebFS {
 	 *
 	 * @param f
 	 */
-	static isFile(f: any): boolean {
+	static isFile(f: unknown): f is OFileMarked {
 		return f instanceof Blob || f instanceof File;
 	}
 
@@ -20,8 +25,8 @@ export default class OWebFS {
 	 * Checks for marked file object.
 	 * @param f
 	 */
-	static isMarkedFile(f: any): boolean {
-		return OWebFS.isFile(f) && f.oz_mark_file_id && f.oz_mark_file_key;
+	static isMarkedFile(f: unknown): boolean {
+		return Boolean(OWebFS.isFile(f) && f.oz_mark_file_id && f.oz_mark_file_key);
 	}
 
 	/**

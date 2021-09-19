@@ -1,13 +1,13 @@
-import OWebRoute, { ORouteTokensMap } from './OWebRoute';
+import OWebRoute, { ORouteTokens } from './OWebRoute';
 import OWebRouter, {
 	ORouteStateItem,
 	ORouteStateObject,
 	ORouteTarget,
 } from './OWebRouter';
-import { logger } from './utils';
+import {searchParam, logger} from './utils';
 
 export default class OWebRouteContext {
-	private _tokens: ORouteTokensMap;
+	private _tokens: ORouteTokens;
 	private _stopped = false;
 	private readonly _target: ORouteTarget;
 	private readonly _state: ORouteStateObject;
@@ -23,7 +23,7 @@ export default class OWebRouteContext {
 	constructor(
 		router: OWebRouter,
 		target: ORouteTarget,
-		state: ORouteStateObject,
+		state: ORouteStateObject
 	) {
 		this._target = target;
 		this._tokens = {};
@@ -36,15 +36,15 @@ export default class OWebRouteContext {
 	 *
 	 * @param token The token.
 	 */
-	getToken(token: string): any {
+	getToken(token: string): string {
 		return this._tokens[token];
 	}
 
 	/**
 	 * Gets a map of all tokens and values.
 	 */
-	getTokens() {
-		return Object.create(this._tokens);
+	getTokens():ORouteTokens {
+		return {...this._tokens};
 	}
 
 	/**
@@ -75,12 +75,12 @@ export default class OWebRouteContext {
 	}
 
 	/**
-	 * Gets search param.
+	 * Gets search param value.
 	 *
-	 * @param param the param name
+	 * @param name the search param name
 	 */
-	getSearchParam(param: string): string | null {
-		return new URL(this._target.href).searchParams.get(param);
+	getSearchParam(name: string): string | null {
+		return searchParam(name, this._target.href);
 	}
 
 	/**
@@ -116,7 +116,7 @@ export default class OWebRouteContext {
 			this._router.replaceHistory(this._target.href, this._state);
 		} else {
 			logger.error(
-				'[OWebDispatchContext] you should not try to save when stopped.',
+				'[OWebDispatchContext] you should not try to save when stopped.'
 			);
 		}
 		return this;

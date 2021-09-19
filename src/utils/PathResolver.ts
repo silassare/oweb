@@ -61,7 +61,7 @@ const PathResolver = {
 			} else {
 				// now here we don't like
 				throw new Error(
-					'[PathResolver] climbing above root is dangerous: ' + path,
+					'[PathResolver] climbing above root is dangerous: ' + path
 				);
 			}
 		}
@@ -90,7 +90,7 @@ const PathResolver = {
 	 * Checks if a path is a relative path.
 	 * @param path
 	 */
-	isRelative(path: any): boolean {
+	isRelative(path: string): boolean {
 		return (
 			/^\.{1,2}[/\\]?/.test(path) ||
 			/[/\\]\.{1,2}[/\\]/.test(path) ||

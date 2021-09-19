@@ -1,7 +1,7 @@
 import OZone from './OZone';
 import {isEmpty, isPlainObject} from '../utils';
 
-export interface OApiJSON<R> {
+export interface OApiResponse<R> {
 	error: number;
 	msg: string;
 	data: R;
@@ -10,59 +10,59 @@ export interface OApiJSON<R> {
 	stoken?: string; // session token
 }
 
-export type OApiAddJSON<T> = OApiJSON<{
-		item: T;
-	}>
+export type OApiAddResponse<T> = OApiResponse<{
+	item: T;
+}>;
 
-export type OApiGetJSON<T> = OApiJSON<{
-		item: T;
-		relations?: {
-			[key: string]: any;
-		};
-	}>
+export type OApiGetResponse<T> = OApiResponse<{
+	item: T;
+	relations?: {
+		[key: string]: any;
+	};
+}>;
 
-export type OApiGetAllJSON<T> = OApiJSON<{
-		items: T[];
-		max?: number;
-		page?: number;
-		total?: number;
-		relations?: {
-			[key: string]: any;
-		};
-	}>
+export type OApiGetAllResponse<T> = OApiResponse<{
+	items: T[];
+	max?: number;
+	page?: number;
+	total?: number;
+	relations?: {
+		[key: string]: any;
+	};
+}>;
 
-export type OApiUpdateJSON<T> = OApiJSON<{
-		item: T;
-	}>
+export type OApiUpdateResponse<T> = OApiResponse<{
+	item: T;
+}>;
 
-export type OApiUpdateAllJSON = OApiJSON<{
-		affected: number;
-	}>
+export type OApiUpdateAllResponse = OApiResponse<{
+	affected: number;
+}>;
 
-export type OApiDeleteJSON<T> = OApiJSON<{
-		item: T;
-	}>
+export type OApiDeleteResponse<T> = OApiResponse<{
+	item: T;
+}>;
 
-export type OApiDeleteAllJSON = OApiJSON<{
-		affected: number;
-	}>
+export type OApiDeleteAllResponse = OApiResponse<{
+	affected: number;
+}>;
 
-export type OApiGetRelationItemsJSON<T> = OApiJSON<{
-		items: T[];
-		max?: number;
-		page?: number;
-		total?: number;
-		relations: {
-			[key: string]: any;
-		};
-	}>
+export type OApiGetRelationItemsResponse<T> = OApiResponse<{
+	items: T[];
+	max?: number;
+	page?: number;
+	total?: number;
+	relations: {
+		[key: string]: any;
+	};
+}>;
 
-export type OApiGetRelationItemJSON<T> = OApiJSON<{
-		item: T;
-		relations?: {
-			[key: string]: any;
-		};
-	}>
+export type OApiGetRelationItemResponse<T> = OApiResponse<{
+	item: T;
+	relations?: {
+		[key: string]: any;
+	};
+}>;
 
 export type OApiFilterCondition =
 	| 'eq'
@@ -89,20 +89,24 @@ export type OApiFilter =
 	1?: 'or' | 'and';
 };
 
-export type OApiFiltersMap = { [key: string]:  number | string | OApiFilter[] };
+export type OApiFilters = { [key: string]: number | string | OApiFilter[] };
 
-export interface OApiRequestOptions {
+export interface OApiServiceRequestOptions {
 	data?: any;
-	filters?: OApiFiltersMap;
+	filters?: OApiFilters;
 	relations?: string | string[];
 	collection?: string;
 	order_by?: string;
 	max?: number;
 	page?: number;
+
+	[key: string]: unknown,
 }
 
-export function cleanRequestOptions(options: OApiRequestOptions): OApiRequestOptions {
-	const _options: OApiRequestOptions = {};
+export function cleanRequestOptions(
+	options: OApiServiceRequestOptions
+): OApiServiceRequestOptions {
+	const _options: OApiServiceRequestOptions = {};
 	if (typeof options.max === 'number') {
 		_options.max = options.max;
 	}
@@ -110,14 +114,17 @@ export function cleanRequestOptions(options: OApiRequestOptions): OApiRequestOpt
 		_options.page = options.page;
 	}
 
-	if (typeof options.relations === 'string') {
+	if (typeof options.relations === 'string' && !isEmpty(options.relations)) {
 		_options.relations = options.relations;
 	}
-	if (typeof options.collection === 'string') {
+	if (
+		typeof options.collection === 'string' &&
+		!isEmpty(options.collection)
+	) {
 		_options.collection = options.collection;
 	}
 
-	if (typeof options.order_by === 'string') {
+	if (typeof options.order_by === 'string' && !isEmpty(options.order_by)) {
 		_options['order_by'] = options.order_by;
 	}
 

@@ -6,18 +6,18 @@ import OWebNet, {
 } from './OWebNet';
 import {buildURL, forEach, isPlainObject} from './utils';
 
-const setOrIgnoreIfExists = function (
+const setOrIgnoreIfExists = function setOrIgnoreIfExists(
 	target: any,
 	key: string,
 	value: any,
-	caseSensitive = false,
+	caseSensitive = false
 ) {
 	if (!target[key] && (!caseSensitive || !target[key.toUpperCase()])) {
 		target[key] = value;
 	}
 };
 
-export default class OWebXHR<T extends any> extends OWebNet<T> {
+export default class OWebXHR<T> extends OWebNet<T> {
 	private _abort?: () => void;
 	private _sent = false;
 
@@ -29,17 +29,17 @@ export default class OWebXHR<T extends any> extends OWebNet<T> {
 	 */
 	constructor(url: string, options: Partial<ONetRequestOptions<T>>) {
 		super(url, {
-			method         : 'get',
-			timeout        : 0,
-			withCredentials: false,
-			responseType   : 'json',
-			headers        : {},
-			isSuccessStatus: (status: number) => status >= 200 && status < 300,
-			isGoodNews     : () => {
+			method               : 'get',
+			timeout              : 0,
+			withCredentials      : false,
+			responseType         : 'json',
+			headers              : {},
+			isSuccessStatus      : (status: number) => status >= 200 && status < 300,
+			isGoodNews           : () => {
 				return true;
 			},
-			serverErrorInfo: () => {
-				return {text: 'OZ_ERROR_SERVER'};
+			errorResponseToDialog: () => {
+				return {text: 'OW_ERROR_REQUEST_FAILED'};
 			},
 			...options,
 		});
@@ -55,7 +55,7 @@ export default class OWebXHR<T extends any> extends OWebNet<T> {
 	/**
 	 * @inheritDoc
 	 */
-	send() {
+	send(): Promise<ONetResponse<T>> {
 		this.assertNotSent('[OWebXHR] request is already sent.');
 
 		let x         = this,
@@ -77,12 +77,12 @@ export default class OWebXHR<T extends any> extends OWebNet<T> {
 		setOrIgnoreIfExists(
 			opt.headers,
 			'Accept',
-			'application/json, text/plain, */*',
+			'application/json, text/plain, */*'
 		);
 
 		xhr.withCredentials = opt.withCredentials;
 
-		xhr.onreadystatechange = function () {
+		xhr.onreadystatechange = function onReadyStateChange() {
 			if (!xhr || xhr.readyState !== 4) {
 				return;
 			}
@@ -135,7 +135,7 @@ export default class OWebXHR<T extends any> extends OWebNet<T> {
 					const err: ONetError = {
 						type: 'error',
 						errType: 'bad_news',
-						... x.options.serverErrorInfo(response)
+						... x.options.errorResponseToDialog(response),
 					};
 					x.trigger(OWebNet.EVT_FAIL, [err]);
 				}
@@ -144,7 +144,7 @@ export default class OWebXHR<T extends any> extends OWebNet<T> {
 				const err: ONetError = {
 					type: 'error',
 					errType: 'http',
-					... x.options.serverErrorInfo(response)
+					... x.options.errorResponseToDialog(response),
 				};
 				x.trigger(OWebNet.EVT_FAIL, [err]);
 			}
@@ -152,17 +152,17 @@ export default class OWebXHR<T extends any> extends OWebNet<T> {
 			always();
 		};
 
-		xhr.addEventListener('progress', function (event) {
+		xhr.addEventListener('progress', function onDownloadProgress(event) {
 			// report download progress
 			x.trigger(OWebNet.EVT_DOWNLOAD_PROGRESS, [event]);
 		});
 
-		xhr.upload.addEventListener('progress', function (event) {
+		xhr.upload.addEventListener('progress', function onUploadProgress(event) {
 			// report upload progress
 			x.trigger(OWebNet.EVT_UPLOAD_PROGRESS, [event]);
 		});
 
-		xhr.onabort = function (event) {
+		xhr.onabort = function onAbort(event) {
 			onerror({
 				type   : 'error',
 				errType: 'abort',
@@ -171,7 +171,7 @@ export default class OWebXHR<T extends any> extends OWebNet<T> {
 			});
 		};
 
-		xhr.ontimeout = function (event) {
+		xhr.ontimeout = function onTimeout(event) {
 			onerror({
 				type   : 'error',
 				errType: 'timeout',
@@ -180,7 +180,7 @@ export default class OWebXHR<T extends any> extends OWebNet<T> {
 			});
 		};
 
-		xhr.onerror = function (event) {
+		xhr.onerror = function onError(event) {
 			// handle non-HTTP error (e.g. network down)
 			onerror({
 				type   : 'error',
@@ -198,13 +198,13 @@ export default class OWebXHR<T extends any> extends OWebNet<T> {
 
 		xhr.open(opt.method.toUpperCase(), url, true);
 
-		forEach(opt.headers, function (value, header) {
+		forEach(opt.headers, function requestHeaderIterator(value, header) {
 			xhr.setRequestHeader(header, value);
 		});
 
-		return new Promise<ONetResponse<T>>(function (
+		return new Promise<ONetResponse<T>>(function xhrPromiseExecutor(
 			resolve: (response: ONetResponse<T>) => void,
-			reject: (error: ONetError) => void,
+			reject: (error: ONetError) => void
 		) {
 			x.onGoodNews((response) => resolve(response))
 			 .onFail((err) => reject(err));
@@ -217,7 +217,7 @@ export default class OWebXHR<T extends any> extends OWebNet<T> {
 	/**
 	 * @inheritDoc
 	 */
-	abort() {
+	abort(): this {
 		this._abort && this._abort();
 		return this;
 	}
@@ -237,7 +237,7 @@ export default class OWebXHR<T extends any> extends OWebNet<T> {
 			setOrIgnoreIfExists(
 				this.options.headers,
 				'Content-Type',
-				'application/x-www-form-urlencoded;charset=utf-8',
+				'application/x-www-form-urlencoded;charset=utf-8'
 			);
 
 			return body.toString();
@@ -247,7 +247,7 @@ export default class OWebXHR<T extends any> extends OWebNet<T> {
 			setOrIgnoreIfExists(
 				this.options.headers,
 				'Content-Type',
-				'application/json;charset=utf-8',
+				'application/json;charset=utf-8'
 			);
 
 			return JSON.stringify(body);

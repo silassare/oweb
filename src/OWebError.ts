@@ -7,17 +7,19 @@ export default class OWebError extends Error {
 	 * @param message
 	 * @param data
 	 */
-	constructor(message: any, data: any = {}) {
-		super(message);
-		this.data = data;
-
+	constructor(message?: Error | string, data: any = {}) {
 		if (message instanceof Error) {
 			const e = message;
+
+			super(e.message);
 			this.message = e.message;
-			this.stack = e.stack;
+			this.stack   = e.stack;
 		} else {
-			this.message = message || '[OWebCustomError] something went wrong.';
-			this.stack = new Error().stack;
+			super(message);
+
+			this.message = message || '[OWebError] something went wrong.';
+			this.stack   = new Error().stack;
 		}
+		this.data = data;
 	}
 }

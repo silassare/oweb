@@ -40,14 +40,14 @@ const wLoc           = window.location,
 	  linkClickEvent = wDoc.ontouchstart ? 'touchstart' : 'click',
 	  hashTagStr     = '#!';
 
-const which        = function (e: any): number {
+const which        = function which(e: any): number {
 		  e = e || window.event;
 		  return null == e.which ? e.button : e.which;
 	  },
-	  samePath     = function (url: URL) {
+	  samePath     = function samePath(url: URL) {
 		  return url.pathname === wLoc.pathname && url.search === wLoc.search;
 	  },
-	  sameOrigin   = function (href: string) {
+	  sameOrigin   = function sameOrigin(href: string) {
 		  if (!href) return false;
 		  const url = new URL(href.toString(), wLoc.toString());
 
@@ -57,7 +57,7 @@ const which        = function (e: any): number {
 			  wLoc.port === url.port
 		  );
 	  },
-	  leadingSlash = (path: string): string => {
+	  leadingSlash = function leadingSlash(path: string): string {
 		  if (!path.length || path === '/') {
 			  return '/';
 		  }
@@ -97,7 +97,7 @@ export default class OWebRouter {
 	constructor(
 		baseUrl: string,
 		hashMode = true,
-		notFound: (target: ORouteTarget) => void,
+		notFound: (target: ORouteTarget) => void
 	) {
 		const r                = this;
 		this._baseUrl          = baseUrl;
@@ -130,7 +130,7 @@ export default class OWebRouter {
 	start(
 		firstRun = true,
 		target: string    = wLoc.href,
-		state?: ORouteStateObject,
+		state?: ORouteStateObject
 	): this {
 		if (!this._initialized) {
 			this._initialized = true;
@@ -223,7 +223,7 @@ export default class OWebRouter {
 				href    : fullUrl.href,
 				path    : leadingSlash(pathname),
 				fullPath: leadingSlash(
-					pathname + fullUrl.search + (fullUrl.hash || ''),
+					pathname + fullUrl.search + (fullUrl.hash || '')
 				),
 			};
 		}
@@ -265,7 +265,7 @@ export default class OWebRouter {
 	on(
 		path: ORoutePath,
 		rules: ORoutePathOptions = {},
-		action: ORouteAction,
+		action: ORouteAction
 	): this {
 		this._routes.push(new OWebRoute(path, rules, action));
 		return this;
@@ -277,7 +277,7 @@ export default class OWebRouter {
 	 * @param route
 	 */
 	addRoute(
-		route: OWebRoute,
+		route: OWebRoute
 	): this {
 		this._routes.push(route);
 		return this;
@@ -323,7 +323,7 @@ export default class OWebRouter {
 		url: string,
 		state: ORouteStateObject    = {},
 		push               = true,
-		ignoreSameLocation = false,
+		ignoreSameLocation = false
 	): this {
 		const targetUrl = this.pathToURL(url),
 			  target    = this.parseURL(targetUrl.href),
@@ -363,7 +363,7 @@ export default class OWebRouter {
 		this._currentDispatcher = cd = this.createDispatcher(
 			target,
 			state,
-			++this._dispatchId,
+			++this._dispatchId
 		);
 
 		if (!cd.found.length) {
@@ -374,12 +374,12 @@ export default class OWebRouter {
 					this._notFound(target);
 				} else {
 					throw new Error(
-						'[OWebRouter] "notFound" handler is redirecting to another missing route. This may cause infinite loop.',
+						'[OWebRouter] "notFound" handler is redirecting to another missing route. This may cause infinite loop.'
 					);
 				}
 			} else {
 				throw new Error(
-					'[OWebRouter] "notFound" handler is not defined.',
+					'[OWebRouter] "notFound" handler is not defined.'
 				);
 			}
 
@@ -408,7 +408,7 @@ export default class OWebRouter {
 	addHistory(
 		url: string,
 		state: ORouteStateObject,
-		title = '',
+		title = ''
 	): this {
 		title = title && title.length ? title : wDoc.title;
 
@@ -429,7 +429,7 @@ export default class OWebRouter {
 	replaceHistory(
 		url: string,
 		state: ORouteStateObject,
-		title = '',
+		title = ''
 	): this {
 		title = title && title.length ? title : wDoc.title;
 
@@ -438,7 +438,7 @@ export default class OWebRouter {
 		logger.debug(
 			'[OWebDispatchContext] history replaced',
 			wHistory.state,
-			url,
+			url
 		);
 
 		return this;
@@ -454,7 +454,7 @@ export default class OWebRouter {
 	private createDispatcher(
 		target: ORouteTarget,
 		state: ORouteStateObject,
-		id: number,
+		id: number
 	): ORouteDispatcher {
 		logger.debug(`[OWebRouter][dispatcher-${id}] creation.`);
 
@@ -481,12 +481,12 @@ export default class OWebRouter {
 					active = false;
 					logger.debug(
 						`[OWebRouter][dispatcher-${id}] cancel called!`,
-						o,
+						o
 					);
 				} else {
 					logger.error(
 						`[OWebRouter][dispatcher-${id}] cancel called when inactive.`,
-						o,
+						o
 					);
 				}
 				return o;
@@ -524,7 +524,7 @@ export default class OWebRouter {
 			wDoc.addEventListener(
 				linkClickEvent,
 				this._linkClickListener,
-				false,
+				false
 			);
 		}
 
@@ -540,12 +540,12 @@ export default class OWebRouter {
 			window.removeEventListener(
 				'popstate',
 				this._popStateListener,
-				false,
+				false
 			);
 			wDoc.removeEventListener(
 				linkClickEvent,
 				this._linkClickListener,
-				false,
+				false
 			);
 		}
 
@@ -659,7 +659,7 @@ export default class OWebRouter {
 			el,
 			orig,
 			targetHref,
-			wHistory.state,
+			wHistory.state
 		);
 		this.browseTo(orig);
 	}

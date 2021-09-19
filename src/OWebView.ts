@@ -1,12 +1,12 @@
 import OWebEvent from './OWebEvent';
 import { id, logger } from './utils';
-import { OApiJSON } from './ozone';
-import {ONetError} from './OWebNet';
+import { OApiResponse } from './ozone';
+import { ONetError } from './OWebNet';
 
 export type OViewDialog = {
 	type: 'info' | 'error' | 'done';
 	text: string;
-	data?: {};
+	data?: Record<string, unknown>;
 };
 
 export default class OWebView extends OWebEvent {
@@ -32,7 +32,7 @@ export default class OWebView extends OWebEvent {
 	/**
 	 * To freeze the view.
 	 */
-	freeze() {
+	freeze():this {
 		++this._freezeCounter;
 
 		if (this._freezeCounter === 1) {
@@ -45,7 +45,7 @@ export default class OWebView extends OWebEvent {
 	/**
 	 * Unfreeze the view.
 	 */
-	unfreeze() {
+	unfreeze():this {
 		if (this.isFrozen()) {
 			--this._freezeCounter;
 
@@ -63,15 +63,15 @@ export default class OWebView extends OWebEvent {
 	 * @param canUseAlert
 	 */
 	dialog(
-		dialog: OViewDialog | OApiJSON<any> | ONetError,
-		canUseAlert = false,
-	) {
+		dialog: OViewDialog | OApiResponse<any> | ONetError,
+		canUseAlert = false
+	):void {
 		let d = dialog;
 
-		if ((d as OApiJSON<any>).error) {
+		if ((d as OApiResponse<any>).error) {
 			d = {
-				type: (d as OApiJSON<any>).error ? 'error' : 'done',
-				text: (d as OApiJSON<any>).msg,
+				type: (d as OApiResponse<any>).error ? 'error' : 'done',
+				text: (d as OApiResponse<any>).msg,
 				data: d.data || {},
 			};
 		}
@@ -84,7 +84,7 @@ export default class OWebView extends OWebEvent {
 	 *
 	 * @param handler
 	 */
-	onFreeze(handler: (this: this) => void) {
+	onFreeze(handler: (this: this) => void) :this{
 		return this.on(OWebView.EVT_VIEW_FREEZE, handler);
 	}
 
@@ -93,7 +93,7 @@ export default class OWebView extends OWebEvent {
 	 *
 	 * @param handler
 	 */
-	onUnFreeze(handler: (this: this) => void) {
+	onUnFreeze(handler: (this: this) => void):this {
 		return this.on(OWebView.EVT_VIEW_UNFREEZE, handler);
 	}
 
@@ -107,8 +107,8 @@ export default class OWebView extends OWebEvent {
 			this: this,
 			dialog: OViewDialog,
 			canUseAlert: boolean,
-		) => void,
-	) {
+		) => void
+	):this {
 		return this.on(OWebView.EVT_VIEW_DIALOG, handler);
 	}
 }

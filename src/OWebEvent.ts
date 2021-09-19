@@ -13,8 +13,8 @@ export default class OWebEvent {
 	 */
 	on(
 		event: string,
-		handler: (this: this, ...args: any[]) => ReturnType<OEventHandler>,
-	) {
+		handler: (this: this, ...args: any[]) => ReturnType<OEventHandler>
+	): this {
 		if (!this._events[event]) {
 			this._events[event] = [];
 		}
@@ -34,7 +34,7 @@ export default class OWebEvent {
 	 * @param event The event name.
 	 * @param handler The event handler function.
 	 */
-	off(event: string, handler: () => void) {
+	off(event: string, handler: () => void): this {
 		if (arguments.length === 1) {
 			if (isString(event)) {
 				delete this._events[event];
@@ -79,7 +79,7 @@ export default class OWebEvent {
 		event: string,
 		data: any[] = [],
 		cancelable = false,
-		context: any = this,
+		context: any = this
 	): boolean {
 		const handlers = this._events[event] || [];
 		let i = -1,

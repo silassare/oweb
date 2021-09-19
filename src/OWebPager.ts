@@ -86,7 +86,7 @@ const wDoc        = window.document;
 let routeId       = 0;
 const _isParentOf = (
 	parent: OPageRouteFull,
-	route: OPageRouteFull,
+	route: OPageRouteFull
 ): boolean => {
 	let p;
 	while ((p = route.parent)) {
@@ -103,7 +103,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 	static readonly SELF                     = id();
 	static readonly EVT_PAGE_LOCATION_CHANGE = id();
 
-	private readonly _pages: { [key: string]: P } = {};
+	private readonly _pages: Record<string, P> = {};
 	private _routesCache: OPageRouteFull[]       = [];
 	private _routesFlattened: OPageRouteFull[]   = [];
 	private _activePage?: P;
@@ -160,7 +160,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 	/**
 	 * Returns all pages list.
 	 */
-	getPageList() {
+	getPageList():Record<string, P> {
 		return {...this._pages};
 	}
 
@@ -197,7 +197,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 	private _registerPageRoutes(
 		page: P,
 		routes: OPageRoute[],
-		parent?: OPageRouteFull,
+		parent?: OPageRouteFull
 	): this {
 		const router: OWebRouter = this._appContext.router;
 
@@ -245,7 +245,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 	 */
 	private _addRoute(
 		route: OPageRouteFull,
-		page: P,
+		page: P
 	): OWebRoute {
 		const webRoute = new OWebRoute(
 			route.path,
@@ -255,7 +255,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 					'[OWebPager] page route match',
 					route,
 					page,
-					routeContext,
+					routeContext
 				);
 
 				if (page.requireLogin &&
@@ -278,7 +278,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 				page.onOpen && page.onOpen(routeContext, route);
 
 				!routeContext.stopped() && this._setActive(page, route);
-			},
+			}
 		);
 
 		this._appContext.router.addRoute(webRoute);
@@ -308,7 +308,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 		this._activePage  = page;
 		this._activeRoute = route;
 		wDoc.title        = app.i18n.toHuman(
-			route.title ? route.title : app.getAppName(),
+			route.title ? route.title : app.getAppName()
 		);
 
 		const info: any = {
@@ -327,8 +327,8 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 	}
 
 	onLocationChange(
-		handler: (route: OPageRouteFull, page: P) => void,
-	) {
+		handler: (route: OPageRouteFull, page: P) => void
+	):this {
 		return this.on(OWebPager.EVT_PAGE_LOCATION_CHANGE, handler);
 	}
 }

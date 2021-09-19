@@ -2,13 +2,13 @@ import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
 import {id} from '../utils';
 import {ONetError, ONetResponse} from '../OWebNet';
-import {OApiJSON} from '../ozone';
+import {OApiResponse} from '../ozone';
+import {OFormData} from '../OWebFormValidator';
 
-export default class OWebSignUp extends OWebEvent {
+export default class OWebSignUp<Start,Validate, End> extends OWebEvent {
 	static readonly SELF                  = id();
-	static readonly EVT_SIGN_UP_NEXT_STEP = id();
-	static readonly EVT_SIGN_UP_SUCCESS   = id();
-	static readonly EVT_SIGN_UP_FAIL      = id();
+	private static readonly EVT_SIGN_UP_SUCCESS   = id();
+	private static readonly EVT_SIGN_UP_FAIL      = id();
 
 	static readonly SIGN_UP_STEP_START    = 1;
 	static readonly SIGN_UP_STEP_VALIDATE = 2;
@@ -18,24 +18,24 @@ export default class OWebSignUp extends OWebEvent {
 		super();
 	}
 
-	stepStart(data: { phone: string; cc2: string }) {
-		return this._sendForm(
+	stepStart(data: { phone: string; cc2: string }): Promise<ONetResponse<OApiResponse<Start>>> {
+		return this._sendForm<Start>(
 			{
 				phone: data.phone,
 				cc2  : data.cc2,
 				step : OWebSignUp.SIGN_UP_STEP_START,
 			},
-			OWebSignUp.SIGN_UP_STEP_VALIDATE,
+			OWebSignUp.SIGN_UP_STEP_VALIDATE
 		);
 	}
 
-	stepValidate(data: { code: string }) {
-		return this._sendForm(
+	stepValidate(data: { code: string }): Promise<ONetResponse<OApiResponse<Validate>>> {
+		return this._sendForm<Validate>(
 			{
 				step: OWebSignUp.SIGN_UP_STEP_VALIDATE,
 				code: data.code,
 			},
-			OWebSignUp.SIGN_UP_STEP_END,
+			OWebSignUp.SIGN_UP_STEP_END
 		);
 	}
 
@@ -46,7 +46,7 @@ export default class OWebSignUp extends OWebEvent {
 		birth_date: string;
 		gender: string;
 		email?: string;
-	}) {
+	}): Promise<ONetResponse<OApiResponse<End>>> {
 		const form = {
 			step: OWebSignUp.SIGN_UP_STEP_END,
 			...data,
@@ -56,51 +56,36 @@ export default class OWebSignUp extends OWebEvent {
 			delete form.email;
 		}
 
-		return this._sendForm(form);
-	}
-
-	onNextStep(
-		handler: (
-			this: this,
-			response: ONetResponse<OApiJSON<any>>,
-			step: number,
-		) => void,
-	): this {
-		return this.on(OWebSignUp.EVT_SIGN_UP_NEXT_STEP, handler);
+		return this._sendForm<End>(form);
 	}
 
 	onSignUpFail(
-		handler: (this: this, err: ONetError) => void,
+		handler: (this: this, err: ONetError) => void
 	): this {
 		return this.on(OWebSignUp.EVT_SIGN_UP_FAIL, handler);
 	}
 
 	onSignUpSuccess(
-		handler: (this: this, response: ONetResponse<OApiJSON<any>>) => void,
+		handler: (this: this, response: ONetResponse<OApiResponse<End>>) => void
 	): this {
 		return this.on(OWebSignUp.EVT_SIGN_UP_SUCCESS, handler);
 	}
 
-	private _sendForm(data: FormData | object, nextStep?: number) {
+	private _sendForm<R>(data: OFormData, nextStep?: number) {
 		const m   = this,
 			  url = m._appContext.url.get('OZ_SERVER_SIGNUP_SERVICE'),
-			  net = m._appContext.oz.request<OApiJSON<any>>(url, {
+			  net = m._appContext.oz.request<OApiResponse<R>>(url, {
 				  method: 'POST',
 				  body  : data,
 			  });
 
 		return net
-			.onGoodNews(function (response) {
-				if (nextStep) {
-					m.trigger(OWebSignUp.EVT_SIGN_UP_NEXT_STEP, [
-						response,
-						nextStep,
-					]);
-				} else {
+			.onGoodNews(function goodNewsHandler(response) {
+				if (!nextStep) {
 					m.trigger(OWebSignUp.EVT_SIGN_UP_SUCCESS, [response]);
 				}
 			})
-			.onFail(function (err) {
+			.onFail(function failHandler(err) {
 				m.trigger(OWebSignUp.EVT_SIGN_UP_FAIL, [err]);
 			})
 			.send();

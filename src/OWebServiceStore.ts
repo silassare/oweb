@@ -1,13 +1,15 @@
 import {getEntityCache, GoblSinglePKEntity} from 'gobl-utils-ts';
 import {
-	OApiAddJSON,
-	OApiDeleteJSON,
-	OApiUpdateJSON,
-	OApiRequestOptions,
+	OApiAddResponse,
+	OApiDeleteResponse,
+	OApiUpdateResponse,
+	OApiServiceRequestOptions, OApiGetAllResponse, OApiGetResponse,
 } from './ozone';
 import OWebApp from './OWebApp';
 import {escapeRegExp, isPlainObject} from './utils';
 import OWebService from './OWebService';
+import OWebXHR from './OWebXHR';
+import {OFormData} from './OWebFormValidator';
 
 const getId = (item: GoblSinglePKEntity) => item.singlePKValue();
 
@@ -33,7 +35,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	constructor(
 		_appContext: OWebApp,
 		private readonly entity: typeof GoblSinglePKEntity,
-		service: string,
+		service: string
 	) {
 		super(_appContext, service);
 	}
@@ -44,14 +46,14 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 * @param id The item id.
 	 * @param relations The relations to retrieve.
 	 */
-	getItemRequest(id: string, relations = '') {
+	getItemRequest(id: string, relations = ''): OWebXHR<OApiGetResponse<T>> {
 		const ctx = this;
 
 		return this.getRequest(id, relations)
-				   .onGoodNews(function (response) {
+				   .onGoodNews(function goodNewsHandler(response) {
 					   ctx.addItemToList(
 						   response.json.data.item,
-						   response.json.data.relations,
+						   response.json.data.relations
 					   );
 				   });
 	}
@@ -61,15 +63,15 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 *
 	 * @param options
 	 */
-	getItemsListRequest(options: OApiRequestOptions = {}) {
+	getItemsListRequest(options: OApiServiceRequestOptions = {}): OWebXHR<OApiGetAllResponse<T>> {
 		const ctx = this;
 
 		return ctx
 			.getAllRequest(options)
-			.onGoodNews(function (response) {
+			.onGoodNews(function goodNewsHandler(response) {
 				ctx.addItemsToList(
 					response.json.data.items,
-					response.json.data.relations,
+					response.json.data.relations
 				);
 			});
 	}
@@ -79,11 +81,11 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 *
 	 * @param data
 	 */
-	addItemRequest(data: any) {
+	addItemRequest(data: OFormData): OWebXHR<OApiAddResponse<T>> {
 		const ctx = this;
 		return ctx
 			.addRequest(data)
-			.onGoodNews(function (response) {
+			.onGoodNews(function goodNewsHandler(response) {
 				ctx.addCreated(response.json);
 			});
 	}
@@ -93,7 +95,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 *
 	 * @param item
 	 */
-	updateItemRequest(item: T) {
+	updateItemRequest(item: T): OWebXHR<OApiUpdateResponse<T>> {
 		const ctx  = this,
 			  id   = getId(item),
 			  diff = item.toObject(true);
@@ -102,10 +104,10 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 
 		return ctx
 			.updateRequest(id, diff)
-			.onGoodNews(function (response) {
+			.onGoodNews(function goodNewsHandler(response) {
 				ctx.setSaved(item, response.json);
 			})
-			.onFinish(function () {
+			.onFinish(function finishHandler() {
 				item.isSaving(false);
 			});
 
@@ -116,7 +118,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 *
 	 * @param item
 	 */
-	deleteItemRequest(item: T) {
+	deleteItemRequest(item: T): OWebXHR<OApiDeleteResponse<T>> {
 		const ctx = this,
 			  id  = getId(item);
 
@@ -124,10 +126,10 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 
 		return ctx
 			.deleteRequest(id)
-			.onGoodNews(function (response) {
+			.onGoodNews(function goodNewsHandler(response) {
 				ctx.setDeleted(response.json);
 			})
-			.onFinish(function () {
+			.onFinish(function finishHandler() {
 				item.isDeleting(false);
 			});
 	}
@@ -138,7 +140,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 * @param items
 	 * @param relations
 	 */
-	addItemsToList(items: T[] | { [key: string]: T }, relations: any = {}) {
+	addItemsToList(items: T[] | { [key: string]: T }, relations: any = {}): void {
 		const ctx       = this,
 			  list: T[] = (isPlainObject(items)
 						   ? Object.values(items)
@@ -161,7 +163,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 						ctx.relations[itemId] = _with(
 							ctx.relations[itemId],
 							rel,
-							data[itemId],
+							data[itemId]
 						);
 					}
 				}
@@ -175,7 +177,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 * @param item
 	 * @param relations
 	 */
-	addItemToList(item: T, relations: any = {}) {
+	addItemToList(item: T, relations: any = {}): void {
 		const ctx    = this,
 			  itemId = getId(item);
 
@@ -190,7 +192,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 				ctx.relations[itemId] = _with(
 					ctx.relations[itemId],
 					rel,
-					relations[rel],
+					relations[rel]
 				);
 			}
 		}
@@ -222,7 +224,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 * @param response
 	 * @private
 	 */
-	private setSaved(target: T, response: OApiUpdateJSON<T>) {
+	private setSaved(target: T, response: OApiUpdateResponse<T>) {
 		const item = response.data.item;
 
 		target.doHydrate(item.toObject(), true);
@@ -235,7 +237,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 *
 	 * @param response
 	 */
-	private addCreated(response: OApiAddJSON<T>) {
+	private addCreated(response: OApiAddResponse<T>) {
 		return this.safelyAddItem(response.data.item);
 	}
 
@@ -244,7 +246,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 *
 	 * @param response
 	 */
-	private setDeleted(response: OApiDeleteJSON<T>) {
+	private setDeleted(response: OApiDeleteResponse<T>) {
 		const item = response.data.item;
 		this.items = _without(this.items, getId(item));
 		return this;
@@ -287,7 +289,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 *
 	 * @param ids
 	 */
-	list(ids: string[] = []) {
+	list(ids: string[] = []): T[] {
 		const list: T[] = [],
 			  len       = ids.length;
 		if (len) {
@@ -341,7 +343,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	filter(
 		list: T[] = this.list(),
 		predicate: (value: T, index: number) => boolean,
-		max       = Infinity,
+		max       = Infinity
 	): T[] {
 		const result: T[] = [],
 			  len         = list.length;
@@ -367,7 +369,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	select(
 		list: T[] = this.list(),
 		predicate: (value: T, index: number) => boolean,
-		max       = Infinity,
+		max       = Infinity
 	): T[] {
 		return this.filter(list, predicate, max);
 	}
@@ -382,7 +384,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	search(
 		list: T[] = this.list(),
 		search: string,
-		stringBuilder: (value: T, index: number) => string,
+		stringBuilder: (value: T, index: number) => string
 	): T[] {
 		if (!(search = search.trim()).length) {
 			return list;

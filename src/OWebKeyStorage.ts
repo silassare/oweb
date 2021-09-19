@@ -1,6 +1,7 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 import { forEach } from './utils';
+import {OJSONValue} from './OWebDataStore';
 
 type OKeyData = {
 	value: any;
@@ -27,7 +28,7 @@ export default class OWebKeyStorage extends OWebEvent {
 		private readonly _appContext: OWebApp,
 		private readonly tagName: string,
 		private persistent: boolean = true,
-		maxLifeTime = Infinity,
+		maxLifeTime = Infinity
 	) {
 		super();
 
@@ -35,7 +36,7 @@ export default class OWebKeyStorage extends OWebEvent {
 		this._store = _appContext.ls.get(this.tagName) || {};
 		this._maxLifeTime = maxLifeTime * 1000;
 
-		_appContext.ls.onClear(function () {
+		_appContext.ls.onClear(() => {
 			m._store = {};
 		});
 
@@ -45,8 +46,8 @@ export default class OWebKeyStorage extends OWebEvent {
 	/**
 	 * Returns the key storage data.
 	 */
-	getStoreData(): {} {
-		const items: any = {};
+	getStoreData(): Record<string, OJSONValue> {
+		const items: Record<string, OJSONValue> = {};
 
 		this._clearExpired();
 
@@ -62,12 +63,12 @@ export default class OWebKeyStorage extends OWebEvent {
 	 *
 	 * @param key The key name.
 	 */
-	getItem(key: string): any {
+	getItem(key: string): OJSONValue | null {
 		let data: OKeyData = this._store[key];
 
 		if (data !== undefined) {
 			data = _hasExpired(data)
-				? this.removeItem(key) && undefined
+				? this.removeItem(key) && null
 				: data.value;
 		}
 
@@ -81,7 +82,7 @@ export default class OWebKeyStorage extends OWebEvent {
 	 * @param value The key value.
 	 */
 
-	setItem(key: string, value: any): this {
+	setItem(key: string, value: OJSONValue): this {
 		this._store[key] = {
 			value,
 			expire:

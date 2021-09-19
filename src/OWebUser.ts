@@ -1,9 +1,9 @@
 import OWebEvent from './OWebEvent';
-import OWebApp from './OWebApp';
+import OWebApp, { OUser } from './OWebApp';
 import OWebKeyStorage from './OWebKeyStorage';
-import {logger} from './utils';
+import { logger } from './utils';
 
-export default class OWebUser<UserEntity> extends OWebEvent {
+export default class OWebUser<UserEntity extends OUser> extends OWebEvent {
 	private _keyStore: OWebKeyStorage;
 
 	constructor(private readonly _appContext: OWebApp) {
@@ -15,8 +15,8 @@ export default class OWebUser<UserEntity> extends OWebEvent {
 	 * Checks if user session is active.
 	 */
 	sessionActive(): boolean {
-		const now    = new Date().getTime(); // milliseconds
-		const hour   = 60 * 60; // seconds
+		const now = new Date().getTime(); // milliseconds
+		const hour = 60 * 60; // seconds
 		const expire = this.getSessionExpire() - hour; // seconds
 		return expire * 1000 > now;
 	}
@@ -31,8 +31,8 @@ export default class OWebUser<UserEntity> extends OWebEvent {
 	/**
 	 * Returns current user data.
 	 */
-	getCurrentUser(): UserEntity | undefined {
-		return this._keyStore.getItem('user_data');
+	getCurrentUser(): UserEntity | null {
+		return this._keyStore.getItem('user_data') as UserEntity | null;
 	}
 
 	/**
@@ -61,7 +61,7 @@ export default class OWebUser<UserEntity> extends OWebEvent {
 	 * Returns current user session expire time.
 	 */
 	getSessionExpire(): number {
-		const expire = this._keyStore.getItem('session_expire');
+		const expire = Number(this._keyStore.getItem('session_expire'));
 		return isNaN(expire) ? 0 : expire;
 	}
 
@@ -78,9 +78,8 @@ export default class OWebUser<UserEntity> extends OWebEvent {
 	/**
 	 * Returns current user session token.
 	 */
-	getSessionToken(): string {
-		const expire = this._keyStore.getItem('session_token');
-		return isNaN(expire) ? 0 : expire;
+	getSessionToken(): string | null {
+		return this._keyStore.getItem('session_token') as string | null;
 	}
 
 	/**

@@ -1,3 +1,4 @@
+import { extractFieldLabelText, isPlainObject } from './utils';
 import OWebApp from './OWebApp';
 import {
 	forEach,
@@ -10,37 +11,84 @@ import {
 } from './utils';
 import OWebFormError from './OWebFormError';
 
-type OFormErrorMap = { [key: string]: OWebFormError[] };
+export type OFieldValue = string | null | undefined | number | Blob;
+
+export interface OField {
+	value: OFieldValue;
+	label?: string;
+	validator?: string;
+}
+export type OFormData = FormData | Record<string, OFieldValue>;
+
+export type OFormOptions = Record<string, OField>;
+export type OForm = OFormOptions | HTMLFormElement;
+
+type OFormErrors = { [key: string]: OWebFormError[] };
 export type OFormValidator = (
 	value: any,
 	name: string,
 	context: OWebFormValidator,
 ) => void;
 
-const formValidators: { [key: string]: OFormValidator } = {};
+const FORM_VALIDATORS: { [key: string]: OFormValidator } = Object.create({});
 
-export default class OWebFormValidator {
-	private readonly formData: FormData;
-	private validatorsMap: { [key: string]: string } = {};
-	private errorMap: OFormErrorMap = {};
+interface OWebFormAdapter {
+	/**
+	 * Returns form data.
+	 * @param fields The fields name list.
+	 */
+	toFormData(fields: string[]): FormData;
 
 	/**
-	 * @param _appContext The app context.
-	 * @param form The form element.
-	 * @param required The required fields.
-	 * @param excluded The fields to exclude from validation.
-	 * @param checkAll When true all fields will be validated.
+	 * Returns fields validators map.
 	 */
-	constructor(
-		private readonly _appContext: OWebApp,
-		private readonly form: HTMLFormElement,
-		private readonly required: string[] = [],
-		private readonly excluded: string[] = [],
-		private readonly checkAll: boolean = false,
-	) {
+	getValidatorsMap(): Record<string, string>;
+
+	/**
+	 *
+	 * @param fieldName
+	 * @param validatorName
+	 */
+	setFieldValidator(fieldName: string, validatorName: string): this;
+
+	/**
+	 * Gets a given field name value.
+	 *
+	 * @param fieldName
+	 */
+	getField(fieldName: string): OFieldValue;
+
+	/**
+	 * Sets a given field value.
+	 * @param fieldName
+	 * @param value
+	 */
+	setField(fieldName: string, value: OFieldValue): this;
+
+	/**
+	 * Returns all fields names list.
+	 */
+	getFieldsList(): string[];
+
+	/**
+	 * Returns field description.
+	 *
+	 * We search the field label, placeholder or title.
+	 *
+	 * @param fieldName
+	 */
+	getFieldDescription(fieldName: string): string;
+}
+
+class OFormDOMFormAdapter implements OWebFormAdapter {
+	private validatorsMap: { [key: string]: string } = Object.create({});
+	private descriptionsMap: { [key: string]: string } = Object.create({});
+	private readonly formData: FormData;
+
+	constructor(private readonly form: HTMLFormElement) {
 		if (!form || form.nodeName !== 'FORM') {
 			throw new Error(
-				'[OWebFormValidator] a valid form element is required.',
+				'[OWebFormValidator][DOMFormAdapter] a valid form element is required.'
 			);
 		}
 
@@ -53,23 +101,177 @@ export default class OWebFormValidator {
 			const name = field.getAttribute('name'),
 				validatorName = field.getAttribute('data-oweb-form-v');
 
-			if (name) {
-				if (!formValidators[validatorName]) {
-					throw new Error(
-						`[OWebFormValidator] validator "${validatorName}" is explicitly set for field "${name}" but is not defined.`,
-					);
-				}
-
-				m.validatorsMap[name] = validatorName;
+			if (name && validatorName) {
+				m.setFieldValidator(name,validatorName);
 			}
 		});
 	}
 
+	toFormData(fields: string[] = []): FormData {
+		const fd = new FormData();
+
+		this.formData.forEach(function (value, name) {
+			if (!fields.length || fields.indexOf(name) >= 0) {
+				fd.append(name, value);
+			}
+		});
+
+		return fd;
+	}
+
+	getValidatorsMap() {
+		return this.validatorsMap;
+	}
+
+	setFieldValidator(fieldName: string, validatorName: string) {
+		if (!FORM_VALIDATORS[validatorName]) {
+			throw new Error(
+				`[OWebFormValidator][DOMFormAdapter] validator "${validatorName}" is not defined can't set for field "${fieldName}".`
+			);
+		}
+
+		this.validatorsMap[fieldName] = validatorName;
+
+		return this;
+	}
+
+	getField(name: string): any {
+		return this.formData.get(name);
+	}
+
+	setField(name: string, value: any): this {
+		this.formData.set(name, value);
+		return this;
+	}
+
+	getFieldsList(): string[] {
+		const fieldNames: string[] = [];
+
+		toArray(this.form.elements).forEach(function formElementsIterator(el) {
+			const entry:any = el as unknown;
+			if (entry.name !== undefined && fieldNames.indexOf(entry.name) < 0) {
+				fieldNames.push(entry.name);
+			}
+		});
+
+		return fieldNames;
+	}
+
+	getFieldDescription(name: string): string {
+		if (!this.descriptionsMap[name]) {
+			this.descriptionsMap[name] = extractFieldLabelText(this.form, name);
+		}
+
+		return this.descriptionsMap[name];
+	}
+}
+
+class OFormObjectAdapter implements OWebFormAdapter {
+	private validatorsMap: { [key: string]: string } = Object.create({});
+	private descriptionsMap: { [key: string]: string } = Object.create({});
+	private readonly formObj: { [key: string]: any } = Object.create({});
+
+	constructor(form: OFormOptions) {
+		if (!isPlainObject(form)) {
+			throw new Error(
+				'[OWebFormValidator][ObjectFormAdapter] a valid form plain object is required.'
+			);
+		}
+
+		forEach<OField>(form, (field, fieldName) => {
+			this.formObj[fieldName] = field.value;
+
+			if (field.validator) {
+				this.setFieldValidator(fieldName, field.validator);
+			}
+
+			if (field.label) {
+				this.descriptionsMap[fieldName] = field.label;
+			}
+		});
+	}
+
+	toFormData(fields: string[] = []) {
+		const fd = new FormData();
+
+		forEach(this.formObj, function (value, name) {
+			if (!fields.length || fields.indexOf(name) >= 0) {
+				if (isArray(value) || value instanceof FileList) {
+					forEach(value, function (val) {
+						fd.append(name, val);
+					});
+				} else {
+					fd.append(name, value);
+				}
+			}
+		});
+
+		return fd;
+	}
+
+	getValidatorsMap() {
+		return this.validatorsMap;
+	}
+
+	setFieldValidator(fieldName: string, validatorName: string) {
+		if (!FORM_VALIDATORS[validatorName]) {
+			throw new Error(
+				`[OWebFormValidator][DOMFormAdapter] validator "${validatorName}" is not defined can't set for field "${fieldName}".`
+			);
+		}
+
+		this.validatorsMap[fieldName] = validatorName;
+
+		return this;
+	}
+
+	getField(name: string): any {
+		return this.formObj[name];
+	}
+
+	setField(name: string, value: any): this {
+		this.formObj[name] = value;
+		return this;
+	}
+
+	getFieldsList(): string[] {
+		return Object.keys(this.formObj);
+	}
+
+	getFieldDescription(name: string): string {
+		if (this.descriptionsMap[name]) {
+			return this.descriptionsMap[name];
+		}
+
+		return name;
+	}
+}
+
+export default class OWebFormValidator {
+	private readonly adapter: OWebFormAdapter;
+	private validatorsMap: { [key: string]: string } = {};
+	private errorMap: OFormErrors                    = {};
+
 	/**
-	 * Returns the form element.
+	 * @param _appContext The app context.
+	 * @param form The form.
+	 * @param required The required fields.
+	 * @param excluded The fields to exclude from validation.
+	 * @param checkAll When true all fields will be validated.
+	 * @param verbose Log warning.
 	 */
-	getForm(): HTMLFormElement {
-		return this.form;
+	constructor(
+		private readonly _appContext: OWebApp,
+		form: OForm,
+		private readonly required: string[] = [],
+		private readonly excluded: string[] = [],
+		private readonly checkAll: boolean = false,
+		private readonly verbose: boolean = false
+	) {
+		this.adapter =
+			form instanceof HTMLFormElement
+				? new OFormDOMFormAdapter(form)
+				: new OFormObjectAdapter(form);
 	}
 
 	/**
@@ -77,6 +279,13 @@ export default class OWebFormValidator {
 	 */
 	getAppContext(): OWebApp {
 		return this._appContext;
+	}
+
+	/**
+	 * Returns the form adapter.
+	 */
+	getFormAdapter(): OWebFormAdapter {
+		return this.adapter;
 	}
 
 	/**
@@ -94,20 +303,7 @@ export default class OWebFormValidator {
 	 * @param fields The fields name list. When empty all field will be added to the FormData.
 	 */
 	getFormData(fields: string[] = []): FormData {
-		if (fields.length) {
-			const formData = new FormData();
-			for (let i = 0; i < fields.length; i++) {
-				const field = fields[i];
-				const values = this.getFieldValues(field); // for checkboxes and others
-				values.forEach((value: any) => {
-					formData.append(field, value);
-				});
-			}
-
-			return formData;
-		}
-
-		return this.formData;
+		return this.adapter.toFormData(fields);
 	}
 
 	/**
@@ -115,8 +311,8 @@ export default class OWebFormValidator {
 	 *
 	 * @param name
 	 */
-	getField(name: string): any {
-		return this.formData.get(name);
+	getField(name: string): OFieldValue {
+		return this.adapter.getField(name);
 	}
 
 	/**
@@ -124,119 +320,68 @@ export default class OWebFormValidator {
 	 * @param name
 	 * @param value
 	 */
-	setField(name: string, value: any): this {
-		this.formData.set(name, value);
+	setField(name: string, value: OFieldValue): this {
+		this.adapter.setField(name, value);
 		return this;
-	}
-
-	/**
-	 * Gets checkboxes like fields value.
-	 *
-	 * @param name
-	 */
-	getFieldValues(name: string): any {
-		return this.formData.getAll(name);
-	}
-
-	/**
-	 * Search for field description.
-	 *
-	 * We search the field label, placeholder or title.
-	 *
-	 * @param name
-	 */
-	getFieldDescription(name: string): string {
-		const field = this.form.querySelector(`[name='${name}']`);
-		let description: any = name;
-
-		if (field) {
-			const id = field.getAttribute('id');
-			let label, placeholder, title;
-			if (
-				id &&
-				(label = this.form.querySelector(`label[for='${id}']`))
-			) {
-				description = label.textContent;
-			} else if (
-				(placeholder = field.getAttribute('placeholder')) &&
-				placeholder.trim().length
-			) {
-				description = placeholder;
-			} else if (
-				(title = field.getAttribute('title')) &&
-				title.trim().length
-			) {
-				description = title;
-			}
-		}
-
-		return description;
 	}
 
 	/**
 	 * Returns error map.
 	 */
-	getErrors(): OFormErrorMap {
+	getErrors(): OFormErrors {
 		return this.errorMap;
 	}
 
 	/**
 	 * Runs form validation.
 	 */
-	validate(): boolean {
-		const context = this,
-			fieldNames: string[] = [];
+	validate(showDialog = true): boolean {
+		const fieldNames: string[] = this.adapter.getFieldsList();
 		let c = -1,
 			name;
 
 		// empty error list
-		context.errorMap = {};
-
-		toArray(context.form.elements).forEach(function (i) {
-			if (i.name !== undefined && fieldNames.indexOf(i.name) < 0) {
-				fieldNames.push(i.name);
-			}
-		});
+		this.errorMap = {};
 
 		while ((name = fieldNames[++c])) {
-			try {
-				if (context.excluded.indexOf(name) < 0) {
-					const value = context.getField(name),
-						validatorName = context.validatorsMap[name] || name,
-						fn = formValidators[validatorName];
+			if (this.excluded.indexOf(name) < 0) {
+				try {
+					const value = this.getField(name),
+						validatorName = this.validatorsMap[name] || name,
+						fn = FORM_VALIDATORS[validatorName];
 
 					if (isNotEmpty(value)) {
 						if (isFunction(fn)) {
-							fn(value, name, context);
-						} else {
+							fn(value, name, this);
+						} else if (this.verbose) {
 							logger.warn(
-								`[OWebFormValidator] validator '${validatorName}' is not defined, field '${name}' is then considered as safe.`,
+								`[OWebFormValidator] validator '${validatorName}' is not defined, field '${name}' is then considered as safe.`
 							);
 						}
-					} else if (~context.required.indexOf(name)) {
+					} else if (~this.required.indexOf(name)) {
 						this.assert(false, 'OZ_FORM_CONTAINS_EMPTY_FIELD', {
-							label: context.getFieldDescription(name),
+							label: this.adapter.getFieldDescription(name),
 						});
 					}
-				}
-			} catch (e) {
-				if (e.isFormError) {
-					if (!this.errorMap[name]) {
-						this.errorMap[name] = [];
-					}
+				} catch (e:any) {
+					if (e.isFormError) {
+						if (!this.errorMap[name]) {
+							this.errorMap[name] = [];
+						}
 
-					this.errorMap[name].push(e);
+						this.errorMap[name].push(e);
 
-					if (!this.checkAll) {
-						this.getAppContext().view.dialog({
-							type: 'error',
-							text: e.message,
-							data: e.data,
-						});
-						break;
+						if (!this.checkAll && showDialog) {
+							this.getAppContext().view.dialog({
+								type: 'error',
+								text: e.message,
+								data: e.data,
+							});
+							break;
+						}
+					} else {
+						throw e;
 					}
-				} else {
-					throw e;
 				}
 			}
 		}
@@ -251,7 +396,7 @@ export default class OWebFormValidator {
 	 * @param message The error message when the predicate is false.
 	 * @param data The error data.
 	 */
-	assert(predicate: any, message: string, data?: {}): this {
+	assert(predicate: unknown, message: string, data?: Record<string, unknown>): this {
 		if (!predicate) {
 			throw new OWebFormError(message, data);
 		}
@@ -268,23 +413,23 @@ export default class OWebFormValidator {
 	static addFieldValidator(name: string, validator: OFormValidator): void {
 		if (!isString(name)) {
 			throw new TypeError(
-				'[OWebFormValidator] field name should be a valid string.',
+				'[OWebFormValidator] field name should be a valid string.'
 			);
 		}
 
 		if (!isFunction(validator)) {
 			throw new TypeError(
-				'[OWebFormValidator] field validator should be a valid function.',
+				'[OWebFormValidator] field validator should be a valid function.'
 			);
 		}
 
 		if (name in validator) {
 			logger.warn(
-				`[OWebFormValidator] field "${name}" validator will be overwritten.`,
+				`[OWebFormValidator] field "${name}" validator will be overwritten.`
 			);
 		}
 
-		formValidators[name] = validator;
+		FORM_VALIDATORS[name] = validator;
 	}
 
 	/**

@@ -2,10 +2,21 @@ import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 import {id, logger} from './utils';
 
-export type OJSONSerializable = string | number | boolean | Date | { [key: string]: OJSONSerializable } | OJSONSerializable[];
+export interface OJSONSerializable {
+	toJSON(): OJSONValue;
+}
+
+export type OJSONValue =
+	| string
+	| number
+	| boolean
+	| Date
+	| OJSONSerializable
+	| { [key: string]: OJSONValue }
+	| OJSONValue[];
 
 const ls    = window.localStorage,
-	  parse = function (data: string | null): any {
+	  parse = function parse(data: string | null): any {
 		  let value: any;
 
 		  if (data !== null) {
@@ -20,9 +31,9 @@ const ls    = window.localStorage,
 	  };
 
 export default class OWebDataStore extends OWebEvent {
-	static readonly EVT_DATA_STORE_CLEARED               = id();
+	static readonly EVT_DATA_STORE_CLEARED              = id();
 	private readonly _key: string;
-	private _data: { [key: string]: OJSONSerializable } = {};
+	private _data: { [key: string]: OJSONValue } = {};
 
 	constructor(private readonly _appContext: OWebApp) {
 		super();
@@ -36,7 +47,7 @@ export default class OWebDataStore extends OWebEvent {
 	 * @param key The data key name.
 	 * @param value The data value.
 	 */
-	set(key: string, value: OJSONSerializable): boolean {
+	set(key: string, value: OJSONValue): boolean {
 		this._data[key] = value;
 
 		this._persist();
@@ -119,7 +130,7 @@ export default class OWebDataStore extends OWebEvent {
 	 *
 	 * @param cb
 	 */
-	onClear(cb: (this: this) => void) {
+	onClear(cb: (this: this) => void):this {
 		return this.on(OWebDataStore.EVT_DATA_STORE_CLEARED, cb);
 	}
 
