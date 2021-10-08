@@ -1,0 +1,8 @@
+{
+    "singleQuote": true,
+    "quoteProps": "consistent",
+    "endOfLine": "lf",
+    "jsxSingleQuote": true,
+    "useTabs": true,
+    "trailingComma": "es5"
+}
