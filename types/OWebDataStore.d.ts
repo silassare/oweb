@@ -1,8 +1,11 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-export declare type OJSONSerializable = string | number | boolean | Date | {
-    [key: string]: OJSONSerializable;
-} | OJSONSerializable[];
+export interface OJSONSerializable {
+    toJSON(): OJSONValue;
+}
+export declare type OJSONValue = string | number | boolean | Date | OJSONSerializable | {
+    [key: string]: OJSONValue;
+} | OJSONValue[];
 export default class OWebDataStore extends OWebEvent {
     private readonly _appContext;
     static readonly EVT_DATA_STORE_CLEARED: string;
@@ -15,7 +18,7 @@ export default class OWebDataStore extends OWebEvent {
      * @param key The data key name.
      * @param value The data value.
      */
-    set(key: string, value: OJSONSerializable): boolean;
+    set(key: string, value: OJSONValue): boolean;
     /**
      * Gets data with the given key.
      *

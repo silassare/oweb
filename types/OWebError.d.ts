@@ -6,5 +6,5 @@ export default class OWebError extends Error {
      * @param message
      * @param data
      */
-    constructor(message: any, data?: any);
+    constructor(message?: Error | string, data?: any);
 }

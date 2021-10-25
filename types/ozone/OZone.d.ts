@@ -1,6 +1,6 @@
 import { ONetRequestOptions } from '../OWebNet';
 import OWebXHR from '../OWebXHR';
-import { OApiJSON, OWebApp } from '../oweb';
+import { OApiResponse, OWebApp } from '../oweb';
 export declare const getApiForHost: (url: string) => OZone | undefined;
 export default class OZone {
     private _appContext;
@@ -22,7 +22,7 @@ export default class OZone {
      * @param url The request url
      * @param options The request options
      */
-    request<R extends OApiJSON<any>>(url: string, options: Partial<ONetRequestOptions<R>>): OWebXHR<R>;
+    request<Response extends OApiResponse<any>>(url: string, options?: Partial<ONetRequestOptions<Response>>): OWebXHR<Response>;
     /**
      * Returns the service URI.
      *

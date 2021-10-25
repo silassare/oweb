@@ -1,7 +1,7 @@
 import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
 import { ONetError, ONetResponse } from '../OWebNet';
-import { OApiJSON } from '../ozone';
+import { OApiResponse } from '../ozone';
 export default class OWebLogin<User> extends OWebEvent {
     private readonly _appContext;
     static readonly SELF: string;
@@ -11,12 +11,12 @@ export default class OWebLogin<User> extends OWebEvent {
     loginWithEmail(data: {
         email: string;
         pass: string;
-    }): Promise<ONetResponse<OApiJSON<User>>>;
+    }): Promise<ONetResponse<OApiResponse<User>>>;
     loginWithPhone(data: {
         phone: string;
         pass: string;
-    }): Promise<ONetResponse<OApiJSON<User>>>;
+    }): Promise<ONetResponse<OApiResponse<User>>>;
     onLoginFail(handler: (this: this, err: ONetError) => void): this;
-    onLoginSuccess(handler: (this: this, response: ONetResponse<OApiJSON<User>>) => void): this;
+    onLoginSuccess(handler: (this: this, response: ONetResponse<OApiResponse<User>>) => void): this;
     private _tryLogin;
 }

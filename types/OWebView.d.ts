@@ -1,10 +1,10 @@
 import OWebEvent from './OWebEvent';
-import { OApiJSON } from './ozone';
+import { OApiResponse } from './ozone';
 import { ONetError } from './OWebNet';
 export declare type OViewDialog = {
     type: 'info' | 'error' | 'done';
     text: string;
-    data?: {};
+    data?: Record<string, unknown>;
 };
 export default class OWebView extends OWebEvent {
     static readonly SELF: string;
@@ -30,7 +30,7 @@ export default class OWebView extends OWebEvent {
      * @param dialog
      * @param canUseAlert
      */
-    dialog(dialog: OViewDialog | OApiJSON<any> | ONetError, canUseAlert?: boolean): void;
+    dialog(dialog: OViewDialog | OApiResponse<any> | ONetError, canUseAlert?: boolean): void;
     /**
      * Register freeze event handler.
      *

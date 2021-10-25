@@ -1,10 +1,10 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-import { OJSONSerializable } from './OWebDataStore';
+import { OJSONValue } from './OWebDataStore';
 export default class OWebConfigs<P extends {
-    [key: string]: OJSONSerializable;
+    [key: string]: OJSONValue;
 }, U extends {
-    [key: string]: OJSONSerializable;
+    [key: string]: OJSONValue;
 }, B = U & P> extends OWebEvent {
     private readonly _appContext;
     static readonly SELF: string;

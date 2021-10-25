@@ -51,11 +51,15 @@ export default class OWebDate {
     private date;
     constructor(_appContext: OWebApp, date?: ODateValue);
     /**
-     * Format date with a given lang key.
+     * Format date with a given format.
      *
      * @param format
      */
-    format(format: string): string;
+    format(format?: string): string;
+    fromNow(): string;
+    compare(_startDate: ODateValue, _endDate: ODateValue): {
+        format: string;
+    };
     /**
      * Returns date description object.
      */

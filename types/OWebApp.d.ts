@@ -1,7 +1,7 @@
 import OWebConfigs from './OWebConfigs';
-import OWebDataStore, { OJSONSerializable } from './OWebDataStore';
+import OWebDataStore, { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
-import OWebFormValidator from './OWebFormValidator';
+import OWebFormValidator, { OForm } from './OWebFormValidator';
 import OWebRouter, { ORouteStateObject, ORouteTarget } from './OWebRouter';
 import OWebUrl from './OWebUrl';
 import OWebView from './OWebView';
@@ -9,6 +9,8 @@ import OWebI18n from './OWebI18n';
 import OZone from './ozone';
 import OWebPager, { OPage } from './OWebPager';
 import OWebUser from './OWebUser';
+import { ONetRequestOptions } from './OWebNet';
+import OWebXHR from './OWebXHR';
 export interface OUrlList {
     [key: string]: string;
     OZ_SERVER_GET_FILE_URI: string;
@@ -20,17 +22,18 @@ export interface OUrlList {
     OZ_SERVER_PASSWORD_SERVICE: string;
     OZ_SERVER_CAPTCHA_SERVICE: string;
     OZ_SERVER_UPLOAD_SERVICE: string;
+    OW_APP_PATH_SIGN_UP: string;
+    OW_APP_PATH_LOGOUT: string;
+    OW_APP_PATH_LOGIN: string;
+    OW_APP_PATH_HOME: string;
 }
 export interface OAppConfigs {
-    [key: string]: OJSONSerializable;
+    [key: string]: OJSONValue;
     OW_APP_NAME: string;
     OW_APP_VERSION: string;
     OW_APP_LOCAL_BASE_URL: string;
     OW_APP_ROUTER_HASH_MODE: boolean;
     OW_APP_ALLOWED_COUNTRIES: string[];
-    OW_APP_LOGO_SRC: string;
-    OW_APP_ANDROID_ID: string;
-    OW_APP_UPDATER_SCRIPT_SRC: string;
     OZ_API_KEY: string;
     OZ_API_KEY_HEADER_NAME: string;
     OZ_API_ALLOW_REAL_METHOD_HEADER: boolean;
@@ -47,26 +50,26 @@ export interface OAppConfigs {
     OZ_USER_ALLOWED_GENDERS: string[];
 }
 export interface OUserConfigs {
-    [key: string]: OJSONSerializable;
+    [key: string]: OJSONValue;
     OW_APP_DEFAULT_LANG: string;
     OW_APP_COUNTRY: string;
 }
 export interface OStore {
     [key: string]: any;
-    services: {
-        [name: string]: any;
-    };
 }
-export interface OAppOptions<Store extends OStore, Page extends OPage> {
+export declare type OUser = {
+    [key: string]: any;
+};
+export interface OAppOptions<Store extends OStore, Page extends OPage, User extends OUser> {
     name: string;
-    appConfigs: OAppConfigs;
-    userConfigs: OUserConfigs;
-    urls: OUrlList;
-    user: (this: OWebApp<Store, Page, OAppOptions<Store, Page>>) => OWebUser<any>;
-    store: (this: OWebApp<Store, Page, OAppOptions<Store, Page>>) => Store;
-    pager: (this: OWebApp<Store, Page, OAppOptions<Store, Page>>) => OWebPager<Page>;
+    appConfigs: Partial<OAppConfigs>;
+    userConfigs: Partial<OUserConfigs>;
+    urls: Partial<OUrlList>;
+    user: (this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>) => OWebUser<User>;
+    store: (this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>) => Store;
+    pager: (this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>) => OWebPager<Page>;
 }
-export default class OWebApp<Store extends OStore = any, Page extends OPage = any, Options extends OAppOptions<Store, Page> = any> extends OWebEvent {
+export default class OWebApp<Store extends OStore = any, Page extends OPage = any, User extends OUser = any, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent {
     private readonly options;
     static readonly SELF: string;
     static readonly EVT_APP_READY: string;
@@ -77,7 +80,7 @@ export default class OWebApp<Store extends OStore = any, Page extends OPage = an
     readonly view: OWebView;
     readonly ls: OWebDataStore;
     readonly router: OWebRouter;
-    readonly user: OWebUser<any>;
+    readonly user: OWebUser<User>;
     readonly configs: OWebConfigs<OAppConfigs, OUserConfigs>;
     readonly url: OWebUrl;
     readonly i18n: OWebI18n;
@@ -91,6 +94,13 @@ export default class OWebApp<Store extends OStore = any, Page extends OPage = an
      */
     protected constructor(options: Options);
     /**
+     * Build an HTTP request.
+     *
+     * @param url
+     * @param options
+     */
+    request<Response>(url: string, options?: Partial<ONetRequestOptions<Response>>): OWebXHR<Response>;
+    /**
      * Store getter.
      */
     get store(): ReturnType<Options['store']>;
@@ -98,10 +108,6 @@ export default class OWebApp<Store extends OStore = any, Page extends OPage = an
      * Pager instance getter.
      */
     get pager(): ReturnType<Options['pager']>;
-    /**
-     * Store services shortcut.
-     */
-    get services(): ReturnType<Options['store']>['services'];
     /**
      * App name getter.
      */
@@ -117,8 +123,9 @@ export default class OWebApp<Store extends OStore = any, Page extends OPage = an
      * @param required The required fields names list.
      * @param excluded The fields names to exclude.
      * @param checkAll Force the validator to check all fields.
+     * @param verbose Log warning.
      */
-    getFormValidator(form: HTMLFormElement, required?: string[], excluded?: string[], checkAll?: boolean): OWebFormValidator;
+    getFormValidator(form: OForm, required?: string[], excluded?: string[], checkAll?: boolean, verbose?: boolean): OWebFormValidator;
     /**
      * Force login.
      *
@@ -190,5 +197,5 @@ export default class OWebApp<Store extends OStore = any, Page extends OPage = an
      *
      * @param options
      */
-    static create<Options extends OAppOptions<OStore, OPage> = any>(options: Options): OWebApp<any, any, Options>;
+    static create<Options extends OAppOptions<OStore, OPage, OUser> = any>(options: Options): OWebApp<any, any, any, Options>;
 }

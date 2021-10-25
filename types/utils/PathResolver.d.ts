@@ -26,6 +26,6 @@ declare const PathResolver: {
      * Checks if a path is a relative path.
      * @param path
      */
-    isRelative(path: any): boolean;
+    isRelative(path: string): boolean;
 };
 export default PathResolver;

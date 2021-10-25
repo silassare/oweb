@@ -1,5 +1,5 @@
 import OZone from './OZone';
-export interface OApiJSON<R> {
+export interface OApiResponse<R> {
     error: number;
     msg: string;
     data: R;
@@ -7,16 +7,16 @@ export interface OApiJSON<R> {
     stime?: number;
     stoken?: string;
 }
-export declare type OApiAddJSON<T> = OApiJSON<{
+export declare type OApiAddResponse<T> = OApiResponse<{
     item: T;
 }>;
-export declare type OApiGetJSON<T> = OApiJSON<{
+export declare type OApiGetResponse<T> = OApiResponse<{
     item: T;
     relations?: {
         [key: string]: any;
     };
 }>;
-export declare type OApiGetAllJSON<T> = OApiJSON<{
+export declare type OApiGetAllResponse<T> = OApiResponse<{
     items: T[];
     max?: number;
     page?: number;
@@ -25,19 +25,19 @@ export declare type OApiGetAllJSON<T> = OApiJSON<{
         [key: string]: any;
     };
 }>;
-export declare type OApiUpdateJSON<T> = OApiJSON<{
+export declare type OApiUpdateResponse<T> = OApiResponse<{
     item: T;
 }>;
-export declare type OApiUpdateAllJSON = OApiJSON<{
+export declare type OApiUpdateAllResponse = OApiResponse<{
     affected: number;
 }>;
-export declare type OApiDeleteJSON<T> = OApiJSON<{
+export declare type OApiDeleteResponse<T> = OApiResponse<{
     item: T;
 }>;
-export declare type OApiDeleteAllJSON = OApiJSON<{
+export declare type OApiDeleteAllResponse = OApiResponse<{
     affected: number;
 }>;
-export declare type OApiGetRelationItemsJSON<T> = OApiJSON<{
+export declare type OApiGetRelationItemsResponse<T> = OApiResponse<{
     items: T[];
     max?: number;
     page?: number;
@@ -46,7 +46,7 @@ export declare type OApiGetRelationItemsJSON<T> = OApiJSON<{
         [key: string]: any;
     };
 }>;
-export declare type OApiGetRelationItemJSON<T> = OApiJSON<{
+export declare type OApiGetRelationItemResponse<T> = OApiResponse<{
     item: T;
     relations?: {
         [key: string]: any;
@@ -61,17 +61,18 @@ export declare type OApiFilter = {
     0: 'is_null' | 'is_not_null';
     1?: 'or' | 'and';
 };
-export declare type OApiFiltersMap = {
+export declare type OApiFilters = {
     [key: string]: number | string | OApiFilter[];
 };
-export interface OApiRequestOptions {
+export interface OApiServiceRequestOptions {
     data?: any;
-    filters?: OApiFiltersMap;
+    filters?: OApiFilters;
     relations?: string | string[];
     collection?: string;
     order_by?: string;
     max?: number;
     page?: number;
+    [key: string]: unknown;
 }
-export declare function cleanRequestOptions(options: OApiRequestOptions): OApiRequestOptions;
+export declare function cleanRequestOptions(options: OApiServiceRequestOptions): OApiServiceRequestOptions;
 export default OZone;

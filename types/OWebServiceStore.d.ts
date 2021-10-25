@@ -1,7 +1,9 @@
 import { GoblSinglePKEntity } from 'gobl-utils-ts';
-import { OApiAddJSON, OApiDeleteJSON, OApiUpdateJSON, OApiRequestOptions } from './ozone';
+import { OApiAddResponse, OApiDeleteResponse, OApiUpdateResponse, OApiServiceRequestOptions, OApiGetAllResponse, OApiGetResponse } from './ozone';
 import OWebApp from './OWebApp';
 import OWebService from './OWebService';
+import OWebXHR from './OWebXHR';
+import { OFormData } from './OWebFormValidator';
 export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWebService<T> {
     private readonly entity;
     protected items: {
@@ -24,31 +26,31 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
      * @param id The item id.
      * @param relations The relations to retrieve.
      */
-    getItemRequest(id: string, relations?: string): import("./OWebXHR").default<import("./ozone").OApiGetJSON<T>>;
+    getItemRequest(id: string, relations?: string): OWebXHR<OApiGetResponse<T>>;
     /**
      * Creates request to get items list.
      *
      * @param options
      */
-    getItemsListRequest(options?: OApiRequestOptions): import("./OWebXHR").default<import("./ozone").OApiGetAllJSON<T>>;
+    getItemsListRequest(options?: OApiServiceRequestOptions): OWebXHR<OApiGetAllResponse<T>>;
     /**
      * Creates request to add new item.
      *
      * @param data
      */
-    addItemRequest(data: any): import("./OWebXHR").default<OApiAddJSON<T>>;
+    addItemRequest(data: OFormData): OWebXHR<OApiAddResponse<T>>;
     /**
      * Creates update request for a given item.
      *
      * @param item
      */
-    updateItemRequest(item: T): import("./OWebXHR").default<OApiUpdateJSON<T>>;
+    updateItemRequest(item: T): OWebXHR<OApiUpdateResponse<T>>;
     /**
      * Creates a delete request for a given item.
      *
      * @param item
      */
-    deleteItemRequest(item: T): import("./OWebXHR").default<OApiDeleteJSON<T>>;
+    deleteItemRequest(item: T): OWebXHR<OApiDeleteResponse<T>>;
     /**
      * Adds a list of items to this store list.
      *

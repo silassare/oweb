@@ -1,5 +1,5 @@
 import OWebNet, { ONetRequestOptions, ONetResponse } from './OWebNet';
-export default class OWebXHR<T extends any> extends OWebNet<T> {
+export default class OWebXHR<T> extends OWebNet<T> {
     private _abort?;
     private _sent;
     /**

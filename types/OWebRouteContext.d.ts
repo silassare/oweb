@@ -1,4 +1,4 @@
-import OWebRoute from './OWebRoute';
+import OWebRoute, { ORouteTokens } from './OWebRoute';
 import OWebRouter, { ORouteStateItem, ORouteStateObject, ORouteTarget } from './OWebRouter';
 export default class OWebRouteContext {
     private _tokens;
@@ -19,11 +19,11 @@ export default class OWebRouteContext {
      *
      * @param token The token.
      */
-    getToken(token: string): any;
+    getToken(token: string): string;
     /**
      * Gets a map of all tokens and values.
      */
-    getTokens(): any;
+    getTokens(): ORouteTokens;
     /**
      * Gets the path.
      */
@@ -42,11 +42,11 @@ export default class OWebRouteContext {
      */
     setStateItem(key: string, value: ORouteStateItem): this;
     /**
-     * Gets search param.
+     * Gets search param value.
      *
-     * @param param the param name
+     * @param name the search param name
      */
-    getSearchParam(param: string): string | null;
+    getSearchParam(name: string): string | null;
     /**
      * Check if the route dispatcher is stopped.
      */

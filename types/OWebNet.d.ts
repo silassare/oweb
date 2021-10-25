@@ -1,9 +1,9 @@
 import OWebEvent from './OWebEvent';
 import { OViewDialog } from './OWebView';
-export declare type ONetRequestBody = undefined | string | object | FormData | URLSearchParams | File | Blob;
-export declare type ONetRequestParams = undefined | object | URLSearchParams;
+export declare type ONetRequestBody = undefined | string | Record<string, unknown> | FormData | URLSearchParams | File | Blob;
+export declare type ONetRequestParams = undefined | Record<string, unknown> | URLSearchParams;
 export declare type ONetRequestMethod = 'get' | 'GET' | 'delete' | 'DELETE' | 'head' | 'HEAD' | 'options' | 'OPTIONS' | 'post' | 'POST' | 'put' | 'PUT' | 'patch' | 'PATCH';
-export interface ONetResponse<T extends any> {
+export interface ONetResponse<T> {
     raw: any;
     json: T;
     status: number;
@@ -15,24 +15,24 @@ export interface ONetError extends OViewDialog {
     type: 'error';
     errType: 'bad_news' | 'http' | 'network' | 'abort' | 'timeout' | 'unknown';
 }
-export interface ONetRequestOptions<T extends any> {
+export interface ONetRequestOptions<T> {
     method: ONetRequestMethod;
     body?: ONetRequestBody;
     params?: ONetRequestParams;
     timeout: number;
     withCredentials: boolean;
-    responseType: XMLHttpRequestResponseType;
+    responseType: XMLHttpRequest['responseType'];
     headers: {
         [key: string]: string;
     };
     isSuccessStatus: (status: number) => boolean;
     isGoodNews: (json: null | T) => boolean;
-    serverErrorInfo: (response: ONetResponse<T>) => {
+    errorResponseToDialog: (response: ONetResponse<T>) => {
         text: string;
-        data?: {};
+        data?: Record<string, unknown>;
     };
 }
-export default abstract class OWebNet<T extends any = null> extends OWebEvent {
+export default abstract class OWebNet<T = null> extends OWebEvent {
     protected url: string;
     protected options: ONetRequestOptions<T>;
     static readonly SELF: string;

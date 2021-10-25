@@ -1,6 +1,6 @@
 import OWebEvent from './OWebEvent';
-import OWebApp from './OWebApp';
-export default class OWebUser<UserEntity> extends OWebEvent {
+import OWebApp, { OUser } from './OWebApp';
+export default class OWebUser<UserEntity extends OUser> extends OWebEvent {
     private readonly _appContext;
     private _keyStore;
     constructor(_appContext: OWebApp);
@@ -15,7 +15,7 @@ export default class OWebUser<UserEntity> extends OWebEvent {
     /**
      * Returns current user data.
      */
-    getCurrentUser(): UserEntity | undefined;
+    getCurrentUser(): UserEntity | null;
     /**
      * Sets current user data.
      *
@@ -41,7 +41,7 @@ export default class OWebUser<UserEntity> extends OWebEvent {
     /**
      * Returns current user session token.
      */
-    getSessionToken(): string;
+    getSessionToken(): string | null;
     /**
      * Clear user data.
      */

@@ -13,9 +13,7 @@ export declare type ORoutePath = string | RegExp;
 export declare type ORoutePathOptions = {
     [key: string]: RegExp | keyof typeof tokenTypesRegMap;
 };
-export declare type ORouteTokensMap = {
-    [key: string]: string;
-};
+export declare type ORouteTokens = Record<string, string>;
 export declare type ORouteAction = (ctx: OWebRouteContext) => void;
 export declare type ORouteInfo = {
     reg: RegExp | null;
@@ -53,7 +51,7 @@ export default class OWebRoute {
      *
      * @param pathname
      */
-    parse(pathname: string): ORouteTokensMap;
+    parse(pathname: string): ORouteTokens;
     /**
      * Parse dynamic path and returns appropriate regexp and tokens list.
      *

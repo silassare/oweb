@@ -103,9 +103,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
     /**
      * Returns all pages list.
      */
-    getPageList(): {
-        [x: string]: P;
-    };
+    getPageList(): Record<string, P>;
     /**
      * Register a given page.
      *

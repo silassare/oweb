@@ -1,5 +1,6 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
+import { OJSONValue } from './OWebDataStore';
 export default class OWebKeyStorage extends OWebEvent {
     private readonly _appContext;
     private readonly tagName;
@@ -16,20 +17,20 @@ export default class OWebKeyStorage extends OWebEvent {
     /**
      * Returns the key storage data.
      */
-    getStoreData(): {};
+    getStoreData(): Record<string, OJSONValue>;
     /**
      * Returns a given key value.
      *
      * @param key The key name.
      */
-    getItem(key: string): any;
+    getItem(key: string): OJSONValue | null;
     /**
      * Sets an item to the key storage.
      *
      * @param key The key name.
      * @param value The key value.
      */
-    setItem(key: string, value: any): this;
+    setItem(key: string, value: OJSONValue): this;
     /**
      * Removes item from the key storage.
      *
