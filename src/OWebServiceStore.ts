@@ -1,28 +1,32 @@
-import {getEntityCache, GoblSinglePKEntity} from 'gobl-utils-ts';
+import { getEntityCache, GoblSinglePKEntity } from 'gobl-utils-ts';
 import {
 	OApiAddResponse,
 	OApiDeleteResponse,
 	OApiUpdateResponse,
-	OApiServiceRequestOptions, OApiGetAllResponse, OApiGetResponse,
+	OApiServiceRequestOptions,
+	OApiGetAllResponse,
+	OApiGetResponse,
 } from './ozone';
 import OWebApp from './OWebApp';
-import {escapeRegExp, isPlainObject} from './utils';
+import { escapeRegExp, isPlainObject } from './utils';
 import OWebService from './OWebService';
 import OWebXHR from './OWebXHR';
-import {OFormData} from './OWebFormValidator';
+import { OWebFormData } from './OWebForm';
 
 const getId = (item: GoblSinglePKEntity) => item.singlePKValue();
 
-const _with    = (target: any, key: string | number, item: any) => {
-		  return {...target, [key]: item};
-	  },
-	  _without = (target: any, key: string | number) => {
-		  delete target[key];
-		  return {...target};
-	  };
+const _with = (target: any, key: string | number, item: any) => {
+		return { ...target, [key]: item };
+	},
+	_without = (target: any, key: string | number) => {
+		delete target[key];
+		return { ...target };
+	};
 
-export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWebService<T> {
-	protected items: { [key: string]: T }       = {};
+export default class OWebServiceStore<
+	T extends GoblSinglePKEntity
+> extends OWebService<T> {
+	protected items: { [key: string]: T } = {};
 	protected relations: { [key: string]: any } = {};
 
 	/**
@@ -49,13 +53,11 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	getItemRequest(id: string, relations = ''): OWebXHR<OApiGetResponse<T>> {
 		const ctx = this;
 
-		return this.getRequest(id, relations)
-				   .onGoodNews(function goodNewsHandler(response) {
-					   ctx.addItemToList(
-						   response.json.data.item,
-						   response.json.data.relations
-					   );
-				   });
+		return this.getRequest(id, relations).onGoodNews(function goodNewsHandler(
+			response
+		) {
+			ctx.addItemToList(response.json.data.item, response.json.data.relations);
+		});
 	}
 
 	/**
@@ -63,7 +65,9 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 *
 	 * @param options
 	 */
-	getItemsListRequest(options: OApiServiceRequestOptions = {}): OWebXHR<OApiGetAllResponse<T>> {
+	getItemsListRequest(
+		options: OApiServiceRequestOptions = {}
+	): OWebXHR<OApiGetAllResponse<T>> {
 		const ctx = this;
 
 		return ctx
@@ -81,13 +85,11 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 *
 	 * @param data
 	 */
-	addItemRequest(data: OFormData): OWebXHR<OApiAddResponse<T>> {
+	addItemRequest(data: OWebFormData): OWebXHR<OApiAddResponse<T>> {
 		const ctx = this;
-		return ctx
-			.addRequest(data)
-			.onGoodNews(function goodNewsHandler(response) {
-				ctx.addCreated(response.json);
-			});
+		return ctx.addRequest(data).onGoodNews(function goodNewsHandler(response) {
+			ctx.addCreated(response.json);
+		});
 	}
 
 	/**
@@ -96,9 +98,9 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 * @param item
 	 */
 	updateItemRequest(item: T): OWebXHR<OApiUpdateResponse<T>> {
-		const ctx  = this,
-			  id   = getId(item),
-			  diff = item.toObject(true);
+		const ctx = this,
+			id = getId(item),
+			diff = item.toObject(true);
 
 		item.isSaving(true);
 
@@ -110,7 +112,6 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 			.onFinish(function finishHandler() {
 				item.isSaving(false);
 			});
-
 	}
 
 	/**
@@ -120,7 +121,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 */
 	deleteItemRequest(item: T): OWebXHR<OApiDeleteResponse<T>> {
 		const ctx = this,
-			  id  = getId(item);
+			id = getId(item);
 
 		item.isDeleting(true);
 
@@ -141,10 +142,10 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 * @param relations
 	 */
 	addItemsToList(items: T[] | { [key: string]: T }, relations: any = {}): void {
-		const ctx       = this,
-			  list: T[] = (isPlainObject(items)
-						   ? Object.values(items)
-						   : items || []) as T[];
+		const ctx = this,
+			list: T[] = (
+				isPlainObject(items) ? Object.values(items) : items || []
+			) as T[];
 
 		list.forEach((item) => {
 			const itemId = getId(item);
@@ -178,8 +179,8 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 * @param relations
 	 */
 	addItemToList(item: T, relations: any = {}): void {
-		const ctx    = this,
-			  itemId = getId(item);
+		const ctx = this,
+			itemId = getId(item);
 
 		ctx.safelyAddItem(item);
 
@@ -205,8 +206,8 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 * @private
 	 */
 	private safelyAddItem(item: T) {
-		const key        = getId(item),
-			  cachedItem = this.items[key];
+		const key = getId(item),
+			cachedItem = this.items[key];
 
 		if (cachedItem) {
 			cachedItem.doHydrate(item.toObject(), true);
@@ -291,11 +292,11 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	 */
 	list(ids: string[] = []): T[] {
 		const list: T[] = [],
-			  len       = ids.length;
+			len = ids.length;
 		if (len) {
 			for (let i = 0; i < len; i++) {
-				const id   = ids[i],
-					  item = this.identify(id);
+				const id = ids[i],
+					item = this.identify(id);
 				if (item) {
 					list.push(item);
 				}
@@ -343,10 +344,10 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	filter(
 		list: T[] = this.list(),
 		predicate: (value: T, index: number) => boolean,
-		max       = Infinity
+		max = Infinity
 	): T[] {
 		const result: T[] = [],
-			  len         = list.length;
+			len = list.length;
 
 		for (let i = 0; i < len && result.length < max; i++) {
 			if (predicate(list[i], i)) {
@@ -369,7 +370,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 	select(
 		list: T[] = this.list(),
 		predicate: (value: T, index: number) => boolean,
-		max       = Infinity
+		max = Infinity
 	): T[] {
 		return this.filter(list, predicate, max);
 	}

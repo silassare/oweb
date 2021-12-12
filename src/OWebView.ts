@@ -32,7 +32,7 @@ export default class OWebView extends OWebEvent {
 	/**
 	 * To freeze the view.
 	 */
-	freeze():this {
+	freeze(): this {
 		++this._freezeCounter;
 
 		if (this._freezeCounter === 1) {
@@ -45,7 +45,7 @@ export default class OWebView extends OWebEvent {
 	/**
 	 * Unfreeze the view.
 	 */
-	unfreeze():this {
+	unfreeze(): this {
 		if (this.isFrozen()) {
 			--this._freezeCounter;
 
@@ -65,7 +65,7 @@ export default class OWebView extends OWebEvent {
 	dialog(
 		dialog: OViewDialog | OApiResponse<any> | ONetError,
 		canUseAlert = false
-	):void {
+	): void {
 		let d = dialog;
 
 		if ((d as OApiResponse<any>).error) {
@@ -84,7 +84,7 @@ export default class OWebView extends OWebEvent {
 	 *
 	 * @param handler
 	 */
-	onFreeze(handler: (this: this) => void) :this{
+	onFreeze(handler: (this: this) => void): this {
 		return this.on(OWebView.EVT_VIEW_FREEZE, handler);
 	}
 
@@ -93,7 +93,7 @@ export default class OWebView extends OWebEvent {
 	 *
 	 * @param handler
 	 */
-	onUnFreeze(handler: (this: this) => void):this {
+	onUnFreeze(handler: (this: this) => void): this {
 		return this.on(OWebView.EVT_VIEW_UNFREEZE, handler);
 	}
 
@@ -103,12 +103,8 @@ export default class OWebView extends OWebEvent {
 	 * @param handler
 	 */
 	onDialog(
-		handler: (
-			this: this,
-			dialog: OViewDialog,
-			canUseAlert: boolean,
-		) => void
-	):this {
+		handler: (this: this, dialog: OViewDialog, canUseAlert: boolean) => void
+	): this {
 		return this.on(OWebView.EVT_VIEW_DIALOG, handler);
 	}
 }

@@ -1,7 +1,7 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
 import { forEach } from './utils';
-import {OJSONValue} from './OWebDataStore';
+import { OJSONValue } from './OWebDataStore';
 
 type OKeyData = {
 	value: any;
@@ -67,9 +67,7 @@ export default class OWebKeyStorage extends OWebEvent {
 		let data: OKeyData = this._store[key];
 
 		if (data !== undefined) {
-			data = _hasExpired(data)
-				? this.removeItem(key) && null
-				: data.value;
+			data = _hasExpired(data) ? this.removeItem(key) && null : data.value;
 		}
 
 		return data;
@@ -86,9 +84,7 @@ export default class OWebKeyStorage extends OWebEvent {
 		this._store[key] = {
 			value,
 			expire:
-				this._maxLifeTime === Infinity
-					? -1
-					: Date.now() + this._maxLifeTime,
+				this._maxLifeTime === Infinity ? -1 : Date.now() + this._maxLifeTime,
 		};
 
 		return this._save();

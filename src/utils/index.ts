@@ -14,19 +14,39 @@ export const id = (function id() {
 export const noop = (): undefined => void 0;
 
 // ==========TYPE CHECKERS====================================
-export const isArray = Array.isArray;
-export const isPlainObject = (a: unknown): a is Record<string, unknown> =>
-	Object.prototype.toString.call(a) === '[object Object]';
+
+export const isInteger =
+	Number.isInteger ||
+	function isInteger(value: unknown): value is number {
+		return (
+			typeof value === 'number' &&
+			isFinite(value) &&
+			Math.floor(value) === value
+		);
+	};
+export const isArray =
+	Array.isArray ||
+	function isArray(value: unknown): value is any[] {
+		return toString.call(value) === '[object Array]';
+	};
+export const isPlainObject = <T = Record<string, unknown>>(
+	a: unknown
+): a is T => Object.prototype.toString.call(a) === '[object Object]';
 export const isString = (a: unknown): a is string => typeof a === 'string';
 export const isFunction = (a: unknown): a is (...args: any[]) => any =>
 	typeof a === 'function';
 
-export function isEmpty(a: unknown): boolean {
-	if (isArray(a)) {
-		return !a.length;
-	}
-	if (isPlainObject(a)) {
-		return !Object.keys(a).length;
+/**
+ * Checks if value is null or undefined.
+ *
+ * @param a
+ */
+export const isNil = (a: unknown): a is null | undefined => {
+	return a === undefined || a === null;
+};
+export const isEmpty = (a: unknown): boolean => {
+	if (a === undefined || a === null) {
+		return true;
 	}
 
 	if (typeof a === 'string') {
@@ -37,9 +57,32 @@ export function isEmpty(a: unknown): boolean {
 		return isNaN(a);
 	}
 
-	return !a;
-}
+	if (typeof a === 'boolean') {
+		return false;
+	}
 
+	if (isArray(a)) {
+		return !a.length;
+	}
+
+	if (isPlainObject(a)) {
+		for (const key in a) {
+			if (Object.prototype.hasOwnProperty.call(a, key)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	const tag = Object.prototype.toString.call(a);
+
+	if (tag === '[object Set]' || tag === '[object Map]') {
+		return !(a as Set<any> | Map<any, any>).size;
+	}
+
+	return false;
+};
 export const isNotEmpty = (a: unknown): boolean => !isEmpty(a);
 export const toArray = <X>(a: Iterable<X>): X[] => [...a];
 export const escapeRegExp = (str: string): string =>
@@ -58,7 +101,7 @@ export function unique<X>(arr: X[]): X[] {
 	return Array.from(new Set(arr));
 }
 
-export function forEach<T>(
+export function each<T>(
 	obj: { [key: string]: T } | T[],
 	fn: (value: T, key: any) => void
 ): void {
@@ -67,6 +110,46 @@ export function forEach<T>(
 		fn(value, key);
 	});
 }
+
+interface List<T> {
+	[index: number]: T;
+	length: number;
+}
+
+type ListForEachType = <U extends List<unknown>>(
+	collection: U,
+	iteratee: (
+		value: U[Extract<keyof U, number>],
+		key: Extract<keyof U, number>,
+		collection: U
+	) => void
+) => void;
+type DictForEachType = <U extends Record<string, unknown>>(
+	collection: U,
+	iteratee: (
+		value: U[Extract<keyof U, string>],
+		key: Extract<keyof U, string>,
+		collection: U
+	) => void
+) => void;
+
+export const forEach = function _forEach<
+	U extends List<unknown> | Record<string, unknown>
+>(
+	collection: U,
+	iteratee: (value: unknown, key: string | number, collection: U) => void
+) {
+	if (isPlainObject(collection)) {
+		for (const k in collection) {
+			Object.prototype.hasOwnProperty.call(collection, k) &&
+				iteratee(collection[k], k, collection);
+		}
+	} else {
+		for (const k in collection) {
+			iteratee(collection[k], k, collection);
+		}
+	}
+} as ListForEachType & DictForEachType;
 
 export const assign =
 	(Object as any).assign ||
@@ -129,9 +212,10 @@ export function stringPlaceholderReplace(
 
 export function textToLineString(text: string): string {
 	const reg = /["'\\\n\r\t\u2028\u2029]/g,
+		singleQuote = String.fromCharCode(39),
 		toEscapes: Record<string, unknown> = {
 			'"': '"',
-			'\'': '\'',
+			[singleQuote]: singleQuote,
 			'\\': '\\',
 			'\n': 'n',
 			'\r': 'r',
@@ -145,7 +229,7 @@ export function textToLineString(text: string): string {
 
 // ==========MATH====================================
 
-export function _setDigitsSep(x: number, sep: string): string {
+const _setDigitsSep = (x: number, sep: string): string => {
 	const s = String(x),
 		ans = [],
 		j = s.indexOf('.'),
@@ -165,7 +249,7 @@ export function _setDigitsSep(x: number, sep: string): string {
 	}
 
 	return ans.concat(end).join('');
-}
+};
 
 export function numberFormat(
 	x: number | string,

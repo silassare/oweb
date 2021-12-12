@@ -1,17 +1,19 @@
-import {stringPlaceholderReplace} from '../utils';
-import {ONetRequestOptions} from '../OWebNet';
+import { stringPlaceholderReplace } from '../utils';
+import { ONetRequestOptions } from '../OWebNet';
 import OWebXHR from '../OWebXHR';
-import {OApiResponse, OWebApp} from '../oweb';
+import { OApiResponse, OWebApp } from '../oweb';
 
-const SERVICE_URL_FORMAT             = ':host/:service',
-	  SERVICE_ENTITY_FORMAT          = ':host/:service/:id',
-	  SERVICE_ENTITY_RELATION_FORMAT = ':host/:service/:id/:relation';
+const SERVICE_URL_FORMAT = ':host/:service',
+	SERVICE_ENTITY_FORMAT = ':host/:service/:id',
+	SERVICE_ENTITY_RELATION_FORMAT = ':host/:service/:id/:relation';
 
 const apiCache: {
 	[apiHost: string]: OZone;
 } = {};
 
-export const getApiForHost = function getApiForHost(url: string): OZone | undefined {
+export const getApiForHost = function getApiForHost(
+	url: string
+): OZone | undefined {
 	for (const apiHost in apiCache) {
 		if (url.startsWith(apiHost)) {
 			return apiCache[apiHost];
@@ -30,7 +32,9 @@ export default class OZone {
 	 * @param _appContext
 	 */
 	protected constructor(private _appContext: OWebApp) {
-		this.apiHost = _appContext.configs.get('OZ_API_BASE_URL').replace(/\/$/g, '');
+		this.apiHost = _appContext.configs
+			.get('OZ_API_BASE_URL')
+			.replace(/\/$/g, '');
 	}
 
 	/**
@@ -58,7 +62,7 @@ export default class OZone {
 		options: Partial<ONetRequestOptions<Response>> = {}
 	): OWebXHR<Response> {
 		const _this = this,
-			  api   = getApiForHost(url);
+			api = getApiForHost(url);
 
 		if (api) {
 			if (!options.headers) {
@@ -66,21 +70,24 @@ export default class OZone {
 			}
 
 			if (this._appContext.configs.get('OZ_API_ALLOW_REAL_METHOD_HEADER')) {
-				const realMethod       = (options.method || 'get').toUpperCase(),
-					  replaceMethods   = ['PATCH', 'PUT', 'DELETE'],
-					  realMethodHeader = this._appContext.configs.get('OZ_API_REAL_METHOD_HEADER_NAME');
+				const realMethod = (options.method || 'get').toUpperCase(),
+					replaceMethods = ['PATCH', 'PUT', 'DELETE'],
+					realMethodHeader = this._appContext.configs.get(
+						'OZ_API_REAL_METHOD_HEADER_NAME'
+					);
 
 				// we update request method
 				if (~replaceMethods.indexOf(realMethod)) {
 					options.headers[realMethodHeader] = realMethod;
-					options.method                    = 'POST';
+					options.method = 'POST';
 				}
 			}
 
 			const headerName = this._appContext.configs.get('OZ_API_KEY_HEADER_NAME');
 
 			if (!options.headers[headerName]) {
-				options.headers[headerName] = this._appContext.configs.get('OZ_API_KEY');
+				options.headers[headerName] =
+					this._appContext.configs.get('OZ_API_KEY');
 			}
 
 			if (!options.isGoodNews) {
@@ -90,8 +97,10 @@ export default class OZone {
 			}
 			if (!options.errorResponseToDialog) {
 				options.errorResponseToDialog = (response) => {
-					const json = response.json as any as OApiResponse<any>;
-					return {text: json.msg, data: json.data};
+					const json = response.json;
+					return json
+						? { text: json.msg, data: json.data }
+						: { text: 'OZ_ERROR_NETWORK' };
 				};
 			}
 		}
@@ -99,14 +108,14 @@ export default class OZone {
 		const o = this._appContext.request<Response>(url, options);
 
 		o.onResponse(function responseHandler(response) {
-			 const {json} = response;
-			 if (json && json.stime) {
-				 _this._appContext.user.setSessionExpire(json.stime);
-			 }
-			 if (json && json.stoken) {
-				 _this._appContext.user.setSessionToken(json.stoken);
-			 }
-		 });
+			const { json } = response;
+			if (json && json.stime) {
+				_this._appContext.user.setSessionExpire(json.stime);
+			}
+			if (json && json.stoken) {
+				_this._appContext.user.setSessionToken(json.stoken);
+			}
+		});
 
 		return o;
 	}
@@ -132,7 +141,8 @@ export default class OZone {
 	getItemURI(service: string, id: string | number): string {
 		return stringPlaceholderReplace(SERVICE_ENTITY_FORMAT, {
 			host: this.apiHost,
-			service, id,
+			service,
+			id,
 		});
 	}
 
@@ -146,7 +156,9 @@ export default class OZone {
 	getItemRelationURI(service: string, id: string, relation: string): string {
 		return stringPlaceholderReplace(SERVICE_ENTITY_RELATION_FORMAT, {
 			host: this.apiHost,
-			service, id, relation,
+			service,
+			id,
+			relation,
 		});
 	}
 }

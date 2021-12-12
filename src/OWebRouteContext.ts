@@ -4,7 +4,7 @@ import OWebRouter, {
 	ORouteStateObject,
 	ORouteTarget,
 } from './OWebRouter';
-import {searchParam, logger} from './utils';
+import { searchParam, logger } from './utils';
 
 export default class OWebRouteContext {
 	private _tokens: ORouteTokens;
@@ -43,8 +43,8 @@ export default class OWebRouteContext {
 	/**
 	 * Gets a map of all tokens and values.
 	 */
-	getTokens():ORouteTokens {
-		return {...this._tokens};
+	getTokens(): ORouteTokens {
+		return { ...this._tokens };
 	}
 
 	/**

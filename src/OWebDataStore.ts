@@ -1,6 +1,6 @@
 import OWebApp from './OWebApp';
 import OWebEvent from './OWebEvent';
-import {id, logger} from './utils';
+import { id, logger } from './utils';
 
 export interface OJSONSerializable {
 	toJSON(): OJSONValue;
@@ -15,29 +15,29 @@ export type OJSONValue =
 	| { [key: string]: OJSONValue }
 	| OJSONValue[];
 
-const ls    = window.localStorage,
-	  parse = function parse(data: string | null): any {
-		  let value: any;
+const ls = window.localStorage,
+	parse = function parse(data: string | null): any {
+		let value: any;
 
-		  if (data !== null) {
-			  try {
-				  value = JSON.parse(data);
-			  } catch (e) {
-				  logger.error(e);
-			  }
-		  }
+		if (data !== null) {
+			try {
+				value = JSON.parse(data);
+			} catch (e) {
+				logger.error(e);
+			}
+		}
 
-		  return value;
-	  };
+		return value;
+	};
 
 export default class OWebDataStore extends OWebEvent {
-	static readonly EVT_DATA_STORE_CLEARED              = id();
+	static readonly EVT_DATA_STORE_CLEARED = id();
 	private readonly _key: string;
 	private _data: { [key: string]: OJSONValue } = {};
 
-	constructor(private readonly _appContext: OWebApp) {
+	constructor(_appContext: OWebApp) {
 		super();
-		this._key  = _appContext.getAppName();
+		this._key = _appContext.getAppName();
 		this._data = parse(ls.getItem(this._key)) || {};
 	}
 
@@ -65,8 +65,8 @@ export default class OWebDataStore extends OWebEvent {
 	 */
 	get(key: string | RegExp): any {
 		if (key instanceof RegExp) {
-			const list        = Object.keys(this._data),
-				  result: any = {};
+			const list = Object.keys(this._data),
+				result: any = {};
 
 			for (let i = 0; i < list.length; i++) {
 				const k = list[i];
@@ -130,7 +130,7 @@ export default class OWebDataStore extends OWebEvent {
 	 *
 	 * @param cb
 	 */
-	onClear(cb: (this: this) => void):this {
+	onClear(cb: (this: this) => void): this {
 		return this.on(OWebDataStore.EVT_DATA_STORE_CLEARED, cb);
 	}
 

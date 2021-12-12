@@ -41,9 +41,7 @@ export default class OWebEvent {
 			} else if (isFunction(event)) {
 				handler = event;
 				for (const ev in this._events) {
-					if (
-						Object.prototype.hasOwnProperty.call(this._events, ev)
-					) {
+					if (Object.prototype.hasOwnProperty.call(this._events, ev)) {
 						const handlers = this._events[ev];
 						let i = handlers.length;
 						while (i--) {

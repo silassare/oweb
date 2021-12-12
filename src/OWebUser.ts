@@ -6,9 +6,9 @@ import { logger } from './utils';
 export default class OWebUser<UserEntity extends OUser> extends OWebEvent {
 	private _keyStore: OWebKeyStorage;
 
-	constructor(private readonly _appContext: OWebApp) {
+	constructor(appContext: OWebApp) {
 		super();
-		this._keyStore = new OWebKeyStorage(_appContext, 'current_user');
+		this._keyStore = new OWebKeyStorage(appContext, 'current_user');
 	}
 
 	/**

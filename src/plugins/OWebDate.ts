@@ -48,13 +48,9 @@ export type ODateDesc = {
 	A: string;
 };
 
-const FORMAT_REG = /(?<!\\)(?:\\\\)*(ms|ss|ii|hh|mm|ll|A|a|s|i|H|h|y|Y|m|F|M|d|l|L|D)/g;
+const FORMAT_REG =
+	/(?<!\\)(?:\\\\)*(ms|ss|ii|hh|mm|ll|A|a|s|i|H|h|y|Y|m|F|M|d|l|L|D)/g;
 
-/*
-const I18N = {
-	OW_TIME_DEFAULT_FORMAT: 'd F Y, hh:ii a',
-};
-*/
 export default class OWebDate {
 	constructor(
 		private _appContext: OWebApp,
@@ -70,22 +66,19 @@ export default class OWebDate {
 		format = this._appContext.i18n.toHuman(format);
 
 		const o = this.describe() as any;
-		return format.replace(
-			FORMAT_REG,
-			function stringChunkReplacer(...args) {
-				return o[args[1]];
-			}
-		);
+		return format.replace(FORMAT_REG, function stringChunkReplacer(...args) {
+			return o[args[1]];
+		});
 	}
 
-	fromNow():string {
+	fromNow(): string {
 		return this.format(this.compare(this.date, Date.now()).format);
 	}
 
 	compare(_startDate: ODateValue, _endDate: ODateValue): { format: string } {
 		const startDate = new Date(_startDate);
 		const endDate = new Date(_endDate);
-		let format:string;
+		let format: string;
 
 		const start = {
 			time: startDate.getTime(),
@@ -130,9 +123,7 @@ export default class OWebDate {
 		if (secondsCount < 5) {
 			format = inPast ? 'OW_TIME_JUST_NOW' : 'OW_TIME_IN_FEW_SECONDS';
 		} else if (secondsCount < 10) {
-			format = inPast
-				? 'OW_TIME_FEW_SECONDS_AGO'
-				: 'OW_TIME_IN_FEW_SECONDS';
+			format = inPast ? 'OW_TIME_FEW_SECONDS_AGO' : 'OW_TIME_IN_FEW_SECONDS';
 		} else if (secondsCount < 55) {
 			format = inPast ? 'OW_TIME_N_SECONDS_AGO' : 'OW_TIME_IN_N_SECONDS';
 		} else if (secondsCount < 60) {
@@ -178,12 +169,8 @@ export default class OWebDate {
 		const i18n = this._appContext.i18n,
 			dayNamesShort = i18n.toHuman('OW_TIME_DAY_NAMES_SHORT').split(','),
 			dayNamesFull = i18n.toHuman('OW_TIME_DAY_NAMES_FULL').split(','),
-			monthNamesShort = i18n
-				.toHuman('OW_TIME_MONTH_NAMES_SHORT')
-				.split(','),
-			monthNamesFull = i18n
-				.toHuman('OW_TIME_MONTH_NAMES_FULL')
-				.split(','),
+			monthNamesShort = i18n.toHuman('OW_TIME_MONTH_NAMES_SHORT').split(','),
+			monthNamesFull = i18n.toHuman('OW_TIME_MONTH_NAMES_FULL').split(','),
 			date = new Date(this.date),
 			y: number = (date as any).getYear(),
 			Y: number = date.getFullYear(),

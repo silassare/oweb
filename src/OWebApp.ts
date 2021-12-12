@@ -1,7 +1,7 @@
 import OWebConfigs from './OWebConfigs';
 import OWebDataStore, { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
-import OWebFormValidator, { OForm } from './OWebFormValidator';
+import OWebForm, { OWebFormOptions } from './OWebForm';
 import OWebRouter, { ORouteStateObject, ORouteTarget } from './OWebRouter';
 import OWebUrl from './OWebUrl';
 import OWebView from './OWebView';
@@ -15,6 +15,7 @@ import OWebXHR from './OWebXHR';
 import defaultAppConfigs from './default/app.configs';
 import defaultUserConfigs from './default/user.configs';
 import defaultAppUrls from './default/app.urls';
+import { OFormDOMFormAdapter, OFormObjectAdapter } from './OWebFormAdapter';
 
 export interface OUrlList {
 	[key: string]: string;
@@ -86,13 +87,13 @@ export interface OAppOptions<
 	userConfigs: Partial<OUserConfigs>;
 	urls: Partial<OUrlList>;
 	user: (
-		this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>,
+		this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>
 	) => OWebUser<User>;
 	store: (
-		this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>,
+		this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>
 	) => Store;
 	pager: (
-		this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>,
+		this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>
 	) => OWebPager<Page>;
 }
 
@@ -146,13 +147,11 @@ export default class OWebApp<
 			baseUrl = this.configs.get('OW_APP_LOCAL_BASE_URL'),
 			hashMode = this.configs.get('OW_APP_ROUTER_HASH_MODE');
 
-		this.router = new OWebRouter(
-			baseUrl,
-			hashMode,
-			function notFoundHandler(target: ORouteTarget) {
-				ctx.trigger(OWebApp.EVT_NOT_FOUND, [target]);
-			}
-		);
+		this.router = new OWebRouter(baseUrl, hashMode, function notFoundHandler(
+			target: ORouteTarget
+		) {
+			ctx.trigger(OWebApp.EVT_NOT_FOUND, [target]);
+		});
 
 		this.i18n.setDefaultLang(this.configs.get('OW_APP_DEFAULT_LANG'));
 
@@ -172,8 +171,8 @@ export default class OWebApp<
 		logger.debug('[Net] new request', url, options);
 
 		const event = function event(type: string) {
-			return function eventHandler(): void {
-				logger.debug('[Net] event %s', type, url, options);
+			return function eventHandler(...args: any[]): void {
+				logger.debug('[Net] event %s', type, url, options, args);
 			};
 		};
 
@@ -225,7 +224,7 @@ export default class OWebApp<
 	}
 
 	/**
-	 * Returns new form validator instance.
+	 * Returns new oweb form instance.
 	 *
 	 * @param form The html form element.
 	 * @param required The required fields names list.
@@ -233,16 +232,18 @@ export default class OWebApp<
 	 * @param checkAll Force the validator to check all fields.
 	 * @param verbose Log warning.
 	 */
-	getFormValidator(
-		form: OForm,
+	form(
+		form: OWebFormOptions | HTMLFormElement,
 		required: string[] = [],
 		excluded: string[] = [],
 		checkAll = false,
 		verbose = false
-	): OWebFormValidator {
-		return new OWebFormValidator(
+	): OWebForm {
+		return new OWebForm(
 			this,
-			form,
+			form instanceof HTMLFormElement
+				? new OFormDOMFormAdapter(form)
+				: new OFormObjectAdapter(form),
 			required,
 			excluded,
 			checkAll,
@@ -255,7 +256,7 @@ export default class OWebApp<
 	 *
 	 * > This will clear all saved data in the local storage.
 	 */
-	forceLogin():void {
+	forceLogin(): void {
 		this.ls.clear();
 		this.showLoginPage({});
 	}
@@ -263,7 +264,7 @@ export default class OWebApp<
 	/**
 	 * Reload the app.
 	 */
-	reloadApp():void {
+	reloadApp(): void {
 		// TODO: instead of reloading the current location, find a way to browse to web app entry point
 		// for android & ios restart the app
 		// window.location.reload(true);
@@ -275,7 +276,7 @@ export default class OWebApp<
 	 *
 	 * > This will clear all saved data in the local storage.
 	 */
-	destroyApp():void {
+	destroyApp(): void {
 		// erase data
 		this.ls.clear();
 		this.reloadApp();
@@ -284,7 +285,7 @@ export default class OWebApp<
 	/**
 	 * Close app.
 	 */
-	closeApp():void {
+	closeApp(): void {
 		// cordova
 		if (window.navigator && (window.navigator as any).app) {
 			(window.navigator as any).app.exitApp();
@@ -305,21 +306,21 @@ export default class OWebApp<
 	/**
 	 * Called when app should show the home page.
 	 */
-	showHomePage(options: ORouteStateObject = {}):void {
+	showHomePage(options: ORouteStateObject = {}): void {
 		this.trigger(OWebApp.EVT_SHOW_HOME, [options]);
 	}
 
 	/**
 	 * Called when app should show the login page.
 	 */
-	showLoginPage(options: ORouteStateObject = {}):void {
+	showLoginPage(options: ORouteStateObject = {}): void {
 		this.trigger(OWebApp.EVT_SHOW_LOGIN, [options]);
 	}
 
 	/**
 	 * Called when app should show the registration page.
 	 */
-	showRegistrationPage(options: ORouteStateObject = {}):void {
+	showRegistrationPage(options: ORouteStateObject = {}): void {
 		this.trigger(OWebApp.EVT_SHOW_LOGIN, [options]);
 	}
 
@@ -328,7 +329,7 @@ export default class OWebApp<
 	 *
 	 * @param handler
 	 */
-	onReady(handler: (this: this) => void | boolean):this {
+	onReady(handler: (this: this) => void | boolean): this {
 		return this.on(OWebApp.EVT_APP_READY, handler);
 	}
 
@@ -339,7 +340,7 @@ export default class OWebApp<
 	 */
 	onShowHomePage(
 		handler: (this: this, options: ORouteStateObject) => void | boolean
-	):this {
+	): this {
 		return this.on(OWebApp.EVT_SHOW_HOME, handler);
 	}
 
@@ -350,7 +351,7 @@ export default class OWebApp<
 	 */
 	onShowLoginPage(
 		handler: (this: this, options: ORouteStateObject) => void | boolean
-	) :this{
+	): this {
 		return this.on(OWebApp.EVT_SHOW_LOGIN, handler);
 	}
 
@@ -361,7 +362,7 @@ export default class OWebApp<
 	 */
 	onShowRegistrationPage(
 		handler: (this: this, options: ORouteStateObject) => void | boolean
-	):this {
+	): this {
 		return this.on(OWebApp.EVT_SHOW_REGISTRATION_PAGE, handler);
 	}
 
@@ -372,7 +373,7 @@ export default class OWebApp<
 	 */
 	onPageNotFound(
 		handler: (this: this, target: ORouteTarget) => void | boolean
-	):this {
+	): this {
 		return this.on(OWebApp.EVT_NOT_FOUND, handler);
 	}
 

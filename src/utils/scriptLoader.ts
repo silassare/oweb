@@ -1,7 +1,7 @@
-import {callback, logger} from '.';
+import { callback, logger } from '.';
 
 const document = window.document,
-	  isOldIE  = /MSIE\s([5-9]\.0)/.test(navigator.userAgent);
+	isOldIE = /MSIE\s([5-9]\.0)/.test(navigator.userAgent);
 
 if (
 	typeof document !== 'object' ||
@@ -11,7 +11,11 @@ if (
 }
 
 export type OScriptFile = [string, () => boolean] | [string];
-export type OBatchCb = (success: boolean, done: string[], failed: string[]) => void;
+export type OBatchCb = (
+	success: boolean,
+	done: string[],
+	failed: string[]
+) => void;
 export type OScriptLoadCb = (src: string) => void;
 
 export function noCache(url: string): string {
@@ -41,11 +45,11 @@ export function loadScript(
 			src = noCache(src);
 		}
 
-		const script   = document.createElement('script');
-		script.src     = src;
-		script.async   = false;
-		script.type    = 'text/javascript';
-		script.onload  = function onLoad() {
+		const script = document.createElement('script');
+		script.src = src;
+		script.async = false;
+		script.type = 'text/javascript';
+		script.onload = function onLoad() {
 			callback(then, [src]);
 		};
 		script.onerror = function onError() {
@@ -71,11 +75,11 @@ export function loadScriptBatch(
 	then?: OBatchCb,
 	disableCache = false
 ): void {
-	const total            = list.length;
+	const total = list.length;
 	const failed: string[] = [];
-	const done: string[]   = [];
-	let counter            = 0;
-	const updateCount      = (success: boolean, src: string) => {
+	const done: string[] = [];
+	let counter = 0;
+	const updateCount = (success: boolean, src: string) => {
 		counter++;
 		(success ? done : failed).push(src);
 
@@ -86,7 +90,7 @@ export function loadScriptBatch(
 
 	for (let i = 0; i < total; i++) {
 		const src = list[i][0];
-		const fn  = list[i][1];
+		const fn = list[i][1];
 
 		if (typeof fn === 'function' && !fn()) {
 			continue;

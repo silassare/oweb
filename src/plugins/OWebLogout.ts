@@ -1,29 +1,24 @@
 import OWebApp from '../OWebApp';
 import OWebEvent from '../OWebEvent';
 import { id } from '../utils';
-import {ONetError, ONetResponse} from '../OWebNet';
+import { ONetError, ONetResponse } from '../OWebNet';
 import { OApiResponse } from '../ozone';
 
 export default class OWebLogout<Result> extends OWebEvent {
-	static readonly SELF               = id();
-	static readonly EVT_LOGOUT_FAIL    = id();
+	static readonly SELF = id();
+	static readonly EVT_LOGOUT_FAIL = id();
 	static readonly EVT_LOGOUT_SUCCESS = id();
 
 	constructor(private readonly _appContext: OWebApp) {
 		super();
 	}
 
-	onLogoutFail(
-		handler: (this: this, err: ONetError) => void
-	): this {
+	onLogoutFail(handler: (this: this, err: ONetError) => void): this {
 		return this.on(OWebLogout.EVT_LOGOUT_FAIL, handler);
 	}
 
 	onLogoutSuccess(
-		handler: (
-			this: this,
-			response: ONetResponse<OApiResponse<Result>>,
-		) => void
+		handler: (this: this, response: ONetResponse<OApiResponse<Result>>) => void
 	): this {
 		return this.on(OWebLogout.EVT_LOGOUT_SUCCESS, handler);
 	}
