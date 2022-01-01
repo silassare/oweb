@@ -1,7 +1,7 @@
 import OWebConfigs from './OWebConfigs';
 import OWebDataStore, { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
-import OWebFormValidator, { OForm } from './OWebFormValidator';
+import OWebForm, { OWebFormOptions } from './OWebForm';
 import OWebRouter, { ORouteStateObject, ORouteTarget } from './OWebRouter';
 import OWebUrl from './OWebUrl';
 import OWebView from './OWebView';
@@ -87,115 +87,25 @@ export default class OWebApp<Store extends OStore = any, Page extends OPage = an
     readonly oz: OZone;
     private readonly _store;
     private readonly _pager;
-    /**
-     * OWebApp constructor.
-     *
-     * @param options
-     */
     protected constructor(options: Options);
-    /**
-     * Build an HTTP request.
-     *
-     * @param url
-     * @param options
-     */
     request<Response>(url: string, options?: Partial<ONetRequestOptions<Response>>): OWebXHR<Response>;
-    /**
-     * Store getter.
-     */
     get store(): ReturnType<Options['store']>;
-    /**
-     * Pager instance getter.
-     */
     get pager(): ReturnType<Options['pager']>;
-    /**
-     * App name getter.
-     */
     getAppName(): string;
-    /**
-     * Checks if we are running in mobile app.
-     */
     isMobileApp(): boolean;
-    /**
-     * Returns new form validator instance.
-     *
-     * @param form The html form element.
-     * @param required The required fields names list.
-     * @param excluded The fields names to exclude.
-     * @param checkAll Force the validator to check all fields.
-     * @param verbose Log warning.
-     */
-    getFormValidator(form: OForm, required?: string[], excluded?: string[], checkAll?: boolean, verbose?: boolean): OWebFormValidator;
-    /**
-     * Force login.
-     *
-     * > This will clear all saved data in the local storage.
-     */
+    form(form: OWebFormOptions | HTMLFormElement, required?: string[], excluded?: string[], checkAll?: boolean, verbose?: boolean): OWebForm;
     forceLogin(): void;
-    /**
-     * Reload the app.
-     */
     reloadApp(): void;
-    /**
-     * Destroy the app.
-     *
-     * > This will clear all saved data in the local storage.
-     */
     destroyApp(): void;
-    /**
-     * Close app.
-     */
     closeApp(): void;
-    /**
-     * To start the web app.
-     */
     start(): this;
-    /**
-     * Called when app should show the home page.
-     */
     showHomePage(options?: ORouteStateObject): void;
-    /**
-     * Called when app should show the login page.
-     */
     showLoginPage(options?: ORouteStateObject): void;
-    /**
-     * Called when app should show the registration page.
-     */
     showRegistrationPage(options?: ORouteStateObject): void;
-    /**
-     * Register handler for OWebApp.EVT_APP_READY event
-     *
-     * @param handler
-     */
     onReady(handler: (this: this) => void | boolean): this;
-    /**
-     * Register handler for OWebApp.EVT_SHOW_HOME event
-     *
-     * @param handler
-     */
     onShowHomePage(handler: (this: this, options: ORouteStateObject) => void | boolean): this;
-    /**
-     * Register handler for OWebApp.EVT_SHOW_LOGIN event
-     *
-     * @param handler
-     */
     onShowLoginPage(handler: (this: this, options: ORouteStateObject) => void | boolean): this;
-    /**
-     * Register handler for OWebApp.EVT_SHOW_REGISTRATION_PAGE event
-     *
-     * @param handler
-     */
     onShowRegistrationPage(handler: (this: this, options: ORouteStateObject) => void | boolean): this;
-    /**
-     * Register handler for OWebApp.EVT_NOT_FOUND event
-     *
-     * @param handler
-     */
     onPageNotFound(handler: (this: this, target: ORouteTarget) => void | boolean): this;
-    /**
-     * Creates new app instance.
-     *
-     * @param options
-     */
     static create<Options extends OAppOptions<OStore, OPage, OUser> = any>(options: Options): OWebApp<any, any, any, Options>;
 }
