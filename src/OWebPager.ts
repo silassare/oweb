@@ -19,12 +19,7 @@ export interface OPageRoute {
 	show?: boolean;
 }
 
-export interface OPageRouteFull {
-	slug?: string;
-	icon?: string;
-	title: OI18n;
-	description?: OI18n;
-	path: ORoutePath;
+export type OPageRouteFull<Route extends OPageRoute = OPageRoute> = Route & {
 	pathOptions: ORoutePathOptions;
 	children: OPageRouteFull[];
 	showChildren: boolean;
@@ -33,13 +28,13 @@ export interface OPageRouteFull {
 
 	readonly id: number;
 	readonly href?: string;
-	readonly parent?: OPageRouteFull;
+	readonly parent?: OPageRouteFull<Route>;
 	active: boolean;
 	activeChild: boolean;
 	webRoute: OWebRoute;
-}
+};
 
-export interface OPage {
+export interface OPage<Route extends OPageRoute = OPageRoute> {
 	/**
 	 * The page name getter.
 	 */
@@ -48,7 +43,7 @@ export interface OPage {
 	/**
 	 * The page routes getter.
 	 */
-	routes: OPageRoute[];
+	routes: Route[];
 
 	/**
 	 * Called once when registering the page.
@@ -63,7 +58,10 @@ export interface OPage {
 	 * @param context The app context.
 	 * @param route The request page route.
 	 */
-	requireLogin?(context: OWebRouteContext, route: OPageRouteFull): boolean;
+	requireLogin?(
+		context: OWebRouteContext,
+		route: OPageRouteFull<Route>
+	): boolean;
 
 	/**
 	 * Called before page open.
@@ -71,7 +69,7 @@ export interface OPage {
 	 * @param context
 	 * @param route
 	 */
-	onOpen?(context: OWebRouteContext, route: OPageRouteFull): void;
+	onOpen?(context: OWebRouteContext, route: OPageRouteFull<Route>): void;
 
 	/**
 	 * Called before page close.
@@ -79,7 +77,10 @@ export interface OPage {
 	 * @param oldRoute
 	 * @param newRoute
 	 */
-	onClose?(oldRoute: OPageRouteFull, newRoute: OPageRouteFull): void;
+	onClose?(
+		oldRoute: OPageRouteFull<Route>,
+		newRoute: OPageRouteFull<Route>
+	): void;
 }
 
 const wDoc = window.document;
@@ -99,15 +100,18 @@ const _isParentOf = (
 	return false;
 };
 
-export default class OWebPager<P extends OPage> extends OWebEvent {
+export default class OWebPager<
+	P extends OPage<R>,
+	R extends OPageRoute = OPageRoute
+> extends OWebEvent {
 	static readonly SELF = id();
 	static readonly EVT_PAGE_LOCATION_CHANGE = id();
 
 	private readonly _pages: Record<string, P> = {};
-	private _routesCache: OPageRouteFull[] = [];
-	private _routesFlattened: OPageRouteFull[] = [];
+	private _routesCache: OPageRouteFull<R>[] = [];
+	private _routesFlattened: OPageRouteFull<R>[] = [];
 	private _activePage?: P;
-	private _activeRoute?: OPageRouteFull;
+	private _activeRoute?: OPageRouteFull<R>;
 
 	/**
 	 * @param _appContext The app context.
@@ -120,7 +124,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 	/**
 	 * Returns registered pages routes.
 	 */
-	getRoutes(): OPageRouteFull[] {
+	getRoutes(): OPageRouteFull<R>[] {
 		return [...this._routesCache];
 	}
 
@@ -150,7 +154,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 	/**
 	 * Returns the active page route.
 	 */
-	getActivePageRoute(): OPageRouteFull {
+	getActivePageRoute(): OPageRouteFull<R> {
 		if (!this._activeRoute) {
 			throw new Error('[OWebPager] no active route.');
 		}
@@ -196,40 +200,42 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 	 */
 	private _registerPageRoutes(
 		page: P,
-		routes: OPageRoute[],
-		parent?: OPageRouteFull
+		routes: R[],
+		parent?: OPageRouteFull<R>
 	): this {
 		const router: OWebRouter = this._appContext.router;
 
 		for (let i = 0; i < routes.length; i++) {
 			const route: any = routes[i];
 
-			route.id = ++routeId;
-			route.parent = parent;
-			route.pathOptions = route.pathOptions || {};
-			route.children = route.children || [];
-			route.active = false;
-			route.activeChild = false;
+			if (!route.id) {
+				route.id = ++routeId;
+				route.parent = parent;
+				route.pathOptions = route.pathOptions || {};
+				route.children = route.children || [];
+				route.active = false;
+				route.activeChild = false;
 
-			const webRoute = (route.webRoute = this._addRoute(route, page));
-			if (!webRoute.isDynamic()) {
-				route.href = router.pathToURL(route.path).href;
-			}
+				const webRoute = (route.webRoute = this._addRoute(route, page));
+				if (!webRoute.isDynamic()) {
+					route.href = router.pathToURL(route.path).href;
+				}
 
-			if (!('show' in route)) {
-				route.show = true;
-			}
-			if (!('showChildren' in route)) {
-				route.showChildren = true;
-			}
-			if (!('disabled' in route)) {
-				route.disabled = false;
-			}
+				if (!('show' in route)) {
+					route.show = true;
+				}
+				if (!('showChildren' in route)) {
+					route.showChildren = true;
+				}
+				if (!('disabled' in route)) {
+					route.disabled = false;
+				}
 
-			this._routesFlattened.push(route);
+				this._routesFlattened.push(route);
 
-			if (route.children.length) {
-				this._registerPageRoutes(page, route.children, route);
+				if (route.children.length) {
+					this._registerPageRoutes(page, route.children, route);
+				}
 			}
 		}
 
@@ -243,7 +249,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 	 * @param page The page to which that route belongs to.
 	 * @private
 	 */
-	private _addRoute(route: OPageRouteFull, page: P): OWebRoute {
+	private _addRoute(route: OPageRouteFull<R>, page: P): OWebRoute {
 		const webRoute = new OWebRoute(
 			route.path,
 			route.pathOptions,
@@ -290,7 +296,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 	 * @param route
 	 * @private
 	 */
-	private _setActive(page: P, route: OPageRouteFull): this {
+	private _setActive(page: P, route: OPageRouteFull<R>): this {
 		const oldPage = this._activePage,
 			oldRoute = this._activeRoute,
 			app = this._appContext;
@@ -321,7 +327,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
 		return this;
 	}
 
-	onLocationChange(handler: (route: OPageRouteFull, page: P) => void): this {
+	onLocationChange(handler: (route: OPageRouteFull<R>, page: P) => void): this {
 		return this.on(OWebPager.EVT_PAGE_LOCATION_CHANGE, handler);
 	}
 }

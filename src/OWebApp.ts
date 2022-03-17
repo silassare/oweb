@@ -8,7 +8,7 @@ import OWebView from './OWebView';
 import OWebI18n from './OWebI18n';
 import { assign, id, logger } from './utils';
 import OZone from './ozone';
-import OWebPager, { OPage } from './OWebPager';
+import OWebPager, { OPage, OPageRoute } from './OWebPager';
 import OWebUser from './OWebUser';
 import { ONetRequestOptions } from './OWebNet';
 import OWebXHR from './OWebXHR';
@@ -76,31 +76,28 @@ export interface OStore {
 export type OUser = {
 	[key: string]: any;
 };
-
 export interface OAppOptions<
-	Store extends OStore,
-	Page extends OPage,
-	User extends OUser
+	Store extends OStore = OStore,
+	Page extends OPage<Route> = OPage<any>,
+	User extends OUser = OUser,
+	Route extends OPageRoute = OPageRoute,
+	Context = OWebApp<Store, Page, User>
 > {
 	name: string;
 	appConfigs: Partial<OAppConfigs>;
 	userConfigs: Partial<OUserConfigs>;
 	urls: Partial<OUrlList>;
-	user: (
-		this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>
-	) => OWebUser<User>;
-	store: (
-		this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>
-	) => Store;
-	pager: (
-		this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>
-	) => OWebPager<Page>;
+
+	user: (this: Context) => OWebUser<User>;
+	store: (this: Context) => Store;
+	pager: (this: Context) => OWebPager<Page>;
 }
 
 export default class OWebApp<
-	Store extends OStore = any,
-	Page extends OPage = any,
-	User extends OUser = any,
+	Store extends OStore = OStore,
+	Page extends OPage<Route> = OPage<any>,
+	User extends OUser = OUser,
+	Route extends OPageRoute = OPageRoute,
 	Options extends OAppOptions<Store, Page, User> = any
 > extends OWebEvent {
 	static readonly SELF = id();
@@ -113,12 +110,12 @@ export default class OWebApp<
 	readonly view: OWebView;
 	readonly ls: OWebDataStore;
 	readonly router: OWebRouter;
-	readonly user: OWebUser<User>;
 	readonly configs: OWebConfigs<OAppConfigs, OUserConfigs>;
 	readonly url: OWebUrl;
 	readonly i18n: OWebI18n;
 	readonly oz: OZone;
 
+	private readonly _user: OWebUser<User>;
 	private readonly _store: Store;
 	private readonly _pager: OWebPager<Page>;
 
@@ -139,7 +136,7 @@ export default class OWebApp<
 		this.url = new OWebUrl(this, assign({}, defaultAppUrls, options.urls));
 		this.view = new OWebView();
 		this.i18n = new OWebI18n();
-		this.user = options.user.call(this);
+		this._user = options.user.call(this);
 		this._store = options.store.call(this);
 		this._pager = options.pager.call(this);
 
@@ -196,17 +193,24 @@ export default class OWebApp<
 	}
 
 	/**
+	 * User getter.
+	 */
+	get user(): ReturnType<Options['user']> {
+		return this._user as ReturnType<Options['user']>;
+	}
+
+	/**
 	 * Store getter.
 	 */
 	get store(): ReturnType<Options['store']> {
-		return this._store as any;
+		return this._store as ReturnType<Options['store']>;
 	}
 
 	/**
 	 * Pager instance getter.
 	 */
 	get pager(): ReturnType<Options['pager']> {
-		return this._pager as any;
+		return this._pager as ReturnType<Options['pager']>;
 	}
 
 	/**
@@ -384,7 +388,7 @@ export default class OWebApp<
 	 */
 	static create<Options extends OAppOptions<OStore, OPage, OUser> = any>(
 		options: Options
-	): OWebApp<any, any, any, Options> {
+	): OWebApp<any, any, any, any, Options> {
 		return new OWebApp(options);
 	}
 }
