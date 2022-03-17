@@ -4,11 +4,7 @@ import OWebRouteContext from './OWebRouteContext';
 const tokenTypesRegMap = {
 		'num': /\d+/.source,
 		'alpha': /[a-zA-Z]+/.source,
-		'alpha-fullUrl': /[a-z]+/.source,
-		'alpha-l': /[A-Z]+/.source,
 		'alpha-num': /[a-zA-Z0-9]+/.source,
-		'alpha-num-l': /[a-z0-9]+/.source,
-		'alpha-num-fullUrl': /[A-Z0-9]+/.source,
 		'any': /[^/]+/.source,
 	},
 	tokenReg = /:([a-z][a-z0-9_]*)/i,
