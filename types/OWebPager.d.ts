@@ -15,12 +15,7 @@ export interface OPageRoute {
     disabled?: boolean;
     show?: boolean;
 }
-export interface OPageRouteFull {
-    slug?: string;
-    icon?: string;
-    title: OI18n;
-    description?: OI18n;
-    path: ORoutePath;
+export declare type OPageRouteFull<Route extends OPageRoute = OPageRoute> = Route & {
     pathOptions: ORoutePathOptions;
     children: OPageRouteFull[];
     showChildren: boolean;
@@ -28,20 +23,20 @@ export interface OPageRouteFull {
     show: boolean;
     readonly id: number;
     readonly href?: string;
-    readonly parent?: OPageRouteFull;
+    readonly parent?: OPageRouteFull<Route>;
     active: boolean;
     activeChild: boolean;
     webRoute: OWebRoute;
-}
-export interface OPage {
+};
+export interface OPage<Route extends OPageRoute = OPageRoute> {
     name: string;
-    routes: OPageRoute[];
+    routes: Route[];
     install?(pager: OWebPager<this>): this;
-    requireLogin?(context: OWebRouteContext, route: OPageRouteFull): boolean;
-    onOpen?(context: OWebRouteContext, route: OPageRouteFull): void;
-    onClose?(oldRoute: OPageRouteFull, newRoute: OPageRouteFull): void;
+    requireLogin?(context: OWebRouteContext, route: OPageRouteFull<Route>): boolean;
+    onOpen?(context: OWebRouteContext, route: OPageRouteFull<Route>): void;
+    onClose?(oldRoute: OPageRouteFull<Route>, newRoute: OPageRouteFull<Route>): void;
 }
-export default class OWebPager<P extends OPage> extends OWebEvent {
+export default class OWebPager<P extends OPage<R>, R extends OPageRoute = OPageRoute> extends OWebEvent {
     private readonly _appContext;
     static readonly SELF: string;
     static readonly EVT_PAGE_LOCATION_CHANGE: string;
@@ -51,14 +46,14 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
     private _activePage?;
     private _activeRoute?;
     constructor(_appContext: OWebApp);
-    getRoutes(): OPageRouteFull[];
+    getRoutes(): OPageRouteFull<R>[];
     getPage(name: string): P;
     getActivePage(): P;
-    getActivePageRoute(): OPageRouteFull;
+    getActivePageRoute(): OPageRouteFull<R>;
     getPageList(): Record<string, P>;
     registerPage(page: P): this;
     private _registerPageRoutes;
     private _addRoute;
     private _setActive;
-    onLocationChange(handler: (route: OPageRouteFull, page: P) => void): this;
+    onLocationChange(handler: (route: OPageRouteFull<R>, page: P) => void): this;
 }
