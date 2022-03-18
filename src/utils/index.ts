@@ -563,16 +563,17 @@ export function searchParam(
 ): string | null {
 	let query = '';
 	url = url || window.location;
+	const loc_str = url.toString();
+	const _u = new URL(loc_str);
 
-	if (URL.prototype.searchParams) {
-		return new URL(url.toString()).searchParams.get(name);
+	if (_u.searchParams) {
+		return _u.searchParams.get(name);
 	}
 
 	if (typeof url !== 'string' && url.search) {
 		query = url.search;
 	} else {
-		const loc_str = url.toString();
-		const k = loc_str.split('').indexOf('?');
+		const k = loc_str.indexOf('?');
 
 		if (k >= 0) {
 			query = loc_str.slice(k);
