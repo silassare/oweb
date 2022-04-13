@@ -152,7 +152,7 @@ export const forEach = function _forEach<
 } as ListForEachType & DictForEachType;
 
 export const assign =
-	(Object as any).assign ||
+	Object.assign ||
 	function _assign(...args: Record<string, unknown>[]) {
 		const to = args[0];
 		let from, symbols;
