@@ -235,6 +235,27 @@ export default class OWebApp<
 	 * @param excluded The fields names to exclude.
 	 * @param checkAll Force the validator to check all fields.
 	 * @param verbose Log warning.
+	 *
+	 * @deprecated use {@link OWebApp.form}
+	 */
+	getFormValidator(
+		form: OWebFormDefinition | HTMLFormElement,
+		required: string[] = [],
+		excluded: string[] = [],
+		checkAll = false,
+		verbose = false
+	): OWebForm {
+		return this.form(form, required, excluded, checkAll, verbose);
+	}
+
+	/**
+	 * Returns new oweb form instance.
+	 *
+	 * @param form The html form element.
+	 * @param required The required fields names list.
+	 * @param excluded The fields names to exclude.
+	 * @param checkAll Force the validator to check all fields.
+	 * @param verbose Log warning.
 	 */
 	form(
 		form: OWebFormDefinition | HTMLFormElement,
