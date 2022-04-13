@@ -23,6 +23,8 @@ export default class OWebUser<UserEntity extends OUser> extends OWebEvent {
 
 	/**
 	 * Checks if the current user has been authenticated.
+	 *
+	 * @deprecated use {@link OWebUser.isVerified }
 	 */
 	userVerified(): boolean {
 		return this.isVerified();
@@ -32,6 +34,8 @@ export default class OWebUser<UserEntity extends OUser> extends OWebEvent {
 	 * Sets current user data.
 	 *
 	 * @param user
+	 *
+	 * @deprecated use {@link OWebUser.setCurrent}
 	 */
 	setCurrentUser(user: UserEntity): this {
 		return this.setCurrent(user);
@@ -39,6 +43,8 @@ export default class OWebUser<UserEntity extends OUser> extends OWebEvent {
 
 	/**
 	 * Returns current user data.
+	 *
+	 * @deprecated use {@link OWebUser.getCurrent}
 	 */
 	getCurrentUser(): UserEntity | null {
 		return this.getCurrent();
