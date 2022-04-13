@@ -2,13 +2,53 @@ import OWebEvent from './OWebEvent';
 import OWebApp, { OUser } from './OWebApp';
 import OWebKeyStorage from './OWebKeyStorage';
 import { logger } from './utils';
+import OWebSignUp from './plugins/OWebSignUp';
+import OWebLogin from './plugins/OWebLogin';
+import OWebLogout from './plugins/OWebLogout';
+import OWebAccountRecovery from './plugins/OWebAccountRecovery';
+import OWebPassword from './plugins/OWebPassword';
 
 export default class OWebUser<UserEntity extends OUser> extends OWebEvent {
 	private _keyStore: OWebKeyStorage;
 
-	constructor(appContext: OWebApp) {
+	constructor(protected _appContext: OWebApp) {
 		super();
-		this._keyStore = new OWebKeyStorage(appContext, 'current_user');
+		this._keyStore = new OWebKeyStorage(_appContext, 'current_user');
+	}
+
+	/**
+	 * Returns a new {@link OWebLogin} instance.
+	 */
+	login() {
+		return new OWebLogin<UserEntity>(this._appContext);
+	}
+
+	/**
+	 * Returns a new {@link OWebLogout} instance.
+	 */
+	logout() {
+		return new OWebLogout<UserEntity>(this._appContext);
+	}
+
+	/**
+	 * Returns a new {@link OWebSignUp} instance.
+	 */
+	signUp<Start, Validate, End>() {
+		return new OWebSignUp<Start, Validate, End>(this._appContext);
+	}
+
+	/**
+	 * Returns a new {@link OWebPassword} instance.
+	 */
+	password() {
+		return new OWebPassword<UserEntity>(this._appContext);
+	}
+
+	/**
+	 * Returns a new {@link OWebAccountRecovery} instance.
+	 */
+	accountRecovery<Start, Validate, End>() {
+		return new OWebAccountRecovery<Start, Validate, End>(this._appContext);
 	}
 
 	/**
