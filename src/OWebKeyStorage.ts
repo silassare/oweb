@@ -3,8 +3,8 @@ import OWebEvent from './OWebEvent';
 import { forEach } from './utils';
 import { OJSONValue } from './OWebDataStore';
 
-type OKeyData = {
-	value: any;
+type OKeyData<T extends OJSONValue = OJSONValue> = {
+	value: T;
 	expire: number;
 };
 
@@ -46,7 +46,7 @@ export default class OWebKeyStorage extends OWebEvent {
 	/**
 	 * Returns the key storage data.
 	 */
-	getStoreData(): Record<string, OJSONValue> {
+	getStoreData<D extends Record<string, OJSONValue>>(): D {
 		const items: Record<string, OJSONValue> = {};
 
 		this._clearExpired();
@@ -55,7 +55,7 @@ export default class OWebKeyStorage extends OWebEvent {
 			items[key] = data.value;
 		});
 
-		return items;
+		return items as D;
 	}
 
 	/**
@@ -63,14 +63,14 @@ export default class OWebKeyStorage extends OWebEvent {
 	 *
 	 * @param key The key name.
 	 */
-	getItem(key: string): OJSONValue | null {
-		let data: OKeyData = this._store[key];
+	getItem<T extends OJSONValue>(key: string): T | null {
+		const data = this._store[key] as OKeyData<T>;
 
-		if (data !== undefined) {
-			data = _hasExpired(data) ? this.removeItem(key) && null : data.value;
+		if (data) {
+			return _hasExpired(data) ? this.removeItem(key) && null : data.value;
 		}
 
-		return data;
+		return null;
 	}
 
 	/**
