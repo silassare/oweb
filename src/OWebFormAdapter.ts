@@ -33,7 +33,7 @@ export abstract class OWebFormAdapter {
 			const fn = OWebForm.getDeclaredValidator(validator);
 			if (!fn) {
 				throw new Error(
-					`[OWebFormValidator][OWebFormAdapter] validator "${validator}" is not defined can't set for field "${fieldName}".`
+					`[OWebForm][OWebFormAdapter] validator "${validator}" is not defined can't set for field "${fieldName}".`
 				);
 			}
 
@@ -98,7 +98,7 @@ export class OFormDOMFormAdapter extends OWebFormAdapter {
 		super();
 		if (!form || form.nodeName !== 'FORM') {
 			throw new Error(
-				'[OWebFormValidator][DOMFormAdapter] a valid form element is required.'
+				'[OWebForm][DOMFormAdapter] a valid form element is required.'
 			);
 		}
 		this.form = form;
@@ -167,7 +167,7 @@ export class OFormObjectAdapter extends OWebFormAdapter {
 		super();
 		if (!isPlainObject(form)) {
 			throw new Error(
-				'[OWebFormValidator][ObjectFormAdapter] a valid form plain object is required.'
+				'[OWebForm][ObjectFormAdapter] a valid form plain object is required.'
 			);
 		}
 

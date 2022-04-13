@@ -126,7 +126,7 @@ export default class OWebForm {
 							}
 						} else if (this.verbose) {
 							logger.warn(
-								`[OWebFormValidator] no validators defined for field '${name}'.`
+								`[OWebForm] no validators defined for field '${name}'.`
 							);
 						}
 					} else if (~this.required.indexOf(name)) {
@@ -190,7 +190,7 @@ export default class OWebForm {
 		validator: OWebFormFieldValidator
 	): void {
 		if (name in DECLARED_VALIDATORS) {
-			logger.warn(`[OWebFormValidator] field validator "${name}" overwritten.`);
+			logger.warn(`[OWebForm] field validator "${name}" overwritten.`);
 		}
 
 		DECLARED_VALIDATORS[name] = validator;
