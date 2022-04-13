@@ -1,7 +1,8 @@
+import { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
 import { assign, isPlainObject, isString } from './utils';
 
-export type OI18nDefinition = { [key: string]: any };
+export type OI18nDefinition = Record<string, OJSONValue>;
 export type OI18nData = { [key: string]: any };
 export type OI18nOptions = {
 	text?: string;
@@ -26,7 +27,7 @@ export type OI18nPluralize =
 	| number
 	| ((data: OI18nData, parts: string[]) => number);
 
-const LANG_OBJECT: { [key: string]: OI18nDefinition } = {};
+const LANG_OBJECT: { [key: string]: OI18nDefinition } = Object.create(null);
 // {name} | {@message} | {@app.name} | {@fr:message} | {@fr:app.name}
 const TOKEN_REG =
 	/{\s*(@)?(?:([a-z-]{2,}):)?([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)*)\s*}/gi;
@@ -124,14 +125,25 @@ const _tmp = new Map(),
 	};
 
 export default class OWebI18n extends OWebEvent {
-	defaultLangCode = 'en';
+	private defaultLangCode = 'en';
 
 	/**
 	 * Sets default i18n lang code.
 	 *
+	 * @deprecated use {@link OWebI18n.setLang}
+	 *
 	 * @param lang The i18n lang code.
 	 */
 	setDefaultLang(lang: string): this {
+		return this.setLang(lang);
+	}
+
+	/**
+	 * Sets i18n lang code.
+	 *
+	 * @param lang The i18n lang code.
+	 */
+	setLang(lang: string): this {
 		if (!LANG_OBJECT[lang]) {
 			throw new Error(
 				`[OWebLang] can't set default language, undefined language data for: ${lang}.`
@@ -141,6 +153,24 @@ export default class OWebI18n extends OWebEvent {
 		this.defaultLangCode = lang;
 
 		return this;
+	}
+
+	/**
+	 * Gets current lang.
+	 *
+	 * @returns {string}
+	 */
+	getCurrentLang() {
+		return this.defaultLangCode;
+	}
+
+	/**
+	 * Gets supported languages.
+	 *
+	 * @returns {string[]}
+	 */
+	getSupportedLangs(): string[] {
+		return Object.keys(LANG_OBJECT);
 	}
 
 	/**
@@ -158,7 +188,7 @@ export default class OWebI18n extends OWebEvent {
 		lang: string = this.defaultLangCode
 	): string {
 		if (typeof key !== 'string') {
-			const opt: OI18nOptions = key as any;
+			const opt = key as OI18nOptions;
 			return translate(
 				opt.text || '',
 				opt.data || data,
