@@ -25,14 +25,7 @@ export default class OWebUser<UserEntity extends OUser> extends OWebEvent {
 	 * Checks if the current user has been authenticated.
 	 */
 	userVerified(): boolean {
-		return Boolean(this.getCurrentUser() && this.sessionActive());
-	}
-
-	/**
-	 * Returns current user data.
-	 */
-	getCurrentUser(): UserEntity | null {
-		return this._keyStore.getItem('user_data') as UserEntity | null;
+		return this.isVerified();
 	}
 
 	/**
@@ -41,7 +34,37 @@ export default class OWebUser<UserEntity extends OUser> extends OWebEvent {
 	 * @param user
 	 */
 	setCurrentUser(user: UserEntity): this {
-		logger.debug('[OWebCurrentUser] setting new user', user);
+		return this.setCurrent(user);
+	}
+
+	/**
+	 * Returns current user data.
+	 */
+	getCurrentUser(): UserEntity | null {
+		return this.getCurrent();
+	}
+
+	/**
+	 * Checks if the current user has been authenticated.
+	 */
+	isVerified(): boolean {
+		return Boolean(this.getCurrent() && this.sessionActive());
+	}
+
+	/**
+	 * Returns current user data.
+	 */
+	getCurrent() {
+		return this._keyStore.getItem<UserEntity>('user_data');
+	}
+
+	/**
+	 * Sets current user data.
+	 *
+	 * @param user
+	 */
+	setCurrent(user: UserEntity): this {
+		logger.debug('[OWebUser] setting new user', user);
 		this._keyStore.setItem('user_data', user);
 
 		return this;
