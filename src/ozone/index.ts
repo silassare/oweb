@@ -47,21 +47,15 @@ export type OApiDeleteAllResponse = OApiResponse<{
 	affected: number;
 }>;
 
-export type OApiGetRelationItemsResponse<T> = OApiResponse<{
-	items: T[];
+export type OApiGetPaginatedRelationItemsResponse<R> = OApiResponse<{
+	items: R[];
 	max?: number;
 	page?: number;
 	total?: number;
-	relations: {
-		[key: string]: any;
-	};
 }>;
 
-export type OApiGetRelationItemResponse<T> = OApiResponse<{
-	item: T;
-	relations?: {
-		[key: string]: any;
-	};
+export type OApiGetRelationItemResponse<R> = OApiResponse<{
+	item: R;
 }>;
 
 export type OApiFilterCondition =

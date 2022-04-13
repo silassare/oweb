@@ -5,7 +5,7 @@ import {
 	OApiDeleteResponse,
 	OApiGetAllResponse,
 	OApiGetRelationItemResponse,
-	OApiGetRelationItemsResponse,
+	OApiGetPaginatedRelationItemsResponse,
 	OApiGetResponse,
 	OApiServiceRequestOptions,
 	OApiUpdateAllResponse,
@@ -186,11 +186,11 @@ export default class OWebService<Entity> {
 		id: string,
 		relation: string,
 		options: OApiServiceRequestOptions
-	): OWebXHR<OApiGetRelationItemsResponse<R>> {
+	): OWebXHR<OApiGetPaginatedRelationItemsResponse<R>> {
 		const oz = this._appContext.oz,
 			url = oz.getItemRelationURI(this.service, id, relation);
 
-		return oz.request<OApiGetRelationItemsResponse<R>>(url, {
+		return oz.request<OApiGetPaginatedRelationItemsResponse<R>>(url, {
 			method: 'GET',
 			params: cleanRequestOptions(options),
 		});
