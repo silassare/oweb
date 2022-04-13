@@ -150,7 +150,7 @@ export default class OWebApp<
 			ctx.trigger(OWebApp.EVT_NOT_FOUND, [target]);
 		});
 
-		this.i18n.setDefaultLang(this.configs.get('OW_APP_DEFAULT_LANG'));
+		this.i18n.setLang(this.configs.get('OW_APP_DEFAULT_LANG'));
 
 		this.oz = OZone.instantiate(this);
 	}
