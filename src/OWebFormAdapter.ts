@@ -5,7 +5,10 @@ import {
 	isPlainObject,
 	toArray,
 } from './utils';
-import OWebForm, { OWebFormFieldValidator, OWebFormOptions } from './OWebForm';
+import OWebForm, {
+	OWebFormFieldValidator,
+	OWebFormDefinition,
+} from './OWebForm';
 
 export type OWebFormDataEntryValue = File | string;
 export abstract class OWebFormAdapter {
@@ -163,7 +166,7 @@ export class OFormObjectAdapter extends OWebFormAdapter {
 	private readonly formObj: { [key: string]: OWebFormDataEntryValue } =
 		Object.create({});
 
-	constructor(form: OWebFormOptions) {
+	constructor(form: OWebFormDefinition) {
 		super();
 		if (!isPlainObject(form)) {
 			throw new Error(
@@ -171,7 +174,7 @@ export class OFormObjectAdapter extends OWebFormAdapter {
 			);
 		}
 
-		forEach<OWebFormOptions>(form, (field, fieldName) => {
+		forEach<OWebFormDefinition>(form, (field, fieldName) => {
 			this.formObj[fieldName] = field.value;
 
 			if (field.validator) {

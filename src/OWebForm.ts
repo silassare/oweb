@@ -17,7 +17,7 @@ export type OWebFormFieldValidator<T = unknown> = (
 ) => void;
 
 export type OWebFormData = FormData | Record<string, any>;
-export type OWebFormOptions = Record<string, OWebFormField>;
+export type OWebFormDefinition = Record<string, OWebFormField>;
 export type OWebFormErrors = { [key: string]: OWebFormError[] };
 
 const DECLARED_VALIDATORS: { [key: string]: OWebFormFieldValidator } =

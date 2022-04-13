@@ -1,7 +1,7 @@
 import OWebConfigs from './OWebConfigs';
 import OWebDataStore, { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
-import OWebForm, { OWebFormOptions } from './OWebForm';
+import OWebForm, { OWebFormDefinition } from './OWebForm';
 import OWebRouter, { ORouteStateObject, ORouteTarget } from './OWebRouter';
 import OWebUrl from './OWebUrl';
 import OWebView from './OWebView';
@@ -237,7 +237,7 @@ export default class OWebApp<
 	 * @param verbose Log warning.
 	 */
 	form(
-		form: OWebFormOptions | HTMLFormElement,
+		form: OWebFormDefinition | HTMLFormElement,
 		required: string[] = [],
 		excluded: string[] = [],
 		checkAll = false,
