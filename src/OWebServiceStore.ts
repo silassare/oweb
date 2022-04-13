@@ -1,4 +1,4 @@
-import { getEntityCache, GoblSinglePKEntity } from 'gobl-utils-ts';
+import { getEntityCache, GoblEntity, GoblSinglePKEntity } from 'gobl-utils-ts';
 import {
 	OApiAddResponse,
 	OApiDeleteResponse,
@@ -12,6 +12,7 @@ import { escapeRegExp, isPlainObject } from './utils';
 import OWebService from './OWebService';
 import OWebXHR from './OWebXHR';
 import { OWebFormData } from './OWebForm';
+import { ONetRequestBody } from './OWebNet';
 
 const getId = (item: GoblSinglePKEntity) => item.singlePKValue();
 
@@ -50,14 +51,17 @@ export default class OWebServiceStore<
 	 * @param id The item id.
 	 * @param relations The relations to retrieve.
 	 */
-	getItemRequest(id: string, relations = ''): OWebXHR<OApiGetResponse<T>> {
+	getItem(id: string, relations = ''): OWebXHR<OApiGetResponse<T>> {
 		const ctx = this;
 
-		return this.getRequest(id, relations).onGoodNews(function goodNewsHandler(
-			response
-		) {
-			ctx.addItemToList(response.json.data.item, response.json.data.relations);
-		});
+		return super
+			.getItem(id, relations)
+			.onGoodNews(function goodNewsHandler(response) {
+				ctx.addItemToList(
+					response.json.data.item,
+					response.json.data.relations
+				);
+			});
 	}
 
 	/**
@@ -65,13 +69,13 @@ export default class OWebServiceStore<
 	 *
 	 * @param options
 	 */
-	getItemsListRequest(
+	getItems(
 		options: OApiServiceRequestOptions = {}
 	): OWebXHR<OApiGetAllResponse<T>> {
 		const ctx = this;
 
-		return ctx
-			.getAllRequest(options)
+		return super
+			.getItems(options)
 			.onGoodNews(function goodNewsHandler(response) {
 				ctx.addItemsToList(
 					response.json.data.items,
@@ -85,9 +89,9 @@ export default class OWebServiceStore<
 	 *
 	 * @param data
 	 */
-	addItemRequest(data: OWebFormData): OWebXHR<OApiAddResponse<T>> {
+	addItem(data: OWebFormData): OWebXHR<OApiAddResponse<T>> {
 		const ctx = this;
-		return ctx.addRequest(data).onGoodNews(function goodNewsHandler(response) {
+		return super.addItem(data).onGoodNews(function goodNewsHandler(response) {
 			ctx.addCreated(response.json);
 		});
 	}
@@ -97,20 +101,32 @@ export default class OWebServiceStore<
 	 *
 	 * @param item
 	 */
-	updateItemRequest(item: T): OWebXHR<OApiUpdateResponse<T>> {
-		const ctx = this,
-			id = getId(item),
-			diff = item.toObject(true);
+	updateItem(
+		item: T | string,
+		formData: ONetRequestBody | null = null
+	): OWebXHR<OApiUpdateResponse<T>> {
+		const ctx = this;
+		let id, target: T | undefined;
 
-		item.isSaving(true);
+		if (item instanceof GoblEntity) {
+			id = getId(item);
+			target = item;
+		} else {
+			id = item;
+			target = this.identify(id);
+		}
 
-		return ctx
-			.updateRequest(id, diff)
+		const diff = formData ? formData : target ? target.toObject(true) : {};
+
+		target && target.isSaving(true);
+
+		return super
+			.updateItem(id, diff)
 			.onGoodNews(function goodNewsHandler(response) {
-				ctx.setSaved(item, response.json);
+				target && ctx.setSaved(target, response.json);
 			})
 			.onFinish(function finishHandler() {
-				item.isSaving(false);
+				target && target.isSaving(false);
 			});
 	}
 
@@ -119,19 +135,27 @@ export default class OWebServiceStore<
 	 *
 	 * @param item
 	 */
-	deleteItemRequest(item: T): OWebXHR<OApiDeleteResponse<T>> {
-		const ctx = this,
+	deleteItem(item: T | string): OWebXHR<OApiDeleteResponse<T>> {
+		const ctx = this;
+		let id, target: T | undefined;
+
+		if (item instanceof GoblEntity) {
 			id = getId(item);
+			target = item;
+		} else {
+			id = item;
+			target = this.identify(id);
+		}
 
-		item.isDeleting(true);
+		target && target.isDeleting(true);
 
-		return ctx
-			.deleteRequest(id)
+		return super
+			.deleteItem(id)
 			.onGoodNews(function goodNewsHandler(response) {
 				ctx.setDeleted(response.json);
 			})
 			.onFinish(function finishHandler() {
-				item.isDeleting(false);
+				target && target.isDeleting(false);
 			});
 	}
 
