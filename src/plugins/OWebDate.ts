@@ -23,30 +23,10 @@
  */
 import OWebApp from '../OWebApp';
 
+/*
+
+ */
 export type ODateValue = Date | number | string;
-export type ODateDesc = {
-	D: string;
-	L: string;
-	l: number;
-	ll: number;
-	d: number;
-	M: string;
-	F: string;
-	m: number;
-	mm: string;
-	Y: number;
-	y: number;
-	h: number;
-	hh: string;
-	H: number;
-	i: number;
-	ii: string;
-	s: number;
-	ss: string;
-	ms: number;
-	a: string;
-	A: string;
-};
 
 const FORMAT_REG =
 	/(?<!\\)(?:\\\\)*(ms|ss|ii|hh|mm|ll|A|a|s|i|H|h|y|Y|m|F|M|d|l|L|D)/g;
@@ -75,7 +55,7 @@ export default class OWebDate {
 		return this.format(this.compare(this.date, Date.now()).format);
 	}
 
-	compare(_startDate: ODateValue, _endDate: ODateValue): { format: string } {
+	compare(_startDate: ODateValue, _endDate: ODateValue) {
 		const startDate = new Date(_startDate);
 		const endDate = new Date(_endDate);
 		let format: string;
@@ -105,67 +85,74 @@ export default class OWebDate {
 
 		const inPast = start.time > end.time;
 		const msCount = Math.abs(start.time - end.time);
-		const secondsCount = Math.floor(msCount / aSecond);
-		const minutesCount = Math.floor(msCount / aMinute);
-		const hoursCount = Math.floor(msCount / anHour);
-		const daysCount = Math.floor(msCount / aDay);
-		const weeksCount = Math.floor(msCount / aWeek);
-
-		const monthsCount =
+		const nSeconds = Math.floor(msCount / aSecond);
+		const nMinutes = Math.floor(msCount / aMinute);
+		const nHours = Math.floor(msCount / anHour);
+		const nDays = Math.floor(msCount / aDay);
+		const nWeeks = Math.floor(msCount / aWeek);
+		const nMonths =
 			Math.abs(end.year - start.year) * 12 + (end.month - start.month);
-		/*
-		const yearsCount  = Math.floor(monthsCount / 12);
+		const nYears = Math.floor(nMonths / 12);
 
-		 let nSeconds = 0, nMinutes = 0, nHours = 0,
-		 nYears = yearsCount,
-		 nMonths = (monthsCount -  (nYears*12));
-		 */
-		if (secondsCount < 5) {
+		if (nSeconds < 5) {
 			format = inPast ? 'OW_TIME_JUST_NOW' : 'OW_TIME_IN_FEW_SECONDS';
-		} else if (secondsCount < 10) {
+		} else if (nSeconds < 10) {
 			format = inPast ? 'OW_TIME_FEW_SECONDS_AGO' : 'OW_TIME_IN_FEW_SECONDS';
-		} else if (secondsCount < 55) {
+		} else if (nSeconds < 55) {
 			format = inPast ? 'OW_TIME_N_SECONDS_AGO' : 'OW_TIME_IN_N_SECONDS';
-		} else if (secondsCount < 60) {
+		} else if (nSeconds < 60) {
 			format = inPast
 				? 'OW_TIME_LESS_THAN_A_MINUTE_AGO'
 				: 'OW_TIME_IN_LESS_THAN_A_MINUTE';
-		} else if (secondsCount < 70) {
+		} else if (nSeconds < 70) {
 			format = inPast
 				? 'OW_TIME_ABOUT_A_MINUTE_AGO'
 				: 'OW_TIME_IN_ABOUT_A_MINUTE';
-		} else if (minutesCount < 55) {
+		} else if (nMinutes < 55) {
 			format = inPast ? 'OW_TIME_N_MINUTES_AGO' : 'OW_TIME_IN_N_MINUTES';
-		} else if (minutesCount < 70) {
+		} else if (nMinutes < 70) {
 			format = inPast
 				? 'OW_TIME_ABOUT_AN_HOUR_AGO'
 				: 'OW_TIME_IN_ABOUT_AN_HOUR';
-		} else if (hoursCount < 24) {
+		} else if (nHours < 24) {
 			format = inPast ? 'OW_TIME_N_HOURS_AGO' : 'OW_TIME_IN_N_HOURS';
-		} else if (daysCount < 7) {
+		} else if (nDays < 7) {
 			format = inPast ? 'OW_TIME_N_DAYS_AGO' : 'OW_TIME_IN_N_DAYS';
-		} else if (weeksCount < 4) {
+		} else if (nWeeks < 4) {
 			format = inPast ? 'OW_TIME_N_WEEKS_AGO' : 'OW_TIME_IN_N_WEEKS';
-		} else if (monthsCount < 12) {
+		} else if (nMonths < 12) {
 			format = inPast ? 'OW_TIME_N_MONTHS_AGO' : 'OW_TIME_IN_N_MONTHS';
 		} else {
 			format = inPast ? 'OW_TIME_N_YEARS_AGO' : 'OW_TIME_IN_N_YEARS';
 		}
 
+		// used in an elapse time or duration counter
+		const cSeconds = Math.floor((msCount / aSecond) % 60);
+		const cMinutes = Math.floor((msCount / aMinute) % 60);
+		const cHours = Math.floor((msCount / anHour) % 24);
+		const cDays = Math.floor(msCount / aDay);
+
 		return {
 			format,
-			/*nSeconds,
-			 nMinutes,
-			 nHours,
-			 nDays,
-			 nYears*/
+			nSeconds,
+			nMinutes,
+			nHours,
+			nDays,
+			nWeeks,
+			nMonths,
+			nYears,
+			inPast,
+			cDays,
+			cHours,
+			cMinutes,
+			cSeconds,
 		};
 	}
 
 	/**
 	 * Returns date description object.
 	 */
-	describe(): ODateDesc {
+	describe() {
 		const i18n = this._appContext.i18n,
 			dayNamesShort = i18n.toHuman('OW_TIME_DAY_NAMES_SHORT').split(','),
 			dayNamesFull = i18n.toHuman('OW_TIME_DAY_NAMES_FULL').split(','),
@@ -216,6 +203,7 @@ export default class OWebDate {
 			ms,
 			a,
 			A,
+			...this.compare(this.date, Date.now()),
 		};
 	}
 
