@@ -36,8 +36,8 @@ export default class OWebRouteContext {
 	 *
 	 * @param token The token.
 	 */
-	getToken(token: string): string {
-		return this._tokens[token];
+	getToken(token: string, def?: string | null): string | null {
+		return this._tokens[token] ?? def ?? null;
 	}
 
 	/**
@@ -59,8 +59,8 @@ export default class OWebRouteContext {
 	 *
 	 * @param key the state key
 	 */
-	getStateItem(key: string): ORouteStateItem {
-		return this._state[key];
+	getStateItem(key: string, def?: ORouteStateItem) {
+		return this._state[key] ?? def ?? null;
 	}
 
 	/**
@@ -78,9 +78,10 @@ export default class OWebRouteContext {
 	 * Gets search param value.
 	 *
 	 * @param name the search param name
+	 * @param def the default to return when not defined
 	 */
-	getSearchParam(name: string): string | null {
-		return searchParam(name, this._target.href);
+	getSearchParam(name: string, def?: string): string | null {
+		return searchParam(name, this._target.href) ?? def ?? null;
 	}
 
 	/**
