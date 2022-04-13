@@ -78,15 +78,17 @@ export type OUser = {
 };
 export interface OAppOptions<
 	Store extends OStore = OStore,
-	Page extends OPage<Route> = OPage<any>,
+	Page extends OPage<OPageRoute> = OPage<OPageRoute>,
 	User extends OUser = OUser,
-	Route extends OPageRoute = OPageRoute,
+	AppConfigs extends Partial<OAppConfigs> = OAppConfigs,
+	UserConfigs extends Partial<OUserConfigs> = OUserConfigs,
+	UrlList extends Partial<OUrlList> = OUrlList,
 	Context = OWebApp<Store, Page, User>
 > {
 	name: string;
-	appConfigs: Partial<OAppConfigs>;
-	userConfigs: Partial<OUserConfigs>;
-	urls: Partial<OUrlList>;
+	appConfigs: AppConfigs;
+	userConfigs: UserConfigs;
+	urls: UrlList;
 
 	user: (this: Context) => OWebUser<User>;
 	store: (this: Context) => Store;
@@ -95,9 +97,8 @@ export interface OAppOptions<
 
 export default class OWebApp<
 	Store extends OStore = OStore,
-	Page extends OPage<Route> = OPage<any>,
+	Page extends OPage<OPageRoute> = OPage<OPageRoute>,
 	User extends OUser = OUser,
-	Route extends OPageRoute = OPageRoute,
 	Options extends OAppOptions<Store, Page, User> = any
 > extends OWebEvent {
 	static readonly SELF = id();
@@ -110,7 +111,10 @@ export default class OWebApp<
 	readonly view: OWebView;
 	readonly ls: OWebDataStore;
 	readonly router: OWebRouter;
-	readonly configs: OWebConfigs<OAppConfigs, OUserConfigs>;
+	readonly configs: OWebConfigs<
+		OAppConfigs & Options['appConfigs'],
+		OUserConfigs & Options['userConfigs']
+	>;
 	readonly url: OWebUrl;
 	readonly i18n: OWebI18n;
 	readonly oz: OZone;
@@ -409,7 +413,7 @@ export default class OWebApp<
 	 */
 	static create<Options extends OAppOptions<OStore, OPage, OUser> = any>(
 		options: Options
-	): OWebApp<any, any, any, any, Options> {
+	): OWebApp<any, any, any, Options> {
 		return new OWebApp(options);
 	}
 }
