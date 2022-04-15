@@ -1,7 +1,7 @@
 import OWebConfigs from './OWebConfigs';
 import OWebDataStore, { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
-import OWebForm, { OWebFormOptions } from './OWebForm';
+import OWebForm, { OWebFormDefinition } from './OWebForm';
 import OWebRouter, { ORouteStateObject, ORouteTarget } from './OWebRouter';
 import OWebUrl from './OWebUrl';
 import OWebView from './OWebView';
@@ -60,16 +60,16 @@ export interface OStore {
 export declare type OUser = {
     [key: string]: any;
 };
-export interface OAppOptions<Store extends OStore = OStore, Page extends OPage<Route> = OPage<any>, User extends OUser = OUser, Route extends OPageRoute = OPageRoute, Context = OWebApp<Store, Page, User>> {
+export interface OAppOptions<Store extends OStore = OStore, Page extends OPage<OPageRoute> = OPage<OPageRoute>, User extends OUser = OUser, AppConfigs extends Partial<OAppConfigs> = OAppConfigs, UserConfigs extends Partial<OUserConfigs> = OUserConfigs, UrlList extends Partial<OUrlList> = OUrlList, Context = OWebApp<Store, Page, User>> {
     name: string;
-    appConfigs: Partial<OAppConfigs>;
-    userConfigs: Partial<OUserConfigs>;
-    urls: Partial<OUrlList>;
+    appConfigs: AppConfigs;
+    userConfigs: UserConfigs;
+    urls: UrlList;
     user: (this: Context) => OWebUser<User>;
     store: (this: Context) => Store;
     pager: (this: Context) => OWebPager<Page>;
 }
-export default class OWebApp<Store extends OStore = OStore, Page extends OPage<Route> = OPage<any>, User extends OUser = OUser, Route extends OPageRoute = OPageRoute, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent {
+export default class OWebApp<Store extends OStore = OStore, Page extends OPage<OPageRoute> = OPage<OPageRoute>, User extends OUser = OUser, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent {
     private readonly options;
     static readonly SELF: string;
     static readonly EVT_APP_READY: string;
@@ -80,33 +80,138 @@ export default class OWebApp<Store extends OStore = OStore, Page extends OPage<R
     readonly view: OWebView;
     readonly ls: OWebDataStore;
     readonly router: OWebRouter;
-    readonly configs: OWebConfigs<OAppConfigs, OUserConfigs>;
+    readonly configs: OWebConfigs<OAppConfigs & Options['appConfigs'], OUserConfigs & Options['userConfigs']>;
     readonly url: OWebUrl;
     readonly i18n: OWebI18n;
     readonly oz: OZone;
     private readonly _user;
     private readonly _store;
     private readonly _pager;
+    /**
+     * OWebApp constructor.
+     *
+     * @param options
+     */
     protected constructor(options: Options);
+    /**
+     * Build an HTTP request.
+     *
+     * @param url
+     * @param options
+     */
     request<Response>(url: string, options?: Partial<ONetRequestOptions<Response>>): OWebXHR<Response>;
+    /**
+     * User getter.
+     */
     get user(): ReturnType<Options['user']>;
+    /**
+     * Store getter.
+     */
     get store(): ReturnType<Options['store']>;
+    /**
+     * Pager instance getter.
+     */
     get pager(): ReturnType<Options['pager']>;
+    /**
+     * App name getter.
+     */
     getAppName(): string;
+    /**
+     * Checks if we are running in mobile app.
+     */
     isMobileApp(): boolean;
-    form(form: OWebFormOptions | HTMLFormElement, required?: string[], excluded?: string[], checkAll?: boolean, verbose?: boolean): OWebForm;
+    /**
+     * Returns new oweb form instance.
+     *
+     * @param form The html form element.
+     * @param required The required fields names list.
+     * @param excluded The fields names to exclude.
+     * @param checkAll Force the validator to check all fields.
+     * @param verbose Log warning.
+     *
+     * @deprecated use {@link OWebApp.form}
+     */
+    getFormValidator(form: OWebFormDefinition | HTMLFormElement, required?: string[], excluded?: string[], checkAll?: boolean, verbose?: boolean): OWebForm;
+    /**
+     * Returns new oweb form instance.
+     *
+     * @param form The html form element.
+     * @param required The required fields names list.
+     * @param excluded The fields names to exclude.
+     * @param checkAll Force the validator to check all fields.
+     * @param verbose Log warning.
+     */
+    form(form: OWebFormDefinition | HTMLFormElement, required?: string[], excluded?: string[], checkAll?: boolean, verbose?: boolean): OWebForm;
+    /**
+     * Force login.
+     *
+     * > This will clear all saved data in the local storage.
+     */
     forceLogin(): void;
+    /**
+     * Reload the app.
+     */
     reloadApp(): void;
+    /**
+     * Destroy the app.
+     *
+     * > This will clear all saved data in the local storage.
+     */
     destroyApp(): void;
+    /**
+     * Close app.
+     */
     closeApp(): void;
+    /**
+     * To start the web app.
+     */
     start(): this;
+    /**
+     * Called when app should show the home page.
+     */
     showHomePage(options?: ORouteStateObject): void;
+    /**
+     * Called when app should show the login page.
+     */
     showLoginPage(options?: ORouteStateObject): void;
+    /**
+     * Called when app should show the registration page.
+     */
     showRegistrationPage(options?: ORouteStateObject): void;
+    /**
+     * Register handler for OWebApp.EVT_APP_READY event
+     *
+     * @param handler
+     */
     onReady(handler: (this: this) => void | boolean): this;
+    /**
+     * Register handler for OWebApp.EVT_SHOW_HOME event
+     *
+     * @param handler
+     */
     onShowHomePage(handler: (this: this, options: ORouteStateObject) => void | boolean): this;
+    /**
+     * Register handler for OWebApp.EVT_SHOW_LOGIN event
+     *
+     * @param handler
+     */
     onShowLoginPage(handler: (this: this, options: ORouteStateObject) => void | boolean): this;
+    /**
+     * Register handler for OWebApp.EVT_SHOW_REGISTRATION_PAGE event
+     *
+     * @param handler
+     */
     onShowRegistrationPage(handler: (this: this, options: ORouteStateObject) => void | boolean): this;
+    /**
+     * Register handler for OWebApp.EVT_NOT_FOUND event
+     *
+     * @param handler
+     */
     onPageNotFound(handler: (this: this, target: ORouteTarget) => void | boolean): this;
-    static create<Options extends OAppOptions<OStore, OPage, OUser> = any>(options: Options): OWebApp<any, any, any, any, Options>;
+    /**
+     * Creates new app instance.
+     *
+     * @param options
+     */
+    static create<Options extends OAppOptions<OStore, OPage, OUser> = any>(options: Options): OWebApp<any, any, any, Options>;
 }

@@ -9,7 +9,21 @@ export declare type OFileMarked = (Blob | File) & {
 };
 export default class OWebFS {
     static readonly OFA_MIME_TYPE = "text/x-ozone-file-alias";
+    /**
+     * Checks for file object.
+     *
+     * @param f
+     */
     static isFile(f: unknown): f is OFileMarked;
+    /**
+     * Checks for marked file object.
+     * @param f
+     */
     static isMarkedFile(f: unknown): boolean;
+    /**
+     * Creates O'Zone file alias.
+     *
+     * @param info
+     */
     static createFileAlias(info: OFileAliasInfo): File;
 }
