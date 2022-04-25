@@ -39,20 +39,21 @@ export default class OWebDate {
 
 	/**
 	 * Format date with a given format.
-	 *
-	 * @param format
 	 */
-	format(format = 'OW_TIME_DEFAULT_FORMAT'): string {
-		format = this._appContext.i18n.toHuman(format);
-
+	format(format = 'OW_TIME_DEFAULT_FORMAT', isLangKey = false): string {
 		const o = this.describe() as any;
+
+		if (isLangKey) {
+			return this._appContext.i18n.toHuman(format, o);
+		}
+
 		return format.replace(FORMAT_REG, function stringChunkReplacer(...args) {
 			return o[args[1]];
 		});
 	}
 
 	fromNow(): string {
-		return this.format(this.compare(this.date, Date.now()).format);
+		return this.format(this.compare(this.date, Date.now()).format, true);
 	}
 
 	compare(_startDate: ODateValue, _endDate: ODateValue) {
