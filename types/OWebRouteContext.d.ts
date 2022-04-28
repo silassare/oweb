@@ -51,7 +51,7 @@ export default class OWebRouteContext {
     /**
      * Check if the route dispatcher is stopped.
      */
-    stopped(): boolean;
+    isStopped(): boolean;
     /**
      * Stop the route dispatcher.
      */

@@ -14,9 +14,9 @@ export interface ORouteDispatcher {
     readonly id: number;
     readonly context: OWebRouteContext;
     readonly found: OWebRoute[];
-    isActive(): boolean;
+    isStopped(): boolean;
     dispatch(): this;
-    cancel(): this;
+    stop(): this;
 }
 export default class OWebRouter {
     private readonly _baseUrl;
