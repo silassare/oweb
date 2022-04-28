@@ -280,7 +280,10 @@ export default class OWebPager<
 
 				page.onOpen && page.onOpen(routeContext, route);
 
-				!routeContext.stopped() && this._setActive(page, route);
+				if (!routeContext.isStopped()) {
+					routeContext.stop();
+					this._setActive(page, route);
+				}
 			}
 		);
 
