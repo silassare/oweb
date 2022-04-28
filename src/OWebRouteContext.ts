@@ -87,7 +87,7 @@ export default class OWebRouteContext {
 	/**
 	 * Check if the route dispatcher is stopped.
 	 */
-	stopped(): boolean {
+	isStopped(): boolean {
 		return this._stopped;
 	}
 
@@ -100,7 +100,7 @@ export default class OWebRouteContext {
 			this.save(); // save before stop
 			this._stopped = true;
 			const cd = this._router.getCurrentDispatcher();
-			cd && cd.cancel();
+			cd && cd.stop();
 			logger.debug('[OWebDispatchContext] route context was stopped!');
 		} else {
 			logger.warn('[OWebDispatchContext] route context already stopped!');
@@ -112,7 +112,7 @@ export default class OWebRouteContext {
 	 * Save history state.
 	 */
 	save(): this {
-		if (!this.stopped()) {
+		if (!this.isStopped()) {
 			logger.debug('[OWebDispatchContext] saving state...');
 			this._router.replaceHistory(this._target.href, this._state);
 		} else {

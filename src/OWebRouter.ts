@@ -28,11 +28,11 @@ export interface ORouteDispatcher {
 	readonly context: OWebRouteContext;
 	readonly found: OWebRoute[];
 
-	isActive(): boolean;
+	isStopped(): boolean;
 
 	dispatch(): this;
 
-	cancel(): this;
+	stop(): this;
 }
 
 const wLoc = window.location,
@@ -344,9 +344,9 @@ export default class OWebRouter {
 			return this;
 		}
 
-		if (_cd && _cd.isActive()) {
+		if (_cd && !_cd.isStopped()) {
 			logger.warn('[OWebRouter] browseTo called while dispatching', _cd);
-			_cd.cancel();
+			_cd.stop();
 		}
 
 		this._currentTarget = target;
@@ -386,7 +386,7 @@ export default class OWebRouter {
 
 		cd.dispatch();
 
-		if (cd.id === this._dispatchId && !cd.context.stopped()) {
+		if (cd.id === this._dispatchId && !cd.context.isStopped()) {
 			cd.context.save();
 			logger.debug('[OWebRouter] success', target.path);
 		}
@@ -459,16 +459,13 @@ export default class OWebRouter {
 			context: routeContext,
 			id,
 			found,
-			isActive: () => active,
-			cancel() {
+			isStopped: () => !active,
+			stop() {
 				if (active) {
 					active = false;
-					logger.debug(`[OWebRouter][dispatcher-${id}] cancel called!`, o);
+					logger.debug(`[OWebRouter][dispatcher-${id}] stopped!`, o);
 				} else {
-					logger.error(
-						`[OWebRouter][dispatcher-${id}] cancel called when inactive.`,
-						o
-					);
+					logger.error(`[OWebRouter][dispatcher-${id}] already stopped.`, o);
 				}
 				return o;
 			},
