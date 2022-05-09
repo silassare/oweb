@@ -13,8 +13,8 @@ export default {
 	OZ_API_KEY_HEADER_NAME: 'x-ozone-api-key',
 	OZ_API_ALLOW_REAL_METHOD_HEADER: true,
 	OZ_API_REAL_METHOD_HEADER_NAME: 'x-ozone-real-method',
-	OZ_API_KEY: '',
-	OZ_API_BASE_URL: '',
+	OZ_API_KEY: '__NO_API_KEY_DEFINED__',
+	OZ_API_BASE_URL: '__NO_API_BASE_URL_DEFINED__',
 
 	OZ_CODE_REG: '^[0-9]{6}$',
 	OZ_USER_NAME_MIN_LENGTH: 3,
