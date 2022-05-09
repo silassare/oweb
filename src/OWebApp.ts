@@ -80,9 +80,9 @@ export interface OAppOptions<
 	Store extends OStore = OStore,
 	Page extends OPage<OPageRoute> = OPage<OPageRoute>,
 	User extends OUser = OUser,
-	AppConfigs extends Partial<OAppConfigs> = OAppConfigs,
-	UserConfigs extends Partial<OUserConfigs> = OUserConfigs,
-	UrlList extends Partial<OUrlList> = OUrlList,
+	AppConfigs extends Partial<OAppConfigs> = Partial<OAppConfigs>,
+	UserConfigs extends Partial<OUserConfigs> = Partial<OUserConfigs>,
+	UrlList extends Partial<OUrlList> = Partial<OUrlList>,
 	Context = OWebApp<Store, Page, User>
 > {
 	name: string;
