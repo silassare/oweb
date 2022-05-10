@@ -1,7 +1,8 @@
 import { stringPlaceholderReplace } from '../utils';
 import { ONetRequestOptions } from '../OWebNet';
 import OWebXHR from '../OWebXHR';
-import { OApiResponse, OWebApp } from '../oweb';
+import OWebApp from '../OWebApp';
+import { OApiResponse } from '.';
 
 const SERVICE_URL_FORMAT = ':host/:service',
 	SERVICE_ENTITY_FORMAT = ':host/:service/:id',
