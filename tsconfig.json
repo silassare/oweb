@@ -9,6 +9,7 @@
 		"allowJs": true,
 		"strict": true,
 		"declaration": true,
+		"declarationMap": true,
 		"declarationDir": "types/",
 		"removeComments": false,
 		"noImplicitAny": true,
