@@ -17,17 +17,71 @@ import { ONetRequestBody } from './OWebNet';
 const getId = (item: GoblSinglePKEntity) => item.singlePKValue();
 
 const _with = (target: any, key: string | number, item: any) => {
-		return { ...target, [key]: item };
-	},
-	_without = (target: any, key: string | number) => {
-		delete target[key];
-		return { ...target };
+	return { ...target, [key]: item };
+};
+
+interface OServiceDataStore<T extends GoblSinglePKEntity> {
+	add(item: T): this;
+	get(id: string): T | undefined;
+	update(item: T): this;
+	remove(id: string): this;
+	all(): T[];
+	clear(): this;
+	filter(filterFn: (entry: T) => boolean): T[];
+	relationServiceResolver<R extends GoblSinglePKEntity>(
+		relation: string
+	): undefined | OWebServiceStore<R>;
+}
+
+const defaultServiceDataStore = function defaultServiceDataStore<
+	T extends GoblSinglePKEntity
+>(): OServiceDataStore<T> {
+	let items: { [key: string]: T } = {};
+	const o: OServiceDataStore<T> = {
+		add(item: T) {
+			const id = getId(item);
+			id in items ? o.update(item) : (items[id] = item);
+			return o;
+		},
+		get(id: string): T | undefined {
+			return items[id];
+		},
+		update(item: T) {
+			const id = getId(item);
+			if (items[id]) {
+				items[id].doHydrate(item.toObject(false), true);
+			}
+
+			return o;
+		},
+		remove(id: string) {
+			delete items[id];
+			return o;
+		},
+		all(): T[] {
+			return Object.values(items);
+		},
+		filter(filterFn: (entry: T) => boolean): T[] {
+			return Object.values(items).filter(filterFn);
+		},
+		relationServiceResolver<R extends GoblSinglePKEntity>():
+			| undefined
+			| OWebServiceStore<R> {
+			return undefined;
+		},
+		clear() {
+			items = {};
+			return this;
+		},
 	};
+
+	return o;
+};
 
 export default class OWebServiceStore<
 	T extends GoblSinglePKEntity
 > extends OWebService<T> {
-	protected items: { [key: string]: T } = {};
+	protected store: OServiceDataStore<T>;
 	protected relations: { [key: string]: any } = {};
 
 	/**
@@ -40,9 +94,12 @@ export default class OWebServiceStore<
 	constructor(
 		_appContext: OWebApp,
 		private readonly entity: typeof GoblSinglePKEntity,
-		service: string
+		service: string,
+		store?: OServiceDataStore<T>
 	) {
 		super(_appContext, service);
+
+		this.store = store || defaultServiceDataStore<T>();
 	}
 
 	/**
@@ -165,7 +222,7 @@ export default class OWebServiceStore<
 	 * @param items
 	 * @param relations
 	 */
-	addItemsToList(items: T[] | { [key: string]: T }, relations: any = {}): void {
+	addItemsToList(items: T[] | Record<string, T>, relations: any = {}): void {
 		const ctx = this,
 			list: T[] = (
 				isPlainObject(items) ? Object.values(items) : items || []
@@ -230,16 +287,14 @@ export default class OWebServiceStore<
 	 * @private
 	 */
 	private safelyAddItem(item: T) {
-		const key = getId(item),
-			cachedItem = this.items[key];
+		const id = getId(item),
+			cachedItem = this.store.get(id);
 
 		if (cachedItem) {
-			cachedItem.doHydrate(item.toObject(), true);
-		} else {
-			this.items = _with(this.items, key, item);
+			item = cachedItem.doHydrate(item.toObject(), true);
 		}
 
-		return this;
+		return this.store.add(item);
 	}
 
 	/**
@@ -254,7 +309,7 @@ export default class OWebServiceStore<
 
 		target.doHydrate(item.toObject(), true);
 
-		return this.safelyAddItem(target);
+		return this.store.add(target);
 	}
 
 	/**
@@ -272,38 +327,23 @@ export default class OWebServiceStore<
 	 * @param response
 	 */
 	private setDeleted(response: OApiDeleteResponse<T>) {
-		const item = response.data.item;
-		this.items = _without(this.items, getId(item));
-		return this;
-	}
-
-	/**
-	 * Gets a given item relations.
-	 *
-	 * @param item
-	 * @param relation
-	 */
-	itemRelation<Z>(item: T, relation: string): Z | undefined {
-		const id = getId(item);
-		return this.relations[id] && this.relations[id][relation];
+		return this.store.remove(getId(response.data.item));
 	}
 
 	/**
 	 * Identify a given item in this store by its id.
 	 *
 	 * @param id
-	 * @param checkCache
+	 * @param checkCacheForMissing
 	 */
-	identify(id: string, checkCache = true): T | undefined {
-		const item = this.items[id];
-		let c;
+	identify(id: string, checkCacheForMissing = true): T | undefined {
+		const item = this.store.get(id);
 
 		if (item) return item;
 
-		if (checkCache) {
-			c = getEntityCache(this.entity.name) as any;
-
-			return c && c[id];
+		if (checkCacheForMissing) {
+			const cache = getEntityCache(this.entity.name) as any;
+			return cache && cache[id];
 		}
 
 		return undefined;
@@ -311,51 +351,25 @@ export default class OWebServiceStore<
 
 	/**
 	 * Gets this store items list.
-	 *
-	 * @param ids
 	 */
-	list(ids: string[] = []): T[] {
-		const list: T[] = [],
-			len = ids.length;
-		if (len) {
-			for (let i = 0; i < len; i++) {
-				const id = ids[i],
-					item = this.identify(id);
-				if (item) {
-					list.push(item);
-				}
-			}
-		} else {
-			for (const key in this.items) {
-				if (Object.prototype.hasOwnProperty.call(this.items, key)) {
-					list.push(this.items[key]);
-				}
+	list(ids: string[] = [], checkCacheForMissing = true): T[] {
+		const len = ids.length;
+
+		if (!len) {
+			return this.store.all();
+		}
+
+		const list: T[] = [];
+
+		for (let i = 0; i < len; i++) {
+			const id = ids[i],
+				item = this.identify(id, checkCacheForMissing);
+			if (item) {
+				list.push(item);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Order items.
-	 *
-	 * @param order
-	 */
-	orderBy(order: (a: T, b: T) => number): T[] {
-		const keys = Object.keys(this.items);
-
-		return keys.map((key) => this.items[key]).sort(order);
-	}
-
-	/**
-	 * Order items by value of a given column.
-	 *
-	 * @param column
-	 */
-	orderByValueOf(column: string): T[] {
-		return this.orderBy((a: any, b: any) => {
-			return a[column] - b[column];
-		});
 	}
 
 	/**
@@ -367,14 +381,14 @@ export default class OWebServiceStore<
 	 */
 	filter(
 		list: T[] = this.list(),
-		predicate: (value: T, index: number) => boolean,
+		predicate: (value: T) => boolean,
 		max = Infinity
 	): T[] {
 		const result: T[] = [],
 			len = list.length;
 
 		for (let i = 0; i < len && result.length < max; i++) {
-			if (predicate(list[i], i)) {
+			if (predicate(list[i])) {
 				result.push(list[i]);
 			}
 		}
@@ -393,7 +407,7 @@ export default class OWebServiceStore<
 	 */
 	select(
 		list: T[] = this.list(),
-		predicate: (value: T, index: number) => boolean,
+		predicate: (value: T) => boolean,
 		max = Infinity
 	): T[] {
 		return this.filter(list, predicate, max);
@@ -409,7 +423,7 @@ export default class OWebServiceStore<
 	search(
 		list: T[] = this.list(),
 		search: string,
-		stringBuilder: (value: T, index: number) => string
+		stringBuilder: (value: T) => string
 	): T[] {
 		if (!(search = search.trim()).length) {
 			return list;
@@ -417,16 +431,19 @@ export default class OWebServiceStore<
 
 		const reg = new RegExp(escapeRegExp(search), 'i');
 
-		return list.filter((item: any, index: number) => {
-			const v = stringBuilder(item, index);
+		return list.filter((item: any) => {
+			const v = stringBuilder(item);
 			return reg.test(v);
 		});
 	}
-
 	/**
-	 * Count items in this store.
+	 * Gets a given item relations.
+	 *
+	 * @param item
+	 * @param relation
 	 */
-	totalCount(): number {
-		return Object.keys(this.items).length;
+	itemRelation<Z>(item: T, relation: string): Z | undefined {
+		const id = getId(item);
+		return this.relations[id] && this.relations[id][relation];
 	}
 }
