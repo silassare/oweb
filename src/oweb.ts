@@ -27,9 +27,6 @@ import OWebAccountRecovery from './plugins/OWebAccountRecovery';
 import OWebSignUp from './plugins/OWebSignUp';
 import OWebTNet from './plugins/OWebTNet';
 
-// side-effect import
-import './default/index';
-
 export * from './utils';
 
 export * from './OWebApp';
