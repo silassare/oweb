@@ -26,3 +26,4 @@ export default class OWebAccountRecovery<Start, Validate, End> extends OWebEvent
     onRecoveryFail(handler: (this: this, err: ONetError) => void): this;
     private _sendForm;
 }
+//# sourceMappingURL=OWebAccountRecovery.d.ts.map

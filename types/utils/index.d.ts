@@ -89,3 +89,4 @@ export declare function extractFieldLabelText(form: HTMLFormElement, fieldName: 
 export declare function uuid(): string;
 export * from './scriptLoader';
 export { default as PathResolver } from './PathResolver';
+//# sourceMappingURL=index.d.ts.map

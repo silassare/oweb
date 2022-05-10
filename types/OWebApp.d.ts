@@ -215,3 +215,4 @@ export default class OWebApp<Store extends OStore = OStore, Page extends OPage<O
      */
     static create<Options extends OAppOptions<OStore, OPage, OUser> = any>(options: Options): OWebApp<any, any, any, Options>;
 }
+//# sourceMappingURL=OWebApp.d.ts.map

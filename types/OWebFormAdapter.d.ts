@@ -67,3 +67,4 @@ export declare class OFormObjectAdapter extends OWebFormAdapter {
     getFieldsNames(): string[];
     getFieldLabel(name: string): string;
 }
+//# sourceMappingURL=OWebFormAdapter.d.ts.map

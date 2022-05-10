@@ -136,3 +136,4 @@ export default abstract class OWebNet<T = null> extends OWebEvent {
      */
     abstract abort(): this;
 }
+//# sourceMappingURL=OWebNet.d.ts.map

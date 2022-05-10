@@ -72,3 +72,4 @@ export default class OWebI18n extends OWebEvent {
      */
     static loadLangData(lang: string, data: OI18nDefinition): void;
 }
+//# sourceMappingURL=OWebI18n.d.ts.map

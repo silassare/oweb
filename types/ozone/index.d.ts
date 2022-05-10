@@ -70,3 +70,4 @@ export interface OApiServiceRequestOptions {
 }
 export declare function cleanRequestOptions(options: OApiServiceRequestOptions): OApiServiceRequestOptions;
 export default OZone;
+//# sourceMappingURL=index.d.ts.map

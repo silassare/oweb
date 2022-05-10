@@ -12,3 +12,4 @@ export default class OWebLogout<Result> extends OWebEvent {
     onLogoutSuccess(handler: (this: this, response: ONetResponse<OApiResponse<Result>>) => void): this;
     logout(): Promise<ONetResponse<OApiResponse<Result>>>;
 }
+//# sourceMappingURL=OWebLogout.d.ts.map

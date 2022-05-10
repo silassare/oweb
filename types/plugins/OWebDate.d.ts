@@ -101,3 +101,4 @@ export default class OWebDate {
      */
     static timestamp(): number;
 }
+//# sourceMappingURL=OWebDate.d.ts.map

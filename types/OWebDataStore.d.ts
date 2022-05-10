@@ -53,3 +53,4 @@ export default class OWebDataStore extends OWebEvent {
      */
     private _persist;
 }
+//# sourceMappingURL=OWebDataStore.d.ts.map

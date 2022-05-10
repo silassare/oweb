@@ -1,3 +1,0 @@
-// load all default
-import './lang/index';
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvZGVmYXVsdC9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxtQkFBbUI7QUFDbkIsT0FBTyxjQUFjLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvLyBsb2FkIGFsbCBkZWZhdWx0XG5pbXBvcnQgJy4vbGFuZy9pbmRleCc7XG4iXX0=

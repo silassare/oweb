@@ -102,3 +102,4 @@ export declare const defaultValidators: {
     gender: (value: unknown, _name: string, fv: OWebForm) => void;
     email: (value: unknown, name: string, fv: OWebForm) => void;
 };
+//# sourceMappingURL=OWebForm.d.ts.map

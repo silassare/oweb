@@ -50,3 +50,4 @@ export default class OWebView extends OWebEvent {
      */
     onDialog(handler: (this: this, dialog: OViewDialog, canUseAlert: boolean) => void): this;
 }
+//# sourceMappingURL=OWebView.d.ts.map

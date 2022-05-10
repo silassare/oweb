@@ -5,11 +5,19 @@ import OWebService from './OWebService';
 import OWebXHR from './OWebXHR';
 import { OWebFormData } from './OWebForm';
 import { ONetRequestBody } from './OWebNet';
+interface OServiceDataStore<T extends GoblSinglePKEntity> {
+    add(item: T): this;
+    get(id: string): T | undefined;
+    update(item: T): this;
+    remove(id: string): this;
+    all(): T[];
+    clear(): this;
+    filter(filterFn: (entry: T) => boolean): T[];
+    relationServiceResolver<R extends GoblSinglePKEntity>(relation: string): undefined | OWebServiceStore<R>;
+}
 export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWebService<T> {
     private readonly entity;
-    protected items: {
-        [key: string]: T;
-    };
+    protected store: OServiceDataStore<T>;
     protected relations: {
         [key: string]: any;
     };
@@ -20,7 +28,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
      * @param entity
      * @param service
      */
-    constructor(_appContext: OWebApp, entity: typeof GoblSinglePKEntity, service: string);
+    constructor(_appContext: OWebApp, entity: typeof GoblSinglePKEntity, service: string, store?: OServiceDataStore<T>);
     /**
      * Creates request to get an item by id.
      *
@@ -58,9 +66,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
      * @param items
      * @param relations
      */
-    addItemsToList(items: T[] | {
-        [key: string]: T;
-    }, relations?: any): void;
+    addItemsToList(items: T[] | Record<string, T>, relations?: any): void;
     /**
      * Adds a given item and its relations to this store.
      *
@@ -96,37 +102,16 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
      */
     private setDeleted;
     /**
-     * Gets a given item relations.
-     *
-     * @param item
-     * @param relation
-     */
-    itemRelation<Z>(item: T, relation: string): Z | undefined;
-    /**
      * Identify a given item in this store by its id.
      *
      * @param id
-     * @param checkCache
+     * @param checkCacheForMissing
      */
-    identify(id: string, checkCache?: boolean): T | undefined;
+    identify(id: string, checkCacheForMissing?: boolean): T | undefined;
     /**
      * Gets this store items list.
-     *
-     * @param ids
      */
-    list(ids?: string[]): T[];
-    /**
-     * Order items.
-     *
-     * @param order
-     */
-    orderBy(order: (a: T, b: T) => number): T[];
-    /**
-     * Order items by value of a given column.
-     *
-     * @param column
-     */
-    orderByValueOf(column: string): T[];
+    list(ids?: string[], checkCacheForMissing?: boolean): T[];
     /**
      * Filter items in this store or in a given list.
      *
@@ -134,7 +119,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
      * @param predicate
      * @param max
      */
-    filter(list: T[] | undefined, predicate: (value: T, index: number) => boolean, max?: number): T[];
+    filter(list: T[] | undefined, predicate: (value: T) => boolean, max?: number): T[];
     /**
      * Select some items in this store.
      *
@@ -144,7 +129,7 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
      * @param predicate
      * @param max
      */
-    select(list: T[] | undefined, predicate: (value: T, index: number) => boolean, max?: number): T[];
+    select(list: T[] | undefined, predicate: (value: T) => boolean, max?: number): T[];
     /**
      * Search items in this store or in a given items list.
      *
@@ -152,9 +137,14 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
      * @param search
      * @param stringBuilder
      */
-    search(list: T[] | undefined, search: string, stringBuilder: (value: T, index: number) => string): T[];
+    search(list: T[] | undefined, search: string, stringBuilder: (value: T) => string): T[];
     /**
-     * Count items in this store.
+     * Gets a given item relations.
+     *
+     * @param item
+     * @param relation
      */
-    totalCount(): number;
+    itemRelation<Z>(item: T, relation: string): Z | undefined;
 }
+export {};
+//# sourceMappingURL=OWebServiceStore.d.ts.map

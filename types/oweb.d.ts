@@ -26,7 +26,6 @@ import OWebPassword from './plugins/OWebPassword';
 import OWebAccountRecovery from './plugins/OWebAccountRecovery';
 import OWebSignUp from './plugins/OWebSignUp';
 import OWebTNet from './plugins/OWebTNet';
-import './default/index';
 export * from './utils';
 export * from './OWebApp';
 export * from './OWebConfigs';
@@ -44,3 +43,4 @@ export * from './utils/scriptLoader';
 export * from './OWebService';
 export * from './ozone';
 export { OWebEvent, OWebApp, OWebNet, OWebXHR, OWebConfigs, OWebUser, OWebForm, OWebError, OWebFormError, OWebDataStore, OWebFS, OWebKeyStorage, OWebI18n, OWebRouter, OWebRoute, OWebRouteContext, OWebUrl, OWebView, OWebService, OWebServiceStore, OWebPager, OWebLogin, OWebLogout, OWebPassword, OWebAccountRecovery, OWebSignUp, OWebDate, OWebTNet, };
+//# sourceMappingURL=oweb.d.ts.map

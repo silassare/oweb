@@ -25,3 +25,4 @@ export default class OWebEvent {
      */
     protected trigger(event: string, data?: any[], cancelable?: boolean, context?: any): boolean;
 }
+//# sourceMappingURL=OWebEvent.d.ts.map

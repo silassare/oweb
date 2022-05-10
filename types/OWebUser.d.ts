@@ -92,3 +92,4 @@ export default class OWebUser<UserEntity extends OUser> extends OWebEvent {
      */
     clear(): this;
 }
+//# sourceMappingURL=OWebUser.d.ts.map

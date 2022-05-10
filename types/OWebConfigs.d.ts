@@ -60,3 +60,4 @@ export default class OWebConfigs<P extends {
      */
     private _assertDefined;
 }
+//# sourceMappingURL=OWebConfigs.d.ts.map

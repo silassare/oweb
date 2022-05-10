@@ -132,3 +132,4 @@ export default class OWebPager<P extends OPage<R>, R extends OPageRoute = OPageR
     private _setActive;
     onLocationChange(handler: (route: OPageRouteFull<R>, page: P) => void): this;
 }
+//# sourceMappingURL=OWebPager.d.ts.map

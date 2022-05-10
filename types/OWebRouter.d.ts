@@ -151,3 +151,4 @@ export default class OWebRouter {
      */
     private _onClick;
 }
+//# sourceMappingURL=OWebRouter.d.ts.map

@@ -1,6 +1,7 @@
 import { ONetRequestOptions } from '../OWebNet';
 import OWebXHR from '../OWebXHR';
-import { OApiResponse, OWebApp } from '../oweb';
+import OWebApp from '../OWebApp';
+import { OApiResponse } from '.';
 export declare const getApiForHost: (url: string) => OZone | undefined;
 export default class OZone {
     private _appContext;
@@ -52,3 +53,4 @@ export default class OZone {
      */
     getItemRelationURI(serviceName: string, id: string, relation: string): string;
 }
+//# sourceMappingURL=OZone.d.ts.map

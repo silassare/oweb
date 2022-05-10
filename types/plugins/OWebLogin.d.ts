@@ -20,3 +20,4 @@ export default class OWebLogin<User> extends OWebEvent {
     onLoginSuccess(handler: (this: this, response: ONetResponse<OApiResponse<User>>) => void): this;
     private _tryLogin;
 }
+//# sourceMappingURL=OWebLogin.d.ts.map

@@ -83,3 +83,4 @@ export default class OWebService<Entity> {
      */
     getRelationItems<R>(id: string, relation: string, options: OApiServiceRequestOptions): OWebXHR<OApiGetPaginatedRelationItemsResponse<R>>;
 }
+//# sourceMappingURL=OWebService.d.ts.map

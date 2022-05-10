@@ -71,3 +71,4 @@ export default class OWebRoute {
     static parseDynamicPath(path: string, options: ORoutePathOptions): ORouteInfo;
 }
 export {};
+//# sourceMappingURL=OWebRoute.d.ts.map

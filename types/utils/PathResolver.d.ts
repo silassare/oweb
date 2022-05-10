@@ -29,3 +29,4 @@ declare const PathResolver: {
     isRelative(path: string): boolean;
 };
 export default PathResolver;
+//# sourceMappingURL=PathResolver.d.ts.map
