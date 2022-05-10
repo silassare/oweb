@@ -1,6 +1,7 @@
 import { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
-import { assign, isPlainObject, isString } from './utils';
+import { assign, forEach, isPlainObject, isString } from './utils';
+import { default as defaultLangs } from './default/lang';
 
 export type OI18nDefinition = Record<string, OJSONValue>;
 export type OI18nData = { [key: string]: any };
@@ -265,3 +266,7 @@ export default class OWebI18n extends OWebEvent {
 		LANG_OBJECT[lang] = assign(LANG_OBJECT[lang] || {}, data);
 	}
 }
+
+forEach(defaultLangs, function loadDefaultLangsData(value, code) {
+	OWebI18n.loadLangData(code, value);
+});
