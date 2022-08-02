@@ -1,15 +1,5 @@
 import { callback, logger } from '.';
 
-const document = window.document,
-	isOldIE = /MSIE\s([5-9]\.0)/.test(navigator.userAgent);
-
-if (
-	typeof document !== 'object' ||
-	typeof document.createElement !== 'function'
-) {
-	throw new Error('scriptLoader is for web use only');
-}
-
 export type OScriptFile = [string, () => boolean] | [string];
 export type OBatchCb = (
 	success: boolean,
@@ -40,6 +30,16 @@ export function loadScript(
 	fail?: OScriptLoadCb,
 	disableCache = false
 ): void {
+	const document = window.document,
+		  isOldIE = /MSIE\s([5-9]\.0)/.test(navigator.userAgent);
+
+	if (
+		typeof document !== 'object' ||
+		typeof document.createElement !== 'function'
+	) {
+		throw new Error('loadScript require a web environment.');
+	}
+
 	if (!document.querySelector(`script[load-path='${src}']`)) {
 		if (disableCache) {
 			src = noCache(src);
