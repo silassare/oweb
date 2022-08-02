@@ -7,7 +7,7 @@
 <b>Signature:</b>
 
 ```typescript
-export default class OWebApp<Store extends OStore = OStore, Page extends OPage<OPageRoute> = OPage<OPageRoute>, User extends OUser = OUser, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent 
+export default class OWebApp<Store extends OStore = OStore, Page extends OPage = OPage, User extends OUser = OUser, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent 
 ```
 <b>Extends:</b> OWebEvent
 

@@ -147,7 +147,7 @@ export default class OWebRouter {
      *
      * onclick from page.js library: github.com/visionmedia/page.js
      *
-     * @param e the envent object
+     * @param e the event object
      */
     private _onClick;
 }

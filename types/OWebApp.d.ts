@@ -69,7 +69,7 @@ export interface OAppOptions<Store extends OStore = OStore, Page extends OPage<O
     store: (this: Context) => Store;
     pager: (this: Context) => OWebPager<Page>;
 }
-export default class OWebApp<Store extends OStore = OStore, Page extends OPage<OPageRoute> = OPage<OPageRoute>, User extends OUser = OUser, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent {
+export default class OWebApp<Store extends OStore = OStore, Page extends OPage = OPage, User extends OUser = OUser, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent {
     private readonly options;
     static readonly SELF: string;
     static readonly EVT_APP_READY: string;

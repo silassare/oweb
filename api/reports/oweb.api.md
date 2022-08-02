@@ -605,7 +605,7 @@ export class OWebAccountRecovery<Start, Validate, End> extends OWebEvent {
 }
 
 // @public (undocumented)
-export class OWebApp<Store extends OStore = OStore, Page extends OPage<OPageRoute> = OPage<OPageRoute>, User extends OUser = OUser, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent {
+export class OWebApp<Store extends OStore = OStore, Page extends OPage = OPage, User extends OUser = OUser, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent {
     protected constructor(options: Options);
     closeApp(): void;
     // (undocumented)

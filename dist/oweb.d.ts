@@ -75,8 +75,6 @@ export declare const isInteger: (number: unknown) => boolean;
 
 /**
  * Checks if value is null or undefined.
- *
- * @param a
  */
 export declare const isNil: (a: unknown) => a is null | undefined;
 
@@ -510,7 +508,7 @@ export declare class OWebAccountRecovery<Start, Validate, End> extends OWebEvent
     private _sendForm;
 }
 
-export declare class OWebApp<Store extends OStore = OStore, Page extends OPage<OPageRoute> = OPage<OPageRoute>, User extends OUser = OUser, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent {
+export declare class OWebApp<Store extends OStore = OStore, Page extends OPage = OPage, User extends OUser = OUser, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent {
     private readonly options;
     static readonly SELF: string;
     static readonly EVT_APP_READY: string;
@@ -1635,7 +1633,7 @@ export declare class OWebRouter {
      *
      * onclick from page.js library: github.com/visionmedia/page.js
      *
-     * @param e the envent object
+     * @param e the event object
      */
     private _onClick;
 }
