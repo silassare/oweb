@@ -16,6 +16,7 @@ import defaultAppConfigs from './default/app.configs';
 import defaultUserConfigs from './default/user.configs';
 import defaultAppUrls from './default/app.urls';
 import { OFormDOMFormAdapter, OFormObjectAdapter } from './OWebFormAdapter';
+import {globalRoot} from './env';
 
 export interface OUrlList {
 	[key: string]: string;
@@ -97,7 +98,7 @@ export interface OAppOptions<
 
 export default class OWebApp<
 	Store extends OStore = OStore,
-	Page extends OPage<OPageRoute> = OPage<OPageRoute>,
+	Page extends OPage = OPage,
 	User extends OUser = OUser,
 	Options extends OAppOptions<Store, Page, User> = any
 > extends OWebEvent {
@@ -167,7 +168,7 @@ export default class OWebApp<
 	 */
 	request<Response>(
 		url: string,
-		options: Partial<ONetRequestOptions<Response>> = {}
+		options: Partial<ONetRequestOptions<Response>> = {} as any
 	): OWebXHR<Response> {
 		logger.debug('[Net] new request', url, options);
 
@@ -316,10 +317,10 @@ export default class OWebApp<
 	 */
 	closeApp(): void {
 		// cordova
-		if (window.navigator && (window.navigator as any).app) {
-			(window.navigator as any).app.exitApp();
+		if (globalRoot.navigator && (globalRoot.navigator as any).app) {
+			(globalRoot.navigator as any).app.exitApp();
 		} else {
-			window.close();
+			globalRoot.close();
 		}
 	}
 
