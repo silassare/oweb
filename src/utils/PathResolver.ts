@@ -71,7 +71,7 @@ const PathResolver = {
 		}
 
 		if (out.length === 1) {
-			out.push(null);
+			out.push('');
 		}
 
 		return out.join(this.DS);
