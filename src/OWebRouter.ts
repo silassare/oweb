@@ -45,12 +45,13 @@ const which = function which(e: any): number {
 		e = e || window.event;
 		return null == e.which ? e.button : e.which;
 	},
-	samePath = function samePath(url: URL) {
+	samePath = function samePath(url: URL | string) {
+		url = new URL(url);
 		return url.pathname === wLoc.pathname && url.search === wLoc.search;
 	},
-	sameOrigin = function sameOrigin(href: string) {
-		if (!href) return false;
-		const url = new URL(href.toString(), wLoc.toString());
+	sameOrigin = function sameOrigin(url: URL | string) {
+		if (!url) return false;
+		url = new URL(url, wLoc.toString());
 
 		return (
 			wLoc.protocol === url.protocol &&
@@ -523,7 +524,7 @@ export default class OWebRouter {
 	 *
 	 * onclick from page.js library: github.com/visionmedia/page.js
 	 *
-	 * @param e the envent object
+	 * @param e the event object
 	 */
 	private _onClick(e: MouseEvent | TouchEvent) {
 		if (1 !== which(e)) return;
@@ -548,12 +549,12 @@ export default class OWebRouter {
 				break;
 			}
 		}
-		// continue ensure link
+		// continue to ensure that link
 		// el.nodeName for svg links are 'a' instead of 'A'
 		while (el && 'A' !== el.nodeName.toUpperCase()) el = el.parentNode as any;
 		if (!el || 'A' !== el.nodeName.toUpperCase()) return;
 
-		// we check if link is inside an svg
+		// we check if link is inside a svg
 		// in this case, both href and target are always inside an object
 		const svg =
 			typeof (el as any).href === 'object' &&
@@ -566,63 +567,70 @@ export default class OWebRouter {
 			return;
 
 		// ensure non-hash for the same path
-		const link = el.getAttribute('href');
-		if (
-			!this._hashMode &&
-			samePath(el as any) &&
-			((el as any).hash || '#' === link)
-		)
-			return;
+		const linkHref = el.getAttribute('href');
+		if (linkHref) {
+			const linkUrl = new URL(linkHref);
+			if (
+				!this._hashMode &&
+				samePath(linkUrl) &&
+				(linkUrl.hash || '#' === linkHref)
+			)
+				return;
 
-		// we check for mailto: in the href
-		if (link && link.indexOf('mailto:') > -1) return;
+			// we check for mailto: in the href
+			if (linkHref.indexOf('mailto:') > -1) return;
 
-		// we check target
-		// svg target is an object and its desired value is in .baseVal property
-		if (svg ? (el as any).target.baseVal : (el as any).target) return;
+			// we check for tel: in the href
+			if (linkHref.indexOf('tel:') > -1) return;
 
-		// x-origin
-		// note: svg links that are not relative don't call click events (and skip page.js)
-		// consequently, all svg links tested inside page.js are relative and in the same origin
-		if (!svg && !sameOrigin((el as any).href)) return;
+			// we check target
+			// svg target is an object and its desired value is in .baseVal property
+			if (svg ? (el as any).target.baseVal : (el as any).target) return;
 
-		// rebuild path
-		// There aren't .pathname and .search properties in svg links, so we use href
-		// Also, svg href is an object and its desired value is in .baseVal property
-		let targetHref = svg ? (el as any).href.baseVal : (el as any).href;
+			// x-origin
+			// note: svg links that are not relative don't call click events (and skip page.js)
+			// consequently, all svg links tested inside page.js are relative and in the same origin
+			if (!svg && !sameOrigin((el as any).href)) return;
 
-		// strip leading "/[drive letter]:" on NW.js on Windows
-		/*
-		 let hasProcess = typeof process !== 'undefined';
-		 if (hasProcess && targetHref.match(/^\/[a-zA-Z]:\//)) {
-		 targetHref = targetHref.replace(/^\/[a-zA-Z]:\//, "/");
-		 }
-		 */
+			// rebuild path
+			// There aren't .pathname and .search properties in svg links, so we use href
+			// Also, svg href is an object and its desired value is in .baseVal property
+			let targetHref: string = svg
+				? (el as any).href.baseVal
+				: (el as any).href;
 
-		const orig = targetHref;
+			// strip leading "/[drive letter]:" on NW.js on Windows
+			// const hasProcess = typeof process !== 'undefined';
+			// if (hasProcess && targetHref.match(/^\/[a-zA-Z]:\//)) {
+			// 	targetHref = targetHref.replace(/^\/[a-zA-Z]:\//, '/');
+			// }
 
-		if (targetHref.indexOf(this._baseUrl) === 0) {
-			targetHref = targetHref.substr(this._baseUrl.length);
-		}
+			const orig = targetHref;
 
-		if (orig === targetHref) {
-			if (el.getAttribute('target') === '_blank') {
-				safeOpen(orig);
-				preventDefault(e);
+			if (targetHref.indexOf(this._baseUrl) === 0) {
+				targetHref = targetHref.slice(this._baseUrl.length);
 			}
 
-			return;
+			if (orig === targetHref) {
+				if (el.getAttribute('target') === '_blank') {
+					safeOpen(orig);
+					preventDefault(e);
+				}
+
+				return;
+			}
+
+			preventDefault(e);
+
+			logger.debug(
+				'[OWebRouter][click] link clicked',
+				el,
+				orig,
+				targetHref,
+				wHistory.state
+			);
+
+			this.browseTo(orig);
 		}
-
-		preventDefault(e);
-
-		logger.debug(
-			'[OWebRouter][click] link clicked',
-			el,
-			orig,
-			targetHref,
-			wHistory.state
-		);
-		this.browseTo(orig);
 	}
 }
