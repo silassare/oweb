@@ -38,7 +38,10 @@ export default class OWebDataStore extends OWebEvent {
 	constructor(_appContext: OWebApp) {
 		super();
 		this._key = _appContext.getAppName();
-		this._data = parse(ls.getItem(this._key)) || {};
+
+		if (ls) {
+			this._data = parse(ls.getItem(this._key)) || {};
+		}
 	}
 
 	/**
