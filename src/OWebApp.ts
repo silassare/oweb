@@ -140,7 +140,7 @@ export default class OWebApp<
 		);
 		this.url = new OWebUrl(this, assign({}, defaultAppUrls, options.urls));
 		this.view = new OWebView();
-		this.i18n = new OWebI18n();
+		this.i18n = new OWebI18n(this);
 		this._user = options.user.call(this);
 		this._store = options.store.call(this);
 		this._pager = options.pager.call(this);

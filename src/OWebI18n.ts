@@ -2,6 +2,7 @@ import { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
 import { assign, forEach, isPlainObject, isString } from './utils';
 import { default as defaultLangs } from './default/lang';
+import OWebApp from './OWebApp';
 
 export type OI18nDefinition = Record<string, OJSONValue>;
 export type OI18nData = { [key: string]: any };
@@ -126,7 +127,8 @@ const _tmp = new Map(),
 	};
 
 export default class OWebI18n extends OWebEvent {
-	private defaultLangCode = 'en';
+
+	constructor(protected _appContext: OWebApp) {super();}
 
 	/**
 	 * Sets default i18n lang code.
@@ -151,7 +153,7 @@ export default class OWebI18n extends OWebEvent {
 			);
 		}
 
-		this.defaultLangCode = lang;
+		this._appContext.configs.set('OW_APP_DEFAULT_LANG', lang);
 
 		return this;
 	}
@@ -161,8 +163,8 @@ export default class OWebI18n extends OWebEvent {
 	 *
 	 * @returns {string}
 	 */
-	getCurrentLang() {
-		return this.defaultLangCode;
+	getCurrentLang():string {
+		return this._appContext.configs.get('OW_APP_DEFAULT_LANG');
 	}
 
 	/**
@@ -186,8 +188,11 @@ export default class OWebI18n extends OWebEvent {
 		key: OI18n,
 		data: OI18nData = {},
 		pluralize: OI18nPluralize = 0,
-		lang: string = this.defaultLangCode
+		lang?: string
 	): string {
+
+		lang = lang || this.getCurrentLang();
+
 		if (typeof key !== 'string') {
 			const opt = key as OI18nOptions;
 			return translate(
@@ -219,7 +224,7 @@ export default class OWebI18n extends OWebEvent {
 				placeholder,
 				title,
 				data = {},
-				lang = this.defaultLangCode,
+				lang = this.getCurrentLang(),
 				pluralize,
 			} = options;
 		let str;
