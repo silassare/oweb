@@ -828,6 +828,9 @@ export class OWebFS {
 
 // @public (undocumented)
 export class OWebI18n extends OWebEvent {
+    constructor(_appContext: OWebApp);
+    // (undocumented)
+    protected _appContext: OWebApp;
     el(el: HTMLElement, options: OI18nElement): void;
     getCurrentLang(): string;
     getSupportedLangs(): string[];

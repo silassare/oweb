@@ -1,5 +1,6 @@
 import { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
+import OWebApp from './OWebApp';
 export declare type OI18nDefinition = Record<string, OJSONValue>;
 export declare type OI18nData = {
     [key: string]: any;
@@ -21,7 +22,8 @@ export declare type OI18nElement = string | {
 };
 export declare type OI18nPluralize = number | ((data: OI18nData, parts: string[]) => number);
 export default class OWebI18n extends OWebEvent {
-    private defaultLangCode;
+    protected _appContext: OWebApp;
+    constructor(_appContext: OWebApp);
     /**
      * Sets default i18n lang code.
      *

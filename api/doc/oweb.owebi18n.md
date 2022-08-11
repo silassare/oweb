@@ -11,6 +11,18 @@ export default class OWebI18n extends OWebEvent
 ```
 <b>Extends:</b> OWebEvent
 
+## Constructors
+
+|  Constructor | Modifiers | Description |
+|  --- | --- | --- |
+|  [(constructor)(\_appContext)](./oweb.owebi18n._constructor_.md) |  | Constructs a new instance of the <code>OWebI18n</code> class |
+
+## Properties
+
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [\_appContext](./oweb.owebi18n._appcontext.md) |  | OWebApp |  |
+
 ## Methods
 
 |  Method | Modifiers | Description |

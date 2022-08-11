@@ -1052,7 +1052,8 @@ export declare class OWebFS {
 }
 
 export declare class OWebI18n extends OWebEvent {
-    private defaultLangCode;
+    protected _appContext: OWebApp;
+    constructor(_appContext: OWebApp);
     /**
      * Sets default i18n lang code.
      *
