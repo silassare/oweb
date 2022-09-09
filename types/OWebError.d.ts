@@ -8,3 +8,4 @@ export default class OWebError extends Error {
      */
     constructor(message?: Error | string, data?: any);
 }
+//# sourceMappingURL=OWebError.d.ts.map

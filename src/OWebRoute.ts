@@ -1,19 +1,16 @@
-import {escapeRegExp, isArray, isPlainObject, isString} from './utils';
+import { escapeRegExp, isArray, isPlainObject, isString } from './utils';
 import OWebRouteContext from './OWebRouteContext';
 
 const tokenTypesRegMap = {
-		  'num'              : /\d+/.source,
-		  'alpha'            : /[a-zA-Z]+/.source,
-		  'alpha-fullUrl'    : /[a-z]+/.source,
-		  'alpha-l'          : /[A-Z]+/.source,
-		  'alpha-num'        : /[a-zA-Z0-9]+/.source,
-		  'alpha-num-l'      : /[a-z0-9]+/.source,
-		  'alpha-num-fullUrl': /[A-Z0-9]+/.source,
-		  'any'              : /[^/]+/.source,
-	  },
-	  tokenReg         = /:([a-z][a-z0-9_]*)/i,
-	  stringReg        = (str: string) => new RegExp(escapeRegExp(str)),
-	  wrapReg          = (str: string, capture = false) => capture ? '(' + str + ')' : '(?:' + str + ')';
+		'num': /\d+/.source,
+		'alpha': /[a-zA-Z]+/.source,
+		'alpha-num': /[a-zA-Z0-9]+/.source,
+		'any': /[^/]+/.source,
+	},
+	tokenReg = /:([a-z][a-z0-9_]*)/i,
+	stringReg = (str: string) => new RegExp(escapeRegExp(str)),
+	wrapReg = (str: string, capture = false) =>
+		capture ? '(' + str + ')' : '(?:' + str + ')';
 
 export type ORoutePath = string | RegExp;
 export type ORoutePathOptions = {
@@ -42,16 +39,14 @@ export default class OWebRoute {
 		action: ORouteAction
 	) {
 		if (path instanceof RegExp) {
-			this.path   = path.toString();
-			this.reg    = path;
+			this.path = path.toString();
+			this.reg = path;
 			this.tokens = isArray(options) ? options : [];
 		} else if (isString(path) && path.length) {
-			options     = (isPlainObject(options)
-						   ? options
-						   : {}) as ORoutePathOptions;
-			const p     = OWebRoute.parseDynamicPath(path, options);
-			this.path   = path;
-			this.reg    = p.reg;
+			options = (isPlainObject(options) ? options : {}) as ORoutePathOptions;
+			const p = OWebRoute.parseDynamicPath(path, options);
+			this.path = path;
+			this.reg = p.reg;
 			this.tokens = p.tokens;
 		} else {
 			throw new TypeError(
@@ -71,7 +66,7 @@ export default class OWebRoute {
 	/**
 	 * Returns true if this route is dynamic false otherwise.
 	 */
-	isDynamic():boolean {
+	isDynamic(): boolean {
 		return this.reg != null;
 	}
 
@@ -101,13 +96,10 @@ export default class OWebRoute {
 			const founds: any = String(pathname).match(this.reg as RegExp);
 
 			if (founds) {
-				return this.tokens.reduce(
-					(acc: any, key: string, index: number) => {
-						acc[key] = founds[index + 1];
-						return acc;
-					},
-					{}
-				);
+				return this.tokens.reduce((acc: any, key: string, index: number) => {
+					acc[key] = founds[index + 1];
+					return acc;
+				}, {});
 			}
 		}
 
@@ -139,15 +131,15 @@ export default class OWebRoute {
 		options: ORoutePathOptions
 	): ORouteInfo {
 		const tokens: string[] = [];
-		let reg                = '',
-			_path: string      = path,
+		let reg = '',
+			_path: string = path,
 			match: RegExpExecArray | null;
 
 		while ((match = tokenReg.exec(_path)) != null) {
-			const found: any   = match[0],
-				  token: any   = match[1],
-				  rule: any    = options[token] || 'any',
-				  head: string = _path.slice(0, match.index);
+			const found: any = match[0],
+				token: any = match[1],
+				rule: any = options[token] || 'any',
+				head: string = _path.slice(0, match.index);
 
 			if (head.length) {
 				reg += wrapReg(stringReg(head).source);
@@ -158,9 +150,7 @@ export default class OWebRoute {
 			} else if (rule instanceof RegExp) {
 				reg += wrapReg(rule.source, true);
 			} else {
-				throw new Error(
-					`Invalid rule for token ':${token}' in path '${path}'`
-				);
+				throw new Error(`Invalid rule for token ':${token}' in path '${path}'`);
 			}
 
 			tokens.push(token);

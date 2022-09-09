@@ -1,20 +1,22 @@
 import OWebConfigs from './OWebConfigs';
 import OWebDataStore, { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
-import OWebFormValidator, { OForm } from './OWebFormValidator';
+import OWebForm, { OWebFormDefinition } from './OWebForm';
 import OWebRouter, { ORouteStateObject, ORouteTarget } from './OWebRouter';
 import OWebUrl from './OWebUrl';
 import OWebView from './OWebView';
 import OWebI18n from './OWebI18n';
 import { assign, id, logger } from './utils';
 import OZone from './ozone';
-import OWebPager, { OPage } from './OWebPager';
+import OWebPager, { OPage, OPageRoute } from './OWebPager';
 import OWebUser from './OWebUser';
 import { ONetRequestOptions } from './OWebNet';
 import OWebXHR from './OWebXHR';
 import defaultAppConfigs from './default/app.configs';
 import defaultUserConfigs from './default/user.configs';
 import defaultAppUrls from './default/app.urls';
+import { OFormDOMFormAdapter, OFormObjectAdapter } from './OWebFormAdapter';
+import { globalRoot } from './env';
 
 export interface OUrlList {
 	[key: string]: string;
@@ -75,31 +77,29 @@ export interface OStore {
 export type OUser = {
 	[key: string]: any;
 };
-
 export interface OAppOptions<
-	Store extends OStore,
-	Page extends OPage,
-	User extends OUser
+	Store extends OStore = OStore,
+	Page extends OPage<OPageRoute> = OPage<OPageRoute>,
+	User extends OUser = OUser,
+	AppConfigs extends Partial<OAppConfigs> = Partial<OAppConfigs>,
+	UserConfigs extends Partial<OUserConfigs> = Partial<OUserConfigs>,
+	UrlList extends Partial<OUrlList> = Partial<OUrlList>,
+	Context = OWebApp<Store, Page, User>
 > {
 	name: string;
-	appConfigs: Partial<OAppConfigs>;
-	userConfigs: Partial<OUserConfigs>;
-	urls: Partial<OUrlList>;
-	user: (
-		this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>,
-	) => OWebUser<User>;
-	store: (
-		this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>,
-	) => Store;
-	pager: (
-		this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>,
-	) => OWebPager<Page>;
+	appConfigs: AppConfigs;
+	userConfigs: UserConfigs;
+	urls: UrlList;
+
+	user: (this: Context) => OWebUser<User>;
+	store: (this: Context) => Store;
+	pager: (this: Context) => OWebPager<Page>;
 }
 
 export default class OWebApp<
-	Store extends OStore = any,
-	Page extends OPage = any,
-	User extends OUser = any,
+	Store extends OStore = OStore,
+	Page extends OPage = OPage,
+	User extends OUser = OUser,
 	Options extends OAppOptions<Store, Page, User> = any
 > extends OWebEvent {
 	static readonly SELF = id();
@@ -112,12 +112,15 @@ export default class OWebApp<
 	readonly view: OWebView;
 	readonly ls: OWebDataStore;
 	readonly router: OWebRouter;
-	readonly user: OWebUser<User>;
-	readonly configs: OWebConfigs<OAppConfigs, OUserConfigs>;
+	readonly configs: OWebConfigs<
+		OAppConfigs & Options['appConfigs'],
+		OUserConfigs & Options['userConfigs']
+	>;
 	readonly url: OWebUrl;
 	readonly i18n: OWebI18n;
 	readonly oz: OZone;
 
+	private readonly _user: OWebUser<User>;
 	private readonly _store: Store;
 	private readonly _pager: OWebPager<Page>;
 
@@ -137,8 +140,8 @@ export default class OWebApp<
 		);
 		this.url = new OWebUrl(this, assign({}, defaultAppUrls, options.urls));
 		this.view = new OWebView();
-		this.i18n = new OWebI18n();
-		this.user = options.user.call(this);
+		this.i18n = new OWebI18n(this);
+		this._user = options.user.call(this);
 		this._store = options.store.call(this);
 		this._pager = options.pager.call(this);
 
@@ -146,15 +149,13 @@ export default class OWebApp<
 			baseUrl = this.configs.get('OW_APP_LOCAL_BASE_URL'),
 			hashMode = this.configs.get('OW_APP_ROUTER_HASH_MODE');
 
-		this.router = new OWebRouter(
-			baseUrl,
-			hashMode,
-			function notFoundHandler(target: ORouteTarget) {
-				ctx.trigger(OWebApp.EVT_NOT_FOUND, [target]);
-			}
-		);
+		this.router = new OWebRouter(baseUrl, hashMode, function notFoundHandler(
+			target: ORouteTarget
+		) {
+			ctx.trigger(OWebApp.EVT_NOT_FOUND, [target]);
+		});
 
-		this.i18n.setDefaultLang(this.configs.get('OW_APP_DEFAULT_LANG'));
+		this.i18n.setLang(this.configs.get('OW_APP_DEFAULT_LANG'));
 
 		this.oz = OZone.instantiate(this);
 	}
@@ -167,13 +168,13 @@ export default class OWebApp<
 	 */
 	request<Response>(
 		url: string,
-		options: Partial<ONetRequestOptions<Response>> = {}
+		options: Partial<ONetRequestOptions<Response>> = {} as any
 	): OWebXHR<Response> {
 		logger.debug('[Net] new request', url, options);
 
 		const event = function event(type: string) {
-			return function eventHandler(): void {
-				logger.debug('[Net] event %s', type, url, options);
+			return function eventHandler(...args: any[]): void {
+				logger.debug('[Net] event %s', type, url, options, args);
 			};
 		};
 
@@ -197,17 +198,24 @@ export default class OWebApp<
 	}
 
 	/**
+	 * User getter.
+	 */
+	get user(): ReturnType<Options['user']> {
+		return this._user as ReturnType<Options['user']>;
+	}
+
+	/**
 	 * Store getter.
 	 */
 	get store(): ReturnType<Options['store']> {
-		return this._store as any;
+		return this._store as ReturnType<Options['store']>;
 	}
 
 	/**
 	 * Pager instance getter.
 	 */
 	get pager(): ReturnType<Options['pager']> {
-		return this._pager as any;
+		return this._pager as ReturnType<Options['pager']>;
 	}
 
 	/**
@@ -225,7 +233,28 @@ export default class OWebApp<
 	}
 
 	/**
-	 * Returns new form validator instance.
+	 * Returns new oweb form instance.
+	 *
+	 * @param form The html form element.
+	 * @param required The required fields names list.
+	 * @param excluded The fields names to exclude.
+	 * @param checkAll Force the validator to check all fields.
+	 * @param verbose Log warning.
+	 *
+	 * @deprecated use {@link OWebApp.form}
+	 */
+	getFormValidator(
+		form: OWebFormDefinition | HTMLFormElement,
+		required: string[] = [],
+		excluded: string[] = [],
+		checkAll = false,
+		verbose = false
+	): OWebForm {
+		return this.form(form, required, excluded, checkAll, verbose);
+	}
+
+	/**
+	 * Returns new oweb form instance.
 	 *
 	 * @param form The html form element.
 	 * @param required The required fields names list.
@@ -233,16 +262,18 @@ export default class OWebApp<
 	 * @param checkAll Force the validator to check all fields.
 	 * @param verbose Log warning.
 	 */
-	getFormValidator(
-		form: OForm,
+	form(
+		form: OWebFormDefinition | HTMLFormElement,
 		required: string[] = [],
 		excluded: string[] = [],
 		checkAll = false,
 		verbose = false
-	): OWebFormValidator {
-		return new OWebFormValidator(
+	): OWebForm {
+		return new OWebForm(
 			this,
-			form,
+			form instanceof HTMLFormElement
+				? new OFormDOMFormAdapter(form)
+				: new OFormObjectAdapter(form),
 			required,
 			excluded,
 			checkAll,
@@ -255,7 +286,7 @@ export default class OWebApp<
 	 *
 	 * > This will clear all saved data in the local storage.
 	 */
-	forceLogin():void {
+	forceLogin(): void {
 		this.ls.clear();
 		this.showLoginPage({});
 	}
@@ -263,7 +294,7 @@ export default class OWebApp<
 	/**
 	 * Reload the app.
 	 */
-	reloadApp():void {
+	reloadApp(): void {
 		// TODO: instead of reloading the current location, find a way to browse to web app entry point
 		// for android & ios restart the app
 		// window.location.reload(true);
@@ -275,7 +306,7 @@ export default class OWebApp<
 	 *
 	 * > This will clear all saved data in the local storage.
 	 */
-	destroyApp():void {
+	destroyApp(): void {
 		// erase data
 		this.ls.clear();
 		this.reloadApp();
@@ -284,12 +315,12 @@ export default class OWebApp<
 	/**
 	 * Close app.
 	 */
-	closeApp():void {
+	closeApp(): void {
 		// cordova
-		if (window.navigator && (window.navigator as any).app) {
-			(window.navigator as any).app.exitApp();
+		if (globalRoot.navigator && (globalRoot.navigator as any).app) {
+			(globalRoot.navigator as any).app.exitApp();
 		} else {
-			window.close();
+			globalRoot.close();
 		}
 	}
 
@@ -305,21 +336,21 @@ export default class OWebApp<
 	/**
 	 * Called when app should show the home page.
 	 */
-	showHomePage(options: ORouteStateObject = {}):void {
+	showHomePage(options: ORouteStateObject = {}): void {
 		this.trigger(OWebApp.EVT_SHOW_HOME, [options]);
 	}
 
 	/**
 	 * Called when app should show the login page.
 	 */
-	showLoginPage(options: ORouteStateObject = {}):void {
+	showLoginPage(options: ORouteStateObject = {}): void {
 		this.trigger(OWebApp.EVT_SHOW_LOGIN, [options]);
 	}
 
 	/**
 	 * Called when app should show the registration page.
 	 */
-	showRegistrationPage(options: ORouteStateObject = {}):void {
+	showRegistrationPage(options: ORouteStateObject = {}): void {
 		this.trigger(OWebApp.EVT_SHOW_LOGIN, [options]);
 	}
 
@@ -328,7 +359,7 @@ export default class OWebApp<
 	 *
 	 * @param handler
 	 */
-	onReady(handler: (this: this) => void | boolean):this {
+	onReady(handler: (this: this) => void | boolean): this {
 		return this.on(OWebApp.EVT_APP_READY, handler);
 	}
 
@@ -339,7 +370,7 @@ export default class OWebApp<
 	 */
 	onShowHomePage(
 		handler: (this: this, options: ORouteStateObject) => void | boolean
-	):this {
+	): this {
 		return this.on(OWebApp.EVT_SHOW_HOME, handler);
 	}
 
@@ -350,7 +381,7 @@ export default class OWebApp<
 	 */
 	onShowLoginPage(
 		handler: (this: this, options: ORouteStateObject) => void | boolean
-	) :this{
+	): this {
 		return this.on(OWebApp.EVT_SHOW_LOGIN, handler);
 	}
 
@@ -361,7 +392,7 @@ export default class OWebApp<
 	 */
 	onShowRegistrationPage(
 		handler: (this: this, options: ORouteStateObject) => void | boolean
-	):this {
+	): this {
 		return this.on(OWebApp.EVT_SHOW_REGISTRATION_PAGE, handler);
 	}
 
@@ -372,7 +403,7 @@ export default class OWebApp<
 	 */
 	onPageNotFound(
 		handler: (this: this, target: ORouteTarget) => void | boolean
-	):this {
+	): this {
 		return this.on(OWebApp.EVT_NOT_FOUND, handler);
 	}
 

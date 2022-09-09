@@ -7,7 +7,7 @@ import OWebUser from './OWebUser';
 import OWebFormError from './OWebFormError';
 import OWebDataStore from './OWebDataStore';
 import OWebEvent from './OWebEvent';
-import OWebFormValidator from './OWebFormValidator';
+import OWebForm from './OWebForm';
 import OWebFS from './OWebFS';
 import OWebKeyStorage from './OWebKeyStorage';
 import OWebI18n from './OWebI18n';
@@ -27,9 +27,6 @@ import OWebAccountRecovery from './plugins/OWebAccountRecovery';
 import OWebSignUp from './plugins/OWebSignUp';
 import OWebTNet from './plugins/OWebTNet';
 
-// side-effect import
-import './default/index';
-
 export * from './utils';
 
 export * from './OWebApp';
@@ -40,7 +37,7 @@ export * from './OWebUrl';
 export * from './OWebNet';
 export * from './OWebXHR';
 
-export * from './OWebFormValidator';
+export * from './OWebForm';
 
 export * from './OWebFS';
 
@@ -67,7 +64,7 @@ export {
 	OWebXHR,
 	OWebConfigs,
 	OWebUser,
-	OWebFormValidator,
+	OWebForm,
 	OWebError,
 	OWebFormError,
 	OWebDataStore,

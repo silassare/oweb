@@ -1,17 +1,11 @@
-import {callback, logger} from '.';
-
-const document = window.document,
-	  isOldIE  = /MSIE\s([5-9]\.0)/.test(navigator.userAgent);
-
-if (
-	typeof document !== 'object' ||
-	typeof document.createElement !== 'function'
-) {
-	throw new Error('scriptLoader is for web use only');
-}
+import { callback, logger } from '.';
 
 export type OScriptFile = [string, () => boolean] | [string];
-export type OBatchCb = (success: boolean, done: string[], failed: string[]) => void;
+export type OBatchCb = (
+	success: boolean,
+	done: string[],
+	failed: string[]
+) => void;
 export type OScriptLoadCb = (src: string) => void;
 
 export function noCache(url: string): string {
@@ -36,16 +30,26 @@ export function loadScript(
 	fail?: OScriptLoadCb,
 	disableCache = false
 ): void {
+	const document = window.document,
+		isOldIE = /MSIE\s([5-9]\.0)/.test(navigator.userAgent);
+
+	if (
+		typeof document !== 'object' ||
+		typeof document.createElement !== 'function'
+	) {
+		throw new Error('loadScript require a web environment.');
+	}
+
 	if (!document.querySelector(`script[load-path='${src}']`)) {
 		if (disableCache) {
 			src = noCache(src);
 		}
 
-		const script   = document.createElement('script');
-		script.src     = src;
-		script.async   = false;
-		script.type    = 'text/javascript';
-		script.onload  = function onLoad() {
+		const script = document.createElement('script');
+		script.src = src;
+		script.async = false;
+		script.type = 'text/javascript';
+		script.onload = function onLoad() {
 			callback(then, [src]);
 		};
 		script.onerror = function onError() {
@@ -71,11 +75,11 @@ export function loadScriptBatch(
 	then?: OBatchCb,
 	disableCache = false
 ): void {
-	const total            = list.length;
+	const total = list.length;
 	const failed: string[] = [];
-	const done: string[]   = [];
-	let counter            = 0;
-	const updateCount      = (success: boolean, src: string) => {
+	const done: string[] = [];
+	let counter = 0;
+	const updateCount = (success: boolean, src: string) => {
 		counter++;
 		(success ? done : failed).push(src);
 
@@ -86,7 +90,7 @@ export function loadScriptBatch(
 
 	for (let i = 0; i < total; i++) {
 		const src = list[i][0];
-		const fn  = list[i][1];
+		const fn = list[i][1];
 
 		if (typeof fn === 'function' && !fn()) {
 			continue;

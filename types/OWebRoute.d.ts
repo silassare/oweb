@@ -2,11 +2,7 @@ import OWebRouteContext from './OWebRouteContext';
 declare const tokenTypesRegMap: {
     num: string;
     alpha: string;
-    'alpha-fullUrl': string;
-    'alpha-l': string;
     'alpha-num': string;
-    'alpha-num-l': string;
-    'alpha-num-fullUrl': string;
     any: string;
 };
 export declare type ORoutePath = string | RegExp;
@@ -75,3 +71,4 @@ export default class OWebRoute {
     static parseDynamicPath(path: string, options: ORoutePathOptions): ORouteInfo;
 }
 export {};
+//# sourceMappingURL=OWebRoute.d.ts.map

@@ -14,9 +14,9 @@ export interface ORouteDispatcher {
     readonly id: number;
     readonly context: OWebRouteContext;
     readonly found: OWebRoute[];
-    isActive(): boolean;
+    isStopped(): boolean;
     dispatch(): this;
-    cancel(): this;
+    stop(): this;
 }
 export default class OWebRouter {
     private readonly _baseUrl;
@@ -147,7 +147,8 @@ export default class OWebRouter {
      *
      * onclick from page.js library: github.com/visionmedia/page.js
      *
-     * @param e the envent object
+     * @param e the event object
      */
     private _onClick;
 }
+//# sourceMappingURL=OWebRouter.d.ts.map

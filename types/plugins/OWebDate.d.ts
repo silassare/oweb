@@ -23,47 +23,69 @@
  */
 import OWebApp from '../OWebApp';
 export declare type ODateValue = Date | number | string;
-export declare type ODateDesc = {
-    D: string;
-    L: string;
-    l: number;
-    ll: number;
-    d: number;
-    M: string;
-    F: string;
-    m: number;
-    mm: string;
-    Y: number;
-    y: number;
-    h: number;
-    hh: string;
-    H: number;
-    i: number;
-    ii: string;
-    s: number;
-    ss: string;
-    ms: number;
-    a: string;
-    A: string;
-};
 export default class OWebDate {
     private _appContext;
     private date;
     constructor(_appContext: OWebApp, date?: ODateValue);
     /**
      * Format date with a given format.
-     *
-     * @param format
      */
-    format(format?: string): string;
+    format(format?: string, isLangKey?: boolean): string;
     fromNow(): string;
     compare(_startDate: ODateValue, _endDate: ODateValue): {
         format: string;
+        nSeconds: number;
+        nMinutes: number;
+        nHours: number;
+        nDays: number;
+        nWeeks: number;
+        nMonths: number;
+        nYears: number;
+        inPast: boolean;
+        cDays: number;
+        cHours: number;
+        cMinutes: number;
+        cSeconds: number;
     };
     /**
      * Returns date description object.
      */
-    describe(): ODateDesc;
+    describe(): {
+        format: string;
+        nSeconds: number;
+        nMinutes: number;
+        nHours: number;
+        nDays: number;
+        nWeeks: number;
+        nMonths: number;
+        nYears: number;
+        inPast: boolean;
+        cDays: number;
+        cHours: number;
+        cMinutes: number;
+        cSeconds: number;
+        D: string;
+        L: string;
+        l: number;
+        ll: number;
+        d: number;
+        M: string;
+        F: string;
+        m: number;
+        mm: string;
+        Y: number;
+        y: number;
+        h: number;
+        hh: string;
+        H: number;
+        i: number;
+        ii: string;
+        s: number;
+        ss: string;
+        ms: number;
+        a: string;
+        A: string;
+    };
     /**
      * Date setter.
      *
@@ -79,3 +101,4 @@ export default class OWebDate {
      */
     static timestamp(): number;
 }
+//# sourceMappingURL=OWebDate.d.ts.map

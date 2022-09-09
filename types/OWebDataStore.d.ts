@@ -7,7 +7,6 @@ export declare type OJSONValue = string | number | boolean | Date | OJSONSeriali
     [key: string]: OJSONValue;
 } | OJSONValue[];
 export default class OWebDataStore extends OWebEvent {
-    private readonly _appContext;
     static readonly EVT_DATA_STORE_CLEARED: string;
     private readonly _key;
     private _data;
@@ -54,3 +53,4 @@ export default class OWebDataStore extends OWebEvent {
      */
     private _persist;
 }
+//# sourceMappingURL=OWebDataStore.d.ts.map

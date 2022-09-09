@@ -29,3 +29,4 @@ export default class OWebXHR<T> extends OWebNet<T> {
      */
     private requestBody;
 }
+//# sourceMappingURL=OWebXHR.d.ts.map

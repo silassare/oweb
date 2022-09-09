@@ -1,0 +1,18 @@
+export const globalRoot = (() => {
+    if (typeof globalThis === 'object' &&
+        globalThis !== null &&
+        globalThis.Object === Object) {
+        return globalThis;
+    }
+    if (typeof global === 'object' &&
+        global !== null &&
+        global.Object === Object) {
+        return global;
+    }
+    if (typeof self === 'object' && self !== null && self.Object === Object) {
+        return self;
+    }
+    return Function('return this')();
+})();
+export const supportRAF = typeof globalRoot.requestAnimationFrame === 'function';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZW52LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vc3JjL2Vudi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxNQUFNLENBQUMsTUFBTSxVQUFVLEdBQUcsQ0FBQyxHQUFHLEVBQUU7SUFDL0IsSUFDQyxPQUFPLFVBQVUsS0FBSyxRQUFRO1FBQzlCLFVBQVUsS0FBSyxJQUFJO1FBQ25CLFVBQVUsQ0FBQyxNQUFNLEtBQUssTUFBTSxFQUMzQjtRQUNELE9BQU8sVUFBVSxDQUFDO0tBQ2xCO0lBRUQsSUFDQyxPQUFPLE1BQU0sS0FBSyxRQUFRO1FBQzFCLE1BQU0sS0FBSyxJQUFJO1FBQ2YsTUFBTSxDQUFDLE1BQU0sS0FBSyxNQUFNLEVBQ3ZCO1FBQ0QsT0FBTyxNQUFNLENBQUM7S0FDZDtJQUVELElBQUksT0FBTyxJQUFJLEtBQUssUUFBUSxJQUFJLElBQUksS0FBSyxJQUFJLElBQUksSUFBSSxDQUFDLE1BQU0sS0FBSyxNQUFNLEVBQUU7UUFDeEUsT0FBTyxJQUFJLENBQUM7S0FDWjtJQUVELE9BQU8sUUFBUSxDQUFDLGFBQWEsQ0FBQyxFQUFFLENBQUM7QUFDbEMsQ0FBQyxDQUFDLEVBQUUsQ0FBQztBQUVMLE1BQU0sQ0FBQyxNQUFNLFVBQVUsR0FDdEIsT0FBTyxVQUFVLENBQUMscUJBQXFCLEtBQUssVUFBVSxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGNvbnN0IGdsb2JhbFJvb3QgPSAoKCkgPT4ge1xuXHRpZiAoXG5cdFx0dHlwZW9mIGdsb2JhbFRoaXMgPT09ICdvYmplY3QnICYmXG5cdFx0Z2xvYmFsVGhpcyAhPT0gbnVsbCAmJlxuXHRcdGdsb2JhbFRoaXMuT2JqZWN0ID09PSBPYmplY3Rcblx0KSB7XG5cdFx0cmV0dXJuIGdsb2JhbFRoaXM7XG5cdH1cblxuXHRpZiAoXG5cdFx0dHlwZW9mIGdsb2JhbCA9PT0gJ29iamVjdCcgJiZcblx0XHRnbG9iYWwgIT09IG51bGwgJiZcblx0XHRnbG9iYWwuT2JqZWN0ID09PSBPYmplY3Rcblx0KSB7XG5cdFx0cmV0dXJuIGdsb2JhbDtcblx0fVxuXG5cdGlmICh0eXBlb2Ygc2VsZiA9PT0gJ29iamVjdCcgJiYgc2VsZiAhPT0gbnVsbCAmJiBzZWxmLk9iamVjdCA9PT0gT2JqZWN0KSB7XG5cdFx0cmV0dXJuIHNlbGY7XG5cdH1cblxuXHRyZXR1cm4gRnVuY3Rpb24oJ3JldHVybiB0aGlzJykoKTtcbn0pKCk7XG5cbmV4cG9ydCBjb25zdCBzdXBwb3J0UkFGID1cblx0dHlwZW9mIGdsb2JhbFJvb3QucmVxdWVzdEFuaW1hdGlvbkZyYW1lID09PSAnZnVuY3Rpb24nO1xuIl19

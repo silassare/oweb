@@ -1,13 +1,13 @@
 import OWebConfigs from './OWebConfigs';
 import OWebDataStore, { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
-import OWebFormValidator, { OForm } from './OWebFormValidator';
+import OWebForm, { OWebFormDefinition } from './OWebForm';
 import OWebRouter, { ORouteStateObject, ORouteTarget } from './OWebRouter';
 import OWebUrl from './OWebUrl';
 import OWebView from './OWebView';
 import OWebI18n from './OWebI18n';
 import OZone from './ozone';
-import OWebPager, { OPage } from './OWebPager';
+import OWebPager, { OPage, OPageRoute } from './OWebPager';
 import OWebUser from './OWebUser';
 import { ONetRequestOptions } from './OWebNet';
 import OWebXHR from './OWebXHR';
@@ -60,16 +60,16 @@ export interface OStore {
 export declare type OUser = {
     [key: string]: any;
 };
-export interface OAppOptions<Store extends OStore, Page extends OPage, User extends OUser> {
+export interface OAppOptions<Store extends OStore = OStore, Page extends OPage<OPageRoute> = OPage<OPageRoute>, User extends OUser = OUser, AppConfigs extends Partial<OAppConfigs> = Partial<OAppConfigs>, UserConfigs extends Partial<OUserConfigs> = Partial<OUserConfigs>, UrlList extends Partial<OUrlList> = Partial<OUrlList>, Context = OWebApp<Store, Page, User>> {
     name: string;
-    appConfigs: Partial<OAppConfigs>;
-    userConfigs: Partial<OUserConfigs>;
-    urls: Partial<OUrlList>;
-    user: (this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>) => OWebUser<User>;
-    store: (this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>) => Store;
-    pager: (this: OWebApp<Store, Page, User, OAppOptions<Store, Page, User>>) => OWebPager<Page>;
+    appConfigs: AppConfigs;
+    userConfigs: UserConfigs;
+    urls: UrlList;
+    user: (this: Context) => OWebUser<User>;
+    store: (this: Context) => Store;
+    pager: (this: Context) => OWebPager<Page>;
 }
-export default class OWebApp<Store extends OStore = any, Page extends OPage = any, User extends OUser = any, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent {
+export default class OWebApp<Store extends OStore = OStore, Page extends OPage = OPage, User extends OUser = OUser, Options extends OAppOptions<Store, Page, User> = any> extends OWebEvent {
     private readonly options;
     static readonly SELF: string;
     static readonly EVT_APP_READY: string;
@@ -80,11 +80,11 @@ export default class OWebApp<Store extends OStore = any, Page extends OPage = an
     readonly view: OWebView;
     readonly ls: OWebDataStore;
     readonly router: OWebRouter;
-    readonly user: OWebUser<User>;
-    readonly configs: OWebConfigs<OAppConfigs, OUserConfigs>;
+    readonly configs: OWebConfigs<OAppConfigs & Options['appConfigs'], OUserConfigs & Options['userConfigs']>;
     readonly url: OWebUrl;
     readonly i18n: OWebI18n;
     readonly oz: OZone;
+    private readonly _user;
     private readonly _store;
     private readonly _pager;
     /**
@@ -100,6 +100,10 @@ export default class OWebApp<Store extends OStore = any, Page extends OPage = an
      * @param options
      */
     request<Response>(url: string, options?: Partial<ONetRequestOptions<Response>>): OWebXHR<Response>;
+    /**
+     * User getter.
+     */
+    get user(): ReturnType<Options['user']>;
     /**
      * Store getter.
      */
@@ -117,7 +121,19 @@ export default class OWebApp<Store extends OStore = any, Page extends OPage = an
      */
     isMobileApp(): boolean;
     /**
-     * Returns new form validator instance.
+     * Returns new oweb form instance.
+     *
+     * @param form The html form element.
+     * @param required The required fields names list.
+     * @param excluded The fields names to exclude.
+     * @param checkAll Force the validator to check all fields.
+     * @param verbose Log warning.
+     *
+     * @deprecated use {@link OWebApp.form}
+     */
+    getFormValidator(form: OWebFormDefinition | HTMLFormElement, required?: string[], excluded?: string[], checkAll?: boolean, verbose?: boolean): OWebForm;
+    /**
+     * Returns new oweb form instance.
      *
      * @param form The html form element.
      * @param required The required fields names list.
@@ -125,7 +141,7 @@ export default class OWebApp<Store extends OStore = any, Page extends OPage = an
      * @param checkAll Force the validator to check all fields.
      * @param verbose Log warning.
      */
-    getFormValidator(form: OForm, required?: string[], excluded?: string[], checkAll?: boolean, verbose?: boolean): OWebFormValidator;
+    form(form: OWebFormDefinition | HTMLFormElement, required?: string[], excluded?: string[], checkAll?: boolean, verbose?: boolean): OWebForm;
     /**
      * Force login.
      *
@@ -199,3 +215,4 @@ export default class OWebApp<Store extends OStore = any, Page extends OPage = an
      */
     static create<Options extends OAppOptions<OStore, OPage, OUser> = any>(options: Options): OWebApp<any, any, any, Options>;
 }
+//# sourceMappingURL=OWebApp.d.ts.map

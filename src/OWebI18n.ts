@@ -1,7 +1,10 @@
+import { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
-import { assign, isPlainObject, isString } from './utils';
+import { assign, forEach, isPlainObject, isString } from './utils';
+import { default as defaultLangs } from './default/lang';
+import OWebApp from './OWebApp';
 
-export type OI18nDefinition = { [key: string]: any };
+export type OI18nDefinition = Record<string, OJSONValue>;
 export type OI18nData = { [key: string]: any };
 export type OI18nOptions = {
 	text?: string;
@@ -11,22 +14,25 @@ export type OI18nOptions = {
 };
 export type OI18n = OI18nOptions | string;
 
-export type OI18nElement = string | {
-	text?: string;
-	placeholder?: string;
-	title?: string;
-	lang?: string;
-	data?: OI18nData;
-	pluralize?: OI18nPluralize;
-};
+export type OI18nElement =
+	| string
+	| {
+			text?: string;
+			placeholder?: string;
+			title?: string;
+			lang?: string;
+			data?: OI18nData;
+			pluralize?: OI18nPluralize;
+	  };
 
 export type OI18nPluralize =
 	| number
 	| ((data: OI18nData, parts: string[]) => number);
 
-const LANG_OBJECT: { [key: string]: OI18nDefinition } = {};
+const LANG_OBJECT: { [key: string]: OI18nDefinition } = Object.create(null);
 // {name} | {@message} | {@app.name} | {@fr:message} | {@fr:app.name}
-const TOKEN_REG = /{\s*(@)?(?:([a-z-]{2,}):)?([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)*)\s*}/gi;
+const TOKEN_REG =
+	/{\s*(@)?(?:([a-z-]{2,}):)?([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)*)\s*}/gi;
 
 /**
  * ```js
@@ -47,17 +53,20 @@ const TOKEN_REG = /{\s*(@)?(?:([a-z-]{2,}):)?([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9
 const parse = function parser(str: string) {
 	const out = str
 		.replace(/([\r\n"'])/g, '\\$1')
-		.replace(TOKEN_REG, function stringChunkReplacer(found, isSub, lang, path) {
-			let l, x;
-			if (isSub) {
-				l = lang ? '"' + lang + '"' : 'l';
-				x = `_(d["${path}"] || "${path}", d, 0, ${l})`;
-			} else {
-				x = 'd.' + path;
-			}
+		.replace(
+			TOKEN_REG,
+			function stringChunkReplacer(_found, isSub, lang, path) {
+				let l, x;
+				if (isSub) {
+					l = lang ? '"' + lang + '"' : 'l';
+					x = `_(d["${path}"] || "${path}", d, 0, ${l})`;
+				} else {
+					x = 'd.' + path;
+				}
 
-			return '"+' + x + '+"';
-		});
+				return '"+' + x + '+"';
+			}
+		);
 
 	return new Function(
 		'_',
@@ -95,10 +104,7 @@ const _tmp = new Map(),
 
 		if (_tmp.has(id)) {
 			fn = _tmp.get(id);
-		} else if (
-			LANG_OBJECT[lang] &&
-			(format = getKey(key, LANG_OBJECT[lang]))
-		) {
+		} else if (LANG_OBJECT[lang] && (format = getKey(key, LANG_OBJECT[lang]))) {
 			_tmp.set(id, (fn = parse(format)));
 		}
 
@@ -121,23 +127,54 @@ const _tmp = new Map(),
 	};
 
 export default class OWebI18n extends OWebEvent {
-	defaultLangCode = 'en';
+	constructor(protected _appContext: OWebApp) {
+		super();
+	}
 
 	/**
 	 * Sets default i18n lang code.
 	 *
+	 * @deprecated use {@link OWebI18n.setLang}
+	 *
 	 * @param lang The i18n lang code.
 	 */
-	setDefaultLang(lang: string):this {
+	setDefaultLang(lang: string): this {
+		return this.setLang(lang);
+	}
+
+	/**
+	 * Sets i18n lang code.
+	 *
+	 * @param lang The i18n lang code.
+	 */
+	setLang(lang: string): this {
 		if (!LANG_OBJECT[lang]) {
 			throw new Error(
 				`[OWebLang] can't set default language, undefined language data for: ${lang}.`
 			);
 		}
 
-		this.defaultLangCode = lang;
+		this._appContext.configs.set('OW_APP_DEFAULT_LANG', lang);
 
 		return this;
+	}
+
+	/**
+	 * Gets current lang.
+	 *
+	 * @returns {string}
+	 */
+	getCurrentLang(): string {
+		return this._appContext.configs.get('OW_APP_DEFAULT_LANG');
+	}
+
+	/**
+	 * Gets supported languages.
+	 *
+	 * @returns {string[]}
+	 */
+	getSupportedLangs(): string[] {
+		return Object.keys(LANG_OBJECT);
 	}
 
 	/**
@@ -152,10 +189,12 @@ export default class OWebI18n extends OWebEvent {
 		key: OI18n,
 		data: OI18nData = {},
 		pluralize: OI18nPluralize = 0,
-		lang: string = this.defaultLangCode
+		lang?: string
 	): string {
+		lang = lang || this.getCurrentLang();
+
 		if (typeof key !== 'string') {
-			const opt: OI18nOptions = key as any;
+			const opt = key as OI18nOptions;
 			return translate(
 				opt.text || '',
 				opt.data || data,
@@ -173,7 +212,7 @@ export default class OWebI18n extends OWebEvent {
 	 * @param el
 	 * @param options
 	 */
-	el(el: HTMLElement, options: OI18nElement):void {
+	el(el: HTMLElement, options: OI18nElement): void {
 		if (typeof options === 'string') {
 			options = { text: options };
 		}
@@ -185,7 +224,7 @@ export default class OWebI18n extends OWebEvent {
 				placeholder,
 				title,
 				data = {},
-				lang = this.defaultLangCode,
+				lang = this.getCurrentLang(),
 				pluralize,
 			} = options;
 		let str;
@@ -216,7 +255,7 @@ export default class OWebI18n extends OWebEvent {
 	 * @param lang The i18n lang code
 	 * @param data The i18n lang data.
 	 */
-	static loadLangData(lang: string, data: OI18nDefinition):void {
+	static loadLangData(lang: string, data: OI18nDefinition): void {
 		if (!isString(lang)) {
 			throw new TypeError(
 				'[OWebI18n] your lang name should be a valid string.'
@@ -232,3 +271,7 @@ export default class OWebI18n extends OWebEvent {
 		LANG_OBJECT[lang] = assign(LANG_OBJECT[lang] || {}, data);
 	}
 }
+
+forEach(defaultLangs, function loadDefaultLangsData(value, code) {
+	OWebI18n.loadLangData(code, value);
+});

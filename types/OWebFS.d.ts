@@ -27,3 +27,4 @@ export default class OWebFS {
      */
     static createFileAlias(info: OFileAliasInfo): File;
 }
+//# sourceMappingURL=OWebFS.d.ts.map

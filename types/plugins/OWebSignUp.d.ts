@@ -30,3 +30,4 @@ export default class OWebSignUp<Start, Validate, End> extends OWebEvent {
     onSignUpSuccess(handler: (this: this, response: ONetResponse<OApiResponse<End>>) => void): this;
     private _sendForm;
 }
+//# sourceMappingURL=OWebSignUp.d.ts.map

@@ -1,6 +1,6 @@
 {
 	"name": "oweb",
-	"version": "2.0.9",
+	"version": "2.1.0",
 	"description": "O'Web is a framework for web applications that use APIs built with the O'Zone framework.",
 	"main": "dist/oweb.js",
 	"typings": "types/oweb.d.ts",
@@ -16,34 +16,43 @@
 		"types"
 	],
 	"scripts": {
-		"build": "npm run lint && tsc && typedoc",
-		"lint": "eslint --fix ./src",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"build": "npm run code:format && npm run lint:fix && tsc && npm run api:build",
+		"lint:script": "eslint \"src/**/*.{ts,js}\" --ignore-path .gitignore",
+		"lint:fix": "eslint \"src/**/*.{ts,js}\" --fix --ignore-path .gitignore",
+		"code:format": "prettier -w -u ./src/",
+		"api:extract": "api-extractor run --local --verbose",
+		"api:doc": "api-documenter markdown --input-folder=temp --output-folder=api/doc",
+		"api:build": "npm run api:extract && npm run api:doc"
 	},
 	"dependencies": {
 		"gobl-utils-ts": "github:silassare/gobl-utils-ts"
 	},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^5.15.0",
-		"@typescript-eslint/parser": "^5.15.0",
-		"eslint": "^8.11.0",
+		"@microsoft/api-documenter": "^7.19.10",
+		"@microsoft/api-extractor": "^7.30.0",
+		"@typescript-eslint/eslint-plugin": "^5.36.2",
+		"@typescript-eslint/parser": "^5.36.2",
+		"eslint": "^8.23.0",
 		"eslint-config-oliup": "github:oliup-io/eslint-config-oliup",
-		"eslint-plugin-prettier": "^4.0.0",
-		"prettier": "^2.6.0",
-		"typedoc": "^0.22.13",
-		"typescript": "^4.6.2"
+		"eslint-plugin-prettier": "^4.2.1",
+		"husky": "^7.0.4",
+		"lint-staged": "^12.5.0",
+		"prettier": "^2.7.1",
+		"typescript": "^4.8.3"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.{ts,js}": "eslint --fix",
+		"*": "prettier -w -u"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/silassare/oweb.git"
 	},
 	"author": "Emile Silas Sare (emile.silas@gmail.com)",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/silassare/oweb/issues"
-	},
-	"homepage": "https://github.com/silassare/oweb#readme",
-	"directories": {
-		"doc": "docs"
-	}
+	"license": "MIT"
 }

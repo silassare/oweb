@@ -4,7 +4,7 @@ import OWebRouter, {
 	ORouteStateObject,
 	ORouteTarget,
 } from './OWebRouter';
-import {searchParam, logger} from './utils';
+import { searchParam, logger } from './utils';
 
 export default class OWebRouteContext {
 	private _tokens: ORouteTokens;
@@ -36,15 +36,15 @@ export default class OWebRouteContext {
 	 *
 	 * @param token The token.
 	 */
-	getToken(token: string): string {
-		return this._tokens[token];
+	getToken(token: string, def?: string | null): string | null {
+		return this._tokens[token] ?? def ?? null;
 	}
 
 	/**
 	 * Gets a map of all tokens and values.
 	 */
-	getTokens():ORouteTokens {
-		return {...this._tokens};
+	getTokens(): ORouteTokens {
+		return { ...this._tokens };
 	}
 
 	/**
@@ -59,8 +59,8 @@ export default class OWebRouteContext {
 	 *
 	 * @param key the state key
 	 */
-	getStateItem(key: string): ORouteStateItem {
-		return this._state[key];
+	getStateItem(key: string, def?: ORouteStateItem) {
+		return this._state[key] ?? def ?? null;
 	}
 
 	/**
@@ -78,15 +78,16 @@ export default class OWebRouteContext {
 	 * Gets search param value.
 	 *
 	 * @param name the search param name
+	 * @param def the default to return when not defined
 	 */
-	getSearchParam(name: string): string | null {
-		return searchParam(name, this._target.href);
+	getSearchParam(name: string, def?: string): string | null {
+		return searchParam(name, this._target.href) ?? def ?? null;
 	}
 
 	/**
 	 * Check if the route dispatcher is stopped.
 	 */
-	stopped(): boolean {
+	isStopped(): boolean {
 		return this._stopped;
 	}
 
@@ -99,7 +100,7 @@ export default class OWebRouteContext {
 			this.save(); // save before stop
 			this._stopped = true;
 			const cd = this._router.getCurrentDispatcher();
-			cd && cd.cancel();
+			cd && cd.stop();
 			logger.debug('[OWebDispatchContext] route context was stopped!');
 		} else {
 			logger.warn('[OWebDispatchContext] route context already stopped!');
@@ -111,7 +112,7 @@ export default class OWebRouteContext {
 	 * Save history state.
 	 */
 	save(): this {
-		if (!this.stopped()) {
+		if (!this.isStopped()) {
 			logger.debug('[OWebDispatchContext] saving state...');
 			this._router.replaceHistory(this._target.href, this._state);
 		} else {

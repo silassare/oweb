@@ -37,20 +37,14 @@ export declare type OApiDeleteResponse<T> = OApiResponse<{
 export declare type OApiDeleteAllResponse = OApiResponse<{
     affected: number;
 }>;
-export declare type OApiGetRelationItemsResponse<T> = OApiResponse<{
-    items: T[];
+export declare type OApiGetPaginatedRelationItemsResponse<R> = OApiResponse<{
+    items: R[];
     max?: number;
     page?: number;
     total?: number;
-    relations: {
-        [key: string]: any;
-    };
 }>;
-export declare type OApiGetRelationItemResponse<T> = OApiResponse<{
-    item: T;
-    relations?: {
-        [key: string]: any;
-    };
+export declare type OApiGetRelationItemResponse<R> = OApiResponse<{
+    item: R;
 }>;
 export declare type OApiFilterCondition = 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte' | 'in' | 'not_in' | 'is_null' | 'is_not_null' | 'like' | 'not_like';
 export declare type OApiFilter = {
@@ -76,3 +70,4 @@ export interface OApiServiceRequestOptions {
 }
 export declare function cleanRequestOptions(options: OApiServiceRequestOptions): OApiServiceRequestOptions;
 export default OZone;
+//# sourceMappingURL=index.d.ts.map

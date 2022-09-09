@@ -1,5 +1,5 @@
 import OZone from './OZone';
-import {isEmpty, isPlainObject} from '../utils';
+import { isEmpty, isPlainObject } from '../utils';
 
 export interface OApiResponse<R> {
 	error: number;
@@ -47,21 +47,15 @@ export type OApiDeleteAllResponse = OApiResponse<{
 	affected: number;
 }>;
 
-export type OApiGetRelationItemsResponse<T> = OApiResponse<{
-	items: T[];
+export type OApiGetPaginatedRelationItemsResponse<R> = OApiResponse<{
+	items: R[];
 	max?: number;
 	page?: number;
 	total?: number;
-	relations: {
-		[key: string]: any;
-	};
 }>;
 
-export type OApiGetRelationItemResponse<T> = OApiResponse<{
-	item: T;
-	relations?: {
-		[key: string]: any;
-	};
+export type OApiGetRelationItemResponse<R> = OApiResponse<{
+	item: R;
 }>;
 
 export type OApiFilterCondition =
@@ -80,14 +74,14 @@ export type OApiFilterCondition =
 
 export type OApiFilter =
 	| {
-	0: Exclude<OApiFilterCondition, 'is_null' | 'is_not_null'>;
-	1: string | number | (string | number)[];
-	2?: 'or' | 'and';
-}
+			0: Exclude<OApiFilterCondition, 'is_null' | 'is_not_null'>;
+			1: string | number | (string | number)[];
+			2?: 'or' | 'and';
+	  }
 	| {
-	0: 'is_null' | 'is_not_null';
-	1?: 'or' | 'and';
-};
+			0: 'is_null' | 'is_not_null';
+			1?: 'or' | 'and';
+	  };
 
 export type OApiFilters = { [key: string]: number | string | OApiFilter[] };
 
@@ -100,7 +94,7 @@ export interface OApiServiceRequestOptions {
 	max?: number;
 	page?: number;
 
-	[key: string]: unknown,
+	[key: string]: unknown;
 }
 
 export function cleanRequestOptions(
@@ -117,10 +111,7 @@ export function cleanRequestOptions(
 	if (typeof options.relations === 'string' && !isEmpty(options.relations)) {
 		_options.relations = options.relations;
 	}
-	if (
-		typeof options.collection === 'string' &&
-		!isEmpty(options.collection)
-	) {
+	if (typeof options.collection === 'string' && !isEmpty(options.collection)) {
 		_options.collection = options.collection;
 	}
 

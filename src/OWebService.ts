@@ -5,31 +5,47 @@ import {
 	OApiDeleteResponse,
 	OApiGetAllResponse,
 	OApiGetRelationItemResponse,
-	OApiGetRelationItemsResponse,
+	OApiGetPaginatedRelationItemsResponse,
 	OApiGetResponse,
 	OApiServiceRequestOptions,
 	OApiUpdateAllResponse,
 	OApiUpdateResponse,
 	cleanRequestOptions,
+	OApiResponse,
 } from './ozone';
 import OWebXHR from './OWebXHR';
-import {ONetRequestBody} from './OWebNet';
+import { ONetRequestBody, ONetRequestOptions } from './OWebNet';
 
 export default class OWebService<Entity> {
-
 	/**
 	 * OWebService constructor.
 	 *
 	 * @param _appContext The app context.
-	 * @param service The service name.
+	 * @param name The service name.
 	 */
-	constructor(protected readonly _appContext: OWebApp, protected service: string) {}
+	constructor(
+		protected readonly _appContext: OWebApp,
+		protected name: string
+	) {}
+
+	/**
+	 * Make request to a specific endpoint using this service as base url.
+	 */
+	request<Response extends OApiResponse<any>>(
+		path: string,
+		options?: Partial<ONetRequestOptions<Response>>
+	): OWebXHR<Response> {
+		const oz = this._appContext.oz,
+			url = oz.toAbsoluteURI(this.name, path);
+
+		return oz.request(url, options);
+	}
 
 	/**
 	 * Returns the service name.
 	 */
 	getName(): string {
-		return this.service;
+		return this.name;
 	}
 
 	/**
@@ -37,13 +53,13 @@ export default class OWebService<Entity> {
 	 *
 	 * @param formData
 	 */
-	addRequest(formData: ONetRequestBody): OWebXHR<OApiAddResponse<Entity>> {
-		const oz  = this._appContext.oz,
-			  url = oz.getServiceURI(this.service);
+	addItem(formData: ONetRequestBody): OWebXHR<OApiAddResponse<Entity>> {
+		const oz = this._appContext.oz,
+			url = oz.getServiceURI(this.name);
 
 		return oz.request<OApiAddResponse<Entity>>(url, {
 			method: 'POST',
-			body  : formData,
+			body: formData,
 		});
 	}
 
@@ -52,9 +68,9 @@ export default class OWebService<Entity> {
 	 *
 	 * @param id The entity id.
 	 */
-	deleteRequest(id: string): OWebXHR<OApiDeleteResponse<Entity>> {
-		const oz  = this._appContext.oz,
-			  url = oz.getItemURI(this.service, id);
+	deleteItem(id: string): OWebXHR<OApiDeleteResponse<Entity>> {
+		const oz = this._appContext.oz,
+			url = oz.getItemURI(this.name, id);
 
 		return oz.request<OApiDeleteResponse<Entity>>(url, {
 			method: 'DELETE',
@@ -67,13 +83,16 @@ export default class OWebService<Entity> {
 	 * @param id The entity id.
 	 * @param formData
 	 */
-	updateRequest(id: string, formData: ONetRequestBody): OWebXHR<OApiUpdateResponse<Entity>> {
-		const oz  = this._appContext.oz,
-			  url = oz.getItemURI(this.service, id);
+	updateItem(
+		id: string,
+		formData: ONetRequestBody
+	): OWebXHR<OApiUpdateResponse<Entity>> {
+		const oz = this._appContext.oz,
+			url = oz.getItemURI(this.name, id);
 
 		return oz.request<OApiUpdateResponse<Entity>>(url, {
 			method: 'PATCH',
-			body  : formData,
+			body: formData,
 		});
 	}
 
@@ -82,9 +101,11 @@ export default class OWebService<Entity> {
 	 *
 	 * @param options
 	 */
-	deleteAllRequest(options: OApiServiceRequestOptions): OWebXHR<OApiDeleteAllResponse> {
-		const oz  = this._appContext.oz,
-			  url = oz.getServiceURI(this.service);
+	deleteItems(
+		options: OApiServiceRequestOptions
+	): OWebXHR<OApiDeleteAllResponse> {
+		const oz = this._appContext.oz,
+			url = oz.getServiceURI(this.name);
 
 		return oz.request<OApiDeleteAllResponse>(url, {
 			method: 'DELETE',
@@ -97,13 +118,15 @@ export default class OWebService<Entity> {
 	 *
 	 * @param options
 	 */
-	updateAllRequest(options: OApiServiceRequestOptions): OWebXHR<OApiUpdateAllResponse> {
-		const oz  = this._appContext.oz,
-			  url = oz.getServiceURI(this.service);
+	updateItems(
+		options: OApiServiceRequestOptions
+	): OWebXHR<OApiUpdateAllResponse> {
+		const oz = this._appContext.oz,
+			url = oz.getServiceURI(this.name);
 
 		return oz.request<OApiUpdateAllResponse>(url, {
 			method: 'PATCH',
-			body  : cleanRequestOptions(options),
+			body: cleanRequestOptions(options),
 		});
 	}
 
@@ -116,10 +139,10 @@ export default class OWebService<Entity> {
 	 * @param id The entity id.
 	 * @param relations The relations string.
 	 */
-	getRequest(id: string, relations = ''): OWebXHR<OApiGetResponse<Entity>> {
-		const oz                                 = this._appContext.oz,
-			  url                                = oz.getItemURI(this.service, id),
-			  options: OApiServiceRequestOptions = {};
+	getItem(id: string, relations = ''): OWebXHR<OApiGetResponse<Entity>> {
+		const oz = this._appContext.oz,
+			url = oz.getItemURI(this.name, id),
+			options: OApiServiceRequestOptions = {};
 
 		if (relations.length) {
 			options.relations = relations;
@@ -136,9 +159,11 @@ export default class OWebService<Entity> {
 	 *
 	 * @param options
 	 */
-	getAllRequest(options: OApiServiceRequestOptions): OWebXHR<OApiGetAllResponse<Entity>> {
-		const oz  = this._appContext.oz,
-			  url = oz.getServiceURI(this.service);
+	getItems(
+		options: OApiServiceRequestOptions
+	): OWebXHR<OApiGetAllResponse<Entity>> {
+		const oz = this._appContext.oz,
+			url = oz.getServiceURI(this.name);
 
 		return oz.request<OApiGetAllResponse<Entity>>(url, {
 			method: 'GET',
@@ -152,9 +177,12 @@ export default class OWebService<Entity> {
 	 * @param id The entity id.
 	 * @param relation The relation name
 	 */
-	getRelationRequest<R>(id: string, relation: string): OWebXHR<OApiGetRelationItemResponse<R>> {
-		const oz  = this._appContext.oz,
-			  url = oz.getItemRelationURI(this.service, id, relation);
+	getRelationItem<R>(
+		id: string,
+		relation: string
+	): OWebXHR<OApiGetRelationItemResponse<R>> {
+		const oz = this._appContext.oz,
+			url = oz.getItemRelationURI(this.name, id, relation);
 
 		return oz.request<OApiGetRelationItemResponse<R>>(url, {
 			method: 'GET',
@@ -168,15 +196,15 @@ export default class OWebService<Entity> {
 	 * @param relation The relation name.
 	 * @param options
 	 */
-	getRelationItemsRequest<R>(
+	getRelationItems<R>(
 		id: string,
 		relation: string,
 		options: OApiServiceRequestOptions
-	): OWebXHR<OApiGetRelationItemsResponse<R>> {
-		const oz  = this._appContext.oz,
-			  url = oz.getItemRelationURI(this.service, id, relation);
+	): OWebXHR<OApiGetPaginatedRelationItemsResponse<R>> {
+		const oz = this._appContext.oz,
+			url = oz.getItemRelationURI(this.name, id, relation);
 
-		return oz.request<OApiGetRelationItemsResponse<R>>(url, {
+		return oz.request<OApiGetPaginatedRelationItemsResponse<R>>(url, {
 			method: 'GET',
 			params: cleanRequestOptions(options),
 		});

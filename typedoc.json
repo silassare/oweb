@@ -1,5 +1,0 @@
-{
-  "entryPoints": ["src/oweb.ts"],
-  "logLevel": "Error",
-  "out": "docs"
-}

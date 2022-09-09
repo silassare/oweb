@@ -25,3 +25,4 @@ export default class OWebUrl<T extends {
      */
     resolveServer(url: string): string;
 }
+//# sourceMappingURL=OWebUrl.d.ts.map

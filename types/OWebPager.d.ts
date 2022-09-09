@@ -15,12 +15,7 @@ export interface OPageRoute {
     disabled?: boolean;
     show?: boolean;
 }
-export interface OPageRouteFull {
-    slug?: string;
-    icon?: string;
-    title: OI18n;
-    description?: OI18n;
-    path: ORoutePath;
+export declare type OPageRouteFull<Route extends OPageRoute = OPageRoute> = Route & {
     pathOptions: ORoutePathOptions;
     children: OPageRouteFull[];
     showChildren: boolean;
@@ -28,12 +23,12 @@ export interface OPageRouteFull {
     show: boolean;
     readonly id: number;
     readonly href?: string;
-    readonly parent?: OPageRouteFull;
+    readonly parent?: OPageRouteFull<Route>;
     active: boolean;
     activeChild: boolean;
     webRoute: OWebRoute;
-}
-export interface OPage {
+};
+export interface OPage<Route extends OPageRoute = OPageRoute> {
     /**
      * The page name getter.
      */
@@ -41,7 +36,7 @@ export interface OPage {
     /**
      * The page routes getter.
      */
-    routes: OPageRoute[];
+    routes: Route[];
     /**
      * Called once when registering the page.
      *
@@ -54,23 +49,23 @@ export interface OPage {
      * @param context The app context.
      * @param route The request page route.
      */
-    requireLogin?(context: OWebRouteContext, route: OPageRouteFull): boolean;
+    requireLogin?(context: OWebRouteContext, route: OPageRouteFull<Route>): boolean;
     /**
      * Called before page open.
      *
      * @param context
      * @param route
      */
-    onOpen?(context: OWebRouteContext, route: OPageRouteFull): void;
+    onOpen?(context: OWebRouteContext, route: OPageRouteFull<Route>): void;
     /**
      * Called before page close.
      *
      * @param oldRoute
      * @param newRoute
      */
-    onClose?(oldRoute: OPageRouteFull, newRoute: OPageRouteFull): void;
+    onClose?(oldRoute: OPageRouteFull<Route>, newRoute: OPageRouteFull<Route>): void;
 }
-export default class OWebPager<P extends OPage> extends OWebEvent {
+export default class OWebPager<P extends OPage<R>, R extends OPageRoute = OPageRoute> extends OWebEvent {
     private readonly _appContext;
     static readonly SELF: string;
     static readonly EVT_PAGE_LOCATION_CHANGE: string;
@@ -86,7 +81,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
     /**
      * Returns registered pages routes.
      */
-    getRoutes(): OPageRouteFull[];
+    getRoutes(): OPageRouteFull<R>[];
     /**
      * Returns the page with the given name.
      * @param name
@@ -99,7 +94,7 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
     /**
      * Returns the active page route.
      */
-    getActivePageRoute(): OPageRouteFull;
+    getActivePageRoute(): OPageRouteFull<R>;
     /**
      * Returns all pages list.
      */
@@ -135,5 +130,6 @@ export default class OWebPager<P extends OPage> extends OWebEvent {
      * @private
      */
     private _setActive;
-    onLocationChange(handler: (route: OPageRouteFull, page: P) => void): this;
+    onLocationChange(handler: (route: OPageRouteFull<R>, page: P) => void): this;
 }
+//# sourceMappingURL=OWebPager.d.ts.map

@@ -4,7 +4,7 @@ import OWebNet, {
 	ONetResponse,
 	ONetRequestBody,
 } from './OWebNet';
-import {buildURL, forEach, isPlainObject} from './utils';
+import { buildURL, forEach, isPlainObject } from './utils';
 
 const setOrIgnoreIfExists = function setOrIgnoreIfExists(
 	target: any,
@@ -29,17 +29,17 @@ export default class OWebXHR<T> extends OWebNet<T> {
 	 */
 	constructor(url: string, options: Partial<ONetRequestOptions<T>>) {
 		super(url, {
-			method               : 'get',
-			timeout              : 0,
-			withCredentials      : false,
-			responseType         : 'json',
-			headers              : {},
-			isSuccessStatus      : (status: number) => status >= 200 && status < 300,
-			isGoodNews           : () => {
+			method: 'get',
+			timeout: 0,
+			withCredentials: false,
+			responseType: 'json',
+			headers: {},
+			isSuccessStatus: (status: number) => status >= 200 && status < 300,
+			isGoodNews: () => {
 				return true;
 			},
 			errorResponseToDialog: () => {
-				return {text: 'OW_ERROR_REQUEST_FAILED'};
+				return { text: 'OW_ERROR_REQUEST_FAILED' };
 			},
 			...options,
 		});
@@ -58,19 +58,19 @@ export default class OWebXHR<T> extends OWebNet<T> {
 	send(): Promise<ONetResponse<T>> {
 		this.assertNotSent('[OWebXHR] request is already sent.');
 
-		let x         = this,
-			xhr       = new XMLHttpRequest();
-		const opt     = x.options,
-			  always  = () => {
-				  x.trigger(OWebNet.EVT_FINISH);
-				  xhr = x = null as any;
-			  },
-			  onerror = (err: ONetError) => {
-				  x.trigger(OWebNet.EVT_ERROR, [err]);
-				  x.trigger(OWebNet.EVT_FAIL, [err]);
-				  always();
-			  },
-			  body    = this.requestBody(opt.body);
+		let x = this,
+			xhr = new XMLHttpRequest();
+		const opt = x.options,
+			always = () => {
+				x.trigger(OWebNet.EVT_FINISH);
+				xhr = x = null as any;
+			},
+			onerror = (err: ONetError) => {
+				x.trigger(OWebNet.EVT_ERROR, [err]);
+				x.trigger(OWebNet.EVT_FAIL, [err]);
+				always();
+			},
+			body = this.requestBody(opt.body);
 
 		xhr.timeout = opt.timeout;
 
@@ -99,11 +99,9 @@ export default class OWebXHR<T> extends OWebNet<T> {
 			}
 
 			const responseRaw =
-					  xhr[
-						  (xhr.responseType || 'text') === 'text'
-						  ? 'responseText'
-						  : 'response'
-						  ];
+				xhr[
+					(xhr.responseType || 'text') === 'text' ? 'responseText' : 'response'
+				];
 
 			let json = null as any;
 
@@ -116,11 +114,11 @@ export default class OWebXHR<T> extends OWebNet<T> {
 
 			const response: ONetResponse<T> = {
 				isSuccessStatus: opt.isSuccessStatus(xhr.status),
-				isGoodNews     : opt.isGoodNews(json),
-				raw            : responseRaw,
+				isGoodNews: opt.isGoodNews(json),
+				raw: responseRaw,
 				json,
-				status         : xhr.status,
-				statusText     : xhr.statusText,
+				status: xhr.status,
+				statusText: xhr.statusText,
 			};
 
 			x.trigger(OWebNet.EVT_RESPONSE, [response]);
@@ -135,7 +133,7 @@ export default class OWebXHR<T> extends OWebNet<T> {
 					const err: ONetError = {
 						type: 'error',
 						errType: 'bad_news',
-						... x.options.errorResponseToDialog(response),
+						...x.options.errorResponseToDialog(response),
 					};
 					x.trigger(OWebNet.EVT_FAIL, [err]);
 				}
@@ -144,7 +142,7 @@ export default class OWebXHR<T> extends OWebNet<T> {
 				const err: ONetError = {
 					type: 'error',
 					errType: 'http',
-					... x.options.errorResponseToDialog(response),
+					...x.options.errorResponseToDialog(response),
 				};
 				x.trigger(OWebNet.EVT_FAIL, [err]);
 			}
@@ -164,29 +162,29 @@ export default class OWebXHR<T> extends OWebNet<T> {
 
 		xhr.onabort = function onAbort(event) {
 			onerror({
-				type   : 'error',
+				type: 'error',
 				errType: 'abort',
-				text   : 'OW_ERROR_REQUEST_ABORTED',
-				data   : {event},
+				text: 'OW_ERROR_REQUEST_ABORTED',
+				data: { event },
 			});
 		};
 
 		xhr.ontimeout = function onTimeout(event) {
 			onerror({
-				type   : 'error',
+				type: 'error',
 				errType: 'timeout',
-				text   : 'OW_ERROR_REQUEST_TIMED_OUT',
-				data   : {event},
+				text: 'OW_ERROR_REQUEST_TIMED_OUT',
+				data: { event },
 			});
 		};
 
 		xhr.onerror = function onError(event) {
 			// handle non-HTTP error (e.g. network down)
 			onerror({
-				type   : 'error',
+				type: 'error',
 				errType: 'network',
-				text   : 'OZ_ERROR_NETWORK',
-				data   : {event},
+				text: 'OZ_ERROR_NETWORK',
+				data: { event },
 			});
 		};
 
@@ -194,7 +192,9 @@ export default class OWebXHR<T> extends OWebNet<T> {
 			xhr && xhr.abort();
 		};
 
-		const url = this.options.params ? buildURL(this.url, this.options.params) : this.url;
+		const url = this.options.params
+			? buildURL(this.url, this.options.params)
+			: this.url;
 
 		xhr.open(opt.method.toUpperCase(), url, true);
 
@@ -206,8 +206,9 @@ export default class OWebXHR<T> extends OWebNet<T> {
 			resolve: (response: ONetResponse<T>) => void,
 			reject: (error: ONetError) => void
 		) {
-			x.onGoodNews((response) => resolve(response))
-			 .onFail((err) => reject(err));
+			x.onGoodNews((response) => resolve(response)).onFail((err) =>
+				reject(err)
+			);
 
 			x._sent = true;
 			xhr.send(body);

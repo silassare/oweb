@@ -1,7 +1,7 @@
+import { OJSONValue } from './OWebDataStore';
 import OWebEvent from './OWebEvent';
-export declare type OI18nDefinition = {
-    [key: string]: any;
-};
+import OWebApp from './OWebApp';
+export declare type OI18nDefinition = Record<string, OJSONValue>;
 export declare type OI18nData = {
     [key: string]: any;
 };
@@ -22,13 +22,34 @@ export declare type OI18nElement = string | {
 };
 export declare type OI18nPluralize = number | ((data: OI18nData, parts: string[]) => number);
 export default class OWebI18n extends OWebEvent {
-    defaultLangCode: string;
+    protected _appContext: OWebApp;
+    constructor(_appContext: OWebApp);
     /**
      * Sets default i18n lang code.
+     *
+     * @deprecated use {@link OWebI18n.setLang}
      *
      * @param lang The i18n lang code.
      */
     setDefaultLang(lang: string): this;
+    /**
+     * Sets i18n lang code.
+     *
+     * @param lang The i18n lang code.
+     */
+    setLang(lang: string): this;
+    /**
+     * Gets current lang.
+     *
+     * @returns {string}
+     */
+    getCurrentLang(): string;
+    /**
+     * Gets supported languages.
+     *
+     * @returns {string[]}
+     */
+    getSupportedLangs(): string[];
     /**
      * Returns i18n translation.
      *
@@ -53,3 +74,4 @@ export default class OWebI18n extends OWebEvent {
      */
     static loadLangData(lang: string, data: OI18nDefinition): void;
 }
+//# sourceMappingURL=OWebI18n.d.ts.map

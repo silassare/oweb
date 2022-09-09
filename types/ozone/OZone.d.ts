@@ -1,6 +1,7 @@
 import { ONetRequestOptions } from '../OWebNet';
 import OWebXHR from '../OWebXHR';
-import { OApiResponse, OWebApp } from '../oweb';
+import OWebApp from '../OWebApp';
+import { OApiResponse } from '.';
 export declare const getApiForHost: (url: string) => OZone | undefined;
 export default class OZone {
     private _appContext;
@@ -26,22 +27,30 @@ export default class OZone {
     /**
      * Returns the service URI.
      *
-     * @param service The service name.
+     * @param serviceName The service name.
      */
-    getServiceURI(service: string): string;
+    getServiceURI(serviceName: string): string;
+    /**
+     * Returns an absolute uri string.
+     *
+     * @param serviceName The service name.
+     * @param path The path.
+     */
+    toAbsoluteURI(serviceName: string, path: string): string;
     /**
      * Returns entity URI.
      *
-     * @param service The service name.
+     * @param serviceName The service name.
      * @param id The entity id.
      */
-    getItemURI(service: string, id: string | number): string;
+    getItemURI(serviceName: string, id: string | number): string;
     /**
      * Returns entity relation URI.
      *
-     * @param service The service name.
+     * @param serviceName The service name.
      * @param id The entity id.
      * @param relation The relation name.
      */
-    getItemRelationURI(service: string, id: string, relation: string): string;
+    getItemRelationURI(serviceName: string, id: string, relation: string): string;
 }
+//# sourceMappingURL=OZone.d.ts.map

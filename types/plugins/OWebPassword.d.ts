@@ -22,3 +22,4 @@ export default class OWebPassword<Result> extends OWebEvent {
     onEditFail(handler: (this: this, err: ONetError) => void): this;
     onEditSuccess(handler: (this: this, response: ONetResponse<OApiResponse<Result>>) => void): this;
 }
+//# sourceMappingURL=OWebPassword.d.ts.map

@@ -19,7 +19,7 @@ export default class OWebRouteContext {
      *
      * @param token The token.
      */
-    getToken(token: string): string;
+    getToken(token: string, def?: string | null): string | null;
     /**
      * Gets a map of all tokens and values.
      */
@@ -33,7 +33,7 @@ export default class OWebRouteContext {
      *
      * @param key the state key
      */
-    getStateItem(key: string): ORouteStateItem;
+    getStateItem(key: string, def?: ORouteStateItem): string | number | boolean | Date | ORouteStateObject | ORouteStateItem[] | null;
     /**
      * Sets a key in history state.
      *
@@ -45,12 +45,13 @@ export default class OWebRouteContext {
      * Gets search param value.
      *
      * @param name the search param name
+     * @param def the default to return when not defined
      */
-    getSearchParam(name: string): string | null;
+    getSearchParam(name: string, def?: string): string | null;
     /**
      * Check if the route dispatcher is stopped.
      */
-    stopped(): boolean;
+    isStopped(): boolean;
     /**
      * Stop the route dispatcher.
      */
@@ -66,3 +67,4 @@ export default class OWebRouteContext {
      */
     actionRunner(route: OWebRoute): this;
 }
+//# sourceMappingURL=OWebRouteContext.d.ts.map

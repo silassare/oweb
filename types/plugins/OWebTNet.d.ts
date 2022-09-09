@@ -24,3 +24,4 @@ export default class OWebTNet<App extends OWebApp, User = ReturnType<App['user']
     onReady(handler: (this: this, status: string, data?: OTNetReadyInfo<User>) => void): this;
     check(): Promise<ONetResponse<OApiResponse<OTNetResponseData<User>>>>;
 }
+//# sourceMappingURL=OWebTNet.d.ts.map

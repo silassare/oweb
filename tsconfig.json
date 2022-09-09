@@ -6,12 +6,22 @@
 		"target": "esnext",
 		"inlineSources": true,
 		"inlineSourceMap": true,
-		"allowJs": false,
+		"allowJs": true,
 		"strict": true,
 		"declaration": true,
-		"declarationDir": "types/"
+		"declarationMap": true,
+		"declarationDir": "types/",
+		"removeComments": false,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"noImplicitThis": true,
+		"alwaysStrict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"lib": ["esnext", "dom", "dom.iterable"]
 	},
-	"include": [
-		"src/**/*"
-	]
+	"include": ["src/**/*"]
 }

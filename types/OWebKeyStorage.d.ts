@@ -17,13 +17,13 @@ export default class OWebKeyStorage extends OWebEvent {
     /**
      * Returns the key storage data.
      */
-    getStoreData(): Record<string, OJSONValue>;
+    getStoreData<D extends Record<string, OJSONValue>>(): D;
     /**
      * Returns a given key value.
      *
      * @param key The key name.
      */
-    getItem(key: string): OJSONValue | null;
+    getItem<T extends OJSONValue>(key: string): T | null;
     /**
      * Sets an item to the key storage.
      *
@@ -52,3 +52,4 @@ export default class OWebKeyStorage extends OWebEvent {
      */
     private _clearExpired;
 }
+//# sourceMappingURL=OWebKeyStorage.d.ts.map

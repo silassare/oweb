@@ -5,8 +5,8 @@ export type OFileAliasInfo = {
 };
 
 export type OFileMarked = (Blob | File) & {
-	oz_mark_file_id?:string,
-	oz_mark_file_key?:string,
+	oz_mark_file_id?: string;
+	oz_mark_file_key?: string;
 };
 
 export default class OWebFS {
@@ -36,12 +36,12 @@ export default class OWebFS {
 	 */
 	static createFileAlias(info: OFileAliasInfo): File {
 		const fileName = info.file_id + '.ofa',
-			  content  = JSON.stringify({
-				  'file_id' : info.file_id,
-				  'file_key': info.file_key,
-			  }),
-			  b        = new Blob([content], {type: OWebFS.OFA_MIME_TYPE});
+			content = JSON.stringify({
+				file_id: info.file_id,
+				file_key: info.file_key,
+			}),
+			b = new Blob([content], { type: OWebFS.OFA_MIME_TYPE });
 
-		return new File([b], fileName, {type: b.type});
+		return new File([b], fileName, { type: b.type });
 	}
 }

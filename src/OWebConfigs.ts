@@ -57,9 +57,7 @@ export default class OWebConfigs<
 	resetAllToDefault(confirmFirst = true): this {
 		if (
 			!confirmFirst ||
-			confirm(
-				this._appContext.i18n.toHuman('OZ_CONFIRM_RESET_USER_CONFIGS')
-			)
+			confirm(this._appContext.i18n.toHuman('OZ_CONFIRM_RESET_USER_CONFIGS'))
 		) {
 			this._usersConfigs = {} as any;
 
@@ -101,7 +99,7 @@ export default class OWebConfigs<
 
 		if (this._isAppConfig(config as string)) {
 			throw new Error(
-				`[OWebConfigs] can't overwrite app config "${config}".`
+				`[OWebConfigs] can't overwrite app config "${String(config)}".`
 			);
 		}
 
@@ -131,7 +129,7 @@ export default class OWebConfigs<
 		const m = this,
 			savedConfig = this._appContext.ls.get(this._tagName) || {};
 
-		forEach(m._defaultUserConfigs as any, (val, key) => {
+		forEach(m._defaultUserConfigs as any, (_val, key) => {
 			if (savedConfig[key] !== undefined) {
 				(m._usersConfigs as any)[key] = savedConfig[key];
 			}
@@ -157,9 +155,7 @@ export default class OWebConfigs<
 	 * @private
 	 */
 	private _assertDefined(config: any) {
-		if (
-			!(config in this._defaultUserConfigs || config in this._appConfigs)
-		) {
+		if (!(config in this._defaultUserConfigs || config in this._appConfigs)) {
 			throw new Error(`[OWebConfigs] config "${config}" is not defined.`);
 		}
 	}
