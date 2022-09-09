@@ -20,8 +20,8 @@ export default class OWebService<Entity>
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [\_appContext](./oweb.owebservice._appcontext.md) |  | OWebApp |  |
-|  [name](./oweb.owebservice.name.md) |  | string |  |
+|  [\_appContext](./oweb.owebservice._appcontext.md) | <p><code>protected</code></p><p><code>readonly</code></p> | OWebApp |  |
+|  [name](./oweb.owebservice.name.md) | <code>protected</code> | string |  |
 
 ## Methods
 
@@ -30,7 +30,7 @@ export default class OWebService<Entity>
 |  [addItem(formData)](./oweb.owebservice.additem.md) |  | Adds an entity. |
 |  [deleteItem(id)](./oweb.owebservice.deleteitem.md) |  | Deletes the entity with the given id. |
 |  [deleteItems(options)](./oweb.owebservice.deleteitems.md) |  | Deletes all entities. |
-|  [getItem(id, relations)](./oweb.owebservice.getitem.md) |  | Gets an entity with the given id.<!-- -->All requested relations names are joined with <code>&#124;</code>. example: <code>relation1&#124;relation2&#124;relationX</code>. |
+|  [getItem(id, relations)](./oweb.owebservice.getitem.md) |  | <p>Gets an entity with the given id.</p><p>All requested relations names are joined with <code>&#124;</code>. example: <code>relation1&#124;relation2&#124;relationX</code>.</p> |
 |  [getItems(options)](./oweb.owebservice.getitems.md) |  | Gets all entities. |
 |  [getName()](./oweb.owebservice.getname.md) |  | Returns the service name. |
 |  [getRelationItem(id, relation)](./oweb.owebservice.getrelationitem.md) |  | Gets a single item relation for a given entity id. |

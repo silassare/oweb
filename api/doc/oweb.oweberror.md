@@ -21,5 +21,5 @@ export default class OWebError extends Error
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [data](./oweb.oweberror.data.md) |  | any |  |
+|  [data](./oweb.oweberror.data.md) | <code>readonly</code> | any |  |
 

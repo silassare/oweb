@@ -26,9 +26,9 @@ declare type ListForEachType = <U extends List<unknown>>(collection: U, iteratee
 declare type DictForEachType = <U extends Record<string, unknown>>(collection: U, iteratee: (value: U[Extract<keyof U, string>], key: Extract<keyof U, string>, collection: U) => void) => void;
 export declare const forEach: ListForEachType & DictForEachType;
 export declare const assign: {
-    <T, U>(target: T, source: U): T & U;
-    <T_1, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V;
-    <T_2, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W;
+    <T extends {}, U>(target: T, source: U): T & U;
+    <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V;
+    <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W;
     (target: object, ...sources: any[]): any;
 };
 export declare function clone<T>(a: T): T;

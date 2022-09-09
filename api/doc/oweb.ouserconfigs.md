@@ -12,8 +12,8 @@ export interface OUserConfigs
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [OW\_APP\_COUNTRY](./oweb.ouserconfigs.ow_app_country.md) | string |  |
-|  [OW\_APP\_DEFAULT\_LANG](./oweb.ouserconfigs.ow_app_default_lang.md) | string |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [OW\_APP\_COUNTRY](./oweb.ouserconfigs.ow_app_country.md) |  | string |  |
+|  [OW\_APP\_DEFAULT\_LANG](./oweb.ouserconfigs.ow_app_default_lang.md) |  | string |  |
 

@@ -12,25 +12,25 @@ export interface OAppConfigs
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [OW\_APP\_ALLOWED\_COUNTRIES](./oweb.oappconfigs.ow_app_allowed_countries.md) | string\[\] |  |
-|  [OW\_APP\_LOCAL\_BASE\_URL](./oweb.oappconfigs.ow_app_local_base_url.md) | string |  |
-|  [OW\_APP\_NAME](./oweb.oappconfigs.ow_app_name.md) | string |  |
-|  [OW\_APP\_ROUTER\_HASH\_MODE](./oweb.oappconfigs.ow_app_router_hash_mode.md) | boolean |  |
-|  [OW\_APP\_VERSION](./oweb.oappconfigs.ow_app_version.md) | string |  |
-|  [OZ\_API\_ALLOW\_REAL\_METHOD\_HEADER](./oweb.oappconfigs.oz_api_allow_real_method_header.md) | boolean |  |
-|  [OZ\_API\_BASE\_URL](./oweb.oappconfigs.oz_api_base_url.md) | string |  |
-|  [OZ\_API\_KEY\_HEADER\_NAME](./oweb.oappconfigs.oz_api_key_header_name.md) | string |  |
-|  [OZ\_API\_KEY](./oweb.oappconfigs.oz_api_key.md) | string |  |
-|  [OZ\_API\_REAL\_METHOD\_HEADER\_NAME](./oweb.oappconfigs.oz_api_real_method_header_name.md) | string |  |
-|  [OZ\_CODE\_REG](./oweb.oappconfigs.oz_code_reg.md) | string |  |
-|  [OZ\_PASS\_MAX\_LENGTH](./oweb.oappconfigs.oz_pass_max_length.md) | number |  |
-|  [OZ\_PASS\_MIN\_LENGTH](./oweb.oappconfigs.oz_pass_min_length.md) | number |  |
-|  [OZ\_PPIC\_MIN\_SIZE](./oweb.oappconfigs.oz_ppic_min_size.md) | number |  |
-|  [OZ\_USER\_ALLOWED\_GENDERS](./oweb.oappconfigs.oz_user_allowed_genders.md) | string\[\] |  |
-|  [OZ\_USER\_MAX\_AGE](./oweb.oappconfigs.oz_user_max_age.md) | number |  |
-|  [OZ\_USER\_MIN\_AGE](./oweb.oappconfigs.oz_user_min_age.md) | number |  |
-|  [OZ\_USER\_NAME\_MAX\_LENGTH](./oweb.oappconfigs.oz_user_name_max_length.md) | number |  |
-|  [OZ\_USER\_NAME\_MIN\_LENGTH](./oweb.oappconfigs.oz_user_name_min_length.md) | number |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [OW\_APP\_ALLOWED\_COUNTRIES](./oweb.oappconfigs.ow_app_allowed_countries.md) |  | string\[\] |  |
+|  [OW\_APP\_LOCAL\_BASE\_URL](./oweb.oappconfigs.ow_app_local_base_url.md) |  | string |  |
+|  [OW\_APP\_NAME](./oweb.oappconfigs.ow_app_name.md) |  | string |  |
+|  [OW\_APP\_ROUTER\_HASH\_MODE](./oweb.oappconfigs.ow_app_router_hash_mode.md) |  | boolean |  |
+|  [OW\_APP\_VERSION](./oweb.oappconfigs.ow_app_version.md) |  | string |  |
+|  [OZ\_API\_ALLOW\_REAL\_METHOD\_HEADER](./oweb.oappconfigs.oz_api_allow_real_method_header.md) |  | boolean |  |
+|  [OZ\_API\_BASE\_URL](./oweb.oappconfigs.oz_api_base_url.md) |  | string |  |
+|  [OZ\_API\_KEY\_HEADER\_NAME](./oweb.oappconfigs.oz_api_key_header_name.md) |  | string |  |
+|  [OZ\_API\_KEY](./oweb.oappconfigs.oz_api_key.md) |  | string |  |
+|  [OZ\_API\_REAL\_METHOD\_HEADER\_NAME](./oweb.oappconfigs.oz_api_real_method_header_name.md) |  | string |  |
+|  [OZ\_CODE\_REG](./oweb.oappconfigs.oz_code_reg.md) |  | string |  |
+|  [OZ\_PASS\_MAX\_LENGTH](./oweb.oappconfigs.oz_pass_max_length.md) |  | number |  |
+|  [OZ\_PASS\_MIN\_LENGTH](./oweb.oappconfigs.oz_pass_min_length.md) |  | number |  |
+|  [OZ\_PPIC\_MIN\_SIZE](./oweb.oappconfigs.oz_ppic_min_size.md) |  | number |  |
+|  [OZ\_USER\_ALLOWED\_GENDERS](./oweb.oappconfigs.oz_user_allowed_genders.md) |  | string\[\] |  |
+|  [OZ\_USER\_MAX\_AGE](./oweb.oappconfigs.oz_user_max_age.md) |  | number |  |
+|  [OZ\_USER\_MIN\_AGE](./oweb.oappconfigs.oz_user_min_age.md) |  | number |  |
+|  [OZ\_USER\_NAME\_MAX\_LENGTH](./oweb.oappconfigs.oz_user_name_max_length.md) |  | number |  |
+|  [OZ\_USER\_NAME\_MIN\_LENGTH](./oweb.oappconfigs.oz_user_name_min_length.md) |  | number |  |
 

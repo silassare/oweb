@@ -21,7 +21,7 @@ export default class OWebUser<UserEntity extends OUser> extends OWebEvent
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [\_appContext](./oweb.owebuser._appcontext.md) |  | OWebApp |  |
+|  [\_appContext](./oweb.owebuser._appcontext.md) | <code>protected</code> | OWebApp |  |
 
 ## Methods
 

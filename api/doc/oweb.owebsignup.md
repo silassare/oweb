@@ -21,10 +21,10 @@ export default class OWebSignUp<Start, Validate, End> extends OWebEvent
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [SELF](./oweb.owebsignup.self.md) | <code>static</code> | string |  |
-|  [SIGN\_UP\_STEP\_END](./oweb.owebsignup.sign_up_step_end.md) | <code>static</code> | (not declared) |  |
-|  [SIGN\_UP\_STEP\_START](./oweb.owebsignup.sign_up_step_start.md) | <code>static</code> | (not declared) |  |
-|  [SIGN\_UP\_STEP\_VALIDATE](./oweb.owebsignup.sign_up_step_validate.md) | <code>static</code> | (not declared) |  |
+|  [SELF](./oweb.owebsignup.self.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [SIGN\_UP\_STEP\_END](./oweb.owebsignup.sign_up_step_end.md) | <p><code>readonly</code></p><p><code>static</code></p> | (not declared) |  |
+|  [SIGN\_UP\_STEP\_START](./oweb.owebsignup.sign_up_step_start.md) | <p><code>readonly</code></p><p><code>static</code></p> | (not declared) |  |
+|  [SIGN\_UP\_STEP\_VALIDATE](./oweb.owebsignup.sign_up_step_validate.md) | <p><code>readonly</code></p><p><code>static</code></p> | (not declared) |  |
 
 ## Methods
 

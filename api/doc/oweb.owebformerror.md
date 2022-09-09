@@ -15,5 +15,5 @@ export default class OWebFormError extends OWebError
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [isFormError](./oweb.owebformerror.isformerror.md) |  | (not declared) |  |
+|  [isFormError](./oweb.owebformerror.isformerror.md) | <code>readonly</code> | (not declared) |  |
 

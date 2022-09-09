@@ -15,28 +15,28 @@ export default class OWebApp<Store extends OStore = OStore, Page extends OPage =
 
 |  Constructor | Modifiers | Description |
 |  --- | --- | --- |
-|  [(constructor)(options)](./oweb.owebapp._constructor_.md) |  | OWebApp constructor. |
+|  [(constructor)(options)](./oweb.owebapp._constructor_.md) | <code>protected</code> | OWebApp constructor. |
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [configs](./oweb.owebapp.configs.md) |  | OWebConfigs&lt;[OAppConfigs](./oweb.oappconfigs.md) &amp; Options\['appConfigs'\], [OUserConfigs](./oweb.ouserconfigs.md) &amp; Options\['userConfigs'\]&gt; |  |
-|  [EVT\_APP\_READY](./oweb.owebapp.evt_app_ready.md) | <code>static</code> | string |  |
-|  [EVT\_NOT\_FOUND](./oweb.owebapp.evt_not_found.md) | <code>static</code> | string |  |
-|  [EVT\_SHOW\_HOME](./oweb.owebapp.evt_show_home.md) | <code>static</code> | string |  |
-|  [EVT\_SHOW\_LOGIN](./oweb.owebapp.evt_show_login.md) | <code>static</code> | string |  |
-|  [EVT\_SHOW\_REGISTRATION\_PAGE](./oweb.owebapp.evt_show_registration_page.md) | <code>static</code> | string |  |
-|  [i18n](./oweb.owebapp.i18n.md) |  | OWebI18n |  |
-|  [ls](./oweb.owebapp.ls.md) |  | OWebDataStore |  |
-|  [oz](./oweb.owebapp.oz.md) |  | OZone |  |
-|  [pager](./oweb.owebapp.pager.md) |  | ReturnType&lt;Options\['pager'\]&gt; | Pager instance getter. |
-|  [router](./oweb.owebapp.router.md) |  | OWebRouter |  |
-|  [SELF](./oweb.owebapp.self.md) | <code>static</code> | string |  |
-|  [store](./oweb.owebapp.store.md) |  | ReturnType&lt;Options\['store'\]&gt; | Store getter. |
-|  [url](./oweb.owebapp.url.md) |  | OWebUrl |  |
-|  [user](./oweb.owebapp.user.md) |  | ReturnType&lt;Options\['user'\]&gt; | User getter. |
-|  [view](./oweb.owebapp.view.md) |  | OWebView |  |
+|  [configs](./oweb.owebapp.configs.md) | <code>readonly</code> | OWebConfigs&lt;[OAppConfigs](./oweb.oappconfigs.md) &amp; Options\['appConfigs'\], [OUserConfigs](./oweb.ouserconfigs.md) &amp; Options\['userConfigs'\]&gt; |  |
+|  [EVT\_APP\_READY](./oweb.owebapp.evt_app_ready.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_NOT\_FOUND](./oweb.owebapp.evt_not_found.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_SHOW\_HOME](./oweb.owebapp.evt_show_home.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_SHOW\_LOGIN](./oweb.owebapp.evt_show_login.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_SHOW\_REGISTRATION\_PAGE](./oweb.owebapp.evt_show_registration_page.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [i18n](./oweb.owebapp.i18n.md) | <code>readonly</code> | OWebI18n |  |
+|  [ls](./oweb.owebapp.ls.md) | <code>readonly</code> | OWebDataStore |  |
+|  [oz](./oweb.owebapp.oz.md) | <code>readonly</code> | OZone |  |
+|  [pager](./oweb.owebapp.pager.md) | <code>readonly</code> | ReturnType&lt;Options\['pager'\]&gt; | Pager instance getter. |
+|  [router](./oweb.owebapp.router.md) | <code>readonly</code> | OWebRouter |  |
+|  [SELF](./oweb.owebapp.self.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [store](./oweb.owebapp.store.md) | <code>readonly</code> | ReturnType&lt;Options\['store'\]&gt; | Store getter. |
+|  [url](./oweb.owebapp.url.md) | <code>readonly</code> | OWebUrl |  |
+|  [user](./oweb.owebapp.user.md) | <code>readonly</code> | ReturnType&lt;Options\['user'\]&gt; | User getter. |
+|  [view](./oweb.owebapp.view.md) | <code>readonly</code> | OWebView |  |
 
 ## Methods
 
@@ -44,8 +44,8 @@ export default class OWebApp<Store extends OStore = OStore, Page extends OPage =
 |  --- | --- | --- |
 |  [closeApp()](./oweb.owebapp.closeapp.md) |  | Close app. |
 |  [create(options)](./oweb.owebapp.create.md) | <code>static</code> | Creates new app instance. |
-|  [destroyApp()](./oweb.owebapp.destroyapp.md) |  | Destroy the app.<!-- -->&gt; This will clear all saved data in the local storage. |
-|  [forceLogin()](./oweb.owebapp.forcelogin.md) |  | Force login.<!-- -->&gt; This will clear all saved data in the local storage. |
+|  [destroyApp()](./oweb.owebapp.destroyapp.md) |  | <p>Destroy the app.</p><p>&gt; This will clear all saved data in the local storage.</p> |
+|  [forceLogin()](./oweb.owebapp.forcelogin.md) |  | <p>Force login.</p><p>&gt; This will clear all saved data in the local storage.</p> |
 |  [form(form, required, excluded, checkAll, verbose)](./oweb.owebapp.form.md) |  | Returns new oweb form instance. |
 |  [getAppName()](./oweb.owebapp.getappname.md) |  | App name getter. |
 |  [getFormValidator(form, required, excluded, checkAll, verbose)](./oweb.owebapp.getformvalidator.md) |  | Returns new oweb form instance. |

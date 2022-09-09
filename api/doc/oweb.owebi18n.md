@@ -21,7 +21,7 @@ export default class OWebI18n extends OWebEvent
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [\_appContext](./oweb.owebi18n._appcontext.md) |  | OWebApp |  |
+|  [\_appContext](./oweb.owebi18n._appcontext.md) | <code>protected</code> | OWebApp |  |
 
 ## Methods
 

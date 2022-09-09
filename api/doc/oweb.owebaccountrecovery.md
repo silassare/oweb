@@ -21,10 +21,10 @@ export default class OWebAccountRecovery<Start, Validate, End> extends OWebEvent
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [AR\_STEP\_END](./oweb.owebaccountrecovery.ar_step_end.md) | <code>static</code> | (not declared) |  |
-|  [AR\_STEP\_START](./oweb.owebaccountrecovery.ar_step_start.md) | <code>static</code> | (not declared) |  |
-|  [AR\_STEP\_VALIDATE](./oweb.owebaccountrecovery.ar_step_validate.md) | <code>static</code> | (not declared) |  |
-|  [SELF](./oweb.owebaccountrecovery.self.md) | <code>static</code> | string |  |
+|  [AR\_STEP\_END](./oweb.owebaccountrecovery.ar_step_end.md) | <p><code>readonly</code></p><p><code>static</code></p> | (not declared) |  |
+|  [AR\_STEP\_START](./oweb.owebaccountrecovery.ar_step_start.md) | <p><code>readonly</code></p><p><code>static</code></p> | (not declared) |  |
+|  [AR\_STEP\_VALIDATE](./oweb.owebaccountrecovery.ar_step_validate.md) | <p><code>readonly</code></p><p><code>static</code></p> | (not declared) |  |
+|  [SELF](./oweb.owebaccountrecovery.self.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
 
 ## Methods
 

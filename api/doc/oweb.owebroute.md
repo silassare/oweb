@@ -24,7 +24,7 @@ export default class OWebRoute
 |  [is(pathname)](./oweb.owebroute.is.md) |  | Checks if a given pathname match this route. |
 |  [isDynamic()](./oweb.owebroute.isdynamic.md) |  | Returns true if this route is dynamic false otherwise. |
 |  [parse(pathname)](./oweb.owebroute.parse.md) |  | Parse a given pathname. |
-|  [parseDynamicPath(path, options)](./oweb.owebroute.parsedynamicpath.md) | <code>static</code> | Parse dynamic path and returns appropriate regexp and tokens list.
+|  [parseDynamicPath(path, options)](./oweb.owebroute.parsedynamicpath.md) | <code>static</code> | <p>Parse dynamic path and returns appropriate regexp and tokens list.</p>
 ```js
 let format = "path/to/:id/file/:index/name.:format";
 let options = {

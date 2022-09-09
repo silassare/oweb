@@ -12,12 +12,12 @@ export interface OApiResponse<R>
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [data](./oweb.oapiresponse.data.md) | R |  |
-|  [error](./oweb.oapiresponse.error.md) | number |  |
-|  [msg](./oweb.oapiresponse.msg.md) | string |  |
-|  [stime?](./oweb.oapiresponse.stime.md) | number | <i>(Optional)</i> |
-|  [stoken?](./oweb.oapiresponse.stoken.md) | string | <i>(Optional)</i> |
-|  [utime](./oweb.oapiresponse.utime.md) | number |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [data](./oweb.oapiresponse.data.md) |  | R |  |
+|  [error](./oweb.oapiresponse.error.md) |  | number |  |
+|  [msg](./oweb.oapiresponse.msg.md) |  | string |  |
+|  [stime?](./oweb.oapiresponse.stime.md) |  | number | <i>(Optional)</i> |
+|  [stoken?](./oweb.oapiresponse.stoken.md) |  | string | <i>(Optional)</i> |
+|  [utime](./oweb.oapiresponse.utime.md) |  | number |  |
 

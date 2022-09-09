@@ -21,9 +21,9 @@ export default class OWebLogin<User> extends OWebEvent
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [EVT\_LOGIN\_FAIL](./oweb.oweblogin.evt_login_fail.md) | <code>static</code> | string |  |
-|  [EVT\_LOGIN\_SUCCESS](./oweb.oweblogin.evt_login_success.md) | <code>static</code> | string |  |
-|  [SELF](./oweb.oweblogin.self.md) | <code>static</code> | string |  |
+|  [EVT\_LOGIN\_FAIL](./oweb.oweblogin.evt_login_fail.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_LOGIN\_SUCCESS](./oweb.oweblogin.evt_login_success.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [SELF](./oweb.oweblogin.self.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
 
 ## Methods
 

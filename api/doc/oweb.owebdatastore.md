@@ -21,15 +21,15 @@ export default class OWebDataStore extends OWebEvent
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [EVT\_DATA\_STORE\_CLEARED](./oweb.owebdatastore.evt_data_store_cleared.md) | <code>static</code> | string |  |
+|  [EVT\_DATA\_STORE\_CLEARED](./oweb.owebdatastore.evt_data_store_cleared.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
 
 ## Methods
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [clear()](./oweb.owebdatastore.clear.md) |  | Clear the data store. |
-|  [get(key)](./oweb.owebdatastore.get.md) |  | Gets data with the given key.<!-- -->When the key is a regexp all data with a key name that match the given regexp will be returned in an object. |
+|  [get(key)](./oweb.owebdatastore.get.md) |  | <p>Gets data with the given key.</p><p>When the key is a regexp all data with a key name that match the given regexp will be returned in an object.</p> |
 |  [onClear(cb)](./oweb.owebdatastore.onclear.md) |  | Register data store clear event handler. |
-|  [remove(key)](./oweb.owebdatastore.remove.md) |  | Removes data with the given key.<!-- -->When the key is a regexp all data with a key name that match the given regexp will be removed. |
+|  [remove(key)](./oweb.owebdatastore.remove.md) |  | <p>Removes data with the given key.</p><p>When the key is a regexp all data with a key name that match the given regexp will be removed.</p> |
 |  [set(key, value)](./oweb.owebdatastore.set.md) |  | Sets key/value pair in the store. |
 

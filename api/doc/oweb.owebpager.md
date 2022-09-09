@@ -21,8 +21,8 @@ export default class OWebPager<P extends OPage<R>, R extends OPageRoute = OPageR
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [EVT\_PAGE\_LOCATION\_CHANGE](./oweb.owebpager.evt_page_location_change.md) | <code>static</code> | string |  |
-|  [SELF](./oweb.owebpager.self.md) | <code>static</code> | string |  |
+|  [EVT\_PAGE\_LOCATION\_CHANGE](./oweb.owebpager.evt_page_location_change.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [SELF](./oweb.owebpager.self.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
 
 ## Methods
 

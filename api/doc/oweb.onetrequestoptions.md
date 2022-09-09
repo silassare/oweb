@@ -12,16 +12,16 @@ export interface ONetRequestOptions<T>
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [body?](./oweb.onetrequestoptions.body.md) | [ONetRequestBody](./oweb.onetrequestbody.md) | <i>(Optional)</i> |
-|  [errorResponseToDialog](./oweb.onetrequestoptions.errorresponsetodialog.md) | (response: [ONetResponse](./oweb.onetresponse.md)<!-- -->&lt;T&gt;) =&gt; { text: string; data?: Record&lt;string, unknown&gt;; } |  |
-|  [headers](./oweb.onetrequestoptions.headers.md) | { \[key: string\]: string; } |  |
-|  [isGoodNews](./oweb.onetrequestoptions.isgoodnews.md) | (json: null \| T) =&gt; boolean |  |
-|  [isSuccessStatus](./oweb.onetrequestoptions.issuccessstatus.md) | (status: number) =&gt; boolean |  |
-|  [method](./oweb.onetrequestoptions.method.md) | [ONetRequestMethod](./oweb.onetrequestmethod.md) |  |
-|  [params?](./oweb.onetrequestoptions.params.md) | [ONetRequestParams](./oweb.onetrequestparams.md) | <i>(Optional)</i> |
-|  [responseType](./oweb.onetrequestoptions.responsetype.md) | XMLHttpRequest\['responseType'\] |  |
-|  [timeout](./oweb.onetrequestoptions.timeout.md) | number |  |
-|  [withCredentials](./oweb.onetrequestoptions.withcredentials.md) | boolean |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [body?](./oweb.onetrequestoptions.body.md) |  | [ONetRequestBody](./oweb.onetrequestbody.md) | <i>(Optional)</i> |
+|  [errorResponseToDialog](./oweb.onetrequestoptions.errorresponsetodialog.md) |  | (response: [ONetResponse](./oweb.onetresponse.md)<!-- -->&lt;T&gt;) =&gt; { text: string; data?: Record&lt;string, unknown&gt;; } |  |
+|  [headers](./oweb.onetrequestoptions.headers.md) |  | { \[key: string\]: string; } |  |
+|  [isGoodNews](./oweb.onetrequestoptions.isgoodnews.md) |  | (json: null \| T) =&gt; boolean |  |
+|  [isSuccessStatus](./oweb.onetrequestoptions.issuccessstatus.md) |  | (status: number) =&gt; boolean |  |
+|  [method](./oweb.onetrequestoptions.method.md) |  | [ONetRequestMethod](./oweb.onetrequestmethod.md) |  |
+|  [params?](./oweb.onetrequestoptions.params.md) |  | [ONetRequestParams](./oweb.onetrequestparams.md) | <i>(Optional)</i> |
+|  [responseType](./oweb.onetrequestoptions.responsetype.md) |  | XMLHttpRequest\['responseType'\] |  |
+|  [timeout](./oweb.onetrequestoptions.timeout.md) |  | number |  |
+|  [withCredentials](./oweb.onetrequestoptions.withcredentials.md) |  | boolean |  |
 

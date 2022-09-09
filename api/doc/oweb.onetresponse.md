@@ -12,12 +12,12 @@ export interface ONetResponse<T>
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [isGoodNews](./oweb.onetresponse.isgoodnews.md) | boolean |  |
-|  [isSuccessStatus](./oweb.onetresponse.issuccessstatus.md) | boolean |  |
-|  [json](./oweb.onetresponse.json.md) | T |  |
-|  [raw](./oweb.onetresponse.raw.md) | any |  |
-|  [status](./oweb.onetresponse.status.md) | number |  |
-|  [statusText](./oweb.onetresponse.statustext.md) | string |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [isGoodNews](./oweb.onetresponse.isgoodnews.md) |  | boolean |  |
+|  [isSuccessStatus](./oweb.onetresponse.issuccessstatus.md) |  | boolean |  |
+|  [json](./oweb.onetresponse.json.md) |  | T |  |
+|  [raw](./oweb.onetresponse.raw.md) |  | any |  |
+|  [status](./oweb.onetresponse.status.md) |  | number |  |
+|  [statusText](./oweb.onetresponse.statustext.md) |  | string |  |
 

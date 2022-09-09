@@ -13,8 +13,8 @@ export interface ONetError extends OViewDialog
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [errType](./oweb.oneterror.errtype.md) | 'bad\_news' \| 'http' \| 'network' \| 'abort' \| 'timeout' \| 'unknown' |  |
-|  [type](./oweb.oneterror.type.md) | 'error' |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [errType](./oweb.oneterror.errtype.md) |  | 'bad\_news' \| 'http' \| 'network' \| 'abort' \| 'timeout' \| 'unknown' |  |
+|  [type](./oweb.oneterror.type.md) |  | 'error' |  |
 

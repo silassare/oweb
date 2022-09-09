@@ -62,7 +62,7 @@
 |  [numberFormat(x, dec, decimalSep, digitsSep)](./oweb.numberformat.md) |  |
 |  [parseQueryString(str)](./oweb.parsequerystring.md) |  |
 |  [preventDefault(e)](./oweb.preventdefault.md) |  |
-|  [safeOpen(url, strWindowName, strWindowFeatures)](./oweb.safeopen.md) | Opens the provided url by injecting a hidden iframe that calls window.open(), then removes the iframe from the DOM.<!-- -->Prevent reverse tabnabbing phishing attacks caused by \_blank<!-- -->https://mathiasbynens.github.io/rel-noopener/<!-- -->https://github.com/danielstjules/blankshield/blob/6e208bf25a44bf50d1a5e85ae96fee0c015d05bc/blankshield.js\#L166 |
+|  [safeOpen(url, strWindowName, strWindowFeatures)](./oweb.safeopen.md) | <p>Opens the provided url by injecting a hidden iframe that calls window.open(), then removes the iframe from the DOM.</p><p>Prevent reverse tabnabbing phishing attacks caused by \_blank</p><p>https://mathiasbynens.github.io/rel-noopener/</p><p>https://github.com/danielstjules/blankshield/blob/6e208bf25a44bf50d1a5e85ae96fee0c015d05bc/blankshield.js\#L166</p> |
 |  [searchParam(name, url)](./oweb.searchparam.md) |  |
 |  [shuffle(a)](./oweb.shuffle.md) |  |
 |  [stringPlaceholderReplace(str, data)](./oweb.stringplaceholderreplace.md) |  |

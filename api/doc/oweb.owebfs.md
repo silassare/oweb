@@ -14,7 +14,7 @@ export default class OWebFS
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [OFA\_MIME\_TYPE](./oweb.owebfs.ofa_mime_type.md) | <code>static</code> | (not declared) |  |
+|  [OFA\_MIME\_TYPE](./oweb.owebfs.ofa_mime_type.md) | <p><code>readonly</code></p><p><code>static</code></p> | (not declared) |  |
 
 ## Methods
 

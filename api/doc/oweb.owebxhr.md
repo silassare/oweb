@@ -9,7 +9,7 @@
 ```typescript
 export default class OWebXHR<T> extends OWebNet<T> 
 ```
-<b>Extends:</b> OWebNet
+<b>Extends:</b> OWebNet&lt;T&gt;
 
 ## Constructors
 

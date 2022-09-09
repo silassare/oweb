@@ -12,13 +12,13 @@ export interface OAppOptions<Store extends OStore = OStore, Page extends OPage<O
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [appConfigs](./oweb.oappoptions.appconfigs.md) | AppConfigs |  |
-|  [name](./oweb.oappoptions.name.md) | string |  |
-|  [pager](./oweb.oappoptions.pager.md) | (this: Context) =&gt; OWebPager&lt;Page&gt; |  |
-|  [store](./oweb.oappoptions.store.md) | (this: Context) =&gt; Store |  |
-|  [urls](./oweb.oappoptions.urls.md) | UrlList |  |
-|  [user](./oweb.oappoptions.user.md) | (this: Context) =&gt; OWebUser&lt;User&gt; |  |
-|  [userConfigs](./oweb.oappoptions.userconfigs.md) | UserConfigs |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [appConfigs](./oweb.oappoptions.appconfigs.md) |  | AppConfigs |  |
+|  [name](./oweb.oappoptions.name.md) |  | string |  |
+|  [pager](./oweb.oappoptions.pager.md) |  | (this: Context) =&gt; OWebPager&lt;Page&gt; |  |
+|  [store](./oweb.oappoptions.store.md) |  | (this: Context) =&gt; Store |  |
+|  [urls](./oweb.oappoptions.urls.md) |  | UrlList |  |
+|  [user](./oweb.oappoptions.user.md) |  | (this: Context) =&gt; OWebUser&lt;User&gt; |  |
+|  [userConfigs](./oweb.oappoptions.userconfigs.md) |  | UserConfigs |  |
 

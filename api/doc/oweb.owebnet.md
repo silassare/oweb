@@ -15,32 +15,32 @@ export default abstract class OWebNet<T = null> extends OWebEvent
 
 |  Constructor | Modifiers | Description |
 |  --- | --- | --- |
-|  [(constructor)(url, options)](./oweb.owebnet._constructor_.md) |  | OWebNet constructor. |
+|  [(constructor)(url, options)](./oweb.owebnet._constructor_.md) | <code>protected</code> | OWebNet constructor. |
 
 ## Properties
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [EVT\_BAD\_NEWS](./oweb.owebnet.evt_bad_news.md) | <code>static</code> | string |  |
-|  [EVT\_DOWNLOAD\_PROGRESS](./oweb.owebnet.evt_download_progress.md) | <code>static</code> | string |  |
-|  [EVT\_ERROR](./oweb.owebnet.evt_error.md) | <code>static</code> | string |  |
-|  [EVT\_FAIL](./oweb.owebnet.evt_fail.md) | <code>static</code> | string |  |
-|  [EVT\_FINISH](./oweb.owebnet.evt_finish.md) | <code>static</code> | string |  |
-|  [EVT\_GOOD\_NEWS](./oweb.owebnet.evt_good_news.md) | <code>static</code> | string |  |
-|  [EVT\_HTTP\_ERROR](./oweb.owebnet.evt_http_error.md) | <code>static</code> | string |  |
-|  [EVT\_HTTP\_SUCCESS](./oweb.owebnet.evt_http_success.md) | <code>static</code> | string |  |
-|  [EVT\_RESPONSE](./oweb.owebnet.evt_response.md) | <code>static</code> | string |  |
-|  [EVT\_UPLOAD\_PROGRESS](./oweb.owebnet.evt_upload_progress.md) | <code>static</code> | string |  |
-|  [options](./oweb.owebnet.options.md) |  | [ONetRequestOptions](./oweb.onetrequestoptions.md)<!-- -->&lt;T&gt; |  |
-|  [SELF](./oweb.owebnet.self.md) | <code>static</code> | string |  |
-|  [url](./oweb.owebnet.url.md) |  | string |  |
+|  [EVT\_BAD\_NEWS](./oweb.owebnet.evt_bad_news.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_DOWNLOAD\_PROGRESS](./oweb.owebnet.evt_download_progress.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_ERROR](./oweb.owebnet.evt_error.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_FAIL](./oweb.owebnet.evt_fail.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_FINISH](./oweb.owebnet.evt_finish.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_GOOD\_NEWS](./oweb.owebnet.evt_good_news.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_HTTP\_ERROR](./oweb.owebnet.evt_http_error.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_HTTP\_SUCCESS](./oweb.owebnet.evt_http_success.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_RESPONSE](./oweb.owebnet.evt_response.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_UPLOAD\_PROGRESS](./oweb.owebnet.evt_upload_progress.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [options](./oweb.owebnet.options.md) | <code>protected</code> | [ONetRequestOptions](./oweb.onetrequestoptions.md)<!-- -->&lt;T&gt; |  |
+|  [SELF](./oweb.owebnet.self.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [url](./oweb.owebnet.url.md) | <code>protected</code> | string |  |
 
 ## Methods
 
 |  Method | Modifiers | Description |
 |  --- | --- | --- |
 |  [abort()](./oweb.owebnet.abort.md) |  | Abort the request |
-|  [assertNotSent(message)](./oweb.owebnet.assertnotsent.md) |  | Assertion that throws error when request is already sent. |
+|  [assertNotSent(message)](./oweb.owebnet.assertnotsent.md) | <code>protected</code> | Assertion that throws error when request is already sent. |
 |  [isSent()](./oweb.owebnet.issent.md) |  | Checks if the request is already sent. |
 |  [onBadNews(handler)](./oweb.owebnet.onbadnews.md) |  | Called when <code>options.responseType</code> is <code>json</code> and <code>options.isGoodNews</code> returns <code>false</code>. |
 |  [onDownloadProgress(handler)](./oweb.owebnet.ondownloadprogress.md) |  | Listen to download progress event. |
@@ -51,6 +51,6 @@ export default abstract class OWebNet<T = null> extends OWebEvent
 |  [onHttpError(handler)](./oweb.owebnet.onhttperror.md) |  | Called when request sent and http response status code is in error range. |
 |  [onHttpSuccess(handler)](./oweb.owebnet.onhttpsuccess.md) |  | Called when request sent and http response status code is in success range. |
 |  [onResponse(handler)](./oweb.owebnet.onresponse.md) |  | Called when request sent and the server responded. |
-|  [onUploadProgress(handler)](./oweb.owebnet.onuploadprogress.md) |  | Listen to download progress event.<!-- -->NOTE: this is not supported by all browser. |
+|  [onUploadProgress(handler)](./oweb.owebnet.onuploadprogress.md) |  | <p>Listen to download progress event.</p><p>NOTE: this is not supported by all browser.</p> |
 |  [send()](./oweb.owebnet.send.md) |  | Send the request and return a promise. |
 

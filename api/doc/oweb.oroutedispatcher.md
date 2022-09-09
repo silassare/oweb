@@ -12,11 +12,11 @@ export interface ORouteDispatcher
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [context](./oweb.oroutedispatcher.context.md) | OWebRouteContext |  |
-|  [found](./oweb.oroutedispatcher.found.md) | OWebRoute\[\] |  |
-|  [id](./oweb.oroutedispatcher.id.md) | number |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [context](./oweb.oroutedispatcher.context.md) | <code>readonly</code> | OWebRouteContext |  |
+|  [found](./oweb.oroutedispatcher.found.md) | <code>readonly</code> | OWebRoute\[\] |  |
+|  [id](./oweb.oroutedispatcher.id.md) | <code>readonly</code> | number |  |
 
 ## Methods
 

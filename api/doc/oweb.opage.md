@@ -12,10 +12,10 @@ export interface OPage<Route extends OPageRoute = OPageRoute>
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [name](./oweb.opage.name.md) | string | The page name getter. |
-|  [routes](./oweb.opage.routes.md) | Route\[\] | The page routes getter. |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [name](./oweb.opage.name.md) |  | string | The page name getter. |
+|  [routes](./oweb.opage.routes.md) |  | Route\[\] | The page routes getter. |
 
 ## Methods
 

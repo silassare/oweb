@@ -12,16 +12,16 @@ export interface OPageRoute
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [children?](./oweb.opageroute.children.md) | [OPageRoute](./oweb.opageroute.md)<!-- -->\[\] | <i>(Optional)</i> |
-|  [description?](./oweb.opageroute.description.md) | [OI18n](./oweb.oi18n.md) | <i>(Optional)</i> |
-|  [disabled?](./oweb.opageroute.disabled.md) | boolean | <i>(Optional)</i> |
-|  [icon?](./oweb.opageroute.icon.md) | string | <i>(Optional)</i> |
-|  [path](./oweb.opageroute.path.md) | ORoutePath |  |
-|  [pathOptions?](./oweb.opageroute.pathoptions.md) | ORoutePathOptions | <i>(Optional)</i> |
-|  [show?](./oweb.opageroute.show.md) | boolean | <i>(Optional)</i> |
-|  [showChildren?](./oweb.opageroute.showchildren.md) | boolean | <i>(Optional)</i> |
-|  [slug?](./oweb.opageroute.slug.md) | string | <i>(Optional)</i> |
-|  [title](./oweb.opageroute.title.md) | [OI18n](./oweb.oi18n.md) |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [children?](./oweb.opageroute.children.md) |  | [OPageRoute](./oweb.opageroute.md)<!-- -->\[\] | <i>(Optional)</i> |
+|  [description?](./oweb.opageroute.description.md) |  | [OI18n](./oweb.oi18n.md) | <i>(Optional)</i> |
+|  [disabled?](./oweb.opageroute.disabled.md) |  | boolean | <i>(Optional)</i> |
+|  [icon?](./oweb.opageroute.icon.md) |  | string | <i>(Optional)</i> |
+|  [path](./oweb.opageroute.path.md) |  | ORoutePath |  |
+|  [pathOptions?](./oweb.opageroute.pathoptions.md) |  | ORoutePathOptions | <i>(Optional)</i> |
+|  [show?](./oweb.opageroute.show.md) |  | boolean | <i>(Optional)</i> |
+|  [showChildren?](./oweb.opageroute.showchildren.md) |  | boolean | <i>(Optional)</i> |
+|  [slug?](./oweb.opageroute.slug.md) |  | string | <i>(Optional)</i> |
+|  [title](./oweb.opageroute.title.md) |  | [OI18n](./oweb.oi18n.md) |  |
 

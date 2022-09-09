@@ -21,9 +21,9 @@ export default class OWebPassword<Result> extends OWebEvent
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [EVT\_PASS\_EDIT\_FAIL](./oweb.owebpassword.evt_pass_edit_fail.md) | <code>static</code> | string |  |
-|  [EVT\_PASS\_EDIT\_SUCCESS](./oweb.owebpassword.evt_pass_edit_success.md) | <code>static</code> | string |  |
-|  [SELF](./oweb.owebpassword.self.md) | <code>static</code> | string |  |
+|  [EVT\_PASS\_EDIT\_FAIL](./oweb.owebpassword.evt_pass_edit_fail.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_PASS\_EDIT\_SUCCESS](./oweb.owebpassword.evt_pass_edit_success.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [SELF](./oweb.owebpassword.self.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
 
 ## Methods
 

@@ -8,9 +8,9 @@ import { GoblSinglePKEntity } from 'gobl-utils-ts';
 
 // @public (undocumented)
 export const assign: {
-    <T, U>(target: T, source: U): T & U;
-    <T_1, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V;
-    <T_2, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W;
+    <T extends {}, U>(target: T, source: U): T & U;
+    <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V;
+    <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W;
     (target: object, ...sources: any[]): any;
 };
 
@@ -112,7 +112,7 @@ export function loadScript(src: string, then?: OScriptLoadCb, fail?: OScriptLoad
 // @public (undocumented)
 export function loadScriptBatch(list: OScriptFile[], then?: OBatchCb, disableCache?: boolean): void;
 
-// Warning: (ae-forgotten-export) The symbol "Console" needs to be exported by the entry point oweb.d.ts
+// Warning: (ae-forgotten-export) The symbol "Console_2" needs to be exported by the entry point oweb.d.ts
 //
 // @public (undocumented)
 export const logger: Console_2 & {

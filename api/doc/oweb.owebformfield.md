@@ -12,9 +12,9 @@ export interface OWebFormField
 
 ## Properties
 
-|  Property | Type | Description |
-|  --- | --- | --- |
-|  [label?](./oweb.owebformfield.label.md) | string | <i>(Optional)</i> |
-|  [validator?](./oweb.owebformfield.validator.md) | string \| [OWebFormFieldValidator](./oweb.owebformfieldvalidator.md) | <i>(Optional)</i> |
-|  [value](./oweb.owebformfield.value.md) | any |  |
+|  Property | Modifiers | Type | Description |
+|  --- | --- | --- | --- |
+|  [label?](./oweb.owebformfield.label.md) |  | string | <i>(Optional)</i> |
+|  [validator?](./oweb.owebformfield.validator.md) |  | string \| [OWebFormFieldValidator](./oweb.owebformfieldvalidator.md) | <i>(Optional)</i> |
+|  [value](./oweb.owebformfield.value.md) |  | any |  |
 

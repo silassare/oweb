@@ -21,10 +21,10 @@ export default class OWebView extends OWebEvent
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [EVT\_VIEW\_DIALOG](./oweb.owebview.evt_view_dialog.md) | <code>static</code> | string |  |
-|  [EVT\_VIEW\_FREEZE](./oweb.owebview.evt_view_freeze.md) | <code>static</code> | string |  |
-|  [EVT\_VIEW\_UNFREEZE](./oweb.owebview.evt_view_unfreeze.md) | <code>static</code> | string |  |
-|  [SELF](./oweb.owebview.self.md) | <code>static</code> | string |  |
+|  [EVT\_VIEW\_DIALOG](./oweb.owebview.evt_view_dialog.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_VIEW\_FREEZE](./oweb.owebview.evt_view_freeze.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [EVT\_VIEW\_UNFREEZE](./oweb.owebview.evt_view_unfreeze.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [SELF](./oweb.owebview.self.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
 
 ## Methods
 

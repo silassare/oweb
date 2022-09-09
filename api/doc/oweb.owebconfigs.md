@@ -25,8 +25,8 @@ export default class OWebConfigs<P extends {
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [EVT\_CONFIG\_CHANGE](./oweb.owebconfigs.evt_config_change.md) | <code>static</code> | string |  |
-|  [SELF](./oweb.owebconfigs.self.md) | <code>static</code> | string |  |
+|  [EVT\_CONFIG\_CHANGE](./oweb.owebconfigs.evt_config_change.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
+|  [SELF](./oweb.owebconfigs.self.md) | <p><code>readonly</code></p><p><code>static</code></p> | string |  |
 
 ## Methods
 

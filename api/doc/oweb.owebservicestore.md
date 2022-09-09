@@ -9,7 +9,7 @@
 ```typescript
 export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWebService<T> 
 ```
-<b>Extends:</b> OWebService
+<b>Extends:</b> OWebService&lt;T&gt;
 
 ## Constructors
 
@@ -21,8 +21,8 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 
 |  Property | Modifiers | Type | Description |
 |  --- | --- | --- | --- |
-|  [relations](./oweb.owebservicestore.relations.md) |  | { \[key: string\]: any; } |  |
-|  [store](./oweb.owebservicestore.store.md) |  | OServiceDataStore&lt;T&gt; |  |
+|  [relations](./oweb.owebservicestore.relations.md) | <code>protected</code> | { \[key: string\]: any; } |  |
+|  [store](./oweb.owebservicestore.store.md) | <code>protected</code> | OServiceDataStore&lt;T&gt; |  |
 
 ## Methods
 
@@ -39,6 +39,6 @@ export default class OWebServiceStore<T extends GoblSinglePKEntity> extends OWeb
 |  [itemRelation(item, relation)](./oweb.owebservicestore.itemrelation.md) |  | Gets a given item relations. |
 |  [list(ids, checkCacheForMissing)](./oweb.owebservicestore.list.md) |  | Gets this store items list. |
 |  [search(list, search, stringBuilder)](./oweb.owebservicestore.search.md) |  | Search items in this store or in a given items list. |
-|  [select(list, predicate, max)](./oweb.owebservicestore.select.md) |  | Select some items in this store. filter |
+|  [select(list, predicate, max)](./oweb.owebservicestore.select.md) |  | <p>Select some items in this store.</p><p> filter</p> |
 |  [updateItem(item, formData)](./oweb.owebservicestore.updateitem.md) |  | Creates update request for a given item. |
 

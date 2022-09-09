@@ -16,5 +16,5 @@ export default class OWebEvent
 |  --- | --- | --- |
 |  [off(event, handler)](./oweb.owebevent.off.md) |  | Removes event handler. |
 |  [on(event, handler)](./oweb.owebevent.on.md) |  | Register event handler. |
-|  [trigger(event, data, cancelable, context)](./oweb.owebevent.trigger.md) |  | Trigger an event. |
+|  [trigger(event, data, cancelable, context)](./oweb.owebevent.trigger.md) | <code>protected</code> | Trigger an event. |
 
