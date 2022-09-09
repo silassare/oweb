@@ -31,7 +31,7 @@ export function loadScript(
 	disableCache = false
 ): void {
 	const document = window.document,
-		  isOldIE = /MSIE\s([5-9]\.0)/.test(navigator.userAgent);
+		isOldIE = /MSIE\s([5-9]\.0)/.test(navigator.userAgent);
 
 	if (
 		typeof document !== 'object' ||

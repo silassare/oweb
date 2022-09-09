@@ -739,4 +739,3 @@ export function uuid(): string {
 		).toString(16);
 	});
 }
-

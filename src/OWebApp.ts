@@ -16,7 +16,7 @@ import defaultAppConfigs from './default/app.configs';
 import defaultUserConfigs from './default/user.configs';
 import defaultAppUrls from './default/app.urls';
 import { OFormDOMFormAdapter, OFormObjectAdapter } from './OWebFormAdapter';
-import {globalRoot} from './env';
+import { globalRoot } from './env';
 
 export interface OUrlList {
 	[key: string]: string;

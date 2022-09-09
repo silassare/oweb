@@ -1,10 +1,17 @@
 export const globalRoot = (() => {
-
-	if (typeof globalThis === 'object' && globalThis !== null && globalThis.Object === Object) {
+	if (
+		typeof globalThis === 'object' &&
+		globalThis !== null &&
+		globalThis.Object === Object
+	) {
 		return globalThis;
 	}
 
-	if (typeof global === 'object' && global !== null && global.Object === Object) {
+	if (
+		typeof global === 'object' &&
+		global !== null &&
+		global.Object === Object
+	) {
 		return global;
 	}
 
@@ -15,4 +22,5 @@ export const globalRoot = (() => {
 	return Function('return this')();
 })();
 
-export const supportRAF = typeof globalRoot.requestAnimationFrame === 'function';
+export const supportRAF =
+	typeof globalRoot.requestAnimationFrame === 'function';

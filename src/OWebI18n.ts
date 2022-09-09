@@ -127,8 +127,9 @@ const _tmp = new Map(),
 	};
 
 export default class OWebI18n extends OWebEvent {
-
-	constructor(protected _appContext: OWebApp) {super();}
+	constructor(protected _appContext: OWebApp) {
+		super();
+	}
 
 	/**
 	 * Sets default i18n lang code.
@@ -163,7 +164,7 @@ export default class OWebI18n extends OWebEvent {
 	 *
 	 * @returns {string}
 	 */
-	getCurrentLang():string {
+	getCurrentLang(): string {
 		return this._appContext.configs.get('OW_APP_DEFAULT_LANG');
 	}
 
@@ -190,7 +191,6 @@ export default class OWebI18n extends OWebEvent {
 		pluralize: OI18nPluralize = 0,
 		lang?: string
 	): string {
-
 		lang = lang || this.getCurrentLang();
 
 		if (typeof key !== 'string') {

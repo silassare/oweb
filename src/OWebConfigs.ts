@@ -98,7 +98,9 @@ export default class OWebConfigs<
 		this._assertDefined(config);
 
 		if (this._isAppConfig(config as string)) {
-			throw new Error(`[OWebConfigs] can't overwrite app config "${config}".`);
+			throw new Error(
+				`[OWebConfigs] can't overwrite app config "${String(config)}".`
+			);
 		}
 
 		if (value === undefined) {
